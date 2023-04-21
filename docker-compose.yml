@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  db: # 定义名为 db 的服务，使用 postgres:14-alpine 镜像作为容器
+    image: postgres:14-alpine
+    ports:
+      - '5432:5432' # 映射容器内的 5432 端口到宿主机的 5432 端口
+
+    environment:
+      - POSTGRES_PASSWORD=postgres # 设置 PostgreSQL 的密码
+      - POSTGRES_USER=postgres # 设置 PostgreSQL 的用户名
+      - POSTGRES_DB=postgres # 设置 PostgreSQL 的默认数据库名
+
+    volumes:
+      - ./data/db:/var/lib/postgresql/data/ # 将宿主机的 ./data/db 目录挂载到容器内的 /var/lib/postgresql/data/ 目录
+
+  frontend:
+    build: # 构建名为 frontend 的服务
+      context: ./frontend # 指定 Dockerfile 所在的上下文路径
+      dockerfile: Dockerfile # 指定 Dockerfile 文件名
+
+    ports:
+      - '3000:3000' # 映射容器内的 3000 端口到宿主机的 3000 端口
+
+    volumes:
+      - ./frontend:/app/frontend # 将宿主机的 ./frontend 目录挂载到容器内的 /app/frontend 目录
+
+    depends_on:
+      - backend # 告诉 Docker Compose 在启动 frontend 服务之前先启动 backend 服务
+
+  backend: 
+    build: # 构建名为 backend 的服务
+      context: ./backend # 指定 Dockerfile 所在的上下文路径
+      dockerfile: Dockerfile # 指定 Dockerfile 文件名
+
+    environment:
+      - POSTGRES_PASSWORD=postgres # 设置 PostgreSQL 的密码
+      - POSTGRES_USER=postgres # 设置 PostgreSQL 的用户名
+      - POSTGRES_DB=postgres # 设置 PostgreSQL 的默认数据库名
+
+    ports:
+      - '8000:8000' # 映射容器内的 8000 端口到宿主机的 8000 端口
+
+    volumes:
+      - ./backend:/app/backend # 将宿主机的 ./backend 目录挂载到容器内的 /app/backend 目录
+
+    depends_on:
+      - db # 告诉 Docker Compose 在启动 backend 服务之前先启动 db 服务
