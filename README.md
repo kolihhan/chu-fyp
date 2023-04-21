@@ -32,7 +32,13 @@
 
 
 
-##引用
+## 引用
 
 [Dockfile、Docker Compose 建立環境](https://dev.to/anjalbam/dockerize-a-django-react-and-postgres-application-with-docker-and-docker-compose-by-anjal-bam-e0a)
+
 [React、Django 教學](https://www.youtube.com/watch?v=tYKRAXIio28&t=3168s&ab_channel=DennisIvy)
+
+## 專案狀態
+
+> feat : 新增功能或物件 \
+> fix : 修復功能或物件
