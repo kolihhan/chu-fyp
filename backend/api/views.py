@@ -31,6 +31,6 @@ def getSingleEmployee(request,id):
     return Response(serializer.data) #Serializer 是一個Object,需要呼叫.data拿到資料
 
 
-
+#JSONResponse
 #如果 many=True 参数告诉Serializers，employee 字段中可能有多个員工，需要对它们进行序列化。
 #如果 many=False，则说明 object 字段只包含一个Query，而不是多个Query。

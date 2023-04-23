@@ -38,6 +38,9 @@
 
 [React、Django 教學](https://www.youtube.com/watch?v=tYKRAXIio28&t=3168s&ab_channel=DennisIvy)
 
+[React、Django 教學 - 2](https://www.youtube.com/watch?v=Uyei2iDA4Hs&list=PLillGF-RfqbbRA-CIUxlxkUpbq0IFkX60&ab_channel=TraversyMedia)
+
+[React 、Redux 、TypeScript 教學](https://www.youtube.com/watch?v=WpvIihorarA&ab_channel=MaksimIvanov)
 ## 專案狀態
 
 > feat : 新增功能或物件 \
