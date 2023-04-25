@@ -1,14 +1,12 @@
 FROM node:16-alpine
 
-WORKDIR /app/frontend/
-
-COPY package*.json /app/frontend/
-
-#install nodemon to provide hot-reloading functionality.
-RUN npm install react-scripts
+COPY package.json /app/
+WORKDIR /app/
 RUN npm install
+ENV PATH /data/node_modules/.bin:$PATH
 
 COPY . /app/frontend/
+WORKDIR /app/frontend/
 
 #use nodemon to run the react application using npm.
 # "nodemon", "--exec", 
