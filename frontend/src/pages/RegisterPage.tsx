@@ -33,20 +33,20 @@ const Register: React.FC = () => {
     
     return (
     <form onSubmit={handleSubmit}>
-    <h1>Register Page</h1>
-    <div>
-    <label>Username</label>
-    <input type="text" value={username} onChange={handleUsernameChange} />
-    </div>
-    <div>
-    <label>Password</label>
-    <input type="password" value={password} onChange={handlePasswordChange} />
-    </div>
-    <div>
-    <label>Confirm Password</label>
-    <input type="password" value={confirmPassword} onChange={handleConfirmPasswordChange} />
-    </div>
-    <button type="submit">Register</button>
+      <h1>Register Page</h1>
+      <div>
+        <label>Username</label>
+        <input type="text" value={username} onChange={handleUsernameChange} />
+      </div>
+      <div>
+        <label>Password</label>
+        <input type="password" value={password} onChange={handlePasswordChange} />
+      </div>
+      <div>
+        <label>Confirm Password</label>
+        <input type="password" value={confirmPassword} onChange={handleConfirmPasswordChange} />
+      </div>
+      <button type="submit">Register</button>
     </form>
     );
     };

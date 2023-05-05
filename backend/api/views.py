@@ -9,6 +9,8 @@ from rest_framework import status
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken
 from .serializers import UserSerializer, MyTokenObtainPairSerializer
 from .models import CustomOutstandingToken, CustomTokenUser , UserAccount
+from . import models
+from . import serializers
 # from django.http import JsonResponse
 
 
@@ -40,4 +42,16 @@ class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
 
-    
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def getAllCompany(request):
+    companyData = models.Company.objects.all()
+    serializer = serializers.CompanySerializer(companyData, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def getAllAnnouncements(request):
+    announcementData = models.Announcement.objects.all()
+    serializer = serializers.AnnouncementSerializer(announcementData, many=True)
+    return Response(serializer.data)

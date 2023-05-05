@@ -9,7 +9,7 @@ from rest_framework_simplejwt.models import TokenUser
 from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 from rest_framework_simplejwt.tokens import RefreshToken, Token
-
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 # Create your models here.
 
@@ -55,7 +55,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     birthday = models.DateField()
     address = models.CharField(max_length=255)
     phone = models.CharField(max_length=20)
-    avatar_url = models.URLField()
+    avatar_url = models.URLField(blank=True, null=True)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
@@ -148,3 +148,113 @@ class CustomRefreshToken(RefreshToken):
             raise InvalidToken(_("Token contained no recognizable payload"))
 
         return token
+    
+class Company(models.Model):
+    name = models.CharField()
+    boss_id = models.ForeignKey('UserAccount', on_delete=models.CASCADE, related_name='boss')
+    admin_id = models.OneToOneField('UserAccount', blank=True, null=True, on_delete=models.SET_NULL, related_name='admin')
+    email = models.CharField()
+    phone = models.CharField(max_length=20)
+    address = models.CharField()
+    company_desc = models.TextField()
+    company_benefits = models.TextField()
+    create_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return self.name
+
+class CompanyEmployee(models.Model):
+    company_id = models.ForeignKey('Company', on_delete=models.CASCADE)
+    user_id = models.ForeignKey('UserAccount', on_delete=models.CASCADE)
+    role = models.CharField(default='Staff')
+    position = models.CharField(default='Staff')
+    salary = models.DecimalField(max_digits=10, decimal_places=2)
+    create_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return str(self.user_id)
+
+class Permission(models.Model):
+    name = models.CharField()
+    create_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return self.name
+ 
+class UserPermission(models.Model):
+    user_id = models.ForeignKey('UserAccount', on_delete=models.CASCADE)
+    permission_id = models.ManyToManyField('Permission')
+    company_id = models.ForeignKey('Company', on_delete=models.CASCADE)
+    create_at = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return str(self.user_id)
+
+class checkIn(models.Model):
+    user_id = models.ForeignKey('UserAccount', on_delete=models.CASCADE)
+    company_id = models.ForeignKey('Company', on_delete=models.CASCADE)
+    check_in_time = models.DateTimeField()
+    check_out_time= models.DateTimeField(blank=True, null=True)
+    create_at = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return str(self.user_id)
+
+class companyCheckInRule(models.Model):
+    company_id = models.ForeignKey('Company', on_delete=models.CASCADE)
+    work_time_start = models.TimeField()
+    work_time_end = models.TimeField()
+    late_tolerance = models.DurationField() # 可容許的遲到範圍 # exp: 9點上班，9點半到不算遲到 # HH:MM:SS
+    create_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return str(self.company_id)
+
+class AnnouncementGroup(models.Model):
+    company_id = models.ForeignKey('Company', on_delete=models.CASCADE)
+    user_id = models.ManyToManyField('UserAccount', blank=True)
+    name = models.CharField()
+    description = models.TextField(blank=True, null=True)
+    create_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return str(self.name)
+    
+class Announcement(models.Model):
+    company_id = models.ForeignKey('Company', on_delete=models.CASCADE)
+    user_id = models.ForeignKey('UserAccount', on_delete=models.CASCADE)
+    title = models.CharField()
+    content = models.TextField()
+    group = models.ManyToManyField('AnnouncementGroup', blank=True)
+    create_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
+    expire_at = models.DateTimeField(blank=True, null=True)
+    def __str__(self):
+        return str(self.company_id)
+
+class TaskHeader(models.Model):
+    company_id = models.ForeignKey('Company', on_delete=models.CASCADE)
+    create_by = models.ForeignKey('UserAccount', on_delete=models.DO_NOTHING, related_name='header_create_by')
+    name = models.CharField()
+    position = models.PositiveIntegerField()
+    hide_by_owner = models.ManyToManyField('UserAccount', blank=True, related_name='header_hide_owner')
+    hide_by_self = models.ManyToManyField('UserAccount', blank=True, name='header_hide_self')
+    create_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return self.name
+
+class TaskItem(models.Model):
+    task_header_id = models.ForeignKey('TaskHeader', on_delete=models.CASCADE)
+    create_by = models.ForeignKey('UserAccount', on_delete=models.DO_NOTHING, related_name='item_create_by')
+    title = models.CharField()
+    content = models.TextField()
+    status = models.CharField(default="Pending")
+    progress = models.PositiveSmallIntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)])
+    position = models.PositiveIntegerField()
+    assign_to = models.ManyToManyField('UserAccount', blank=True, related_name='item_assign_to')
+    hide_by_owner = models.ManyToManyField('UserAccount', blank=True, related_name='item_hide_owner')
+    hide_by_self = models.ManyToManyField('UserAccount', blank=True, related_name='item_hide_self')
+    due_date = models.DateTimeField(blank=True, null=True)
+    create_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return self.title
