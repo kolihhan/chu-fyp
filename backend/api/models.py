@@ -152,7 +152,7 @@ class CustomRefreshToken(RefreshToken):
 class Company(models.Model):
     name = models.CharField()
     boss_id = models.ForeignKey('UserAccount', on_delete=models.CASCADE, related_name='boss')
-    admin_id = models.OneToOneField('UserAccount', blank=True, null=True, on_delete=models.SET_NULL, related_name='admin')
+    admin_id = models.ForeignKey('UserAccount', blank=True, null=True, on_delete=models.SET_NULL, related_name='admin')
     email = models.CharField()
     phone = models.CharField(max_length=20)
     address = models.CharField()

@@ -13,7 +13,7 @@ from . import models
 class UserIdAndEmailSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.UserAccount
-        fields = ['id', 'email']
+        fields = ['id', 'email', 'name']
         
 class UserSerializer(serializers.ModelSerializer):
 
@@ -67,6 +67,8 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 
 class CompanySerializer(serializers.ModelSerializer):
+    boss_id = UserIdAndEmailSerializer(many=False, read_only=True)
+    admin_id = UserIdAndEmailSerializer(many=False, read_only=True)
     class Meta: 
         model = models.Company
         fields = '__all__'

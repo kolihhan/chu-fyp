@@ -59,6 +59,24 @@ def createCompany(request):
         admin_id = models.UserAccount.objects.get(id=companyData['admin_id'])
     )
     serializer = serializers.CompanySerializer(createdCompany, many=False)
+
+    if(createdCompany.id):  # company create success
+        print("company create success")
+        # if(companyData['boss_id']!=companyData['admin_id']):
+        #     admin = models.UserAccount.objects.get(id=companyData['boss_id'])
+        #     addedAdmin = models.CompanyEmployee.objects.create(
+        #         role = "admin", position = "manager", salary = 0, company_id = createdCompany, user_id = admin
+        #     )
+        #     if(addedAdmin.id):
+        #         print("admin added")
+
+        # boss = models.UserAccount.objects.get(id=companyData['boss_id'])
+        # addedBoss = models.CompanyEmployee.objects.create(
+        #     role = "boss", position = "boss", salary = 0, company_id = createdCompany, user_id = boss
+        # )
+        # if(addedBoss.id):
+        #     print("boss added")
+
     return Response(serializer.data)
 
 @api_view(['GET'])
@@ -68,14 +86,62 @@ def getCompany(request, pk):
     serializer = serializers.CompanySerializer(companyData, many=False)
     return Response(serializer.data)
 
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def getBossCompany(request, pk):
+    companyData = models.Company.objects.filter(boss_id=pk)
+    serializer = serializers.CompanySerializer(companyData, many=True)
+    return Response(serializer.data)
+
+@api_view(['PUT'])
+@permission_classes([AllowAny])
+def updateCompanyAdmin(request):
+    companyId = request.data['id']
+    adminId = request.data['admin_id']
+    companyData = models.Company.objects.get(id=companyId)
+    companyData.admin_id = models.UserAccount.objects.get(id=adminId)
+    companyData.save()
+    serializer = serializers.CompanySerializer(companyData)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def getBossCompanyAdmin(request, pk):
+    companyData = models.Company.objects.filter(Q(boss_id=pk)).exclude(Q(admin_id=pk))
+    serializer = serializers.CompanySerializer(companyData, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def getBossCompanyEmployee(request, pk):
+    companyData = models.CompanyEmployee.objects.filter(Q(company_id__boss_id=pk)).exclude(Q(role='admin') | Q(role='boss'))
+    serializer = serializers.CompanyEmployeeSerializer(companyData, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def getCompanyAdmin(request, pk):
+    companyData = models.Company.objects.get(id=pk)
+    serializer = serializers.CompanySerializer(companyData, many=False)
+    return Response(serializer.data)
+
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def updateCompany(request, pk):
     updatedCompany = request.data
     originalCompany = models.Company.objects.get(id=pk)
-    serializer = serializers.CompanySerializer(instance=originalCompany, data=updatedCompany)
-    if(serializer.is_valid()):
-        serializer.save()
+    originalCompany.boss_id = models.UserAccount.objects.get(id=updatedCompany['boss_id'])
+    originalCompany.admin_id = models.UserAccount.objects.get(id=updatedCompany['admin_id'])
+    originalCompany.name = updatedCompany.get('name', originalCompany.name)
+    originalCompany.email = updatedCompany.get('email', originalCompany.email)
+    originalCompany.phone = updatedCompany.get('phone', originalCompany.phone)
+    originalCompany.address = updatedCompany.get('address', originalCompany.address)
+    originalCompany.company_desc = updatedCompany.get('company_desc', originalCompany.company_desc)
+    originalCompany.company_benefits = updatedCompany.get('company_benefits', originalCompany.company_benefits)
+    originalCompany.save()
+    serializer = serializers.CompanySerializer(originalCompany)
+    # if(serializer.is_valid()):
+    #     serializer.save()
     return Response(serializer.data)
 
 @api_view(['DELETE'])
@@ -108,23 +174,63 @@ def getCompanyEmployee(request, pk):
     serializer = serializers.CompanyEmployeeSerializer(companyEmployee, many=True)
     return Response(serializer.data)
 
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def getEmployee(request, pk):
+    companyEmployee = models.CompanyEmployee.objects.get(id=pk)
+    serializer = serializers.CompanyEmployeeSerializer(companyEmployee, many=False)
+    return Response(serializer.data)
+
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
-def updateCompanyEmployee(request, pk):
+def updateCompanyEmployee(request):
     updatedCompanyEmployee = request.data
-    originalCompanyEmployee = models.CompanyEmployee.objects.get(id=pk)
-    serializer = serializers.CompanyEmployeeSerializer(instance=originalCompanyEmployee, data=updatedCompanyEmployee)
-    if(serializer.is_valid()):
-        serializer.save()
-    return Response(serializer.data)
+    userId = request.data['user_id']
+    companyId = request.data['company_id']
+    originalCompanyEmployee = models.CompanyEmployee.objects.filter(Q(user_id__id=userId) & Q(company_id__id=companyId)).first()
+    if(originalCompanyEmployee):
+        print(originalCompanyEmployee)
+        serializer = serializers.CompanyEmployeeSerializer(instance=originalCompanyEmployee, data=updatedCompanyEmployee)
+        if(serializer.is_valid()):
+            serializer.save()
+        return Response(serializer.data)
+    else:
+        return Response({'message': 'CompanyEmployee does not exist'}, status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
-def deleteCompanyEmployee(request, pk):
-    deletedCompanyEmployee = models.CompanyEmployee.objects.get(id=pk)
-    delete = deletedCompanyEmployee.delete()
-    return Response(delete)
+def deleteCompanyEmployee(request):
+    userId = request.data['user_id']
+    companyId = request.data['company_id']
+    deletedCompanyEmployee = models.CompanyEmployee.objects.filter(Q(user_id__id = userId) & Q(company_id__id=companyId)).first()
+    if(deletedCompanyEmployee):
+        delete = deletedCompanyEmployee.delete()
+        return Response(delete)
+    else: 
+        return Response({'message': 'Company Employee does not exist'}, status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def postAnnouncement(request):
+    companyId = request.data['company_id']
+    userId = request.data['user_id']
+
+    groupIds = request.data['group']
+    groups = []
+    for groupId in groupIds:
+        group = models.AnnouncementGroup.objects.get(id=groupId)
+        groups.append(group)
+    postedAnnouncement = models.Announcement.objects.create(
+        company_id = models.Company.objects.get(id=companyId),
+        user_id = models.UserAccount.objects.get(id=userId),
+        title = request.data['title'],
+        content = request.data['content'],
+        expire_at = request.data.get('expire_at', None)
+    )
+    postedAnnouncement.group.set(groups)
+    serializer = serializers.AnnouncementSerializer(postedAnnouncement, many=False)
+    return Response(serializer.data)
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
@@ -155,6 +261,24 @@ def getAnnouncement(request, pk):
     announcementData = models.Announcement.objects.get(id=pk)
     serializer = serializers.AnnouncementSerializer(announcementData, many=False)
     return Response(serializer.data)
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def updateAnnouncement(request, pk):
+    updatedAnnouncement = request.data
+    originalAnnouncement = models.Announcement.objects.get(id=pk)
+    originalAnnouncement.title = updatedAnnouncement.get('title', originalAnnouncement.title)
+    originalAnnouncement.content = updatedAnnouncement.get('content', originalAnnouncement.content)
+    originalAnnouncement.expire_at = updatedAnnouncement.get('expire_at', originalAnnouncement.expire_at)
+    groups = []
+    for group in updatedAnnouncement['group']:
+        groups.append(models.AnnouncementGroup.objects.get(id=group))
+    originalAnnouncement.group.set(groups)
+    originalAnnouncement.save()
+    
+    serializer = serializers.AnnouncementSerializer(originalAnnouncement)
+    return Response(serializer.data)
+
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
