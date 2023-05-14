@@ -7,12 +7,15 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 import jwt
 from rest_framework import status
+from rest_framework.views import APIView
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken
-from .serializers import UserSerializer, MyTokenObtainPairSerializer
-from .models import CustomOutstandingToken, CustomTokenUser , UserAccount
+from .serializers import UserSerializer, MyTokenObtainPairSerializer, UserResumeSerializer
+from .models import CustomOutstandingToken, CustomTokenUser , UserAccount, CompanyEmployee, UserResume
 from . import models
 from . import serializers
 from django.db.models import Q
+import logging
+
 # from django.http import JsonResponse
 
 
@@ -295,3 +298,64 @@ def getAllCompany(request):
     companyData = models.Company.objects.all()
     serializer = serializers.CompanySerializer(companyData, many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def getAllAnnouncements(request):
+    announcementData = models.Announcement.objects.all()
+    serializer = serializers.AnnouncementSerializer(announcementData, many=True)
+    return Response(serializer.data)
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def update_user_account(request,pk):
+    
+    try:
+        user_account = UserAccount.objects.get(id=pk)
+    except UserAccount.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    serializer = UserSerializer(user_account, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def company_remove_employee(request, pk):
+    try:
+        user_account = CompanyEmployee.objects.get(user_id=pk)
+        user_account.delete()
+        return Response({"detail": "員工成功移除。"}, status=status.HTTP_204_NO_CONTENT)
+    except CompanyEmployee.DoesNotExist:
+        return Response({"detail": "員工未發現。"}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        logging.exception("An error occurred: %s", e)
+        return Response({"detail": "移除員工時，發生錯誤。"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class UserResumeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, format=None):
+        serializer = UserResumeSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user_resume_instance = serializer.save(user=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def put(self, request, pk, format=None):
+        user_resume_instance = UserResume.objects.get(pk=pk, user=request.user)
+        serializer = UserResumeSerializer(user_resume_instance, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+    def delete(self, request, pk, format=None):
+        user_resume_instance = UserResume.objects.get(pk=pk, user=request.user)
+        user_resume_instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

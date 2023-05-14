@@ -119,3 +119,8 @@ class TaskItemSerializer(serializers.ModelSerializer):
     class Meta: 
         model = models.TaskItem
         fields = '__all__'
+
+class UserResumeSerializer(serializers.ModelSerializer):
+    class Meta: 
+        model = models.UserResume
+        fields = '__all__'
