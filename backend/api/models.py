@@ -1,15 +1,16 @@
 import json
-from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, Permission, Group
-from rest_framework_simplejwt.tokens import RefreshToken, BlacklistMixin
-from django.utils.translation import gettext_lazy as _
-from django.utils import timezone
+
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager,
+                                        Group, Permission, PermissionsMixin)
+from django.core.validators import MaxValueValidator, MinValueValidator
+from django.db import models
+from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
+from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from rest_framework_simplejwt.models import TokenUser
 from rest_framework_simplejwt.settings import api_settings
-from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
-from rest_framework_simplejwt.tokens import RefreshToken, Token
-from django.core.validators import MinValueValidator, MaxValueValidator
+from rest_framework_simplejwt.tokens import BlacklistMixin, RefreshToken, Token
 
 # Create your models here.
 
@@ -17,6 +18,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 #auto_now_add : 只執行一次
 #auto_now : 每次都會執行
 
+# 用戶資料模型
 class UserAccountManager(BaseUserManager):
     def create_user(self, email, name, password=None, **extra_fields):
         if not email:
@@ -26,9 +28,6 @@ class UserAccountManager(BaseUserManager):
         user.set_password(password)
         user.save(using=self._db)
         return user
-class CustomTokenUserManager(models.Manager):
-    def get_by_natural_key(self, email):
-        return self.get(email=email)
 class UserAccount(AbstractBaseUser, PermissionsMixin):
 
     groups = models.ManyToManyField(
@@ -71,84 +70,8 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
 
     def get_full_name(self):
         return self.name
-class CustomOutstandingToken(models.Model):
-    """
-    A model to hold outstanding tokens.
-    """
-    user = models.ForeignKey(
-        UserAccount,
-        on_delete=models.CASCADE,
-        related_name='outstanding_tokens',
-    )
-    token = models.CharField(max_length=255, db_index=True, unique=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-class CustomTokenUser(TokenUser):
-    """
-    A model that is compatible with Simple JWT, but uses our custom User model.
-    """
-    objects = CustomTokenUserManager()
-
-    def __init__(self, user):
-        self.id = user.id
-        self.email = user.email
-
-    @classmethod
-    def from_user(cls, user):
-        return cls(user)
-
-    class Meta:
-        proxy = True
-
-    def natural_key(self):
-        return (self.email,)
-
-    def refresh_token(self, lifetime=None):
-        """
-        Generate a new refresh token for the user.
-        """
-
-        CustomOutstandingToken.objects.filter(user=self).delete()
-
-        token = CustomRefreshToken.for_user(self)
-
-        return token
-
-    def revoke_token(self, token: Token):
-        """
-        Revoke the given refresh or access token.
-        """
-        CustomOutstandingToken.objects.filter(
-            user=self,
-            token=str(token),
-        ).delete()
-
-    def to_json(self):
-        return json.dumps({
-            'id': self.id,
-        })
-class CustomRefreshToken(RefreshToken):
-
-    @classmethod
-    def for_user(cls, user):
-        token_user = CustomTokenUser.from_user(user)
-        token = cls()
-
-        CustomOutstandingToken.objects.create(
-            user=user,
-            token=str(token),
-            created_at=token.current_time,
-
-        )
-
-        try:
-            token["user"] = token_user.to_json()
-            token["user_id"] = getattr(user, "id")
-            token["orig_iat"] = int(timezone.now().timestamp())
-        except KeyError as e:
-            raise InvalidToken(_("Token contained no recognizable payload"))
-
-        return token
     
+# Company模型
 class Company(models.Model):
     name = models.CharField()
     boss_id = models.ForeignKey('UserAccount', on_delete=models.CASCADE, related_name='boss')
@@ -163,6 +86,7 @@ class Company(models.Model):
     def __str__(self):
         return self.name
 
+# Company員工資料模型
 class CompanyEmployee(models.Model):
     company_id = models.ForeignKey('Company', on_delete=models.CASCADE)
     user_id = models.ForeignKey('UserAccount', on_delete=models.CASCADE)
@@ -230,34 +154,6 @@ class Announcement(models.Model):
     def __str__(self):
         return str(self.company_id)
 
-class TaskHeader(models.Model):
-    company_id = models.ForeignKey('Company', on_delete=models.CASCADE)
-    create_by = models.ForeignKey('UserAccount', on_delete=models.DO_NOTHING, related_name='header_create_by')
-    name = models.CharField()
-    position = models.PositiveIntegerField()
-    hide_by_owner = models.ManyToManyField('UserAccount', blank=True, related_name='header_hide_owner')
-    hide_by_self = models.ManyToManyField('UserAccount', blank=True, name='header_hide_self')
-    create_at = models.DateTimeField(auto_now_add=True)
-    update_at = models.DateTimeField(auto_now=True)
-    def __str__(self):
-        return self.name
-
-class TaskItem(models.Model):
-    task_header_id = models.ForeignKey('TaskHeader', on_delete=models.CASCADE)
-    create_by = models.ForeignKey('UserAccount', on_delete=models.DO_NOTHING, related_name='item_create_by')
-    title = models.CharField()
-    content = models.TextField()
-    status = models.CharField(default="Pending")
-    progress = models.PositiveSmallIntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)])
-    position = models.PositiveIntegerField()
-    assign_to = models.ManyToManyField('UserAccount', blank=True, related_name='item_assign_to')
-    hide_by_owner = models.ManyToManyField('UserAccount', blank=True, related_name='item_hide_owner')
-    hide_by_self = models.ManyToManyField('UserAccount', blank=True, related_name='item_hide_self')
-    due_date = models.DateTimeField(blank=True, null=True)
-    create_at = models.DateTimeField(auto_now_add=True)
-    update_at = models.DateTimeField(auto_now=True)
-    def __str__(self):
-        return self.title
 class UserResume(models.Model):
     user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)

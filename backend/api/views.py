@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -9,8 +9,9 @@ import jwt
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken
-from .serializers import UserSerializer, MyTokenObtainPairSerializer, UserResumeSerializer
-from .models import CustomOutstandingToken, CustomTokenUser , UserAccount, CompanyEmployee, UserResume
+from .serializers import UserSerializer, UserResumeSerializer
+from .customToken import MyTokenObtainPairSerializer
+from .models import UserAccount, CompanyEmployee, UserResume, UserPermission , Company
 from . import models
 from . import serializers
 from django.db.models import Q
@@ -359,3 +360,39 @@ class UserResumeView(APIView):
         user_resume_instance = UserResume.objects.get(pk=pk, user=request.user)
         user_resume_instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def assign_position(request):
+    user_id = request.data.get('user_id')
+    position = request.data.get('position')
+
+    company_employee = get_object_or_404(CompanyEmployee, user_id=user_id)
+    company_employee.position = position
+    company_employee.save()
+
+    return Response({'message': 'Position assigned successfully.'})
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def replace_admin(request):
+    
+    admin_id = request.data.get('admin_id')
+
+    company = get_object_or_404(Company, id=1)  # Assuming there's only one company instance
+    company.admin_id = admin_id
+    company.save()
+
+    return Response({'message': 'Administrator has been replaced.'})
+
+@api_view(['POST'])
+def change_permissions(request):
+    admin_id = request.data.get('admin_id')
+    permissions = request.data.get('permissions')
+
+    admin_user_permission = get_object_or_404(UserPermission, user_id=admin_id)
+    admin_user_permission.permission_id.set(permissions)
+    admin_user_permission.save()
+
+    return Response({'message': 'Permissions changed successfully.'})

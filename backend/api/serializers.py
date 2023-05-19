@@ -1,13 +1,15 @@
-from rest_framework import serializers
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer, PasswordField
-from rest_framework import serializers, exceptions
-from rest_framework_simplejwt.settings import api_settings
-from django.utils.translation import gettext_lazy as _
 from django import forms
 from django.contrib.auth import authenticate
-from .models import UserAccount, CustomTokenUser, CustomOutstandingToken
+from django.utils.translation import gettext_lazy as _
+from rest_framework import exceptions, serializers
+from rest_framework_simplejwt.serializers import (PasswordField,
+                                                  TokenObtainPairSerializer,
+                                                  TokenRefreshSerializer)
+from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.tokens import RefreshToken
+
 from . import models
+from .models import CustomOutstandingToken, CustomTokenUser, UserAccount
 
 
 class UserIdAndEmailSerializer(serializers.ModelSerializer):
@@ -34,31 +36,6 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         return user  
-
-class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-
-    username_field = 'email'
-
-    def validate(self, attrs):
-
-        data = {}
-
-        # 使用你的UserAccount模型进行验证
-        user = UserAccount.objects.filter(email=attrs.get('email')).first()
-
-        if user is None and not user.check_password(attrs.get('password')):
-            raise serializers.ValidationError(
-                '錯誤密碼或賬戶'
-            )
-
-        # 使用你的CustomTokenUser模型进行token生成
-        refresh = CustomTokenUser.refresh_token(self = user)
-
-        data['access'] = str(refresh.access_token)
-        data['refresh'] = str(refresh)
-        data['user_id'] = user.pk
-
-        return data
     
 # class BossSerializer(ModelSerializer):
 #     class Meta:
