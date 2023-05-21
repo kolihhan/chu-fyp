@@ -9,7 +9,7 @@ from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from . import models
-from .models import CustomOutstandingToken, CustomTokenUser, UserAccount
+from .models import UserAccount
 
 
 class UserIdAndEmailSerializer(serializers.ModelSerializer):
@@ -45,7 +45,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 class CompanySerializer(serializers.ModelSerializer):
     boss_id = UserIdAndEmailSerializer(many=False, read_only=True)
-    admin_id = UserIdAndEmailSerializer(many=False, read_only=True)
     class Meta: 
         model = models.Company
         fields = '__all__'
@@ -62,12 +61,12 @@ class PermissionSerializer(serializers.ModelSerializer):
 
 class UserPermissionSerializer(serializers.ModelSerializer):
     class Meta: 
-        model = models.UserPermission
+        model = models.CompanyPermission
         fields = '__all__'
 
 class CheckInSerializer(serializers.ModelSerializer):
     class Meta: 
-        model = models.checkIn
+        model = models.CompanyCheckIn
         fields = '__all__'
 
 class CompanyCheckInRuleSerializer(serializers.ModelSerializer):
@@ -78,23 +77,13 @@ class CompanyCheckInRuleSerializer(serializers.ModelSerializer):
 class AnnouncementGroupSerializer(serializers.ModelSerializer):
     user_id = UserIdAndEmailSerializer(many=True, read_only=True)
     class Meta: 
-        model = models.AnnouncementGroup
+        model = models.CompanyAnnouncementGroup
         fields = '__all__'
 
 class AnnouncementSerializer(serializers.ModelSerializer):
     group = AnnouncementGroupSerializer(many=True, read_only=True)
     class Meta: 
-        model = models.Announcement
-        fields = '__all__'
-
-class TaskHeaderSerializer(serializers.ModelSerializer):
-    class Meta: 
-        model = models.TaskHeader
-        fields = '__all__'
-
-class TaskItemSerializer(serializers.ModelSerializer):
-    class Meta: 
-        model = models.TaskItem
+        model = models.CompanyAnnouncement
         fields = '__all__'
 
 class UserResumeSerializer(serializers.ModelSerializer):

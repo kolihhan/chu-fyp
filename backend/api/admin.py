@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django import forms
 from django.contrib.admin.widgets import AutocompleteSelect
-from .models import UserAccount, CustomOutstandingToken
+from .models import UserAccount
 from . import models
 
 #Show ur api models in super user page
@@ -12,125 +12,91 @@ companyExclude = ['']
 class UserAccountAdmin(admin.ModelAdmin):
     list_display = [f.name for f in UserAccount._meta.fields]
 
-class CustomOutstandingTokenAdmin(admin.ModelAdmin):
-    list_display = [f.name for f in CustomOutstandingToken._meta.fields]
+# class CustomOutstandingTokenAdmin(admin.ModelAdmin):
+#     list_display = [f.name for f in CustomOutstandingToken._meta.fields]
+
+class UserResumeAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in models.UserResume._meta.fields]
+
+class UserApplicationRecordAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in models.UserApplicationRecord._meta.fields]
+
+class UserOfferRecordAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in models.UserOfferRecord._meta.fields]
 
 class CompanyAdmin(admin.ModelAdmin):
-    
-    list_display = ('id', 'name', '_boss_id', '_admin_id','email', 'phone', 'address', 'company_desc', 'company_benefits', 'create_at', 'update_at')
+    list_display = [
+        '_boss_id' if f.name=='boss_id' 
+        else f.name for f in models.Company._meta.fields
+    ]
     def _boss_id(self, obj):
         return str(obj.boss_id.id) +" "+ obj.boss_id.email
-    def _admin_id(self, obj):
-        return str(obj.admin_id.id) +" "+ obj.admin_id.email if obj.admin_id else None
-
-    _boss_id.short_description = 'Boss ID'
-    _admin_id.short_description = 'Admin ID'
+    # _boss_id.short_description = 'Boss'
 
 class CompanyEmployeeAdmin(admin.ModelAdmin):
     list_display = [f.name for f in models.CompanyEmployee._meta.fields]
-    if 'company_id' in list_display:
-        list_display[list_display.index('company_id')] = '_company_id'
-    if 'user_id' in list_display:
-        list_display[list_display.index('user_id')] = '_user_id'
 
-    def _company_id(self, obj):
-        return str(obj.company_id.id) + " " + obj.company_id.name
-    def _user_id(self, obj):
-        return str(obj.user_id.id) + " " + obj.user_id.email
+class CompanyEmployeePositionAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in models.CompanyEmployeePosition._meta.fields]
 
-class PermissionAdmin(admin.ModelAdmin):
-    list_display = [f.name for f in models.Permission._meta.fields]
+class CompanyDepartmentAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in models.CompanyDepartment._meta.fields]
 
-class UserPermissionAdmin(admin.ModelAdmin):
-    list_display = [f.name for f in models.UserPermission._meta.fields]
-    if 'company_id' in list_display:
-        list_display[list_display.index('company_id')] = '_company_id'
-    if 'user_id' in list_display:
-        list_display[list_display.index('user_id')] = '_user_id'
+class CompanyPermissionAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in models.CompanyPermission._meta.fields]
+    
+class CompanyRecruitmentAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in models.CompanyRecruitment._meta.fields]
 
-    def _company_id(self, obj):
-        return str(obj.company_id.id) + " " + obj.company_id.name
-    def _user_id(self, obj):
-        return str(obj.user_id.id) + " " + obj.user_id.email
+class CompanyBenefitsAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in models.CompanyBenefits._meta.fields]
+
+class CompanyPromotionRecordAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in models.CompanyPromotionRecord._meta.fields]
+
+class CompanyEmployeePerformanceReviewAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in models.CompanyEmployeePerformanceReview._meta.fields]
+
+class CompanyTrainingAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in models.CompanyTraining._meta.fields]
+
+class CompanyEmployeeTrainingAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in models.CompanyEmployeeTraining._meta.fields]
+
+class CompanyEmployeeFeedBackReviewAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in models.CompanyEmployeeFeedBackReview._meta.fields]
 
 class checkInAdmin(admin.ModelAdmin):
-    list_display = [f.name for f in models.checkIn._meta.fields]
-    if 'company_id' in list_display:
-        list_display[list_display.index('company_id')] = '_company_id'
-    if 'user_id' in list_display:
-        list_display[list_display.index('user_id')] = '_user_id'
-
-    def _company_id(self, obj):
-        return str(obj.company_id.id) + " " + obj.company_id.name
-    def _user_id(self, obj):
-        return str(obj.user_id.id) + " " + obj.user_id.email
+    list_display = [f.name for f in models.CompanyCheckIn._meta.fields]
 
 class companyCheckInRuleAdmin(admin.ModelAdmin):
     list_display = [f.name for f in models.companyCheckInRule._meta.fields]
-    if 'company_id' in list_display:
-        list_display[list_display.index('company_id')] = '_company_id'
-
-    def _company_id(self, obj):
-        return str(obj.company_id.id) + " " + obj.company_id.name
 
 class AnnouncementGroupAdmin(admin.ModelAdmin):
-    list_display = [f.name for f in models.AnnouncementGroup._meta.fields]
-    if 'company_id' in list_display:
-        list_display[list_display.index('company_id')] = '_company_id'
-    if 'user_id' in list_display:
-        list_display[list_display.index('user_id')] = '_user_id'
-
-    def _company_id(self, obj):
-        return str(obj.company_id.id) + " " + obj.company_id.name
-    def _user_id(self, obj):
-        return str(obj.user_id.id) + " " + obj.user_id.email
+    list_display = [f.name for f in models.CompanyAnnouncementGroup._meta.fields]
 
 class AnnouncementAdmin(admin.ModelAdmin):
-    list_display = [f.name for f in models.Announcement._meta.fields]
-    if 'company_id' in list_display:
-        list_display[list_display.index('company_id')] = '_company_id'
-    if 'user_id' in list_display:
-        list_display[list_display.index('user_id')] = '_user_id'
-
-    def _company_id(self, obj):
-        return str(obj.company_id.id) + " " + obj.company_id.name
-    def _user_id(self, obj):
-        return str(obj.user_id.id) + " " + obj.user_id.email
-
-class TaskHeaderAdmin(admin.ModelAdmin):
-    list_display = [f.name for f in models.TaskHeader._meta.fields]
-    if 'company_id' in list_display:
-        list_display[list_display.index('company_id')] = '_company_id'
-    if 'create_by' in list_display:
-        list_display[list_display.index('create_by')] = '_create_by'
-
-    def _company_id(self, obj):
-        return str(obj.company_id.id) + " " + obj.company_id.name
-    def _create_by(self, obj):
-        return str(obj.create_by.id) + " " + obj.create_by.email    
-
-class TaskItemAdmin(admin.ModelAdmin):
-    list_display = [f.name for f in models.TaskItem._meta.fields]
-    if 'task_header_id' in list_display:
-        list_display[list_display.index('task_header_id')] = '_task_header_id'
-    if 'create_by' in list_display:
-        list_display[list_display.index('create_by')] = '_create_by'
-
-    def _task_header_id(self, obj):
-        return str(obj.task_header_id.id) + " " + obj.task_header_id.name
-    def _create_by(self, obj):
-        return str(obj.create_by.id) + " " + obj.create_by.email
+    list_display = [f.name for f in models.CompanyAnnouncement._meta.fields]
 
 # Register your models here.
 admin.site.register(UserAccount, UserAccountAdmin)
-admin.site.register(CustomOutstandingToken, CustomOutstandingTokenAdmin)
+admin.site.register(models.UserResume, UserResumeAdmin)
+admin.site.register(models.UserApplicationRecord, UserApplicationRecordAdmin)
+admin.site.register(models.UserOfferRecord, UserOfferRecordAdmin)
 admin.site.register(models.Company, CompanyAdmin)
 admin.site.register(models.CompanyEmployee, CompanyEmployeeAdmin)
-admin.site.register(models.Permission, PermissionAdmin)
-admin.site.register(models.UserPermission, UserPermissionAdmin)
-admin.site.register(models.checkIn, checkInAdmin)
+admin.site.register(models.CompanyEmployeePosition, CompanyEmployeePositionAdmin)
+admin.site.register(models.CompanyDepartment, CompanyDepartmentAdmin)
+admin.site.register(models.CompanyPermission, CompanyPermissionAdmin)
+admin.site.register(models.CompanyRecruitment, CompanyRecruitmentAdmin)
+admin.site.register(models.CompanyBenefits, CompanyBenefitsAdmin)
+admin.site.register(models.CompanyPromotionRecord, CompanyPromotionRecordAdmin)
+admin.site.register(models.CompanyEmployeePerformanceReview, CompanyEmployeePerformanceReviewAdmin)
+admin.site.register(models.CompanyTraining, CompanyTrainingAdmin)
+admin.site.register(models.CompanyEmployeeTraining, CompanyEmployeeTrainingAdmin)
+admin.site.register(models.CompanyEmployeeFeedBackReview, CompanyEmployeeFeedBackReviewAdmin)
+admin.site.register(models.CompanyCheckIn, checkInAdmin)
 admin.site.register(models.companyCheckInRule, companyCheckInRuleAdmin)
-admin.site.register(models.AnnouncementGroup, AnnouncementGroupAdmin)
-admin.site.register(models.Announcement, AnnouncementAdmin)
-admin.site.register(models.TaskHeader, TaskHeaderAdmin)
-admin.site.register(models.TaskItem, TaskItemAdmin)
+admin.site.register(models.CompanyAnnouncementGroup, AnnouncementGroupAdmin)
+admin.site.register(models.CompanyAnnouncement, AnnouncementAdmin)
+# admin.site.register(CustomOutstandingToken, CustomOutstandingTokenAdmin)
