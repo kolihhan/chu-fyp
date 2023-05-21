@@ -35,6 +35,7 @@ urlpatterns = [
 
     
     path('companys', getAllCompany, name='company'),
+    path('boss/company/<str:pk>', getBossCompany, name='getBossCompany')
 
 
 ]
