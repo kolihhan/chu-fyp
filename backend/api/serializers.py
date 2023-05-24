@@ -16,7 +16,18 @@ class UserIdAndEmailSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.UserAccount
         fields = ['id', 'email', 'name']
-        
+
+class CompanyPermissionNameAndDescSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.CompanyPermission
+        fields = ['id', 'permission_name', 'permission_desc']
+
+class CompanyEmployeePositionPermissionSerializer(serializers.ModelSerializer):
+    companyPermission_id = CompanyPermissionNameAndDescSerializer(many=True, read_only=True)
+    class Meta:
+        model = models.CompanyEmployeePosition
+        fields = '__all__'
+
 class UserSerializer(serializers.ModelSerializer):
 
     password = serializers.CharField(write_only=True)
@@ -50,6 +61,7 @@ class CompanySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class CompanyEmployeeSerializer(serializers.ModelSerializer):
+    companyEmployeePosition_id = CompanyEmployeePositionPermissionSerializer(many=False, read_only=True)
     class Meta: 
         model = models.CompanyEmployee
         fields = '__all__'
@@ -74,14 +86,14 @@ class CompanyCheckInRuleSerializer(serializers.ModelSerializer):
         model = models.companyCheckInRule
         fields = '__all__'
 
-class AnnouncementGroupSerializer(serializers.ModelSerializer):
+class CompanyAnnouncementGroupSerializer(serializers.ModelSerializer):
     user_id = UserIdAndEmailSerializer(many=True, read_only=True)
     class Meta: 
         model = models.CompanyAnnouncementGroup
         fields = '__all__'
 
-class AnnouncementSerializer(serializers.ModelSerializer):
-    group = AnnouncementGroupSerializer(many=True, read_only=True)
+class CompanyAnnouncementSerializer(serializers.ModelSerializer):
+    group = CompanyAnnouncementGroupSerializer(many=True, read_only=True)
     class Meta: 
         model = models.CompanyAnnouncement
         fields = '__all__'
@@ -89,4 +101,14 @@ class AnnouncementSerializer(serializers.ModelSerializer):
 class UserResumeSerializer(serializers.ModelSerializer):
     class Meta: 
         model = models.UserResume
+        fields = '__all__'
+
+class CompanyPermissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.CompanyPermission
+        fields = '__all__'
+
+class CompanyEmployeePositionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.CompanyEmployeePosition
         fields = '__all__'

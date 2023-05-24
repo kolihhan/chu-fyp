@@ -82,6 +82,8 @@ class UserResume(models.Model):
     language = models.TextField(default="Chinese")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return self.user 
 
 # 用戶面試申請模型
 class UserApplicationRecord(models.Model):
@@ -96,7 +98,9 @@ class UserApplicationRecord(models.Model):
         ("Withdrawn","Withdrawn")           # user自己撤回
     ])
     create_at = models.DateTimeField(auto_now_add=True)
-
+    def __str__(self):
+        return self.user
+    
 # 用戶面試成功模型
 class UserOfferRecord(models.Model):
     userApplicationRecord_id = models.ForeignKey(UserApplicationRecord, on_delete=models.CASCADE)
@@ -106,7 +110,9 @@ class UserOfferRecord(models.Model):
     start_date = models.DateTimeField()
     end_date = models.DateTimeField(blank=True, null=True)
     create_at = models.DateTimeField(auto_now_add=True)
-
+    def __str__(self):
+        return self.userApplicationRecord_id
+    
 # 公司模型
 class Company(models.Model):
     name = models.CharField()
@@ -141,6 +147,8 @@ class CompanyEmployeePosition(models.Model):
     companyBenefits_id = models.ManyToManyField('CompanyBenefits', blank=True)
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return f"{self.id}"
 
 # 公司部門模型
 class CompanyDepartment(models.Model):
@@ -148,6 +156,8 @@ class CompanyDepartment(models.Model):
     department = models.CharField()
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return f"{self.id}"
 
 # 公司權限模型
 class CompanyPermission(models.Model):
@@ -156,6 +166,8 @@ class CompanyPermission(models.Model):
     permission_desc = models.TextField(blank=True, null=False)
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return f"{self.id}"
 
 # 公司招聘模型
 class CompanyRecruitment(models.Model):
@@ -176,6 +188,8 @@ class CompanyRecruitment(models.Model):
     buiness_trip = models.BooleanField()    # 出差
     working_hour = models.TextField()       # 上班時段
     leaving_system = models.TextField()     # 休假制度
+    def __str__(self):
+        return f"{self.id}"
 
 # 公司福利模型
 class CompanyBenefits(models.Model):
@@ -183,7 +197,9 @@ class CompanyBenefits(models.Model):
     name = models.TextField()
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
-
+    def __str__(self):
+        return f"{self.id}"
+    
 # 公司員工升遷記錄模型
 class CompanyPromotionRecord(models.Model):
     companyEmployee_id = models.ForeignKey(CompanyEmployee, on_delete=models.CASCADE)
@@ -193,6 +209,8 @@ class CompanyPromotionRecord(models.Model):
     description = models.TextField()
     remarks = models.TextField()
     create_at = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return f"{self.id}"
 
 # 公司員工表現模型
 class CompanyEmployeePerformanceReview(models.Model):
@@ -201,6 +219,8 @@ class CompanyEmployeePerformanceReview(models.Model):
     description = models.TextField()
     remarks = models.TextField()
     create_at = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return f"{self.id}"
 
 # 公司培訓模型
 class CompanyTraining(models.Model):
@@ -211,6 +231,8 @@ class CompanyTraining(models.Model):
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     create_at = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return f"{self.id}"
 
 # 公司員工培訓模型
 class CompanyEmployeeTraining(models.Model):
@@ -219,6 +241,8 @@ class CompanyEmployeeTraining(models.Model):
     companyTraining_id = models.ForeignKey(CompanyTraining, on_delete=models.CASCADE)
     training_result = models.CharField()
     create_at = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return f"{self.id}"
 
 # 公司員工回饋模型
 class CompanyEmployeeFeedBackReview(models.Model):
@@ -227,6 +251,8 @@ class CompanyEmployeeFeedBackReview(models.Model):
     feedback_to = models.ForeignKey(CompanyEmployee, on_delete=models.CASCADE, related_name='feerback_to')  
     remarks = models.TextField()
     create_at = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return f"{self.id}"
 
 # 公司打卡模型
 class CompanyCheckIn(models.Model):

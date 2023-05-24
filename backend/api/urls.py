@@ -3,6 +3,8 @@ from rest_framework_simplejwt.views import (TokenObtainPairView,
                                             TokenRefreshView, TokenVerifyView)
 
 from .views import *
+from . import views
+
 
 #Routes
 
@@ -10,32 +12,44 @@ urlpatterns = [
     path('register', register, name='register'),
     path('login', MyTokenObtainPairView.as_view(), name='login'),
     
+    # company
     path('company/<str:pk>', getCompany, name='getCompany'),
     path('createCompany', createCompany, name='createCompany'),
     path('updateCompany/<str:pk>', updateCompany, name='updateCompany'),
     path('deleteCompany/<str:pk>', deleteCompany, name='deleteCompany'),
 
-    path('addCompanyEmployee', addCompanyEmployee, name='addCompanyEmployee'),
-    path('companyEmployee/<str:pk>', getCompanyEmployee, name='getCompanyEmployee'),
-    path('updateCompanyEmployee/<str:pk>', updateCompanyEmployee, name='updateCompanyEmployee'),
-    path('deleteCompanyEmployee/<str:pk>', deleteCompanyEmployee, name='deleteCompanyEmployee'),
+    path('boss/company/<str:pk>', getBossAllCompany, name='getBossCompany'),
 
-    path('announcements', getAnnouncements, name='announcements'),
-    path('announcementsuser/<str:companyId>/<str:userId>', getUserAnnouncements, name='announcementsByUser'),
-    path('announcement/<str:pk>', getAnnouncement, name='announcement'),
+    # permission
+    path('companyPermission/create', createCompanyPermission, name='createCompanyPermission'),
+    path('companyPermission/get/<int:pk>', getCompanyPermission, name='getCompanyPermission'),
+    path('companyPermission/update/<int:pk>', updateCompanyPermission, name='updateCompanyPermission'),
+    path('companyPermission/delete/<int:pk>', deleteCompanyPermission, name='deleteCompanyPermission'),
 
+    path('companyPermission/get/company/all/<int:pk>', getCompanyAllCompanyPermission, name='getCompanyAllCompanyPermission'),
+
+    # companyEmployee
+    # path('addCompanyEmployee', addCompanyEmployee, name='addCompanyEmployee'),
+    path('companyEmployee/get/<str:pk>', getCompanyEmployee, name='getCompanyEmployee'),
+    # path('updateCompanyEmployee/<str:pk>', updateCompanyEmployee, name='updateCompanyEmployee'),
+    # path('deleteCompanyEmployee/<str:pk>', deleteCompanyEmployee, name='deleteCompanyEmployee'),
+
+    # announcement
+    path('announcement/create', postAnnouncement, name='postAnnouncement'),
+    path('announcement/get/<int:pk>', getAnnouncement, name='getAnnouncement'),
+    path('announcement/update/<int:pk>', updateAnnouncement, name='updateAnnouncement'),
+    path('announcement/delete/<int:pk>', deleteAnnouncement, name='deleteAnnouncement'),
+
+    # resume
+    path('resumes/', UserResumeView.as_view(), name='user_resume_list'),
+    path('resumes/<int:pk>/', UserResumeView.as_view(), name='user_resume_detail'),   
     path('update/<int:pk>', update_user_account, name='update_account'),
     
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     
-    path('resumes/', UserResumeView.as_view(), name='user_resume_list'),
-    path('resumes/<int:pk>/', UserResumeView.as_view(), name='user_resume_detail'),
-
     
-    path('companys', getAllCompany, name='company'),
-    path('boss/company/<str:pk>', getBossCompany, name='getBossCompany')
 
 
 ]
@@ -59,4 +73,4 @@ urlpatterns = [
 # get all announcement of user by companyId and userId
 # get one announcement
 # update announcement
-    # delete announcement
+# delete announcement
