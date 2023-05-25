@@ -16,6 +16,7 @@ from . import models
 from . import serializers
 from django.db.models import Q
 from django.db import transaction
+from django.utils import timezone
 import logging
 
 # from django.http import JsonResponse
@@ -48,6 +49,17 @@ class MyTokenObtainPairView(TokenObtainPairView):
     permission_classes = [AllowAny]
     serializer_class = MyTokenObtainPairSerializer
 
+
+# class
+
+# region user
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getMultipleUserByEmail(request, pk):
+    userList = models.UserAccount.objects.filter(email__contains=pk)
+    serializer = serializers.UserIdAndEmailSerializer(userList, many=True)
+    return Response(serializer.data)
+# endregion
 
 # region company
 @api_view(['POST'])
@@ -90,6 +102,12 @@ def createCompany(request):
             )
             createdCompanyEmployeePosition.companyPermission_id.set([createdPermission])
             createdCompanyEmployeePosition.companyBenefits_id.set([createdBenefit])
+
+            createdCompanyEmployeePosition2 = models.CompanyEmployeePosition.objects.create(
+                company_id = createdCompany,
+                position_name = "Employee",
+                companyDepartment_id = createdDepartment,
+            )
         
             createdEmployee = models.CompanyEmployee.objects.create(
                 company_id = createdCompany,
@@ -151,30 +169,196 @@ def getBossAllCompany(request, pk):
     return Response(serializer.data)
 # endregion
 
-# cannot use post and put on CompanyEmployee
+# region resume 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def createResume(request):
+    try:
+        resumeData = request.data
+        createdResume = models.UserResume.objects.create(
+            user = models.UserAccount.objects.get(id=resumeData['user']),
+            summary = resumeData['summary'],
+            experience = resumeData['experience'],
+            education = resumeData['education'],
+            skills = resumeData['skills'],
+            prefer_work = resumeData['prefer_work'],
+            language = resumeData['language']
+        )
+        serializer = serializers.UserResumeSerializer(createdResume, many=False)
+        if createdResume.id:
+            return Response({'message':'履歷建立成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message':'履歷建立失敗 , 請稍後再嘗試'})
+    except Exception as e:
+        return Response({'message':'履歷建立失敗 , 請稍後再嘗試'})
+    
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getResume(request, pk):
+    try:
+        resume = models.UserResume.objects.get(id=pk)
+        serializer = serializers.UserResumeSerializer(resume, many=False)
+        return Response({'messagge':'', 'data':serializer.data})
+    except models.UserResume.DoesNotExist:
+        return Response({'message':'履歷不存在'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'履歷取得失敗，請稍後再嘗試'})
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getUserAllResume(request, pk):
+    try:
+        resume = models.UserResume.objects.filter(user__id=pk)
+        serializer = serializers.UserResumeSerializer(resume, many=True)
+        return Response({'messagge':'', 'data':serializer.data})
+    except models.UserResume.DoesNotExist:
+        return Response({'message':'履歷不存在'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'履歷取得失敗，請稍後再嘗試'})
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def updateResume(request, pk):
+    try:
+        updatedResume = request.data
+        originalResume = models.UserResume.objects.get(id=pk)
+        originalResume.summary = updatedResume.get('summary', originalResume.summary)
+        originalResume.experience = updatedResume.get('experience', originalResume.experience)
+        originalResume.education = updatedResume.get('education', originalResume.education)
+        originalResume.skills = updatedResume.get('skills', originalResume.skills)
+        originalResume.prefer_work = updatedResume.get('prefer_work', originalResume.prefer_work)
+        originalResume.language = updatedResume.get('language', originalResume.language)
+        originalResume.save()
+        serializer = serializers.UserResumeSerializer(originalResume, many=False)
+        return Response({'messagge':'', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.UserResume.DoesNotExist:
+        return Response({'message':'履歷不存在'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'履歷更新失敗，請稍後再嘗試'})
+    
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def deleteResume(request, pk):
+    try:
+        deletedResume = models.UserResume.objects.get(id=pk)
+        delete = deletedResume.delete()
+        if delete[0] > 0: 
+            return Response({'message':'履歷刪除成功'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message':'刪除失敗，請稍後再嘗試'})
+    except models.UserResume.DoesNotExist:
+        return Response({'message':'履歷不存在'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'刪除失敗，請稍後再嘗試'})
+    
+# endregion
+
 # region CompanyEmployee
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def createCmpEmp(request):
-    employeeData = request.data
-    createdCompanyEmployee  = models.CompanyEmployee.objects.create(
-        company_id = models.Company.objects.get(id=employeeData["company_id"]),
-        user_id = models.UserAccount.objects.get(id=employeeData['user_id']),
-        companyEmployeePosition_id = models.CompanyEmployeePosition.objects.get(id=employeeData['companyEmployeePosition_id']),
-        salary = employeeData['salary'],
-    )
-    serializer = serializers.CompanyEmployeeSerializer(createdCompanyEmployee, many=False)
-    if(createdCompanyEmployee.id):
-        return Response({"message":"員工增加成功", "data":serializer.data})
-    else: return Response({"message":"員工增加失敗"})
+def createCompanyEmployee(request):
+    try:
+        employeeData = request.data
+        createdCompanyEmployee  = models.CompanyEmployee.objects.create(
+            company_id = models.Company.objects.get(id=employeeData["company_id"]),
+            user_id = models.UserAccount.objects.get(id=employeeData['user_id']),
+            companyEmployeePosition_id = models.CompanyEmployeePosition.objects.get(id=employeeData['companyEmployeePosition_id']),
+            salary = employeeData['salary'],
+        )
+        serializer = serializers.CompanyEmployeeSerializer(createdCompanyEmployee, many=False)
+        if(createdCompanyEmployee.id):
+            return Response({"message":"員工增加成功", "data":serializer.data})
+        else: return Response({"message":"員工增加失敗"})
+    except (models.Company.DoesNotExist, models.UserAccount.DoesNotExist, models.CompanyEmployeePosition.DoesNotExist):
+        return Response({"message": "公司、使用者帳號或員工職位不存在"})
+    except Exception as e:
+        return Response({"message": "員工增加失敗", "error": str(e)})
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def createMultipleCompanyEmployee(request):
+    try:
+        with transaction.atomic():
+            createdCompanyEmployees = []
+            employeeData = request.data
+            for userID in employeeData['user_id']:
+                createdCompanyEmployee  = models.CompanyEmployee.objects.create(
+                    company_id = models.Company.objects.get(id=employeeData["company_id"]),
+                    user_id = models.UserAccount.objects.get(id=userID),
+                    companyEmployeePosition_id = models.CompanyEmployeePosition.objects.get(id=employeeData['companyEmployeePosition_id']),
+                    salary = employeeData['salary'],
+                )
+                serializer = serializers.CompanyEmployeeSerializer(createdCompanyEmployee, many=False)
+                createdCompanyEmployees.append(serializer.data)
+            return Response({"message":"員工增加成功", "data":createdCompanyEmployees})
+    except (models.Company.DoesNotExist, models.UserAccount.DoesNotExist, models.CompanyEmployeePosition.DoesNotExist):
+        return Response({"message": "公司、使用者帳號或員工職位不存在"})
+    except Exception as e:
+        return Response({"message": "員工增加失敗", "error": str(e)})
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getCompanyEmployee(request, pk):
+    # pass in companyEmployee id
     companyEmployee = models.CompanyEmployee.objects.get(id=pk)
     serializer = serializers.CompanyEmployeeSerializer(companyEmployee, many=False)
     return Response(serializer.data)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getCompanyAllEmployee(request, pk):
+    # pass in company id
+    companyEmployee = models.CompanyEmployee.objects.filter(company_id=pk)
+    serializer = serializers.CompanyEmployeeSerializer(companyEmployee, many=True)
+    return Response(serializer.data)
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def updateCompanyEmployee(request, pk):
+    try:
+        updatedCompanyEmployee = request.data
+        newCompanyEmployeePosition_id = updatedCompanyEmployee.get('companyEmployeePosition_id', None)
+        originalCompanyEmployee = models.CompanyEmployee.objects.get(id=pk)
+        if(newCompanyEmployeePosition_id==None): newCompanyEmployeePosition_id = originalCompanyEmployee.companyEmployeePosition_id
+        else: newCompanyEmployeePosition_id = models.CompanyEmployeePosition.objects.get(id=newCompanyEmployeePosition_id)
+        
+        originalCompanyEmployee.companyEmployeePosition_id  = newCompanyEmployeePosition_id
+        originalCompanyEmployee.salary = updatedCompanyEmployee.get('salary', originalCompanyEmployee.salary)
+        originalCompanyEmployee.save()
+        serializer = serializers.CompanyEmployeeSerializer(originalCompanyEmployee, many=False)
+
+        return Response({"message":"員工資料更新成功", 'data':serializer.data},status=status.HTTP_200_OK)
+    except models.CompanyEmployee.DoesNotExist:
+        return Response({'message':'員工不存在'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({"message":"員工資料更新失敗，請稍後再嘗試"})
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def fireEmployee(request, pk):
+    try:
+        originalCompanyEmployee = models.CompanyEmployee.objects.get(id=pk)
+        originalCompanyEmployee.end_date = timezone.now()
+        originalCompanyEmployee.save()
+        serializer = serializers.CompanyEmployeeSerializer(originalCompanyEmployee, many=False)
+        return Response({"message":"員工資料更新成功", 'data':serializer.data},status=status.HTTP_200_OK)
+    except models.CompanyEmployee.DoesNotExist:
+        return Response({'message':'員工不存在'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({"message":"員工資料更新失敗，請稍後再嘗試"})
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def deleteCompanyEmployee(request, pk):
+    try:
+        deletedCompanyEmployee = models.CompanyEmployee.objects.get(id=pk)
+        delete = deletedCompanyEmployee.delete()
+        if delete[0]>0: return Response({"message": "員工刪除成功"}, status=status.HTTP_200_OK)
+        else: return Response({"message", "員工刪除失敗，請稍後再嘗試"}) 
+    except models.CompanyEmployee.DoesNotExist:
+        return Response({"messgae": "員工不存在"}, status=status.HTTP_404_NOT_FOUND)
+    except:
+        return Response({"messgae": "員工刪除失敗，請稍後再嘗試"})
 # endregion
 
 # region CompanyPermission
@@ -325,14 +509,14 @@ def deleteAnnouncement(request, pk):
 # endregion
 
 # region 
-# @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
-# def getIdFromToken(request):
-#     # get token from header
-#     token = request.META.get('HTTP_AUTHORIZATION', '').split(' ')[1]  
-#     accessToken = AccessToken(token)
-#     userId = accessToken.payload['user_id']
-#     return Response(userId)
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def getIdFromToken(request):
+    # get token from header
+    token = request.META.get('HTTP_AUTHORIZATION', '').split(' ')[1]
+    accessToken = AccessToken(token)
+    userId = accessToken.payload['user_id']
+    return Response(userId)
 
 
 
@@ -354,10 +538,6 @@ def update_user_account(request,pk):
         return Response(serializer.data, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-
-
-
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def company_remove_employee(request, pk):
@@ -371,36 +551,6 @@ def company_remove_employee(request, pk):
         logging.exception("An error occurred: %s", e)
         return Response({"detail": "移除員工時，發生錯誤。"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
-class UserResumeView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, pk):
-        resumeData = models.UserResume.objects.get(id=pk)
-        serializer = serializers.UserResumeSerializer(resumeData, many=False)
-        return Response(serializer.data)
-
-    def post(self, request, format=None):
-        resumeUser = models.UserAccount.objects.get(id=request.data['user'])
-        serializer = UserResumeSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user_resume_instance = serializer.save(user=resumeUser)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-    def put(self, request, pk, format=None):
-        resumeUser = models.UserAccount.objects.get(id=request.data['user'])
-        user_resume_instance = UserResume.objects.get(pk=pk, user=resumeUser)
-        serializer = UserResumeSerializer(user_resume_instance, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
-
-    def delete(self, request, pk, format=None):
-        resumeUser = models.UserAccount.objects.get(id=request.data['user'])
-        user_resume_instance = UserResume.objects.get(pk=pk, user=resumeUser)
-        user_resume_instance.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def assign_position(request):
@@ -412,32 +562,6 @@ def assign_position(request):
     company_employee.save()
 
     return Response({'message': 'Position assigned successfully.'})
-
-
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def replace_admin(request):
-    
-    # admin_id = request.data.get('admin_id')
-
-    # company = get_object_or_404(Company, id=1)  # Assuming there's only one company instance
-    # company.admin_id = admin_id
-    # company.save()
-
-    # return Response({'message': 'Administrator has been replaced.'})
-    pass
-
-@api_view(['POST'])
-def change_permissions(request):
-    # admin_id = request.data.get('admin_id')
-    # permissions = request.data.get('permissions')
-
-    # admin_user_permission = get_object_or_404(models.UserPermission, user_id=admin_id)
-    # admin_user_permission.permission_id.set(permissions)
-    # admin_user_permission.save()
-
-    # return Response({'message': 'Permissions changed successfully.'})
-    pass
 
 # endregion
 

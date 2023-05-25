@@ -12,13 +12,22 @@ urlpatterns = [
     path('register', register, name='register'),
     path('login', MyTokenObtainPairView.as_view(), name='login'),
     
+    # user
+    path('user/get/multiple/email/<str:pk>', getMultipleUserByEmail, name='getMultipleUserByEmail'),
+
     # company
     path('company/<str:pk>', getCompany, name='getCompany'),
     path('createCompany', createCompany, name='createCompany'),
     path('updateCompany/<str:pk>', updateCompany, name='updateCompany'),
     path('deleteCompany/<str:pk>', deleteCompany, name='deleteCompany'),
-
     path('boss/company/<str:pk>', getBossAllCompany, name='getBossCompany'),
+
+    # resume
+    path('resume/create', createResume, name='createResume'),
+    path('resume/get/<int:pk>', getResume, name='getResume'),
+    path('resume/get/user/<int:pk>', getUserAllResume, name='getUserAllResume'),
+    path('resume/update/<int:pk>', updateResume, name='updateResume'),
+    path('resume/delete/<int:pk>', deleteResume, name='deleteResume'),
 
     # permission
     path('companyPermission/create', createCompanyPermission, name='createCompanyPermission'),
@@ -29,10 +38,13 @@ urlpatterns = [
     path('companyPermission/get/company/all/<int:pk>', getCompanyAllCompanyPermission, name='getCompanyAllCompanyPermission'),
 
     # companyEmployee
-    # path('addCompanyEmployee', addCompanyEmployee, name='addCompanyEmployee'),
+    path('companyEmployee/create', createCompanyEmployee, name='createCompanyEmployee'),
     path('companyEmployee/get/<str:pk>', getCompanyEmployee, name='getCompanyEmployee'),
-    # path('updateCompanyEmployee/<str:pk>', updateCompanyEmployee, name='updateCompanyEmployee'),
-    # path('deleteCompanyEmployee/<str:pk>', deleteCompanyEmployee, name='deleteCompanyEmployee'),
+    path('companyEmployee/get/company/all/<str:pk>', getCompanyAllEmployee, name='getCompanyAllEmployee'),
+    path('companyEmployee/update/<str:pk>', updateCompanyEmployee, name='updateCompanyEmployee'),
+    path('companyEmployee/delete/<str:pk>', deleteCompanyEmployee, name='deleteCompanyEmployee'),
+    path('companyEmployee/create/multiple', createMultipleCompanyEmployee, name='createMultipleCompanyEmployee'),
+    path('companyEmployee/fire/<int:pk>', fireEmployee, name='fireEmployee'),
 
     # announcement
     path('announcement/create', postAnnouncement, name='postAnnouncement'),
@@ -41,8 +53,7 @@ urlpatterns = [
     path('announcement/delete/<int:pk>', deleteAnnouncement, name='deleteAnnouncement'),
 
     # resume
-    path('resumes/', UserResumeView.as_view(), name='user_resume_list'),
-    path('resumes/<int:pk>/', UserResumeView.as_view(), name='user_resume_detail'),   
+    
     path('update/<int:pk>', update_user_account, name='update_account'),
     
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),

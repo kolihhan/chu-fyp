@@ -135,6 +135,7 @@ class CompanyEmployee(models.Model):
     salary = models.DecimalField(max_digits=10, decimal_places=2)
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
+    end_date = models.DateTimeField(null=True, blank=True)
     def __str__(self):
         return str(self.user_id)
 

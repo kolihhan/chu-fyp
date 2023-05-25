@@ -61,6 +61,7 @@ class CompanySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class CompanyEmployeeSerializer(serializers.ModelSerializer):
+    user_id = UserIdAndEmailSerializer(many=False, read_only=True)
     companyEmployeePosition_id = CompanyEmployeePositionPermissionSerializer(many=False, read_only=True)
     class Meta: 
         model = models.CompanyEmployee
