@@ -331,7 +331,7 @@ def updateCompanyEmployee(request, pk):
     except models.CompanyEmployee.DoesNotExist:
         return Response({'message':'員工不存在'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
-        return Response({"message":"員工資料更新失敗，請稍後再嘗試"})
+        return Response({"message":"員工資料更新失敗，請稍後再嘗試"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
@@ -345,7 +345,7 @@ def fireEmployee(request, pk):
     except models.CompanyEmployee.DoesNotExist:
         return Response({'message':'員工不存在'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
-        return Response({"message":"員工資料更新失敗，請稍後再嘗試"})
+        return Response({"message":"員工資料更新失敗，請稍後再嘗試"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
@@ -359,6 +359,77 @@ def deleteCompanyEmployee(request, pk):
         return Response({"messgae": "員工不存在"}, status=status.HTTP_404_NOT_FOUND)
     except:
         return Response({"messgae": "員工刪除失敗，請稍後再嘗試"})
+# endregion
+
+# region department
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def createDepartment(request):
+    try:
+        departmentData = request.data
+        createdDepartment = models.CompanyDepartment.objects.create(
+            company_id = models.Company.objects.get(id=departmentData['company_id']),
+            department_name = departmentData['department_name'],
+        )
+        serializer = serializers.CompanyDepartmentSerializer(createdDepartment, many=False)
+        return Response(serializer.data)
+    except Exception as e:
+        return Response({'message':'部門創建失敗,請稍後再嘗試', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getDepartment(request, pk):
+    try:
+        department = models.CompanyDepartment.objects.get(id=pk)
+        serializer = serializers.CompanyDepartmentSerializer(department, many=False)
+        return Response({'data':serializer.data})
+    except models.CompanyDepartment.DoesNotExist:
+        return Response({'message':'部門不存在'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getCompanyAllDepartment(request, pk):
+    try:
+        department = models.CompanyDepartment.objects.filter(company_id__id=pk)
+        serializer = serializers.CompanyDepartmentSerializer(department, many=True)
+        return Response({'data':serializer.data})
+    except models.CompanyDepartment.DoesNotExist:
+        return Response({'message':'部門不存在'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def updateDepartment(request, pk):
+    try:
+        departmentData = request.data
+        department = models.CompanyDepartment.objects.get(id=pk)
+        department.department_name = departmentData['department_name']
+        department.save()
+        serializer = serializers.CompanyDepartmentSerializer(department, many=False)
+        return Response({'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyDepartment.DoesNotExist:
+        return Response({'message':'部門不存在'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'部門跟新失敗，請稍後再嘗試', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def deleteDepartment(request, pk):
+    try:
+        deletedDepartment = models.CompanyDepartment.objects.get(id=pk)
+        delete = deletedDepartment.delete()
+        if delete[0] > 0:
+            return Response({'message':'部門刪除成功'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message':'部門刪除失敗，請稍後再嘗試'}, status=status.HTTP_400_BAD_REQUEST)
+    except models.CompanyDepartment.DoesNotExist:
+        return Response({'message':'部門不存在'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'部門刪除失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
 # endregion
 
 # region CompanyPermission

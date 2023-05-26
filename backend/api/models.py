@@ -154,7 +154,7 @@ class CompanyEmployeePosition(models.Model):
 # 公司部門模型
 class CompanyDepartment(models.Model):
     company_id = models.ForeignKey(Company, on_delete=models.CASCADE)
-    department = models.CharField()
+    department_name = models.CharField()
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
     def __str__(self):

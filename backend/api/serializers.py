@@ -67,6 +67,11 @@ class CompanyEmployeeSerializer(serializers.ModelSerializer):
         model = models.CompanyEmployee
         fields = '__all__'
 
+class CompanyDepartmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.CompanyDepartment
+        fields = '__all__'
+
 class PermissionSerializer(serializers.ModelSerializer):
     class Meta: 
         model = models.Permission

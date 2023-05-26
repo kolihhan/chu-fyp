@@ -29,12 +29,18 @@ urlpatterns = [
     path('resume/update/<int:pk>', updateResume, name='updateResume'),
     path('resume/delete/<int:pk>', deleteResume, name='deleteResume'),
 
+    # department
+    path('companyDepartment/create', createDepartment, name='createDepartment'),
+    path('companyDepartment/get/<int:pk>', getDepartment, name='getDepartment'),
+    path('companyDepartment/get/company/all/<int:pk>', getCompanyAllDepartment, name='getCompanyAllDepartment'),
+    path('companyDepartment/update/<int:pk>', updateDepartment, name='updateDepartment'),
+    path('companyDepartment/delete/<int:pk>', deleteDepartment, name='deleteDepartment'),
+
     # permission
     path('companyPermission/create', createCompanyPermission, name='createCompanyPermission'),
     path('companyPermission/get/<int:pk>', getCompanyPermission, name='getCompanyPermission'),
     path('companyPermission/update/<int:pk>', updateCompanyPermission, name='updateCompanyPermission'),
     path('companyPermission/delete/<int:pk>', deleteCompanyPermission, name='deleteCompanyPermission'),
-
     path('companyPermission/get/company/all/<int:pk>', getCompanyAllCompanyPermission, name='getCompanyAllCompanyPermission'),
 
     # companyEmployee
