@@ -109,6 +109,13 @@ class UserResumeSerializer(serializers.ModelSerializer):
         model = models.UserResume
         fields = '__all__'
 
+
+class UserApplicationRecordSerializer(serializers.ModelSerializer):
+    class Meta: 
+        model = models.UserApplicationRecord
+        fields = '__all__'
+
+
 class CompanyPermissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.CompanyPermission

@@ -9,9 +9,10 @@ import jwt
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken
-from .serializers import UserSerializer, UserResumeSerializer
+from .serializers import UserSerializer, UserResumeSerializer, UserApplicationRecordSerializer
 from .customToken import MyTokenObtainPairSerializer
-from .models import UserAccount, UserResume, CompanyPermission , Company
+from .models import UserAccount, UserResume, CompanyPermission , Company, UserApplicationRecord
+from rest_framework.exceptions import NotFound, ValidationError
 from . import models
 from . import serializers
 from django.db.models import Q
@@ -636,3 +637,131 @@ def assign_position(request):
 
 # endregion
 
+class UserResumeAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        try:
+            user_resumes = UserResume.objects.filter(user=request.user)
+            # 根据需要获取用户的履历列表
+
+            # 序列化user_resumes并返回响应
+            serializer = UserResumeSerializer(user_resumes, many=True)
+            return Response(serializer.data)
+        except Exception as e:
+            return Response(str(e), status=500)
+
+    def post(self, request):
+        try:
+            data = {
+                'user': request.user.id,
+                'summary': request.data.get('summary'),
+                'experience': request.data.get('experience'),
+                'education': request.data.get('education'),
+                'skills': request.data.get('skills'),
+                'prefer_work': request.data.get('prefer_work', 'High Salary'),
+                'language': request.data.get('language', 'Chinese')
+            }
+
+            # 创建新的用户履历
+            user_resume = UserResume.objects.create(**data)
+
+            # 序列化user_resume并返回响应
+            serializer = UserResumeSerializer(user_resume)
+            return Response(serializer.data, status=201)
+        except Exception as e:
+            return Response(str(e), status=500)
+
+    def put(self, request, resume_id):
+        try:
+            user_resume = get_object_or_404(UserResume, id=resume_id, user=request.user)
+            # 更新用户履历的代码
+
+            user_resume.summary = request.data.get('summary', user_resume.summary)
+            user_resume.experience = request.data.get('experience', user_resume.experience)
+            user_resume.education = request.data.get('education', user_resume.education)
+            user_resume.skills = request.data.get('skills', user_resume.skills)
+            user_resume.prefer_work = request.data.get('prefer_work', user_resume.prefer_work)
+            user_resume.language = request.data.get('language', user_resume.language)
+            user_resume.save()
+
+            # 序列化user_resume并返回响应
+            serializer = UserResumeSerializer(user_resume)
+            return Response(serializer.data)
+        except NotFound:
+            return Response("履历不存在", status=404)
+        except Exception as e:
+            return Response(str(e), status=500)
+
+    def delete(self, request, resume_id):
+        try:
+            user_resume = get_object_or_404(UserResume, id=resume_id, user=request.user)
+            # 删除用户履历的代码
+            user_resume.delete()
+
+            return Response("履历已删除")
+        except NotFound:
+            return Response("履历不存在", status=404)
+        except Exception as e:
+            return Response(str(e), status=500)
+
+class UserApplicationRecordAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            data = {
+                'user': request.user.id,
+                'userResume_id': request.data.get('user_resume_id'),
+                'companyRecruitment_id': request.data.get('company_recruitment_id'),
+                'status': 'Pending'  # 默认状态为受理中
+            }
+
+            # 创建新的面试申请记录
+            application_record = UserApplicationRecord.objects.create(**data)
+
+            # 序列化application_record并返回响应
+            serializer = UserApplicationRecordSerializer(application_record)
+            return Response(serializer.data, status=201)
+        except ValidationError as e:
+            return Response(str(e), status=400)
+        except Exception as e:
+            return Response(str(e), status=500)
+
+    def get(self, request):
+        try:
+            application_records = UserApplicationRecord.objects.filter(user=request.user)
+            # 根据需要获取用户的面试申请记录列表
+
+            # 序列化application_records并返回响应
+            serializer = UserApplicationRecordSerializer(application_records, many=True)
+            return Response(serializer.data)
+        except Exception as e:
+            return Response(str(e), status=500)
+
+    def delete(self, request, application_id):
+        try:
+            application_record = get_object_or_404(UserApplicationRecord, id=application_id, user=request.user)
+            application_record.status = 'Withdrawn'  # 将状态改为已取消
+            application_record.save()
+
+            return Response("應聘已取消")
+        except NotFound:
+            return Response("應聘記錄不存在", status=404)
+        except Exception as e:
+            return Response(str(e), status=500)
+
+    def put(self, request, application_id):
+        try:
+            application_record = get_object_or_404(UserApplicationRecord, id=application_id, user=request.user)
+            # 更新用户面试申请记录的代码
+
+            serializer = UserApplicationRecordSerializer(application_record, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response(serializer.errors, status=400)
+        except NotFound:
+            return Response("應聘記錄不存在", status=404)
+        except Exception as e:
+            return Response(str(e), status=500)

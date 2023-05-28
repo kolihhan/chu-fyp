@@ -59,12 +59,18 @@ urlpatterns = [
     path('announcement/delete/<int:pk>', deleteAnnouncement, name='deleteAnnouncement'),
 
     # resume
-    
+    path('user/resume', UserResumeAPIView.as_view(), name='user-resume'),
+    path('user/resume/<int:resume_id>', UserResumeAPIView.as_view(), name='user-resume-detail'),
+
+    path('user/application', UserApplicationRecordAPIView.as_view(), name='job-application'),
+    path('user/application/<int:application_id>', UserApplicationRecordAPIView.as_view(), name='job-application-detail'),
+
     path('update/<int:pk>', update_user_account, name='update_account'),
     
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    
     
     
 
