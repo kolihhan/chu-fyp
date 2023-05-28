@@ -69,6 +69,7 @@ def createCompany(request):
     try:
         with transaction.atomic():
             companyData = request.data
+            # region create company
             createdCompany = models.Company.objects.create(
                 name = companyData['name'],
                 email = companyData['email'],
@@ -79,23 +80,34 @@ def createCompany(request):
                 boss_id = models.UserAccount.objects.get(id=companyData['boss_id']),
             )
             serializer = serializers.CompanySerializer(createdCompany, many=False)
-        
+            # endregion 
+
+            # region create an initial Department for the company
             createdDepartment = models.CompanyDepartment.objects.create(
                 company_id = createdCompany,
-                department = "Main Department"
+                department_name = "Main Department"
             )
+            # endregion
 
+            # region create all inital permission for the company
             createdPermission = models.CompanyPermission.objects.create(
                 company_id = createdCompany,
                 permission_name = "Permission_All",
                 permission_desc = "Permission that allow to control every thing"
             )
+            # todo: create all initial permission for a company
+            # endregion
 
+            # region create all inital benefit for the company
             createdBenefit = models.CompanyBenefits.objects.create(
                 company_id = createdCompany,
-                name = "No benefit"
+                benefit_name = "Boss benefit",
+                benefit_desc = "Boss no need benefit"
             )
-            
+            # todo: create all inital benefit for a company
+            # endregion
+
+            # region create companyEmployee Position (boss and employee)
             createdCompanyEmployeePosition = models.CompanyEmployeePosition.objects.create(
                 company_id = createdCompany,
                 position_name = "Boss",
@@ -109,19 +121,21 @@ def createCompany(request):
                 position_name = "Employee",
                 companyDepartment_id = createdDepartment,
             )
+            # endregion
         
+            # region create companyEmployee (boss)
             createdEmployee = models.CompanyEmployee.objects.create(
                 company_id = createdCompany,
                 user_id = createdCompany.boss_id,
                 companyEmployeePosition_id = createdCompanyEmployeePosition,
                 salary = 0
             )
+            # endregion
         
         return Response({'message':'公司創建成功', 'data':serializer.data})
     except:
         transaction.rollback()
         return Response({'message':'公司創建失敗，請稍後再嘗試'})
-
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -159,15 +173,14 @@ def deleteCompany(request, pk):
         else: return Response({'message':'公司刪除失敗，請稍後再嘗試'})
     except models.Company.DoesNotExist:
         return Response({"message":"公司不存在"}, status=status.HTTP_404_NOT_FOUND)
-# endregion
 
-# region boss manage company
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getBossAllCompany(request, pk):
     companyData = models.Company.objects.filter(boss_id=pk)
     serializer = serializers.CompanySerializer(companyData, many=True)
     return Response(serializer.data)
+
 # endregion
 
 # region resume 
@@ -318,8 +331,10 @@ def getCompanyAllEmployee(request, pk):
 def updateCompanyEmployee(request, pk):
     try:
         updatedCompanyEmployee = request.data
+
         newCompanyEmployeePosition_id = updatedCompanyEmployee.get('companyEmployeePosition_id', None)
         originalCompanyEmployee = models.CompanyEmployee.objects.get(id=pk)
+
         if(newCompanyEmployeePosition_id==None): newCompanyEmployeePosition_id = originalCompanyEmployee.companyEmployeePosition_id
         else: newCompanyEmployeePosition_id = models.CompanyEmployeePosition.objects.get(id=newCompanyEmployeePosition_id)
         
@@ -360,6 +375,7 @@ def deleteCompanyEmployee(request, pk):
         return Response({"messgae": "員工不存在"}, status=status.HTTP_404_NOT_FOUND)
     except:
         return Response({"messgae": "員工刪除失敗，請稍後再嘗試"})
+
 # endregion
 
 # region department
@@ -407,7 +423,7 @@ def updateDepartment(request, pk):
     try:
         departmentData = request.data
         department = models.CompanyDepartment.objects.get(id=pk)
-        department.department_name = departmentData['department_name']
+        department.department_name = departmentData.get('department_name', department.department_name)
         department.save()
         serializer = serializers.CompanyDepartmentSerializer(department, many=False)
         return Response({'data':serializer.data}, status=status.HTTP_200_OK)
@@ -433,37 +449,237 @@ def deleteDepartment(request, pk):
         
 # endregion
 
+# region benefit
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def createBenefit(request):
+    try:
+        permissionData = request.data
+        createdBenefit = models.CompanyBenefits.objects.create(
+            company_id = models.Company.objects.get(id=permissionData['company_id']),
+            benefit_name = permissionData['benefit_name'],
+            benefit_desc = permissionData['benefit_desc'],
+        )
+        serializer = serializers.CompanyBenefitsSerializer(createdBenefit, many=False)
+        if createdBenefit.id :
+            return Response({'message':'權限增加成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+        else: 
+            return Response({'message':'權限增加失敗'}, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response({'message':'權限增加失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getBenefit(request, pk):
+    try:
+        benefit = models.CompanyBenefits.objects.get(id=pk)
+        serializer = serializers.CompanyBenefitsSerializer(benefit, many=False)
+        return Response({'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyBenefits.DoesNotExist:
+        return Response({'message':'權限不存在'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Exception({'message','權限獲取失敗'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+      
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getCompanyAllBenefit(request, pk):
+    try:
+        benefit = models.CompanyBenefits.objects.filter(company_id__id=pk)
+        serializer = serializers.CompanyBenefitsSerializer(benefit, many=True)
+        return Response({'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyBenefits.DoesNotExist:
+        return Response({'message':'權限不存在'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Exception({'message':'權限獲取失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def updateBenefit(request, pk):
+    try:
+        benefitData = request.data
+        benefit = models.CompanyBenefits.objects.get(id=pk)
+        benefit.benefit_name = benefitData.get('benefit_name', benefit.benefit_name)
+        benefit.benefit_desc = benefitData('benefit_desc', benefit.benefit_desc)
+        benefit.save()
+        serializer = serializers.CompanyBenefitsSerializer(benefit, many=False)
+        return Response({'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyBenefits.DoesNotExist:
+        return Response({'message':'權限更新不存在'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'權限更新失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def deleteBenefit(request, pk):
+    try:
+        benefit = models.CompanyBenefits.objects.get(id=pk)
+        delete = benefit.delete()
+        if delete[0] > 0: return Response({'message':'權限刪除成功'}, status=status.HTTP_200_OK)
+        else: return Response({'message':'權限刪除失敗,請稍後再嘗試'}, status=status.HTTP_400_BAD_REQUEST)
+    except models.CompanyBenefits.DoesNotExist:
+        return Response({'message':'權限不存在'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'權限刪除失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# endregion
+
+# region employeePosition
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def createPosition(request):
+    try:
+        with transaction.atomic():
+            positionData = request.data
+            createdPosition = models.CompanyEmployeePosition.objects.create(
+                company_id = models.Company.objects.get(id=positionData['company_id']),
+                position_name = positionData['position_name'],
+                companyDepartment_id = models.CompanyDepartment.objects.get(id=positionData['companyDepartment_id'])
+            )
+            companyPermissions = []
+            for permissionId in positionData.get('companyPermission_id', None) if positionData.get('companyPermission_id', None)!=None else []:
+                companyPermissions.append(models.CompanyPermission.objects.get(id=permissionId))
+
+            companyBenefits = []
+            for benefitId in positionData.get('companyBenefits_id', None) if positionData.get('companyBenefits_id', None)!=None else []:
+                companyBenefits.append(models.CompanyBenefits.objects.get(id=benefitId))
+            
+            createdPosition.companyPermission_id.set(companyPermissions)
+            createdPosition.companyBenefits_id.set(companyBenefits)
+
+            serializer = serializers.CompanyEmployeePositionSerializer(createdPosition, many=False)
+
+            return Response({'message':'職位創建成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+        
+    except (models.CompanyPermission.DoesNotExist, models.CompanyBenefits.DoesNotExist) as e:
+        transaction.rollback
+        return Response({'message':'職位創建失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        transaction.rollback
+        return Response({'message':'職位創建失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getPosition(request, pk):
+    try:
+        position = models.CompanyEmployeePosition.objects.get(id=pk)
+        serializer = serializers.CompanyEmployeePositionSerializer(position, many=False)
+        return Response({'message:': '', 'data':serializer.data})
+    except models.CompanyEmployeePosition.DoesNotExist:
+        return Response({'message':'職位不存在'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'職位獲取失敗，請稍後在嘗試', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getCompanyAllPosition(request, pk):
+    try:
+        position = models.CompanyEmployeePosition.objects.filter(company_id__id=pk)
+        serializer = serializers.CompanyEmployeePositionSerializer(position, many=True)
+        return Response({'message:': '', 'data':serializer.data})
+    except models.CompanyEmployeePosition.DoesNotExist:
+        return Response({'message':'職位不存在'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'職位獲取失敗，請稍後在嘗試', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def updatePosition(request, pk):
+    try:
+        positionData = request.data
+        updatedPosition = models.CompanyEmployeePosition.objects.get(id=pk)
+
+        updatedPosition.position_name = positionData.get('position_name', updatedPosition.position_name)
+
+        if positionData.get('companyDepartment_id', None)!=None: departmentId = models.CompanyDepartment.objects.get(id=positionData['companyDepartment_id'])
+        else: departmentId = updatedPosition.companyDepartment_id
+        updatedPosition.companyDepartment_id = departmentId
+        
+        companyPermissions = []
+        if positionData.get('companyPermission_id', None)!=None:
+            for permissionId in positionData['companyPermission_id']:
+                companyPermissions.append(models.CompanyPermission.objects.get(id=permissionId))
+            updatedPosition.companyPermission_id.set(companyPermissions)
+        
+        companyBenefits = []
+        if positionData.get('companyBenefits_id', None)!=None:
+            for benefitId in positionData['companyBenefits_id']:
+                companyBenefits.append(models.CompanyBenefits.objects.get(id=benefitId))
+            updatedPosition.companyBenefits_id.set(companyBenefits)
+        
+        updatedPosition.save()
+
+        serializer = serializers.CompanyEmployeePositionSerializer(updatedPosition, many=False)
+
+        return Response({'message:': '職位更新成功', 'data':serializer.data})
+    except (models.CompanyPermission.DoesNotExist, models.CompanyPermission.DoesNotExist, models.CompanyBenefits.DoesNotExist) as e:
+        return Response({'message':'職位不存在', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'職位更新失敗，請稍後在嘗試', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def deleteDepartment(request, pk):
+    try:
+        deletedDepartment = models.CompanyEmployeePosition.objects.get(id=pk)
+        delete = deletedDepartment.delete()
+        if delete[0]> 0:
+            return Response({'message':'職位刪除成功'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message':'職位刪除失敗,請稍後再嘗試'}, status=status.HTTP_400_BAD_REQUEST)
+    except models.CompanyEmployeePosition.DoesNotExist:
+        return Response({'message':'職位不存在'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'職位刪除吃白，請稍後再嘗試'},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+# endregion
+
 # region CompanyPermission
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def createCompanyPermission(request):
-    companyPermissionData = request.data
-    createdCompanyPermission = models.CompanyPermission.objects.create(
-        company_id = models.Company.objects.get(id=companyPermissionData['company_id']),
-        permission_name = companyPermissionData['permission_name'],
-        permission_desc = companyPermissionData['permission_desc'],
-    )
-    serializer = serializers.CompanyPermissionSerializer(createdCompanyPermission, many=False)
-    return Response({'message':'權限增加成功', 'data':serializer.data})
+    try:
+        permissionData = request.data
+        createdPermission = models.CompanyPermission.objects.create(
+            company_id = models.Company.objects.get(id=permissionData['company_id']),
+            permission_name = permissionData['permission_name'],
+            permission_desc = permissionData['permission_desc']
+        )
+        serializer = serializers.CompanyPermissionSerializer(createdPermission, many=False)
+        if createdPermission.id :
+            return Response({'message':'權限增加成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+        else: 
+            return Response({'message':'權限增加失敗'}, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response({'message':'權限增加失敗', 'e':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getCompanyPermission(request, pk):
-    companyPermission = models.CompanyPermission.objects.get(id=pk)
-    serializer = serializers.CompanyPermissionSerializer(companyPermission, many=False)
-    return Response(serializer.data)
+    try:
+        companyPermission = models.CompanyPermission.objects.get(id=pk)
+        serializer = serializers.CompanyPermissionSerializer(companyPermission, many=False)
+        return  Response({'message':'', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyPermission.DoesNotExist:
+        return Response({'message':'權限不存在'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'權限獲取失敗','error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def updateCompanyPermission(request, pk):
-    updatedCompanyPermission = request.data
-    originalCompanyPermission = models.CompanyPermission.objects.get(id=pk)
-    originalCompanyPermission.company_id = updatedCompanyPermission.get('company_id', originalCompanyPermission.company_id)
-    originalCompanyPermission.permission_name = updatedCompanyPermission.get('permission_name', originalCompanyPermission.permission_name)
-    originalCompanyPermission.permission_desc = updatedCompanyPermission.get('permission_desc', originalCompanyPermission.permission_desc)
-    originalCompanyPermission.save()
-    serializer = serializers.CompanyPermissionSerializer(originalCompanyPermission, many=False)
-    return Response({'message':'權限修改成功', 'data':serializer.data})
+    try:
+        updatedCompanyPermission = request.data
+        originalCompanyPermission = models.CompanyPermission.objects.get(id=pk)
+        originalCompanyPermission.company_id = updatedCompanyPermission.get('company_id', originalCompanyPermission.company_id)
+        originalCompanyPermission.permission_name = updatedCompanyPermission.get('permission_name', originalCompanyPermission.permission_name)
+        originalCompanyPermission.permission_desc = updatedCompanyPermission.get('permission_desc', originalCompanyPermission.permission_desc)
+        originalCompanyPermission.save()
+        serializer = serializers.CompanyPermissionSerializer(originalCompanyPermission, many=False)
+        return Response({'message':'權限修改成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyPermission.DoesNotExist:
+        return Response({'message':'權限修改失敗'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'權限修改失敗，請稍後再嘗試', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
@@ -471,18 +687,26 @@ def deleteCompanyPermission(request, pk):
     try:
         deletedCompanyPermission = models.CompanyPermission.objects.get(id=pk)
         delete = deletedCompanyPermission.delete()
-        if(delete[0]>0): return Response({"message":"權限已刪除"})
-        else: return Response({'message':'權限刪除失敗，請稍後在嘗試'})
+        if(delete[0]>0): 
+            return Response({"message":"權限已刪除"}, status=status.HTTP_200_OK)
+        else: 
+            return Response({'message':'權限刪除失敗，請稍後在嘗試'}, status=status.HTTP_400_BAD_REQUEST)
     except CompanyPermission.DoesNotExist:
         return Response({'message':'權限不存在'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'權限刪除失敗，請稍後再嘗試', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-# get company's all company permission
 def getCompanyAllCompanyPermission(request, pk):
-    companyPermission = models.CompanyPermission.objects.filter(company_id__id = pk)
-    serializer = serializers.CompanyPermissionSerializer(companyPermission, many=True)
-    return Response(serializer.data)
+    try:
+        companyPermission = models.CompanyPermission.objects.filter(company_id__id = pk)
+        serializer = serializers.CompanyPermissionSerializer(companyPermission, many=True)
+        return  Response({'message':'', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyPermission.DoesNotExist:
+        return Response({'message':'權限不存在'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'權限獲取失敗','error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 # endregion
 

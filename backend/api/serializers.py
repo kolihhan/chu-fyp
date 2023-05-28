@@ -121,7 +121,16 @@ class CompanyPermissionSerializer(serializers.ModelSerializer):
         model = models.CompanyPermission
         fields = '__all__'
 
+class CompanyBenefitsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.CompanyBenefits
+        fields = '__all__'
+
 class CompanyEmployeePositionSerializer(serializers.ModelSerializer):
+    companyDepartment_id = CompanyDepartmentSerializer(many=False, read_only=True)
+    companyPermission_id = CompanyPermissionSerializer(many=True, read_only=True)
+    companyBenefits_id = CompanyBenefitsSerializer(many=True, read_only=True)
     class Meta:
         model = models.CompanyEmployeePosition
         fields = '__all__'
+

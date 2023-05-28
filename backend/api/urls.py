@@ -36,6 +36,20 @@ urlpatterns = [
     path('companyDepartment/update/<int:pk>', updateDepartment, name='updateDepartment'),
     path('companyDepartment/delete/<int:pk>', deleteDepartment, name='deleteDepartment'),
 
+    # benefit
+    path('companyBenefit/create', createBenefit, name='createBenefit'),
+    path('companyBenefit/get/<int:pk>', getBenefit, name='getBenefit'),
+    path('companyBenefit/get/company/all/<int:pk>', getCompanyAllBenefit, name='getCompanyAllBenefit'),
+    path('companyBenefit/update/<int:pk>', updateBenefit, name='updateBenefit'),
+    path('companyBenefit/delete/<int:pk>', deleteBenefit, name='deleteBenefit'),
+
+    # position
+    path('companyPosition/create', createPosition, name='createPosition'),
+    path('companyPosition/get/<int:pk>', getPosition, name='getPosition'),
+    path('companyPosition/get/company/all/<int:pk>', getCompanyAllPosition, name='getCompanyAllPosition'),
+    path('companyPosition/update/<int:pk>', updatePosition, name='updatePosition'),
+    path('companyPosition/delete/<int:pk>', deleteDepartment, name='deleteDepartment'),
+
     # permission
     path('companyPermission/create', createCompanyPermission, name='createCompanyPermission'),
     path('companyPermission/get/<int:pk>', getCompanyPermission, name='getCompanyPermission'),

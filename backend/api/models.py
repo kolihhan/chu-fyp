@@ -195,7 +195,8 @@ class CompanyRecruitment(models.Model):
 # 公司福利模型
 class CompanyBenefits(models.Model):
     company_id = models.ForeignKey(Company, on_delete=models.CASCADE)
-    name = models.TextField()
+    benefit_name = models.TextField()
+    benefit_desc = models.TextField()
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
     def __str__(self):
