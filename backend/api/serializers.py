@@ -67,6 +67,12 @@ class CompanyEmployeeSerializer(serializers.ModelSerializer):
         model = models.CompanyEmployee
         fields = '__all__'
 
+class CompanyEmployeeSerializerIdAndUserId(serializers.ModelSerializer):
+    user_id = UserIdAndEmailSerializer(many=False, read_only=True)
+    class Meta: 
+        model = models.CompanyEmployee
+        fields = ['id', 'user_id']
+
 class CompanyDepartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.CompanyDepartment
@@ -93,13 +99,14 @@ class CompanyCheckInRuleSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class CompanyAnnouncementGroupSerializer(serializers.ModelSerializer):
-    user_id = UserIdAndEmailSerializer(many=True, read_only=True)
+    companyEmployee_id = CompanyEmployeeSerializerIdAndUserId(many=True, read_only=True)
     class Meta: 
         model = models.CompanyAnnouncementGroup
         fields = '__all__'
 
 class CompanyAnnouncementSerializer(serializers.ModelSerializer):
     group = CompanyAnnouncementGroupSerializer(many=True, read_only=True)
+    companyEmployee_id = CompanyEmployeeSerializerIdAndUserId(many=False, read_only=True)
     class Meta: 
         model = models.CompanyAnnouncement
         fields = '__all__'

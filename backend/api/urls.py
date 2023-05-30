@@ -66,9 +66,18 @@ urlpatterns = [
     path('companyEmployee/create/multiple', createMultipleCompanyEmployee, name='createMultipleCompanyEmployee'),
     path('companyEmployee/fire/<int:pk>', fireEmployee, name='fireEmployee'),
 
+    # announcementGroup
+    path('announcementGroup/create', createAnnouncementGroup, name='createAnnouncementGroup'),
+    path('announcementGroup/get/<int:pk>', getAnnouncementGroup, name='getAnnouncementGroup'),
+    path('announcementGroup/get/company/all/<int:pk>', getCompanyAllAnnouncementGroup, name='getCompanyAllAnnouncementGroup'),
+    path('announcementGroup/update/<int:pk>', updateAnnouncementGroup, name='updateAnnouncementGroup'),
+    path('announcementGroup/delete/<int:pk>', deleteAnnouncementGroup, name='deleteAnnouncementGroup'),
+
     # announcement
     path('announcement/create', postAnnouncement, name='postAnnouncement'),
     path('announcement/get/<int:pk>', getAnnouncement, name='getAnnouncement'),
+    path('announcement/get/user/all/<int:companyId>/<int:employeeId>', getUserAllAnnouncement, name='getUserAllAnnouncement'),
+    path('announcement/get/company/all/<int:companyId>', getCompanyAllAnnouncement, name='getCompanyAllAnnouncement'),
     path('announcement/update/<int:pk>', updateAnnouncement, name='updateAnnouncement'),
     path('announcement/delete/<int:pk>', deleteAnnouncement, name='deleteAnnouncement'),
 

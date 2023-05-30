@@ -131,7 +131,9 @@ def createCompany(request):
                 salary = 0
             )
             # endregion
-        
+
+            # todo: create initial AnnouncementGroup
+            
         return Response({'message':'公司創建成功', 'data':serializer.data})
     except:
         transaction.rollback()
@@ -710,62 +712,165 @@ def getCompanyAllCompanyPermission(request, pk):
 
 # endregion
 
+# region AnnouncementGroup
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def createAnnouncementGroup(request):
+    try:
+        data = request.data
+        createdAnnouncementGroup = models.CompanyAnnouncementGroup.objects.create(
+            company_id = models.Company.objects.get(id=data['company_id']),
+            name= data['name'],
+            description=data['description']
+        )
+        empData = []
+        for emp in data['companyEmployee_id']:
+            empData.append(models.CompanyEmployee.objects.get(id=emp))
+        createdAnnouncementGroup.companyEmployee_id.set(empData)
+        createdAnnouncementGroup.save()
+        serializer = serializers.CompanyAnnouncementGroupSerializer(createdAnnouncementGroup, many=False)
+        return Response({'message':'公告群組創建成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except (models.Company.DoesNotExist, models.CompanyEmployee.DoesNotExist) as e:
+        return Response({'message':'公告群組創建失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'公告群組創建失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getAnnouncementGroup(request, pk):
+    try:
+        aGroup = models.CompanyAnnouncementGroup.objects.get(id=pk)
+        serializer = serializers.CompanyAnnouncementGroupSerializer(aGroup, many=False)
+        return Response({'message':'', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyAnnouncementGroup.DoesNotExist:
+        return Response({'message':'公告群組不存在'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        Response({'message':'公告群組獲取失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getCompanyAllAnnouncementGroup(request, pk):
+    try:
+        aGroup = models.CompanyAnnouncementGroup.objects.filter(company_id__id=pk)
+        serializer = serializers.CompanyAnnouncementGroupSerializer(aGroup, many=True)
+        return Response({'message':'', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyAnnouncementGroup.DoesNotExist:
+        return Response({'message':'公告群組不存在'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        Response({'message':'公告群組獲取失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def updateAnnouncementGroup(request, pk):
+    try:
+        data = request.data
+        oriAGroup = models.CompanyAnnouncementGroup.objects.get(id=pk)
+        oriAGroup.name= data.get('name', oriAGroup.name)
+        oriAGroup.description=data.get('description', oriAGroup.description)
+
+        empData = []
+        if data.get('companyEmployee_id',None)!=None:
+            for emp in data['companyEmployee_id']:
+                empData.append(models.CompanyEmployee.objects.get(id=emp))
+            oriAGroup.companyEmployee_id.set(empData)
+
+        oriAGroup.save()
+        
+        serializer = serializers.CompanyAnnouncementGroupSerializer(oriAGroup, many=False)
+        return Response({'message':'公告群租更新成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyAnnouncementGroup.DoesNotExist:
+        return Response({'message':'公告群組修改失敗'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'公告群租修改失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['DELETE'])
+def deleteAnnouncementGroup(request, pk):
+    try:
+        deletedAnnouncementGroup = models.CompanyAnnouncementGroup.objects.get(id=pk)
+        delete = deletedAnnouncementGroup.delete()
+        if delete[0] > 0: 
+            return Response({'message':'公告群組刪除成功'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message':'公告群組刪除失敗'}, status=status.HTTP_400_BAD_REQUEST)
+    except models.CompanyAnnouncementGroup.DoesNotExist:
+        return Response({'message':'公告群租不存在'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'公告群組刪除失敗'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+# endregion
+
 # region Announcement
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def postAnnouncement(request):
-    companyId = request.data['company_id']
-    companyEmployeeId = request.data['companyEmployee_id']
+    try:
+        with transaction.atomic():
+            annData = request.data
+            companyId = annData['company_id']
+            companyEmployeeId = annData['companyEmployee_id']
 
-    groupIds = request.data['group']
-    groups = []
-    for groupId in groupIds:
-        group = models.CompanyAnnouncementGroup.objects.get(id=groupId)
-        groups.append(group)
+            groupIds = annData['group']
+            groups = []
+            for groupId in groupIds:
+                group = models.CompanyAnnouncementGroup.objects.get(id=groupId)
+                groups.append(group)
 
-    postedAnnouncement = models.CompanyAnnouncement.objects.create(
-        company_id = models.Company.objects.get(id=companyId),
-        companyEmployee_id = models.CompanyEmployee.objects.get(id=companyEmployeeId),
-        title = request.data['title'],
-        content = request.data['content'],
-        expire_at = request.data.get('expire_at', None)
-    )
-    postedAnnouncement.group.set(groups)
-    serializer = serializers.CompanyAnnouncementSerializer(postedAnnouncement, many=False)
-    return Response(serializer.data)
-
+            postedAnnouncement = models.CompanyAnnouncement.objects.create(
+                company_id = models.Company.objects.get(id=companyId),
+                companyEmployee_id = models.CompanyEmployee.objects.get(id=companyEmployeeId),
+                title = annData['title'],
+                content = annData['content'],
+                expire_at = annData.get('expire_at', None)
+            )
+            postedAnnouncement.group.set(groups)
+            serializer = serializers.CompanyAnnouncementSerializer(postedAnnouncement, many=False)
+            return Response({'message':'公告發佈成功','data':serializer.data}, status=status.HTTP_200_OK)
+    except (models.CompanyAnnouncementGroup.DoesNotExist, models.CompanyEmployee.DoesNotExist) as e:
+        transaction.rollback()
+        return Response({'message':'公告發佈失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        transaction.rollback()
+        return Response({'message':'公告發佈失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def getAnnouncement(request, pk):
     try:
         announcementData = models.CompanyAnnouncement.objects.get(id=pk)
         serializer = serializers.CompanyAnnouncementSerializer(announcementData, many=False)
-        return Response(serializer.data)
+        return Response({'data':serializer.data}, status=status.HTTP_200_OK)
     except models.CompanyAnnouncement.DoesNotExist:
         return Response({'message':'公告不存在'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'公告獲取失敗，請稍後再嘗試', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def updateAnnouncement(request, pk):
     updatedAnnouncement = request.data
     try:
-        originalAnnouncement = models.CompanyAnnouncement.objects.get(id=pk)
-        originalAnnouncement.title = updatedAnnouncement.get('title', originalAnnouncement.title)
-        originalAnnouncement.content = updatedAnnouncement.get('content', originalAnnouncement.content)
-        originalAnnouncement.expire_at = updatedAnnouncement.get('expire_at', originalAnnouncement.expire_at)
+        with transaction.atomic():
+            originalAnnouncement = models.CompanyAnnouncement.objects.get(id=pk)
+            originalAnnouncement.title = updatedAnnouncement.get('title', originalAnnouncement.title)
+            originalAnnouncement.content = updatedAnnouncement.get('content', originalAnnouncement.content)
+            originalAnnouncement.expire_at = updatedAnnouncement.get('expire_at', originalAnnouncement.expire_at)
 
-        groups = []
-        if(updatedAnnouncement.get('group', None) != None):
-            for group in updatedAnnouncement['group']:
-                groups.append(models.CompanyAnnouncementGroup.objects.get(id=group))
-            originalAnnouncement.group.set(groups)
+            groups = []
+            if(updatedAnnouncement.get('group', None) != None):
+                for group in updatedAnnouncement['group']:
+                    groups.append(models.CompanyAnnouncementGroup.objects.get(id=group))
+                originalAnnouncement.group.set(groups)
 
-        originalAnnouncement.save()
-        
-        serializer = serializers.CompanyAnnouncementSerializer(originalAnnouncement)
-        return Response(serializer.data)
-    except models.CompanyAnnouncement.DoesNotExist:
-        return Response({'message':'公告不存在'}, status=status.HTTP_404_NOT_FOUND)
+            originalAnnouncement.save()
+            
+            serializer = serializers.CompanyAnnouncementSerializer(originalAnnouncement)
+            return Response({'data':serializer.data}, status=status.HTTP_200_OK)
+    except (models.CompanyAnnouncement.DoesNotExist, models.CompanyAnnouncementGroup.DoesNotExist) as e:
+        transaction.rollback()
+        return Response({'message':'公告不存在', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        transaction.rollback()
+        return Response({'message':'公告更新失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
@@ -773,34 +878,38 @@ def deleteAnnouncement(request, pk):
     try:
         deletedAnnouncement = models.CompanyAnnouncement.objects.get(id=pk)
         delete = deletedAnnouncement.delete()
-        if(delete[0]>0): Response({'message':'公告已刪除'}, status=status.HTTP_200_OK)
-        else: Response({'message':'公告刪除失敗，請稍後再嘗試'})
+        if(delete[0]>0): 
+            return Response({'message':'公告已刪除'}, status=status.HTTP_200_OK)
+        else: 
+            return Response({'message':'公告刪除失敗，請稍後再嘗試'}, status=status.HTTP_400_BAD_REQUEST)
     except models.CompanyAnnouncement.DoesNotExist:
         return Response({'message':'公告不存在'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'公告刪除失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getUserAllAnnouncement(request, companyId, employeeId):
+    try:
+        announcementData = models.CompanyAnnouncement.objects.filter((Q(company_id__id=companyId)) & (Q(group__isnull=True) | Q(group__companyEmployee_id__id=employeeId)))
+        serializer = serializers.CompanyAnnouncementSerializer(announcementData, many=True)
+        return Response({'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyAnnouncementGroup.DoesNotExist as e:
+        return Response({'message':'公告不存在','error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'公告獲取失敗','error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-# @api_view(['GET'])
-# @permission_classes([AllowAny])
-# def getAnnouncements(request):
-#     announcementData = models.CompanyAnnouncement.objects.all()
-#     serializer = serializers.CompanyAnnouncementSerializer(announcementData, many=True)
-#     return Response(serializer.data)
-
-# @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
-# def getUserAnnouncements(request, companyId, userId):
-#     announcementData = models.CompanyAnnouncement.objects.filter(Q(company_id=companyId) & (Q(group__isnull=True) | Q(group__user_id__id=userId)))
-#     serializer = serializers.CompanyAnnouncementSerializer(announcementData, many=True)
-#     return Response(serializer.data)
-#     '''
-#     get announcement by group user id
-#         group is ManyToManyField to table AnnouncementGroup, 
-#         user_id is manyToManyField to table UserAccount,
-#         id is field from table UserAccount
-#         seperate double underscore
-#     ManyToManyFieldInAnnouncementTABLE__ManyToManyFieldInAnnouncementGroupTABLE__fieldInUserAccountTABLE
-#     announcementData = models.Announcement.objects.filter(group__user_id__id=2)
-#     '''
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getCompanyAllAnnouncement(request, companyId):
+    try:
+        announcementData = models.CompanyAnnouncement.objects.filter(Q(company_id__id=companyId))
+        serializer = serializers.CompanyAnnouncementSerializer(announcementData, many=True)
+        return Response({'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyAnnouncementGroup.DoesNotExist as e:
+        return Response({'message':'公告不存在','error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'公告獲取失敗','error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 # endregion
 
@@ -813,8 +922,6 @@ def getIdFromToken(request):
     accessToken = AccessToken(token)
     userId = accessToken.payload['user_id']
     return Response(userId)
-
-
 
 # endregion
 
