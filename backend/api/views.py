@@ -19,6 +19,7 @@ from django.db.models import Q
 from django.db import transaction
 from django.utils import timezone
 import logging
+import datetime
 
 # from django.http import JsonResponse
 
@@ -911,6 +912,182 @@ def getCompanyAllAnnouncement(request, companyId):
     except Exception as e:
         return Response({'message':'公告獲取失敗','error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+# endregion
+
+# region CompanyTraining
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def createCompanyTraining(request):
+    try:
+        data = request.data
+        createdComppanyTraining = models.CompanyTraining.objects.create(
+            company_id = models.Company.objects.get(id=data['company_id']),
+            title = data['title'],
+            description = data['description'],
+            trainer = models.CompanyEmployee.objects.get(id=data['trainer']),
+            start_date = datetime.datetime.strptime(data['start_date'], '%Y-%m-%d %H:%M:%S'),   # 2023-05-30 10:00:00
+            end_date = datetime.datetime.strptime(data['end_date'], '%Y-%m-%d %H:%M:%S')
+        )
+        serializer = serializers.CompanyTrainingSerializer(createdComppanyTraining, many=False)
+        return Response({'message':'公司培訓創建成功','data':serializer.data}, status=status.HTTP_200_OK)
+    except (models.Company.DoesNotExist, models.CompanyEmployee.DoesNotExist) as e:
+        return Response({'message':'公司培訓創建失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'公司培訓創建失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getCompanyTraining(request, pk):
+    try:
+        createdComppanyTraining = models.CompanyTraining.objects.get(id=pk)
+        serializer = serializers.CompanyTrainingSerializer(createdComppanyTraining, many=False)
+        return Response({'message':'','data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyTraining.DoesNotExist as e:
+        return Response({'message':'公司培訓不存在', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'公司培訓獲取失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getCompanyAllTraining(request, pk):
+    try:
+        createdComppanyTraining = models.CompanyTraining.objects.filter(company_id__id=pk)
+        serializer = serializers.CompanyTrainingSerializer(createdComppanyTraining, many=True)
+        return Response({'message':'','data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyTraining.DoesNotExist as e:
+        return Response({'message':'公司培訓不存在', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'公司培訓獲取失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def updateCompanyTraining(request, pk):
+    try:
+        data = request.data
+        updatedCompanyTraining = models.CompanyTraining.objects.get(id=pk)
+        updatedCompanyTraining.title = data.get('title', updatedCompanyTraining.title)
+        updatedCompanyTraining.description = data.get('description', updatedCompanyTraining.description)
+        if data.get('trainer', None)!=None: updatedCompanyTraining.trainer = models.CompanyEmployee.objects.get(id=data['trainer'])
+        if data.get('start_date', None)!=None: updatedCompanyTraining.start_date = datetime.datetime.strptime(data['start_date'], '%Y-%m-%d %H:%M:%S')
+        if data.get('end_date', None)!=None: updatedCompanyTraining.end_date = datetime.datetime.strptime(data['end_date'], '%Y-%m-%d %H:%M:%S')
+        updatedCompanyTraining.save()
+
+        serializer = serializers.CompanyTrainingSerializer(updatedCompanyTraining, many=False)
+        return Response({'message':'公司培訓修改成功','data':serializer.data}, status=status.HTTP_200_OK)
+    except (models.Company.DoesNotExist, models.CompanyEmployee.DoesNotExist, models.CompanyTraining.DoesNotExist) as e:
+        return Response({'message':'公司培訓不存在', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'公司培訓修改失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def deleteCompanyTraining(request, pk):
+    try:
+        deletedComppanyTraining = models.CompanyTraining.objects.get(id=pk)
+        delete = deletedComppanyTraining.delete()
+        if delete[0] > 0:
+            return Response({'message':'公司培刪除成功'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message':'公司培刪除失敗'}, status=status.HTTP_400_BAD_REQUEST)
+    except models.CompanyTraining.DoesNotExist as e:
+        return Response({'message':'公司培訓不存在', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'公司培訓刪除失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# endregion
+
+# region CompanyEmployeeTraining
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def createCompanyEmployeeTraining(request):
+    try:
+        data = request.data
+        createdCET = models.CompanyEmployeeTraining.objects.create(
+            companyEmployee_id = models.CompanyEmployee.objects.get(id=data['companyEmployee_id']),
+            company_id = models.Company.objects.get(id=data['company_id']),
+            companyTraining_id = models.CompanyTraining.objects.get(id=data['companyTraining_id']),
+            training_result = 'In Progress'
+        )
+        serializer = serializers.CompanyEmployeeTrainingSerializer(createdCET, many=False)
+        return Response({'message':'員工培訓建立成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except (models.Company.DoesNotExist, models.CompanyEmployee.DoesNotExist, models.CompanyTraining.DoesNotExist) as e:
+        return Response({'message':'員工培訓建立失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'員工培訓建立失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getCompanyEmployeeTraining(request, pk):
+    try:
+        companyEmployeeTraining = models.CompanyEmployeeTraining.objects.get(id=pk)
+        serializer = serializers.CompanyEmployeeTrainingSerializer(companyEmployeeTraining, many=False)
+        return Response({'message':'員工培訓獲取成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyTraining.DoesNotExist as e:
+        return Response({'message':'員工培訓獲取失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'員工培訓獲取失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getCompanyAllCompanyEmployeeTraining(request, pk):
+    try:
+        companyEmployeeTraining = models.CompanyEmployeeTraining.objects.filter(company_id__id=pk)
+        serializer = serializers.CompanyEmployeeTrainingSerializer(companyEmployeeTraining, many=True)
+        return Response({'message':'員工培訓獲取成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyTraining.DoesNotExist as e:
+        return Response({'message':'員工培訓獲取失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'員工培訓獲取失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getEmployeeAllCompanyEmployeeTraining(request, pk):
+    try:
+        companyEmployeeTraining = models.CompanyEmployeeTraining.objects.filter(companyEmployee_id__id=pk)
+        serializer = serializers.CompanyEmployeeTrainingSerializer(companyEmployeeTraining, many=True)
+        return Response({'message':'員工培訓獲取成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyTraining.DoesNotExist as e:
+        return Response({'message':'員工培訓獲取失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'員工培訓獲取失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def updateCompanyEmployeeTraining(request, pk):
+    try:
+        data = request.data
+        updatedCET = models.CompanyEmployeeTraining.objects.get(id=pk)
+        if data.get('companyEmployee_id', None)!=None: 
+            updatedCET.companyEmployee_id = models.CompanyEmployee.objects.get(id=data['companyEmployee_id'])
+        if data.get('company_id', None)!=None: 
+            updatedCET.company_id = models.Company.objects.get(id=data['company_id'])
+        if data.get('companyTraining_id', None)!=None: 
+            updatedCET.companyTraining_id = models.CompanyTraining.objects.get(id=data['companyTraining_id'])
+        if data.get('training_result', None)!=None: 
+            updatedCET.training_result = data['training_result']
+        updatedCET.save()
+        serializer = serializers.CompanyEmployeeTrainingSerializer(updatedCET, many=False)
+        return Response({'message':'員工培訓修改成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except (models.Company.DoesNotExist, models.CompanyEmployee.DoesNotExist, models.CompanyTraining.DoesNotExist, models.CompanyEmployeeTraining.DoesNotExist) as e:
+        return Response({'message':'員工培訓修改失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'員工培訓修改失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def deleteCompanyEmployeeTraining(request, pk):
+    try:
+        deletedCET = models.CompanyEmployeeTraining.objects.get(id=pk)
+        delete = deletedCET.delete()    
+        if delete[0]>0:
+            return Response({'message':'員工培訓刪除成功'}, status=status.HTTP_200_OK)
+        else: 
+            return Response({'message':'員工培訓刪除失敗'}, status=status.HTTP_400_BAD_REQUEST)
+    except models.CompanyEmployeeTraining.DoesNotExist as e:
+        return Response({'message':'員工培訓刪除失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'員工培訓刪除失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 # endregion
 
 # region 

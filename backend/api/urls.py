@@ -81,6 +81,21 @@ urlpatterns = [
     path('announcement/update/<int:pk>', updateAnnouncement, name='updateAnnouncement'),
     path('announcement/delete/<int:pk>', deleteAnnouncement, name='deleteAnnouncement'),
 
+    # companyTraining
+    path('companyTraining/create', createCompanyTraining, name='createCompanyTraining'),
+    path('companyTraining/get/<int:pk>', getCompanyTraining, name='getCompanyTraining'),
+    path('companyTraining/get/company/all/<int:pk>', getCompanyAllTraining, name='getCompanyAllTraining'),
+    path('companyTraining/update/<int:pk>', updateCompanyTraining, name='updateCompanyTraining'),
+    path('companyTraining/delete/<int:pk>', deleteCompanyTraining, name='deleteCompanyTraining'),
+    
+    # companyEmployeeTraining
+    path('companyEmployeeTraining/create', createCompanyEmployeeTraining, name='createCompanyEmployeeTraining'),
+    path('companyEmployeeTraining/get/<int:pk>', getCompanyEmployeeTraining, name='getCompanyEmployeeTraining'),
+    path('companyEmployeeTraining/get/company/all/<int:pk>', getCompanyAllCompanyEmployeeTraining, name='getCompanyAllCompanyEmployeeTraining'),
+    path('companyEmployeeTraining/get/employee/all/<int:pk>', getEmployeeAllCompanyEmployeeTraining, name='getEmployeeAllCompanyEmployeeTraining'),
+    path('companyEmployeeTraining/update/<int:pk>', updateCompanyEmployeeTraining, name='updateCompanyEmployeeTraining'),
+    path('companyEmployeeTraining/delete/<int:pk>', deleteCompanyEmployeeTraining, name='deleteCompanyEmployeeTraining'),
+
     # resume
     path('user/resume', UserResumeAPIView.as_view(), name='user-resume'),
     path('user/resume/<int:resume_id>', UserResumeAPIView.as_view(), name='user-resume-detail'),

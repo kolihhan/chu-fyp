@@ -141,3 +141,15 @@ class CompanyEmployeePositionSerializer(serializers.ModelSerializer):
         model = models.CompanyEmployeePosition
         fields = '__all__'
 
+class CompanyTrainingSerializer(serializers.ModelSerializer):
+    trainer = CompanyEmployeeSerializerIdAndUserId(many=False, read_only=True)
+    class Meta: 
+        model = models.CompanyTraining
+        fields = '__all__'
+
+class CompanyEmployeeTrainingSerializer(serializers.ModelSerializer):
+    companyEmployee_id = CompanyEmployeeSerializerIdAndUserId(many=False, read_only=True)
+    companyTraining_id = CompanyTrainingSerializer(many=False, read_only=False)
+    class Meta: 
+        model = models.CompanyEmployeeTraining
+        fields = '__all__'
