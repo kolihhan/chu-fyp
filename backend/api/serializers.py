@@ -153,3 +153,22 @@ class CompanyEmployeeTrainingSerializer(serializers.ModelSerializer):
     class Meta: 
         model = models.CompanyEmployeeTraining
         fields = '__all__'
+class CompanyEmployeeTrainingSerializer(serializers.ModelSerializer):
+    companyEmployee_id = CompanyEmployeeSerializerIdAndUserId(many=False, read_only=True)
+    companyTraining_id = CompanyTrainingSerializer(many=False, read_only=False)
+    class Meta: 
+        model = models.CompanyEmployeeTraining
+        fields = '__all__'
+
+class CompanyEmployeePerformanceReviewSerializer(serializers.ModelSerializer):
+    companyEmployee_id = CompanyEmployeeSerializerIdAndUserId(many=False, read_only=True)
+    class Meta: 
+        model = models.CompanyEmployeePerformanceReview
+        fields = '__all__'
+
+class CompanyEmployeeFeedBackReviewSerializer(serializers.ModelSerializer):
+    companyEmployee_id = CompanyEmployeeSerializerIdAndUserId(many=False, read_only=True)
+    feedback_to = CompanyEmployeeSerializerIdAndUserId(many=False, read_only=True)
+    class Meta: 
+        model = models.CompanyEmployeeFeedBackReview
+        fields = '__all__'

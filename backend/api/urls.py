@@ -96,6 +96,23 @@ urlpatterns = [
     path('companyEmployeeTraining/update/<int:pk>', updateCompanyEmployeeTraining, name='updateCompanyEmployeeTraining'),
     path('companyEmployeeTraining/delete/<int:pk>', deleteCompanyEmployeeTraining, name='deleteCompanyEmployeeTraining'),
 
+    # CompanyEmployeePerformance
+    path('companyEmployeePerformance/create', createCompanyEmployeePerformance, name='createCompanyEmployeePerformance'),
+    path('companyEmployeePerformance/get/<int:pk>', getCompanyEmployeePerformance, name='getCompanyEmployeePerformance'),
+    path('companyEmployeePerformance/get/company/all/<int:pk>', getCompanyAllEmployeePerformance, name='getCompanyAllEmployeePerformance'),
+    path('companyEmployeePerformance/get/employee/all/<int:pk>', getEmployeeAllEmployeePerformance, name='getEmployeeAllEmployeePerformance'),
+    path('companyEmployeePerformance/update/<int:pk>', updateCompanyEmployeePerformance, name='updateCompanyEmployeePerformance'),
+    path('companyEmployeePerformance/delete/<int:pk>', deleteCompanyEmployeePerformance, name='deleteCompanyEmployeePerformance'),
+    
+    # CompanyEmployeeFeedBackReview
+    path('companyEmployeeFeedBackReview/create', createCompanyEmployeeFeedbackReview, name='createCompanyEmployeeFeedbackReview'),
+    path('companyEmployeeFeedBackReview/get/<int:pk>', getCompanyEmployeeFeedbackReview, name='getCompanyEmployeeFeedbackReview'),
+    path('companyEmployeeFeedBackReview/get/company/all/<int:pk>', getCompanyAllEmployeeFeedbackReview, name='getCompanyAllEmployeeFeedbackReview'),
+    path('companyEmployeeFeedBackReview/get/employee/by/all/<int:pk>', getEmployeeAllEmployeeFeedbackReviewBy, name='getEmployeeAllEmployeeFeedbackReviewBy'),
+    path('companyEmployeeFeedBackReview/get/employee/to/all/<int:pk>', getEmployeeAllEmployeeFeedbackReviewTo, name='getEmployeeAllEmployeeFeedbackReviewTo'),
+    path('companyEmployeeFeedBackReview/update/<int:pk>', updateCompanyEmployeeFeedbackReview, name='updateCompanyEmployeeFeedbackReview'),
+    path('companyEmployeeFeedBackReview/delete/<int:pk>', deleteCompanyEmployeeFeedbackReview, name='deleteCompanyEmployeeFeedbackReview'),
+
     # resume
     path('user/resume', UserResumeAPIView.as_view(), name='user-resume'),
     path('user/resume/<int:resume_id>', UserResumeAPIView.as_view(), name='user-resume-detail'),
