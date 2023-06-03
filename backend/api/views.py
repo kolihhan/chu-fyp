@@ -1073,7 +1073,6 @@ def updateCompanyEmployeeTraining(request, pk):
     except Exception as e:
         return Response({'message':'員工培訓修改失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def deleteCompanyEmployeeTraining(request, pk):
@@ -1088,7 +1087,206 @@ def deleteCompanyEmployeeTraining(request, pk):
         return Response({'message':'員工培訓刪除失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         return Response({'message':'員工培訓刪除失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 # endregion
+
+# region CompanyEmployeePerformanceReview
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def createCompanyEmployeePerformance(request):
+    try:
+        data = request.data
+        createdCEP = models.CompanyEmployeePerformanceReview.objects.create(
+            companyEmployee_id = models.CompanyEmployee.objects.get(id=data['companyEmployee_id']),
+            company_id = models.Company.objects.get(id=data['company_id']),
+            description = data['description'],
+            remarks = data['remarks']
+        )
+        serializer = serializers.CompanyEmployeePerformanceReviewSerializer(createdCEP, many=False)
+        return Response({'message':'員工表現記錄成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except (models.CompanyEmployee.DoesNotExist, models.Company.DoesNotExist) as e:
+        return Response({'message':'員工表現記錄失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'員工表現記錄失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getCompanyEmployeePerformance(request, pk):
+    try:
+        cep = models.CompanyEmployeePerformanceReview.objects.get(id=pk)
+        serializer = serializers.CompanyEmployeePerformanceReviewSerializer(cep, many=False)
+        return Response({'message':'員工表現獲取成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyEmployeePerformanceReview.DoesNotExist as e:
+        return Response({'message':'員工表現不存在', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'員工表現獲取失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getCompanyAllEmployeePerformance(request, pk):
+    try:
+        cep = models.CompanyEmployeePerformanceReview.objects.filter(company_id__id=pk)
+        serializer = serializers.CompanyEmployeePerformanceReviewSerializer(cep, many=True)
+        return Response({'message':'員工表現獲取成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyEmployeePerformanceReview.DoesNotExist as e:
+        return Response({'message':'員工表現不存在', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'員工表現獲取失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getEmployeeAllEmployeePerformance(request, pk):
+    try:
+        cep = models.CompanyEmployeePerformanceReview.objects.filter(companyEmployee_id__id=pk)
+        serializer = serializers.CompanyEmployeePerformanceReviewSerializer(cep, many=True)
+        return Response({'message':'員工表現獲取成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyEmployeePerformanceReview.DoesNotExist as e:
+        return Response({'message':'員工表現不存在', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'員工表現獲取失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def updateCompanyEmployeePerformance(request, pk):
+    try:
+        data = request.data
+        updatedCEP = models.CompanyEmployeePerformanceReview.objects.get(id=pk)
+        if data.get('companyEmployee_id', None) != None: 
+            updatedCEP.companyEmployee_id = models.CompanyEmployee.objects.get(id=data['companyEmployee_id'])
+        if data.get('company_id', None) != None: 
+            updatedCEP.company_id = models.Company.objects.get(id=data['company_id'])
+        if data.get('description', None) != None: 
+            updatedCEP.description = data['description']
+        if data.get('remarks', None) != None: 
+            updatedCEP.remarks = data['remarks']
+        
+        serializer = serializers.CompanyEmployeePerformanceReviewSerializer(updatedCEP, many=False)
+        return Response({'message':'員工表現修改成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except (models.CompanyEmployee.DoesNotExist, models.Company.DoesNotExist, models.CompanyEmployeePerformanceReview.DoesNotExist) as e:
+        return Response({'message':'員工表現修改失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'員工表現修改失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def deleteCompanyEmployeePerformance(request, pk):
+    try:
+        cep = models.CompanyEmployeePerformanceReview.objects.get(id=pk)
+        delete = cep.delete()
+        if delete[0]>0:
+            return Response({'message':'員工表現刪除成功'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message':'員工表現刪除成功'}, status=status.HTTP_200_OK)
+    except models.CompanyEmployeePerformanceReview.DoesNotExist as e:
+        return Response({'message':'員工表現不存在', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'員工表現獲刪除敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+# endregion 
+
+# region CompanyEmployeeFeedBackReview
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def createCompanyEmployeeFeedbackReview(request):
+    try:
+        data = request.data
+        createdCEFR = models.CompanyEmployeeFeedBackReview.objects.create(
+            company_id = models.Company.objects.get(id=data['company_id']),
+            companyEmployee_id = models.CompanyEmployee.objects.get(id=data['companyEmployee_id']),
+            feedback_to = models.CompanyEmployee.objects.get(id=data['feedback_to']),
+            remarks = data['remarks']
+        )
+        serializer = serializers.CompanyEmployeeFeedBackReviewSerializer(createdCEFR, many=False)
+        return Response({'message':'員工反饋成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except (models.CompanyEmployee.DoesNotExist, models.Company.DoesNotExist) as e:
+        return Response({'message':'員工反饋失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'員工反饋失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getCompanyEmployeeFeedbackReview(request, pk):
+    try:
+        cerf = models.CompanyEmployeeFeedBackReview.objects.get(id=pk)
+        serializer = serializers.CompanyEmployeeFeedBackReviewSerializer(cerf, many=False)
+        return Response({'message':'員工反饋獲取成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyEmployeeFeedBackReview.DoesNotExist as e:
+        return Response({'message':'員工反饋獲取失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'員工反饋獲取失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getCompanyAllEmployeeFeedbackReview(request, pk):
+    try:
+        cerf = models.CompanyEmployeeFeedBackReview.objects.filter(company_id__id=pk)
+        serializer = serializers.CompanyEmployeeFeedBackReviewSerializer(cerf, many=True)
+        return Response({'message':'員工反饋獲取成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyEmployeeFeedBackReview.DoesNotExist as e:
+        return Response({'message':'員工反饋獲取失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'員工反饋獲取失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getEmployeeAllEmployeeFeedbackReviewBy(request, pk):
+    try:
+        cerf = models.CompanyEmployeeFeedBackReview.objects.filter(companyEmployee_id__id=pk)
+        serializer = serializers.CompanyEmployeeFeedBackReviewSerializer(cerf, many=True)
+        return Response({'message':'員工反饋獲取成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyEmployeeFeedBackReview.DoesNotExist as e:
+        return Response({'message':'員工反饋獲取失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'員工反饋獲取失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getEmployeeAllEmployeeFeedbackReviewTo(request, pk):
+    try:
+        cerf = models.CompanyEmployeeFeedBackReview.objects.filter(feedback_to__id=pk)
+        serializer = serializers.CompanyEmployeeFeedBackReviewSerializer(cerf, many=True)
+        return Response({'message':'員工反饋獲取成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyEmployeeFeedBackReview.DoesNotExist as e:
+        return Response({'message':'員工反饋獲取失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'員工反饋獲取失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def updateCompanyEmployeeFeedbackReview(request, pk):
+    try:
+        data = request.data
+        updatedCEFR = models.CompanyEmployeeFeedBackReview.objects.get(id=pk)
+        if data.get('company_id', None) != None:
+            updatedCEFR.company_id = models.Company.objects.get(id=data['company_id'])
+        if data.get('companyEmployee_id', None) != None:
+            updatedCEFR.companyEmployee_id = models.CompanyEmployee.objects.get(id=data['companyEmployee_id'])
+        if data.get('feedback_to', None) != None:
+            updatedCEFR.feedback_to = models.CompanyEmployee.objects.get(id=data['feedback_to'])
+        if data.get('remarks', None) != None:
+            updatedCEFR.remarks = data['remarks']
+        
+        serializer = serializers.CompanyEmployeeFeedBackReviewSerializer(updatedCEFR, many=False)
+        return Response({'message':'員工反饋修改成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except (models.CompanyEmployee.DoesNotExist, models.Company.DoesNotExist, models.CompanyEmployeeFeedBackReview.DoesNotExist) as e:
+        return Response({'message':'員工反饋修改失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'員工反饋修改失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def deleteCompanyEmployeeFeedbackReview(request, pk):
+    try:
+        deletedCERF = models.CompanyEmployeeFeedBackReview.objects.get(id=pk)
+        delete = deletedCERF.delete()
+        if delete[0]>0:
+            return Response({'message':'員工反饋刪除成功'}, status=status.HTTP_200_OK)
+    except models.CompanyEmployeeFeedBackReview.DoesNotExist as e:
+        return Response({'message':'員工反饋刪除失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'員工反饋刪除失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+# endregion 
 
 # region 
 @api_view(['POST'])
