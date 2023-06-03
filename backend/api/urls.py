@@ -100,8 +100,15 @@ urlpatterns = [
     path('user/resume', UserResumeAPIView.as_view(), name='user-resume'),
     path('user/resume/<int:resume_id>', UserResumeAPIView.as_view(), name='user-resume-detail'),
 
+    # userApplicationRecord
     path('user/application', UserApplicationRecordAPIView.as_view(), name='job-application'),
     path('user/application/<int:application_id>', UserApplicationRecordAPIView.as_view(), name='job-application-detail'),
+
+    # companyCheckIn
+    path('company/check-in/', CompanyCheckInAPIView.as_view(), name='company-check-in'),
+
+    #companyPromotionRecord
+    path('company/promotion/', CompanyPromotionRecordAPIView.as_view(), name='company-promotion'),
 
     path('update/<int:pk>', update_user_account, name='update_account'),
     

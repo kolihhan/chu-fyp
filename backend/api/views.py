@@ -11,7 +11,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken
 from .serializers import UserSerializer, UserResumeSerializer, UserApplicationRecordSerializer
 from .customToken import MyTokenObtainPairSerializer
-from .models import UserAccount, UserResume, CompanyPermission , Company, UserApplicationRecord
+from .models import UserAccount, UserResume, CompanyPermission , Company, UserApplicationRecord, CompanyCheckIn, companyCheckInRule, CompanyPromotionRecord
 from rest_framework.exceptions import NotFound, ValidationError
 from . import models
 from . import serializers
@@ -1273,3 +1273,48 @@ class UserApplicationRecordAPIView(APIView):
             return Response("應聘記錄不存在", status=404)
         except Exception as e:
             return Response(str(e), status=500)
+
+
+class CompanyCheckInAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        check_ins = CompanyCheckIn.objects.filter(companyEmployee_id__user=request.user)
+        serializer = serializers.CompanyCheckInSerializer(check_ins, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        data = {
+            'companyEmployee_id': request.data.get('companyEmployee_id'),
+            'company_id': request.data.get('company_id'),
+            'type': request.data.get('type', 'Check In')
+        }
+        serializer = serializers.CompanyCheckInSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
+
+
+class CompanyPromotionRecordAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        promotion_records = CompanyPromotionRecord.objects.filter(companyEmployee_id__user=request.user)
+        serializer = serializers.CompanyPromotionRecordSerializer(promotion_records, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        data = {
+            'companyEmployee_id': request.data.get('companyEmployee_id'),
+            'company_id': request.data.get('company_id'),
+            'previous_position': request.data.get('previous_position'),
+            'new_position': request.data.get('new_position'),
+            'description': request.data.get('description'),
+            'remarks': request.data.get('remarks')
+        }
+        serializer = serializers.CompanyPromotionRecordSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)

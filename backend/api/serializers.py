@@ -152,4 +152,19 @@ class CompanyEmployeeTrainingSerializer(serializers.ModelSerializer):
     companyTraining_id = CompanyTrainingSerializer(many=False, read_only=False)
     class Meta: 
         model = models.CompanyEmployeeTraining
+
+
+class CompanyCheckInSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.CompanyCheckIn
+        fields = '__all__'
+
+class CompanyCheckInRuleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.companyCheckInRule
+        fields = '__all__'
+
+class CompanyPromotionRecordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.CompanyPromotionRecord
         fields = '__all__'
