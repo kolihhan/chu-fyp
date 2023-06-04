@@ -187,3 +187,9 @@ class CompanyEmployeeFeedBackReviewSerializer(serializers.ModelSerializer):
     class Meta: 
         model = models.CompanyEmployeeFeedBackReview
         fields = '__all__'
+
+class CompanyRecruitmentSerializer(serializers.ModelSerializer):
+    companyEmployeePosition = CompanyEmployeePositionSerializer(many=False, read_only=True)
+    class Meta: 
+        model = models.CompanyRecruitment
+        fields = '__all__'

@@ -1288,7 +1288,154 @@ def deleteCompanyEmployeeFeedbackReview(request, pk):
     
 # endregion 
 
-# region 
+# region CompanyRecruitment
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def createCompanyRecruitment(request):
+    try:
+        data = request.data
+        createdCompanyRecruitment = models.CompanyRecruitment.objects.create(
+            companyEmployeePosition = models.CompanyEmployeePosition.objects.get(id=data['companyEmployeePosition']),
+            title = data['title'],
+            description = data['description'],
+            requirement = data['requirement'],
+            min_salary = data['min_salary'],
+            max_salary = data['max_salary'],
+            responsibilities = data['responsibilities'],
+            location = data['location'],
+            start_at = datetime.datetime.strptime(data['start_at'], '%Y-%m-%d %H:%M:%S'),   # 2023-05-30 10:00:00
+            offered_at = datetime.datetime.strptime(data['offered_at'], '%Y-%m-%d %H:%M:%S'),
+            close_at = datetime.datetime.strptime(data['close_at'], '%Y-%m-%d %H:%M:%S'),
+            employee_need = data['employee_need'],
+            job_category = data['job_category'],
+            job_nature = data['job_nature'],
+            buiness_trip = data['buiness_trip'],
+            working_hour = data['working_hour'],
+            leaving_system = data['leaving_system']
+        )
+        serializer = serializers.CompanyRecruitmentSerializer(createdCompanyRecruitment, many=False)
+        return Response({'message':'招聘創建成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyEmployeePosition.DoesNotExist as e:
+        return Response({'message':'招聘創建失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'招聘創建失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getCompanyRecruitment(request, pk):
+    try:
+        companyRecruitment = models.CompanyRecruitment.objects.get(id=pk)
+        serializer = serializers.CompanyRecruitmentSerializer(companyRecruitment, many=False)
+        return Response({'message':'招聘獲取成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyRecruitment.DoesNotExist as e:
+        return Response({'message':'招聘獲取失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'招聘獲取失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getCompanyAllRecruitment(request, pk):
+    try:
+        companyRecruitment = models.CompanyRecruitment.objects.filter(companyEmployeePosition__company_id__id=pk)
+        serializer = serializers.CompanyRecruitmentSerializer(companyRecruitment, many=True)
+        return Response({'message':'招聘獲取成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyRecruitment.DoesNotExist as e:
+        return Response({'message':'招聘獲取失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'招聘獲取失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getCompanyRecruitmentAppliedUser(request, pk):
+    try:
+        companyRecruitment = models.UserApplicationRecord.objects.filter(companyRecruitment_id__id=pk)
+        serializer = serializers.UserApplicationRecordSerializer(companyRecruitment, many=True)
+        return Response({'message':'招聘獲取成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyRecruitment.DoesNotExist as e:
+        return Response({'message':'招聘獲取失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'招聘獲取失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def updateCompanyRecruitment(request, pk):
+    try:
+        data = request.data
+        updatedCompanyRecruitment = models.CompanyRecruitment.objects.get(id=pk)
+        if data.get('companyEmployeePosition', None)!=None: 
+            updatedCompanyRecruitment.companyEmployeePosition = models.CompanyEmployeePosition.objects.get(id=data['companyEmployeePosition'])
+        if data.get('title', None)!=None: 
+            updatedCompanyRecruitment.title = data['title']
+        if data.get('description', None)!=None: 
+            updatedCompanyRecruitment.description = data['description']
+        if data.get('requirement', None)!=None: 
+            updatedCompanyRecruitment.requirement = data['requirement']
+        if data.get('min_salary', None)!=None: 
+            updatedCompanyRecruitment.min_salary = data['min_salary']
+        if data.get('max_salary', None)!=None: 
+            updatedCompanyRecruitment.max_salary = data['max_salary']
+        if data.get('responsibilities', None)!=None: 
+            updatedCompanyRecruitment.responsibilities = data['responsibilities']
+        if data.get('location', None)!=None: 
+            updatedCompanyRecruitment.location = data['location']
+        if data.get('start_at', None)!=None: 
+            updatedCompanyRecruitment.start_at = datetime.datetime.strptime(data['start_at'], '%Y-%m-%d %H:%M:%S')   # 2023-05-30 10:00:00
+        if data.get('offered_at', None)!=None: 
+            updatedCompanyRecruitment.offered_at = datetime.datetime.strptime(data['offered_at'], '%Y-%m-%d %H:%M:%S')
+        if data.get('close_at', None)!=None: 
+            updatedCompanyRecruitment.close_at = datetime.datetime.strptime(data['close_at'], '%Y-%m-%d %H:%M:%S')
+        if data.get('employee_need', None)!=None: 
+            updatedCompanyRecruitment.employee_need = data['employee_need']
+        if data.get('job_category', None)!=None: 
+            updatedCompanyRecruitment.job_category = data['job_category']
+        if data.get('job_nature', None)!=None: 
+            updatedCompanyRecruitment.job_nature = data['job_nature']
+        if data.get('buiness_trip', None)!=None: 
+            updatedCompanyRecruitment.buiness_trip = data['buiness_trip']
+        if data.get('working_hour', None)!=None: 
+            updatedCompanyRecruitment.working_hour = data['working_hour']
+        if data.get('leaving_system', None)!=None: 
+            updatedCompanyRecruitment.leaving_system = data['leaving_system']
+        updatedCompanyRecruitment.save()
+        serializer = serializers.CompanyRecruitmentSerializer(updatedCompanyRecruitment, many=False)
+        return Response({'message':'招聘修改成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except (models.CompanyRecruitment.DoesNotExist, models.CompanyEmployeePosition.DoesNotExist) as e:
+        return Response({'message':'招聘修改失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'招聘修改失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def closeCompanyRecruitment(request, pk):
+    try:
+        updatedCompanyRecruitment = models.CompanyRecruitment.objects.get(id=pk)
+        updatedCompanyRecruitment.close_at = datetime.datetime.now()
+        updatedCompanyRecruitment.save()
+        serializer = serializers.CompanyRecruitmentSerializer(updatedCompanyRecruitment, many=False)
+        return Response({'message':'招聘關閉成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except (models.CompanyRecruitment.DoesNotExist, models.CompanyEmployeePosition.DoesNotExist) as e:
+        return Response({'message':'招聘關閉失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'招聘關閉失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def deleteCompanyRecruitment(request, pk):
+    try:
+        deletedCompanyRecruitment = models.UserApplicationRecord.objects.filter(companyRecruitment_id__id=pk)
+        delete = deletedCompanyRecruitment.delete()
+        if delete[0] > 0:
+            return Response({'message':'招聘刪除成功'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message':'招聘刪除失敗'}, status=status.HTTP_400_BAD_REQUEST)
+    except models.CompanyRecruitment.DoesNotExist as e:
+        return Response({'message':'招聘獲取失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'招聘獲取失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# endregion
+
+# region get user id from token
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def getIdFromToken(request):
@@ -1412,6 +1559,8 @@ class UserResumeAPIView(APIView):
             return Response(str(e), status=500)
 
 class UserApplicationRecordAPIView(APIView):
+    # todo: get by recruit company
+    # todo: get by recruitment id  
     permission_classes = [IsAuthenticated]
 
     def post(self, request):

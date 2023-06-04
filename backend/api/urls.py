@@ -112,6 +112,15 @@ urlpatterns = [
     path('companyEmployeeFeedBackReview/get/employee/to/all/<int:pk>', getEmployeeAllEmployeeFeedbackReviewTo, name='getEmployeeAllEmployeeFeedbackReviewTo'),
     path('companyEmployeeFeedBackReview/update/<int:pk>', updateCompanyEmployeeFeedbackReview, name='updateCompanyEmployeeFeedbackReview'),
     path('companyEmployeeFeedBackReview/delete/<int:pk>', deleteCompanyEmployeeFeedbackReview, name='deleteCompanyEmployeeFeedbackReview'),
+    
+    # CompanyEmployeeFeedBackReview
+    path('companyRecruitment/create', createCompanyRecruitment, name='createCompanyRecruitment'),
+    path('companyRecruitment/get/<int:pk>', getCompanyRecruitment, name='getCompanyRecruitment'),
+    path('companyRecruitment/get/company/all/<int:pk>', getCompanyAllRecruitment, name='getCompanyAllRecruitment'),
+    path('companyRecruitment/get/applied/all/<int:pk>', getCompanyRecruitmentAppliedUser, name='getCompanyRecruitmentAppliedUser'),
+    path('companyRecruitment/update/<int:pk>', updateCompanyRecruitment, name='updateCompanyRecruitment'),
+    path('companyRecruitment/close/<int:pk>', closeCompanyRecruitment, name='closeCompanyRecruitment'),
+    path('companyRecruitment/delete/<int:pk>', deleteCompanyRecruitment, name='deleteCompanyRecruitment'),
 
     # resume
     path('user/resume', UserResumeAPIView.as_view(), name='user-resume'),
