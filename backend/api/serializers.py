@@ -193,3 +193,8 @@ class CompanyRecruitmentSerializer(serializers.ModelSerializer):
     class Meta: 
         model = models.CompanyRecruitment
         fields = '__all__'
+
+class CompanyCheckInRuleSerializer(serializers.ModelSerializer):
+    class Meta: 
+        model = models.companyCheckInRule
+        fields = '__all__'

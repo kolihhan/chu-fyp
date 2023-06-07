@@ -1435,6 +1435,75 @@ def deleteCompanyRecruitment(request, pk):
 
 # endregion
 
+# region companyCheckInRule
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def createCompanyCheckInRule(request):
+    try:
+        data = request.data
+        createdCompanyCheckInRule = models.companyCheckInRule.objects.create(
+            company_id = models.Company.objects.get(id=data['company_id']),
+            work_time_start = datetime.datetime.strptime(data['work_time_start'], '%Y-%m-%d %H:%M:%S').time(),
+            work_time_end = datetime.datetime.strptime(data['work_time_end'], '%Y-%m-%d %H:%M:%S').time(),
+            late_tolerance = datetime.timedelta(hours=data['late_tolerance']['hours'],minutes=data['late_tolerance']['minutes'])
+        )
+        serializer = serializers.CompanyCheckInRuleSerializer(createdCompanyCheckInRule, many=False)
+        return Response({'message':'打卡規則建立成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyEmployeePosition.DoesNotExist as e:
+        return Response({'message':'打卡規則建立失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'打卡規則建立失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getCompanyCheckInRule(request, pk):
+    try:
+        companyCheckInRule = models.companyCheckInRule.objects.get(id=pk)
+        serializer = serializers.CompanyCheckInRuleSerializer(companyCheckInRule, many=False)
+        return Response({'message':'打卡規則獲取成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyEmployeePosition.DoesNotExist as e:
+        return Response({'message':'打卡規則獲取失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'打卡規則獲取失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def updateCompanyCheckInRule(request, pk):
+    try:
+        data = request.data
+        updatedCompanyCheckInRule = models.companyCheckInRule.objects.get(id=pk)
+        if data.get('work_time_start', None) != None:
+            updatedCompanyCheckInRule.work_time_start = datetime.datetime.strptime(data['work_time_start'], '%Y-%m-%d %H:%M:%S').time()
+        if data.get('work_time_end', None) != None:
+            updatedCompanyCheckInRule.work_time_end = datetime.datetime.strptime(data['work_time_end'], '%Y-%m-%d %H:%M:%S').time()
+        if data.get('late_tolerance', None) != None:
+            updatedCompanyCheckInRule.late_tolerance = datetime.timedelta(hours=data['late_tolerance']['hours'],minutes=data['late_tolerance']['minutes'])
+        updatedCompanyCheckInRule.save()
+        serializer = serializers.CompanyCheckInRuleSerializer(updatedCompanyCheckInRule, many=False)
+        return Response({'message':'打卡規則建立成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyEmployeePosition.DoesNotExist as e:
+        return Response({'message':'打卡規則建立失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'打卡規則建立失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def deleteCompanyCheckInRule(request, pk):
+    try:
+        deletedCompanyCheckInRule = models.companyCheckInRule.objects.get(id=pk)
+        delete = deletedCompanyCheckInRule.delete()
+        if delete[0] > 0:
+            return Response({'message':'打卡規則刪除成功'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message':'打卡規則刪除失敗'}, status=status.HTTP_400_BAD_REQUEST)
+    except models.CompanyEmployeePosition.DoesNotExist as e:
+        return Response({'message':'打卡規則不存在', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'打卡規則刪除失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# endregion
+
 # region get user id from token
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])

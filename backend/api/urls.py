@@ -121,6 +121,12 @@ urlpatterns = [
     path('companyRecruitment/update/<int:pk>', updateCompanyRecruitment, name='updateCompanyRecruitment'),
     path('companyRecruitment/close/<int:pk>', closeCompanyRecruitment, name='closeCompanyRecruitment'),
     path('companyRecruitment/delete/<int:pk>', deleteCompanyRecruitment, name='deleteCompanyRecruitment'),
+  
+    # CompanyCheckInRule
+    path('companyCheckInRule/create', createCompanyCheckInRule, name='createCompanyCheckInRule'),
+    path('companyCheckInRule/get/<int:pk>', getCompanyCheckInRule, name='getCompanyCheckInRule'),
+    path('companyCheckInRule/update/<int:pk>', updateCompanyCheckInRule, name='updateCompanyCheckInRule'),
+    path('companyCheckInRule/delete/<int:pk>', deleteCompanyCheckInRule, name='deleteCompanyCheckInRule'),
 
     # resume
     path('user/resume', UserResumeAPIView.as_view(), name='user-resume'),
