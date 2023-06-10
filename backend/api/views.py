@@ -91,11 +91,115 @@ def createCompany(request):
             # endregion
 
             # region create all inital permission for the company
-            createdPermission = models.CompanyPermission.objects.create(
-                company_id = createdCompany,
-                permission_name = "Permission_All",
-                permission_desc = "Permission that allow to control every thing"
-            )
+            createdPermissionList=[
+                models.CompanyPermission(
+                    company_id = createdCompany,
+                    permission_name = "Permission_All",
+                    permission_desc = "Permission that allow to control every thing"
+                ),
+                models.CompanyPermission(
+                    company_id = createdCompany,
+                    permission_name = "Permission_Invite_Employee",
+                    permission_desc = "Permission that allow to invite employee from this platform"
+                ),
+                models.CompanyPermission(
+                    company_id = createdCompany,
+                    permission_name = "Permission_Get_Employee_List",
+                    permission_desc = "Permission that allow to get all employee from company"
+                ),
+                models.CompanyPermission(
+                    company_id = createdCompany,
+                    permission_name = "Permission_Get_Employee_Data",
+                    permission_desc = "Permission that allow to get employee data"
+                ),
+                models.CompanyPermission(
+                    company_id = createdCompany,
+                    permission_name = "Permission_Update_Employee_Salary",
+                    permission_desc = "Permission that allow to update employee data"
+                ),
+                models.CompanyPermission(
+                    company_id = createdCompany,
+                    permission_name = "Permission_Update_Employee_Permission",
+                    permission_desc = "Permission that allow to update employee permission"
+                ),
+                models.CompanyPermission(
+                    company_id = createdCompany,
+                    permission_name = "Permission_Fire_Employee",
+                    permission_desc = "Permission that allow to get all employee from company"
+                ),
+                models.CompanyPermission(
+                    company_id = createdCompany,
+                    permission_name = "Permission_Recruit_Employee",
+                    permission_desc = "Permission that allow to recruit employee"
+                ),
+                models.CompanyPermission(
+                    company_id = createdCompany,
+                    permission_name = "Permission_Create_New_Department",
+                    permission_desc = "Permission that allow to get all employee from company"
+                ),
+                models.CompanyPermission(
+                    company_id = createdCompany,
+                    permission_name = "Permission_Get_Company_Benefits",
+                    permission_desc = "Permission that allow to get all employee from company"
+                ),
+                models.CompanyPermission(
+                    company_id = createdCompany,
+                    permission_name = "Permission_Create_Company_Benefits",
+                    permission_desc = "Permission that allow to get all employee from company"
+                ),
+                models.CompanyPermission(
+                    company_id = createdCompany,
+                    permission_name = "Permission_Update_Company_Benefits",
+                    permission_desc = "Permission that allow to get all employee from company"
+                ),
+                models.CompanyPermission(
+                    company_id = createdCompany,
+                    permission_name = "Permission_Delete_Company_Benefits",
+                    permission_desc = "Permission that allow to get all employee from company"
+                ),
+                models.CompanyPermission(
+                    company_id = createdCompany,
+                    permission_name = "Permission_Create_Announcement_Group",
+                    permission_desc = "Permission that allow to get all employee from company"
+                ),
+                models.CompanyPermission(
+                    company_id = createdCompany,
+                    permission_name = "Permission_Get_All_Announcement_Group",
+                    permission_desc = "Permission that allow to get all employee from company"
+                ),
+                models.CompanyPermission(
+                    company_id = createdCompany,
+                    permission_name = "Permission_View_Announcement_Group",
+                    permission_desc = "Permission that allow to get all employee from company"
+                ),
+                models.CompanyPermission(
+                    company_id = createdCompany,
+                    permission_name = "Permission_Update_Announcement_Group",
+                    permission_desc = "Permission that allow to get all employee from company"
+                ),
+                models.CompanyPermission(
+                    company_id = createdCompany,
+                    permission_name = "Permission_Delete_Announcement_Group",
+                    permission_desc = "Permission that allow to get all employee from company"
+                ),
+                models.CompanyPermission(
+                    company_id = createdCompany,
+                    permission_name = "Permission_Post_Announcement",
+                    permission_desc = "Permission that allow to get all employee from company"
+                ),
+                models.CompanyPermission(
+                    company_id = createdCompany,
+                    permission_name = "Permission_View_Announcement",
+                    permission_desc = "Permission that allow to get all employee from company"
+                ),
+                models.CompanyPermission(
+                    company_id = createdCompany,
+                    permission_name = "Permission_Feedback",
+                    permission_desc = "Permission that allow to get all employee from company"
+                ),
+            ]
+            models.CompanyPermission.objects.bulk_create(createdPermissionList)
+
             # todo: create all initial permission for a company
             # endregion
 
@@ -1502,6 +1606,179 @@ def deleteCompanyCheckInRule(request, pk):
     except Exception as e:
         return Response({'message':'打卡規則刪除失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+# endregion
+
+# region resume
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def createUserResume(request):
+    try:
+        data = request.data
+        createdUserResume = models.UserResume.objects.create(
+            user = models.UserAccount.objects.get(id=data['user']),
+            summary = data['summary'],
+            experience = data['experience'],
+            education = data['education'],
+            skills = data['skills'],
+            prefer_work = data['prefer_work'],
+            language = data['language']
+        )
+        serializer = serializers.UserResumeSerializer(createdUserResume, many=False)
+        return Response({'message':'履歷建立成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.UserAccount.DoesNotExist as e:
+        return Response({'message':'履歷建立失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'履歷建立失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getUserResume(request, pk):
+    try:
+        userResumeData = models.UserResume.objects.get(id=pk)
+        serializer = serializers.UserResumeSerializer(userResumeData, many=False)
+        return Response({'message':'履歷獲取成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.UserResume.DoesNotExist as e:
+        return Response({'message':'履歷獲取失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'履歷獲取失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getUserAllResume(request, pk):
+    try:
+        userResumeData = models.UserResume.objects.filter(user__id=pk)
+        serializer = serializers.UserResumeSerializer(userResumeData, many=True)
+        return Response({'message':'履歷獲取成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.UserResume.DoesNotExist as e:
+        return Response({'message':'履歷獲取失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'履歷獲取失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def updateUserResume(request, pk):
+    try:
+        data = request.data
+        updatedUserResume = models.UserResume.objects.get(id=pk)
+        if data.get('summary', None) !=None:
+            updatedUserResume.summary = data['summary']
+        if data.get('experience', None) !=None:
+            updatedUserResume.experience = data['experience']
+        if data.get('education', None) !=None:
+            updatedUserResume.education = data['education']
+        if data.get('skills', None) !=None:
+            updatedUserResume.skills = data['skills']
+        if data.get('prefer_work', None) !=None:
+            updatedUserResume.prefer_work = data['prefer_work']
+        if data.get('language', None) !=None:
+            updatedUserResume.language = data['language']
+        
+        updatedUserResume.save()
+        serializer = serializers.UserResumeSerializer(updatedUserResume, many=False)
+        return Response({'message':'履歷修改成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.UserAccount.DoesNotExist as e:
+        return Response({'message':'履歷修改失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'履歷修改失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def deleteUserResume(request, pk):
+    try:
+        deletedUserResume = models.UserResume.objects.get(id=pk)
+        delete = deletedUserResume.delete()
+        if delete[0] > 0: 
+            return Response({'message':'履歷刪除成功'}, status=status.HTTP_200_OK)
+        else: 
+            return Response({'message':'履歷刪除失敗'}, status=status.HTTP_200_OK)
+    except models.UserResume.DoesNotExist as e:
+        return Response({'message':'履歷刪除失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'履歷刪除失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+# endregion
+
+# region userApplicationRecord
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def createUserApplicationRecord(request):
+    try:
+        data = request.data
+        createdUserApplicationRecord = models.UserApplicationRecord.objects.create(
+            user = models.UserAccount.objects.get(id=data['user']),
+            userResume_id = models.UserResume.objects.get(id=data['userResume_id']),
+            companyRecruitment_id = models.CompanyRecruitment.objects.get(id=data['companyRecruitment_id']),
+            # status = data['status']
+        )
+        serializer = serializers.UserApplicationRecordSerializer(createdUserApplicationRecord, many=False)
+        return Response({'message':'面試申請成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.UserAccount.DoesNotExist as e:
+        return Response({'message':'面試申請失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'面試申請失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getUserApplicationRecord(request, pk):
+    try:
+        userApplicationRecordData = models.UserApplicationRecord.objects.get(id=pk)
+        serializer = serializers.UserApplicationRecordSerializer(userApplicationRecordData, many=False)
+        return Response({'message':'面試申請資料獲取成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.UserApplicationRecord.DoesNotExist as e:
+        return Response({'message':'面試申請資料獲取失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'面試申請資料獲取失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getAllUserApplicationRecordByUser(request, pk):
+    try:
+        userApplicationRecordData = models.UserApplicationRecord.objects.filter(user__id=pk)
+        serializer = serializers.UserApplicationRecordSerializer(userApplicationRecordData, many=False)
+        return Response({'message':'面試申請資料獲取成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.UserApplicationRecord.DoesNotExist as e:
+        return Response({'message':'面試申請資料獲取失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'面試申請資料獲取失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getAllUserApplicationRecordByCompany(request, pk):
+    try:
+        userApplicationRecordData = models.UserApplicationRecord.objects.filter(companyRecruitment_id__id=pk)
+        serializer = serializers.UserApplicationRecordSerializer(userApplicationRecordData, many=True)
+        return Response({'message':'面試申請資料獲取成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.UserApplicationRecord.DoesNotExist as e:
+        return Response({'message':'面試申請資料獲取失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'面試申請資料獲取失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def updateUserApplicationRecord(request, pk):
+    try:
+        data = request.data
+        updatedUserApplicationRecord = models.UserApplicationRecord.objects.get(id=pk)
+        updatedUserApplicationRecord.status = data['status']
+        serializer = serializers.UserApplicationRecordSerializer(updatedUserApplicationRecord, many=False)
+        return Response({'message':'面試申請更新成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.UserApplicationRecord.DoesNotExist as e:
+        return Response({'message':'面試申請更新失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'面試申請更新失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def deleteUserApplicationRecord(request, pk):
+    try:
+        deletedUserApplicationRecord = models.UserApplicationRecord.objects.get(id=pk)
+        delete = deletedUserApplicationRecord.delete()
+        if delete [0] > 0:
+            return Response({'message':'面試申請刪除成功'}, status=status.HTTP_200_OK)
+    except models.UserApplicationRecord.DoesNotExist as e:
+        return Response({'message':'面試申請刪除失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'面試申請刪除失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 # endregion
 
 # region get user id from token

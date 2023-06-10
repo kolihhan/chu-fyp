@@ -129,10 +129,23 @@ urlpatterns = [
     path('companyCheckInRule/delete/<int:pk>', deleteCompanyCheckInRule, name='deleteCompanyCheckInRule'),
 
     # resume
+    path('userResume/create', createUserResume, name='createUserResume'),
+    path('userResume/get/<int:pk>', getUserResume, name='getUserResume'),
+    path('userResume/get/user/all/<int:pk>', getUserAllResume, name='getUserAllResume'),
+    path('userResume/update/<int:pk>', updateUserResume, name='updateUserResume'),
+    path('userResume/delete/<int:pk>', deleteUserResume, name='deleteUserResume'),
+
     path('user/resume', UserResumeAPIView.as_view(), name='user-resume'),
     path('user/resume/<int:resume_id>', UserResumeAPIView.as_view(), name='user-resume-detail'),
 
     # userApplicationRecord
+    path('userApplicationRecord/create', createUserApplicationRecord, name='createUserApplicationRecord'),
+    path('userApplicationRecord/get/<int:pk>', getUserApplicationRecord, name='getUserApplicationRecord'),
+    path('userApplicationRecord/get/user/all/<int:pk>', getAllUserApplicationRecordByUser, name='getUserApplicationRecordByUser'),
+    path('userApplicationRecord/get/company/all/<int:pk>', getAllUserApplicationRecordByCompany, name='getUserApplicationRecordByCompany'),
+    path('userApplicationRecord/update/<int:pk>', updateUserApplicationRecord, name='updateUserApplicationRecord'),
+    path('userApplicationRecord/delete/<int:pk>', deleteUserApplicationRecord, name='deleteUserApplicationRecord'),
+
     path('user/application', UserApplicationRecordAPIView.as_view(), name='job-application'),
     path('user/application/<int:application_id>', UserApplicationRecordAPIView.as_view(), name='job-application-detail'),
 
