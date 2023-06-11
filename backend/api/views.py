@@ -20,7 +20,7 @@ from django.db import transaction
 from django.utils import timezone
 import logging
 import datetime
-
+# from django.db.models import QuerySet
 # from django.http import JsonResponse
 
 
@@ -70,6 +70,7 @@ def createCompany(request):
     try:
         with transaction.atomic():
             companyData = request.data
+
             # region create company
             createdCompany = models.Company.objects.create(
                 name = companyData['name'],
@@ -81,15 +82,15 @@ def createCompany(request):
                 boss_id = models.UserAccount.objects.get(id=companyData['boss_id']),
             )
             serializer = serializers.CompanySerializer(createdCompany, many=False)
-            # endregion 
+            # endregion create company
 
             # region create an initial Department for the company
             createdDepartment = models.CompanyDepartment.objects.create(
                 company_id = createdCompany,
                 department_name = "Main Department"
             )
-            # endregion
-
+            # endregion create department
+            
             # region create all inital permission for the company
             createdPermissionList=[
                 models.CompanyPermission(
@@ -198,46 +199,76 @@ def createCompany(request):
                     permission_desc = "Permission that allow to get all employee from company"
                 ),
             ]
-            models.CompanyPermission.objects.bulk_create(createdPermissionList)
-
-            # todo: create all initial permission for a company
-            # endregion
-
+            models.CompanyPermission.objects.bulk_create(createdPermissionList)            
+            # endregion create permission
+            
             # region create all inital benefit for the company
-            createdBenefit = models.CompanyBenefits.objects.create(
+            bossBenefit = models.CompanyBenefits.objects.create(
                 company_id = createdCompany,
                 benefit_name = "Boss benefit",
                 benefit_desc = "Boss no need benefit"
             )
-            # todo: create all inital benefit for a company
-            # endregion
+            employeeBenefit = models.CompanyBenefits.objects.create(
+                company_id = createdCompany,
+                benefit_name = "Employee benefit",
+                benefit_desc = "五險一金，員工旅游（之後再改）"
+            )
+            # endregion create benefit
 
-            # region create companyEmployee Position (boss and employee)
-            createdCompanyEmployeePosition = models.CompanyEmployeePosition.objects.create(
+            # region create companyEmployee Position
+            positionBoss = models.CompanyEmployeePosition.objects.create(
                 company_id = createdCompany,
                 position_name = "Boss",
-                companyDepartment_id = createdDepartment,
+                companyDepartment_id = createdDepartment
             )
-            createdCompanyEmployeePosition.companyPermission_id.set([createdPermission])
-            createdCompanyEmployeePosition.companyBenefits_id.set([createdBenefit])
+            positionBoss.companyPermission_id.set([models.CompanyPermission.objects.get(Q(permission_name='Permission_All') & Q(company_id=createdCompany))])
+            positionBoss.companyBenefits_id.set([bossBenefit])
+            positionBoss.save()
 
-            createdCompanyEmployeePosition2 = models.CompanyEmployeePosition.objects.create(
+            positionEmployee = models.CompanyEmployeePosition.objects.create(
                 company_id = createdCompany,
                 position_name = "Employee",
                 companyDepartment_id = createdDepartment,
             )
-            # endregion
+            positionEmployee.companyPermission_id.set([
+                models.CompanyPermission.objects.get(Q(permission_name='Permission_Get_Employee_List') & Q(company_id=createdCompany)),
+                models.CompanyPermission.objects.get(Q(permission_name='Permission_Get_All_Announcement_Group') & Q(company_id=createdCompany)),
+                models.CompanyPermission.objects.get(Q(permission_name='Permission_View_Announcement_Group') & Q(company_id=createdCompany)),
+                models.CompanyPermission.objects.get(Q(permission_name='Permission_Post_Announcement') & Q(company_id=createdCompany)),
+                models.CompanyPermission.objects.get(Q(permission_name='Permission_View_Announcement') & Q(company_id=createdCompany)),
+                models.CompanyPermission.objects.get(Q(permission_name='Permission_Feedback') & Q(company_id=createdCompany))
+            ])
+            positionEmployee.companyBenefits_id.set([employeeBenefit])
+            positionEmployee.save()
+            # endregion companyEmployee position
         
             # region create companyEmployee (boss)
-            createdEmployee = models.CompanyEmployee.objects.create(
+            companyEmployeeBoss = models.CompanyEmployee.objects.create(
                 company_id = createdCompany,
                 user_id = createdCompany.boss_id,
-                companyEmployeePosition_id = createdCompanyEmployeePosition,
+                companyEmployeePosition_id = positionBoss,
                 salary = 0
             )
-            # endregion
+            # endregion create boss
 
-            # todo: create initial AnnouncementGroup
+            # region createAnnouncementGroup
+            mainAnnouncementGroup = models.CompanyAnnouncementGroup.objects.create(
+                company_id = createdCompany,
+                name= 'Main Announcement Group',
+                description='Announcement Group for all employee'
+            )
+            mainAnnouncementGroup.companyEmployee_id.set([companyEmployeeBoss])
+            mainAnnouncementGroup.save()
+            # endregion createAnnouncementGroup
+
+            # region create check in rule
+            checkInRule = models.companyCheckInRule.objects.create(
+                company_id = createdCompany,
+                work_time_start = datetime.datetime.strptime('2023-6-11 09:00:00', '%Y-%m-%d %H:%M:%S').time(),
+                work_time_end = datetime.datetime.strptime('2023-6-11 18:00:00', '%Y-%m-%d %H:%M:%S').time(),
+                late_tolerance = datetime.timedelta(hours=0,minutes=0)
+            )
+            # endregion checkInRule
             
         return Response({'message':'公司創建成功', 'data':serializer.data})
     except:
@@ -257,13 +288,20 @@ def updateCompany(request, pk):
     updatedCompany = request.data
     try:
         originalCompany = models.Company.objects.get(id=pk)
-        originalCompany.boss_id = models.UserAccount.objects.get(id=updatedCompany.get('boss_id', originalCompany.boss_id.id))
-        originalCompany.name = updatedCompany.get('name', originalCompany.name)
-        originalCompany.email = updatedCompany.get('email', originalCompany.email)
-        originalCompany.phone = updatedCompany.get('phone', originalCompany.phone)
-        originalCompany.address = updatedCompany.get('address', originalCompany.address)
-        originalCompany.company_desc = updatedCompany.get('company_desc', originalCompany.company_desc)
-        originalCompany.company_benefits = updatedCompany.get('company_benefits', originalCompany.company_benefits)
+        if updatedCompany.get('boss_id', None)!=None: 
+            originalCompany.boss_id = models.UserAccount.objects.get(id=updatedCompany['boss_id'])
+        if updatedCompany.get('name', None)!=None: 
+            originalCompany.name = updatedCompany['name']
+        if updatedCompany.get('email', None)!=None: 
+            originalCompany.email = updatedCompany['email']
+        if updatedCompany.get('phone', None)!=None: 
+            originalCompany.phone = updatedCompany['phone']
+        if updatedCompany.get('address', None)!=None: 
+            originalCompany.address = updatedCompany['address']
+        if updatedCompany.get('company_desc', None)!=None: 
+            originalCompany.company_desc = updatedCompany['company_desc']
+        if updatedCompany.get('company_benefits', None)!=None: 
+            originalCompany.company_benefits = updatedCompany['company_benefits']
         originalCompany.save()
         serializer = serializers.CompanySerializer(originalCompany)
         return Response({'message':'公司修改成功', 'data':serializer.data})
@@ -438,18 +476,13 @@ def getCompanyAllEmployee(request, pk):
 def updateCompanyEmployee(request, pk):
     try:
         updatedCompanyEmployee = request.data
-
-        newCompanyEmployeePosition_id = updatedCompanyEmployee.get('companyEmployeePosition_id', None)
         originalCompanyEmployee = models.CompanyEmployee.objects.get(id=pk)
-
-        if(newCompanyEmployeePosition_id==None): newCompanyEmployeePosition_id = originalCompanyEmployee.companyEmployeePosition_id
-        else: newCompanyEmployeePosition_id = models.CompanyEmployeePosition.objects.get(id=newCompanyEmployeePosition_id)
-        
-        originalCompanyEmployee.companyEmployeePosition_id  = newCompanyEmployeePosition_id
-        originalCompanyEmployee.salary = updatedCompanyEmployee.get('salary', originalCompanyEmployee.salary)
+        if updatedCompanyEmployee.get('companyEmployeePosition_id', None)!=None:
+            originalCompanyEmployee.companyEmployeePosition_id = models.CompanyEmployeePosition.objects.get(id=updatedCompanyEmployee['companyEmployeePosition_id'])
+        if updatedCompanyEmployee.get('salary', None)!=None:
+            originalCompanyEmployee.salary = updatedCompanyEmployee['salary']
         originalCompanyEmployee.save()
         serializer = serializers.CompanyEmployeeSerializer(originalCompanyEmployee, many=False)
-
         return Response({"message":"員工資料更新成功", 'data':serializer.data},status=status.HTTP_200_OK)
     except models.CompanyEmployee.DoesNotExist:
         return Response({'message':'員工不存在'}, status=status.HTTP_404_NOT_FOUND)
@@ -697,9 +730,8 @@ def updatePosition(request, pk):
 
         updatedPosition.position_name = positionData.get('position_name', updatedPosition.position_name)
 
-        if positionData.get('companyDepartment_id', None)!=None: departmentId = models.CompanyDepartment.objects.get(id=positionData['companyDepartment_id'])
-        else: departmentId = updatedPosition.companyDepartment_id
-        updatedPosition.companyDepartment_id = departmentId
+        if positionData.get('companyDepartment_id', None)!=None: 
+            updatedPosition.companyDepartment_id = positionData['companyDepartment_id']
         
         companyPermissions = []
         if positionData.get('companyPermission_id', None)!=None:
