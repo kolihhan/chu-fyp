@@ -150,10 +150,12 @@ urlpatterns = [
     path('user/application/<int:application_id>', UserApplicationRecordAPIView.as_view(), name='job-application-detail'),
 
     # companyCheckIn
-    path('company/check-in/', CompanyCheckInAPIView.as_view(), name='company-check-in'),
+    path('company/check-in/<int:pk>', CompanyCheckInAPIView.as_view(), name='company-check-in'),
+    path('company/check-in/<int:pk>/<int:record_id>', CompanyCheckInAPIView.as_view(), name='company-check-in'),
 
     #companyPromotionRecord
-    path('company/promotion/', CompanyPromotionRecordAPIView.as_view(), name='company-promotion'),
+    path('company/promotion/<int:pk>', CompanyPromotionRecordAPIView.as_view(), name='company-promotion'),
+    path('company/promotion/<int:pk>/<int:record_id>', CompanyPromotionRecordAPIView.as_view(), name='company-promotion'),
 
     path('update/<int:pk>', update_user_account, name='update_account'),
     

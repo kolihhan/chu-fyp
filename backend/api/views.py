@@ -1971,15 +1971,17 @@ class UserApplicationRecordAPIView(APIView):
 class CompanyCheckInAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request):
-        check_ins = CompanyCheckIn.objects.filter(companyEmployee_id__user=request.user)
+    def get(self, request, pk):
+        companyE = get_object_or_404(models.CompanyEmployee, user_id=pk)
+        check_ins = CompanyCheckIn.objects.filter(companyEmployee_id=companyE)
         serializer = serializers.CompanyCheckInSerializer(check_ins, many=True)
         return Response(serializer.data)
 
-    def post(self, request):
+    def post(self, request,pk):
+        companyE = get_object_or_404(models.CompanyEmployee, user_id=pk)
         data = {
-            'companyEmployee_id': request.data.get('companyEmployee_id'),
-            'company_id': request.data.get('company_id'),
+            'companyEmployee_id': companyE.user_id,
+            'company_id': companyE.company_id,
             'type': request.data.get('type', 'Check In')
         }
         serializer = serializers.CompanyCheckInSerializer(data=data)
@@ -1987,17 +1989,46 @@ class CompanyCheckInAPIView(APIView):
             serializer.save()
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
+    
+    def delete(self, request, pk, record_id):
+        try:
+            companyE = get_object_or_404(models.CompanyEmployee, user_id=pk)
+
+            employeeRecord = get_object_or_404(models.CompanyCheckIn, companyEmployee_id=companyE,id = record_id)
+            employeeRecord.delete()
+
+            return Response("Check In 記錄已取消")
+        except NotFound:
+            return Response("Check In 記錄不存在", status=404)
+        except Exception as e:
+            return Response(str(e), status=500)
+
+    def put(self, request, pk, record_id):
+        try:
+            companyE = get_object_or_404(models.CompanyEmployee, user_id=pk)
+            # 更新用户面试申请记录的代码
+            employeeRecord = get_object_or_404(models.CompanyCheckIn, companyEmployee_id=companyE,id = record_id)
+            serializer = UserApplicationRecordSerializer(employeeRecord, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response(serializer.errors, status=400)
+        except NotFound:
+            return Response("Check In 記錄不存在", status=404)
+        except Exception as e:
+            return Response(str(e), status=500)
 
 
 class CompanyPromotionRecordAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request):
-        promotion_records = CompanyPromotionRecord.objects.filter(companyEmployee_id__user=request.user)
+    def get(self, request,pk):
+        companyE = get_object_or_404(models.CompanyEmployee, user_id=pk)
+        promotion_records = CompanyPromotionRecord.objects.filter(companyEmployee_id =companyE)
         serializer = serializers.CompanyPromotionRecordSerializer(promotion_records, many=True)
         return Response(serializer.data)
 
-    def post(self, request):
+    def post(self, request,pk):
         data = {
             'companyEmployee_id': request.data.get('companyEmployee_id'),
             'company_id': request.data.get('company_id'),
@@ -2011,3 +2042,31 @@ class CompanyPromotionRecordAPIView(APIView):
             serializer.save()
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
+    
+    def delete(self, request, pk, record_id):
+        try:
+            companyE = get_object_or_404(models.CompanyEmployee, user_id=pk)
+
+            employeeRecord = get_object_or_404(models.CompanyPromotionRecord, companyEmployee_id=companyE,id = record_id)
+            employeeRecord.delete()
+
+            return Response("Promotion Record 記錄已取消")
+        except NotFound:
+            return Response("Promotion Record 記錄不存在", status=404)
+        except Exception as e:
+            return Response(str(e), status=500)
+
+    def put(self, request, pk, record_id):
+        try:
+            companyE = get_object_or_404(models.CompanyEmployee, user_id=pk)
+            # 更新用户面试申请记录的代码
+            employeeRecord = get_object_or_404(models.CompanyPromotionRecord, companyEmployee_id=companyE,id = record_id)
+            serializer = serializers.CompanyPromotionRecordSerializer(employeeRecord, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response(serializer.errors, status=400)
+        except NotFound:
+            return Response("Promotion Record 記錄不存在", status=404)
+        except Exception as e:
+            return Response(str(e), status=500)
