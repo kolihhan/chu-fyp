@@ -2004,15 +2004,15 @@ class CompanyCheckInAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, pk):
-        companyE = get_object_or_404(models.CompanyEmployee, user_id=pk)
-        check_ins = CompanyCheckIn.objects.filter(companyEmployee_id=companyE)
+        companyE = get_object_or_404(models.CompanyEmployee, id=pk)
+        check_ins = CompanyCheckIn.objects.filter(companyEmployee_id=companyE.id)
         serializer = serializers.CompanyCheckInSerializer(check_ins, many=True)
         return Response(serializer.data)
 
     def post(self, request,pk):
-        companyE = get_object_or_404(models.CompanyEmployee, user_id=pk)
+        companyE = get_object_or_404(models.CompanyEmployee, id=pk)
         data = {
-            'companyEmployee_id': companyE.user_id,
+            'companyEmployee_id': companyE.id,
             'company_id': companyE.company_id,
             'type': request.data.get('type', 'Check In')
         }
@@ -2024,9 +2024,9 @@ class CompanyCheckInAPIView(APIView):
     
     def delete(self, request, pk, record_id):
         try:
-            companyE = get_object_or_404(models.CompanyEmployee, user_id=pk)
+            companyE = get_object_or_404(models.CompanyEmployee, id=pk)
 
-            employeeRecord = get_object_or_404(models.CompanyCheckIn, companyEmployee_id=companyE,id = record_id)
+            employeeRecord = get_object_or_404(models.CompanyCheckIn, companyEmployee_id=companyE.id,id = record_id)
             employeeRecord.delete()
 
             return Response("Check In 記錄已取消")
@@ -2037,10 +2037,10 @@ class CompanyCheckInAPIView(APIView):
 
     def put(self, request, pk, record_id):
         try:
-            companyE = get_object_or_404(models.CompanyEmployee, user_id=pk)
+            companyE = get_object_or_404(models.CompanyEmployee, id=pk)
             # 更新用户面试申请记录的代码
-            employeeRecord = get_object_or_404(models.CompanyCheckIn, companyEmployee_id=companyE,id = record_id)
-            serializer = UserApplicationRecordSerializer(employeeRecord, data=request.data, partial=True)
+            employeeRecord = get_object_or_404(models.CompanyCheckIn, companyEmployee_id=companyE.id,id = record_id)
+            serializer = serializers.CompanyCheckInSerializer(employeeRecord, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data)
@@ -2055,15 +2055,16 @@ class CompanyPromotionRecordAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request,pk):
-        companyE = get_object_or_404(models.CompanyEmployee, user_id=pk)
-        promotion_records = CompanyPromotionRecord.objects.filter(companyEmployee_id =companyE)
+        companyE = get_object_or_404(models.CompanyEmployee, id=pk)
+        promotion_records = CompanyPromotionRecord.objects.filter(companyEmployee_id =companyE.id)
         serializer = serializers.CompanyPromotionRecordSerializer(promotion_records, many=True)
         return Response(serializer.data)
 
     def post(self, request,pk):
+        companyE = get_object_or_404(models.CompanyEmployee, id=pk)
         data = {
-            'companyEmployee_id': request.data.get('companyEmployee_id'),
-            'company_id': request.data.get('company_id'),
+            'companyEmployee_id': companyE.id,
+            'company_id': companyE.company_id,
             'previous_position': request.data.get('previous_position'),
             'new_position': request.data.get('new_position'),
             'description': request.data.get('description'),
@@ -2077,7 +2078,7 @@ class CompanyPromotionRecordAPIView(APIView):
     
     def delete(self, request, pk, record_id):
         try:
-            companyE = get_object_or_404(models.CompanyEmployee, user_id=pk)
+            companyE = get_object_or_404(models.CompanyEmployee, id=pk)
 
             employeeRecord = get_object_or_404(models.CompanyPromotionRecord, companyEmployee_id=companyE,id = record_id)
             employeeRecord.delete()
@@ -2090,9 +2091,9 @@ class CompanyPromotionRecordAPIView(APIView):
 
     def put(self, request, pk, record_id):
         try:
-            companyE = get_object_or_404(models.CompanyEmployee, user_id=pk)
+            companyE = get_object_or_404(models.CompanyEmployee, id=pk)
             # 更新用户面试申请记录的代码
-            employeeRecord = get_object_or_404(models.CompanyPromotionRecord, companyEmployee_id=companyE,id = record_id)
+            employeeRecord = get_object_or_404(models.CompanyPromotionRecord, companyEmployee_id=companyE.id,id = record_id)
             serializer = serializers.CompanyPromotionRecordSerializer(employeeRecord, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
