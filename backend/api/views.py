@@ -1778,7 +1778,7 @@ def getUserApplicationRecord(request, pk):
 def getAllUserApplicationRecordByUser(request, pk):
     try:
         userApplicationRecordData = models.UserApplicationRecord.objects.filter(user__id=pk)
-        serializer = serializers.UserApplicationRecordSerializer(userApplicationRecordData, many=False)
+        serializer = serializers.UserApplicationRecordSerializer(userApplicationRecordData, many=True)
         return Response({'message':'面試申請資料獲取成功', 'data':serializer.data}, status=status.HTTP_200_OK)
     except models.UserApplicationRecord.DoesNotExist as e:
         return Response({'message':'面試申請資料獲取失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
@@ -1804,6 +1804,7 @@ def updateUserApplicationRecord(request, pk):
         data = request.data
         updatedUserApplicationRecord = models.UserApplicationRecord.objects.get(id=pk)
         updatedUserApplicationRecord.status = data['status']
+        updatedUserApplicationRecord.save()
         serializer = serializers.UserApplicationRecordSerializer(updatedUserApplicationRecord, many=False)
         return Response({'message':'面試申請更新成功', 'data':serializer.data}, status=status.HTTP_200_OK)
     except models.UserApplicationRecord.DoesNotExist as e:
