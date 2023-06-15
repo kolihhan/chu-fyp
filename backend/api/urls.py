@@ -114,6 +114,7 @@ urlpatterns = [
     path('companyEmployeeFeedBackReview/delete/<int:pk>', deleteCompanyEmployeeFeedbackReview, name='deleteCompanyEmployeeFeedbackReview'),
     
     # CompanyEmployeeFeedBackReview
+    path('companyRecruitment/get/company/all', getAllCompanyRecruitment, name='getAllCompanyRecruitment'),
     path('companyRecruitment/create', createCompanyRecruitment, name='createCompanyRecruitment'),
     path('companyRecruitment/get/<int:pk>', getCompanyRecruitment, name='getCompanyRecruitment'),
     path('companyRecruitment/get/company/all/<int:pk>', getCompanyAllRecruitment, name='getCompanyAllRecruitment'),

@@ -5,6 +5,7 @@ import { RootState } from '../app/store';
 import { logout } from '../reducers/authReducers';
 import { AnyAction} from '@reduxjs/toolkit';
 import { ThunkDispatch } from 'redux-thunk';
+import { Menu } from 'antd';
 
 const Navbar: React.FC = () => {
   const isAuthenticated = useSelector((state: RootState) => state.auth.accessToken);
@@ -18,27 +19,27 @@ const Navbar: React.FC = () => {
   };
   
   return (
-    <nav>
-      <ul>
-        <li>
+    <div style={{ backgroundColor: '#f0f2f5', padding: '10px' }}>
+      <Menu mode="horizontal" theme="light" style={{ border: 'none' }}>
+        <Menu.Item key="home">
           <Link to="/">Home</Link>
-        </li>
+        </Menu.Item>
         {isAuthenticated ? (
           <>
-            <li>
+            <Menu.Item key="profile">
               <Link to="/profile">Profile</Link>
-            </li>
-            <li>
+            </Menu.Item>
+            <Menu.Item key="logout">
               <button onClick={handleLogout}>Logout</button>
-            </li>
+            </Menu.Item>
           </>
         ) : (
-          <li>
+          <Menu.Item key="login">
             <Link to="/login">Login</Link>
-          </li>
+          </Menu.Item>
         )}
-      </ul>
-    </nav>
+      </Menu>
+    </div>
   );
 };
 

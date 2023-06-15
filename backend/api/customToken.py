@@ -113,7 +113,12 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         # 使用你的UserAccount模型进行验证
         user = UserAccount.objects.filter(email=attrs.get('email')).first()
 
-        if user is None and not user.check_password(attrs.get('password')):
+        if user is None:
+             raise serializers.ValidationError(
+                '錯誤密碼或賬戶'
+            )           
+        
+        if not user.check_password(attrs.get('password')):
             raise serializers.ValidationError(
                 '錯誤密碼或賬戶'
             )

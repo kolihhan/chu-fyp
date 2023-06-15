@@ -1425,6 +1425,18 @@ def deleteCompanyEmployeeFeedbackReview(request, pk):
 # endregion 
 
 # region CompanyRecruitment
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def getAllCompanyRecruitment(request):
+    try:
+        companyRecruitment = models.CompanyRecruitment.objects.all()
+        serializer = serializers.CompanyRecruitmentSerializer(companyRecruitment, many=True)
+        return Response({'message': '招聘获取成功', 'data': serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyRecruitment.DoesNotExist as e:
+        return Response({'message': '招聘获取失败', 'error': str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message': '招聘获取失败', 'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def createCompanyRecruitment(request):
