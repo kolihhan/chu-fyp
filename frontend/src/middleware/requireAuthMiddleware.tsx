@@ -14,7 +14,7 @@ const requireAuthMiddleware: Middleware<{}, RootState> = (store) => (next) => (a
           // 延迟导航到登录页面
           setTimeout(() => {
             window.location.href = '/login';
-          }, 1000); // 延迟 2 秒导航到登录页面
+          }, 500); // 延迟 2 秒导航到登录页面
         }
         
       
