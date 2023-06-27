@@ -1,10 +1,11 @@
 from django.shortcuts import render,get_object_or_404
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
+from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 import jwt
 from rest_framework import status
 from rest_framework.views import APIView
@@ -20,6 +21,7 @@ from django.db import transaction
 from django.utils import timezone
 import logging
 import datetime
+
 # from django.db.models import QuerySet
 # from django.http import JsonResponse
 
@@ -45,6 +47,31 @@ def register(request):
         serializer.save()
         return Response("賬號建立成功", status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def verify(request):
+    access_token = request.data.get('accessToken')
+
+    if not access_token:
+        return Response({'error': 'Access token is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        token = AccessToken(access_token)
+        user = token.payload.get('user_id')
+        token_exp = token.payload.get('exp')
+        current_timestamp = datetime.datetime.now().timestamp()
+
+        if token_exp < current_timestamp:
+            return Response({'error': '登入驗證過期，請重新登入'}, status=status.HTTP_401_UNAUTHORIZED)
+        
+        user_info = UserAccount.objects.get(pk = user)
+        serializer = UserSerializer(user_info,many=False)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    except InvalidToken:
+        return Response({'error': 'Invalid access token.'}, status=status.HTTP_401_UNAUTHORIZED)
 
 class MyTokenObtainPairView(TokenObtainPairView):
     http_method_names = ['post']
@@ -1469,7 +1496,7 @@ def createCompanyRecruitment(request):
         return Response({'message':'招聘創建失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def getCompanyRecruitment(request, pk):
     try:
         companyRecruitment = models.CompanyRecruitment.objects.get(id=pk)
@@ -1777,20 +1804,22 @@ def getUserApplicationRecord(request, pk):
 @permission_classes([IsAuthenticated])
 def getAllUserApplicationRecordByUser(request, pk):
     try:
-        userApplicationRecordData = models.UserApplicationRecord.objects.filter(user__id=pk)
+        userApplicationRecordData = models.UserApplicationRecord.objects.select_related('userofferrecord').filter(user__id=pk)
         serializer = serializers.UserApplicationRecordSerializer(userApplicationRecordData, many=True)
-        return Response({'message':'面試申請資料獲取成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+
+        return Response({'message': '面試申請資料獲取成功', 'data': serializer.data}, status=status.HTTP_200_OK)
     except models.UserApplicationRecord.DoesNotExist as e:
-        return Response({'message':'面試申請資料獲取失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'message': '面試申請資料獲取失敗', 'error': str(e)}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
-        return Response({'message':'面試申請資料獲取失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response({'message': '面試申請資料獲取失敗', 'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getAllUserApplicationRecordByCompany(request, pk):
     try:
         userApplicationRecordData = models.UserApplicationRecord.objects.filter(companyRecruitment_id__id=pk)
-        serializer = serializers.UserApplicationRecordSerializer(userApplicationRecordData, many=True)
+        serializer = serializers.UserApplicationRecordSerializerTest(userApplicationRecordData, many=True)
         return Response({'message':'面試申請資料獲取成功', 'data':serializer.data}, status=status.HTTP_200_OK)
     except models.UserApplicationRecord.DoesNotExist as e:
         return Response({'message':'面試申請資料獲取失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)

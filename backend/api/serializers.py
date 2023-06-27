@@ -116,6 +116,17 @@ class UserResumeSerializer(serializers.ModelSerializer):
         model = models.UserResume
         fields = '__all__'
 
+class UserOfferRecordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.UserOfferRecord
+        fields = '__all__'
+
+class UserApplicationRecordSerializerTest(serializers.ModelSerializer):
+    userofferrecord = UserOfferRecordSerializer()  # 添加 UserOfferRecord 的序列化器字段
+
+    class Meta:
+        model = models.UserApplicationRecord
+        fields = '__all__'
 
 class UserApplicationRecordSerializer(serializers.ModelSerializer):
     class Meta: 

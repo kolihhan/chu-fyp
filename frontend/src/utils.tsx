@@ -1,37 +1,45 @@
-import jwtDecode from 'jwt-decode';
-import { User } from './reducers/authReducers';
+export const authHeaders = () =>{
+  const token = sessionStorage.getItem('accessToken');
+  if(token) {
+    return{
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  }else{
+    return{
+      'Content-Type': 'application/json',
+    }
+  }
+
+
+};
 
 export const saveToken = (token: string) => {
-  localStorage.setItem('accessToken', token);
+  sessionStorage.setItem('accessToken', token);
 };
 
-export const loadToken = () => {
-  return localStorage.getItem('accessToken');
-};
 
 export const removeToken = () => {
-  localStorage.removeItem('accessToken');
+  sessionStorage.removeItem('accessToken');
 };
 
-export const decodeToken = (token: string) => {
-  return jwtDecode<JwtPayload>(token);
-};
 
-export const getUserFromToken = (token: string): User | null => {
+export const getUserFromToken = (payload: any) => {
   try {
-    const payload = decodeToken(token);
     return {
-      id: payload.user_id,
+      id: payload.id,
       username: payload.username,
+      email: payload.email,
+      gender: payload.gender,
+      birthday: payload.birthday ?? null,
+      address: payload.address,
+      phone: payload.phone,
+      avatarUrl: payload.avatarUrl
     };
+
+
   } catch (error) {
     return null;
   }
 };
 
-interface JwtPayload {
-  user_id: number;
-  username: string;
-  exp: number;
-  iat: number;
-}

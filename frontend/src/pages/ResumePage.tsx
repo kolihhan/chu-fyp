@@ -3,8 +3,8 @@ import { Form, Input, Button } from 'antd';
 
 const ResumePage: React.FC = () => {
   const onFinish = (values: any) => {
-    console.log('Received values:', values);
-    // 这里可以将values发送给后端进行保存
+
+    //dispatch(updateResume(values));
   };
 
   return (

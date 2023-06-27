@@ -11,7 +11,8 @@ from . import views
 urlpatterns = [
     path('register', register, name='register'),
     path('login', MyTokenObtainPairView.as_view(), name='login'),
-    
+    path('verify', verify, name='verify'),
+
     # user
     path('user/get/multiple/email/<str:pk>', getMultipleUserByEmail, name='getMultipleUserByEmail'),
 

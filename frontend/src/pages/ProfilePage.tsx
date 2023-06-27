@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
-import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
-import { Form, Input, Button, DatePicker, Select, Timeline, Table } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Form, Input, Button, DatePicker, Select, Timeline, Table, Tabs, Popconfirm } from 'antd';
 
-import { useDispatch } from 'react-redux';
-import { register } from '../reducers/authReducers';
+import { selectUserResume, selectUserApplicationRecord, fetchResumes, fetchUserApplicationRecord} from '../reducers/userReducers';
+import { useSelector, useDispatch } from 'react-redux';
+
 import { AnyAction } from '@reduxjs/toolkit';
 import { ThunkDispatch } from 'redux-thunk';
 import { RootState } from '../app/store';
 import dayjs from 'dayjs';  // 引入 dayjs 库
+
+
+const { TabPane } = Tabs;
 
 const ProfilePage: React.FC = () => {
   // 定义 dispatch 类型
@@ -15,16 +18,32 @@ const ProfilePage: React.FC = () => {
 
   const dispatch: AppDispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(fetchUserApplicationRecord());
+  });
+
+  const user = useSelector((state: RootState) => state.auth.user);
+  const resumes = useSelector(selectUserResume);
+  const applicationData = useSelector(selectUserApplicationRecord);
+
   const { Option } = Select;
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState(user?.username);
+  const [email, setEmail] = useState(user?.email);
   const [password, setPassword] = useState('');
   const [checkPassword, setCheckPassword] = useState('');
-  const [gender, setGender] = useState('');
-  const [birthday, setBirthday] = useState<dayjs.Dayjs | null>(null);  // 使用 Dayjs 类型的状态
-  const [address, setAddress] = useState('');
-  const [phone, setPhone] = useState('');
-  const [avatarUrl, setAvatarUrl] = useState('');
+  const [gender, setGender] = useState(user?.gender);
+  const [birthday, setBirthday] = useState<dayjs.Dayjs | null>(user?.birthday ?? null);
+  const [address, setAddress] = useState(user?.address);
+  const [phone, setPhone] = useState(user?.phone);
+  const [avatarUrl, setAvatarUrl] = useState(user?.avatarUrl);
+  const [activeTab, setActiveTab] = useState('profile');
+
+  const toggleTab = (tab: string) => {
+    if (activeTab !== tab) {
+      setActiveTab(tab);
+    }
+  };
+
 
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
@@ -62,79 +81,38 @@ const ProfilePage: React.FC = () => {
     setAvatarUrl(event.target.value);
   };
 
+
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 
-    dispatch(register(username, email, password, checkPassword, gender, birthday, address, phone, avatarUrl));
+    // dispatch(register(username, email, password, checkPassword, gender, birthday, address, phone, avatarUrl));
   };
 
-  const [activeTab, setActiveTab] = useState('profile');
-
-  const toggleTab = (tab: string) => {
-    if (activeTab !== tab) {
-      setActiveTab(tab);
-    }
-  };
-
-  const onFinish = (values: any) => {
-    console.log('Received values:', values);
-  };
-
-  const resumeData = [
-    { id: 1, name: 'John Doe', experience: '5 years', skills: 'JavaScript, React, HTML, CSS' },
-    { id: 2, name: 'Jane Smith', experience: '3 years', skills: 'Python, Django, SQL' },
-    // 其他简历数据
-  ];
-  
-  const resumeColumns = [
-    { title: 'ID', dataIndex: 'id', key: 'id' },
-    { title: 'Name', dataIndex: 'name', key: 'name' },
-    { title: 'Experience', dataIndex: 'experience', key: 'experience' },
-    { title: 'Skills', dataIndex: 'skills', key: 'skills' },
-    // 其他表格列配置
-  ];
-  
-  const applicationData = [
-    { id: 1, position: 'Software Engineer', status: 'In Progress' },
-    { id: 2, position: 'Data Analyst', status: 'Rejected' },
-    // 其他应聘进度数据
-  ];
-  
   const cancelApplication = (applicationId: number) => {
     // 取消应聘逻辑
   };
 
+  const handleEdit = (record: any) => {
+    // 处理删除逻辑，可以调用相应的删除 API 或执行其他操作
+  };
+
+  const handleDelete = (record: any) => {
+    // 处理删除逻辑，可以调用相应的删除 API 或执行其他操作
+  };
+
+  const acceptOffer = (record: any) => {
+    // 处理删除逻辑，可以调用相应的删除 API 或执行其他操作
+  };
+
+  const declineOffer = (record: any) => {
+    // 处理删除逻辑，可以调用相应的删除 API 或执行其他操作
+  };
 
   return (
     <div>
-      <Nav tabs>
-        <NavItem>
-          <NavLink
-            className={activeTab === 'profile' ? 'active' : ''}
-            onClick={() => toggleTab('profile')}
-          >
-            个人资料
-          </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink
-            className={activeTab === 'resume' ? 'active' : ''}
-            onClick={() => toggleTab('resume')}
-          >
-            简历管理
-          </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink
-            className={activeTab === 'application' ? 'active' : ''}
-            onClick={() => toggleTab('application')}
-          >
-            应聘进度
-          </NavLink>
-        </NavItem>
-      </Nav>
 
-      <TabContent activeTab={activeTab}>
-        <TabPane tabId="profile">
+      <Tabs activeKey={activeTab} onChange={toggleTab}>
+        <TabPane tab="个人资料" key="profile">
           <Form onFinish={handleSubmit}>
             <Form.Item label="Username" name="username" rules={[{ required: true, message: 'Please enter your username' }]}>
               <Input value={username} onChange={handleUsernameChange} />
@@ -167,39 +145,83 @@ const ProfilePage: React.FC = () => {
             <Form.Item label="Avatar URL" name="avatarUrl">
               <Input value={avatarUrl} onChange={handleAvatarUrlChange} />
             </Form.Item>
-            {/* 其他字段以相同的方式添加 */}
             <Form.Item>
               <Button type="primary" htmlType="submit">
-                Register
+                修改
               </Button>
             </Form.Item>
           </Form>
         </TabPane>
 
-        <TabPane tabId="resume">
-          <Table dataSource={resumeData} columns={resumeColumns} />
+
+        <TabPane tab="简历管理" key="resume">
+          <Table dataSource={resumes}>
+            <Table.Column
+              title="履历"
+              dataIndex="id"
+              key="resume"
+              render={(id, record, index) => (
+                <span>第{index + 1}个履历</span>
+              )}
+            />
+            <Table.Column
+              title="操作"
+              dataIndex="id"
+              key="actions"
+              render={(id) => (
+                <div>
+                  <Button type="primary" onClick={() => handleEdit(id)}>
+                    编辑
+                  </Button>
+                  <Popconfirm
+                    title="确定删除吗？"
+                    onConfirm={() => handleDelete(id)}
+                    okText="确定"
+                    cancelText="取消"
+                  >
+                    <Button danger>删除</Button>
+                  </Popconfirm>
+                </div>
+              )}
+            />
+          </Table>
         </TabPane>
 
-        <TabPane tabId="application">
+
+
+
+
+        <TabPane tab="应聘进度" key="application">
           <Timeline>
             {applicationData.map((application) => (
               <Timeline.Item key={application.id}>
                 <p>{application.position}</p>
                 <p>{application.status}</p>
-                <Button onClick={() => cancelApplication(application.id)}>
-                  Cancel Application
-                </Button>
-                <Button onClick={() => cancelApplication(application.id)}>
-                  接受
-                </Button>
+                {application.userOfferRecord ? (
+                  <div>
+                    <p>Expected Salary: {application.userOfferRecord.expected_salary}</p>
+                    <p>Provided Salary: {application.userOfferRecord.provided_salary}</p>
+                    <p>Contract Duration: {application.userOfferRecord.contract_duration}</p>
+                    <p>Start Date: {application.userOfferRecord.start_date}</p>
+                    {application.userOfferRecord.end_date && (
+                      <p>End Date: {application.userOfferRecord.end_date}</p>
+                    )}
+                    <Button onClick={() => acceptOffer(application.id)}>Accept Offer</Button>
+                    <Button onClick={() => declineOffer(application.id)}>Decline Offer</Button>
+                  </div>
+                ) : (
+                  <Button onClick={() => cancelApplication(application.id)}>Cancel Application</Button>
+                )}
               </Timeline.Item>
             ))}
           </Timeline>
+
         </TabPane>
+      </Tabs>
 
 
 
-      </TabContent>
+
     </div>
   );
 };
