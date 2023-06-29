@@ -214,3 +214,8 @@ class CompanyEmployeeEvaluateSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.CompanyEmployeeEvaluate
         fields = '__all__'
+
+class CompanyEmployeeLeaveRecordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.CompanyEmployeeLeaveRecord
+        fields = '__all__'

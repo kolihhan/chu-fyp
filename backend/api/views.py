@@ -2202,3 +2202,107 @@ def getEmployeeCompanyEmployeeEvaluate(request, pk):
     except Exception as e:
         return Response({'message': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 # endregion 
+
+# region leave
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def createLeaveRecord(request):
+    try:
+        data = request.data
+        clr = models.CompanyEmployeeLeaveRecord.objects.create(
+            company_id = models.Company.objects.get(id=data['company_id']),
+            companyEmployee_id = models.CompanyEmployee.objects.get(id=data['companyEmployee_id']),
+            reason = data['reason'],
+            type = data['type'],
+            status = "Pending",
+            leave_start = datetime.datetime.strptime(str(data['leave_start']), '%Y-%m-%d %H:%M:%S'),
+            leave_end = datetime.datetime.strptime(str(data['leave_end']), '%Y-%m-%d %H:%M:%S')
+        )
+        serializer = serializers.CompanyEmployeeLeaveRecordSerializer(clr, many=False)
+        return Response({'data': serializer.data}, status=status.HTTP_200_OK)
+    except (models.Company.DoesNotExist, models.CompanyEmployee.DoesNotExist) as e:
+        return Response({'message': str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message', str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getLeaveRecord(request, pk):
+    try:
+        lr = models.CompanyEmployeeLeaveRecord.objects.get(id=pk)
+        serializer = serializers.CompanyEmployeeLeaveRecordSerializer(lr, many=False)
+        return Response({'data': serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyEmployeeLeaveRecord.DoesNotExist as e:
+        return Response({'message': str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getEmployeeAllLeaveRecord(request, pk):
+    try:
+        lr = models.CompanyEmployeeLeaveRecord.objects.filter(companyEmployee_id__id=pk)
+        serializer = serializers.CompanyEmployeeLeaveRecordSerializer(lr, many=True)
+        return Response({'data': serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyEmployeeLeaveRecord.DoesNotExist as e:
+        return Response({'message': str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getCompanyAllLeaveRecord(request, pk):
+    try:
+        lr = models.CompanyEmployeeLeaveRecord.objects.filter(company_id__id=pk)
+        serializer = serializers.CompanyEmployeeLeaveRecordSerializer(lr, many=True)
+        return Response({'data': serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyEmployeeLeaveRecord.DoesNotExist as e:
+        return Response({'message': str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def updateLeaveRecord(request, pk):
+    try:
+        data = request.data
+        ulr = models.CompanyEmployeeLeaveRecord.objects.get(id=pk)
+        if data.get('reason', None) != None:
+            ulr.reason = data['reason']
+        if data.get('type', None) != None:
+            ulr.type = data['type']
+        if data.get('status', None) != None:
+            ulr.status = data['status']
+        if data.get('leave_start', None) != None:
+            ulr.leave_start = datetime.datetime.strptime(data['leave_start'], '%Y-%m-%d %H:%M:%S')
+        if data.get('leave_end', None) != None:
+            ulr.leave_end = datetime.datetime.strptime(data['leave_end'], '%Y-%m-%d %H:%M:%S')
+        if data.get('comment', None) != None:
+            ulr.comment = data['comment']
+        if data.get('approve_at', None) != None:
+            ulr.approve_at = datetime.datetime.strptime(data['approve_at'], '%Y-%m-%d %H:%M:%S')
+        
+        ulr.save()
+        serializer = serializers.CompanyEmployeeLeaveRecordSerializer(ulr, many=False)
+        return Response({'data': serializer.data}, status=status.HTTP_200_OK)
+    except (models.Company.DoesNotExist, models.CompanyEmployee.DoesNotExist) as e:
+        return Response({'message': str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def deleteLeaveRecord(request, pk):
+    try:
+        dlr = models.CompanyEmployeeLeaveRecord.objects.get(id=pk)
+        delete = dlr.delete()
+        if delete[0] > 0:
+            return Response({'message': '刪除成功'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': '刪除失敗'}, status=status.HTTP_400_BAD_REQUEST)
+    except models.CompanyEmployeeLeaveRecord.DoesNotExist as e:
+        return Response({'message': str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message', str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# endregion leave

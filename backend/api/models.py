@@ -307,3 +307,27 @@ class CompanyEmployeeEvaluate(models.Model):
     remark = models.TextField(null=True, blank=True)
     improvement = models.TextField(null=True, blank=True)
     date = models.DateField(auto_now_add=True)
+
+class CompanyEmployeeLeaveRecord(models.Model):
+    company_id = models.ForeignKey(Company, on_delete=models.CASCADE)
+    companyEmployee_id = models.ForeignKey(CompanyEmployee, on_delete=models.CASCADE)
+    reason = models.TextField(null=True, blank=True)
+    type = models.CharField(choices=[
+        ("Annual Leave", "Annual Leave"),
+        ("Sick Leave", "Sick Leave"),
+        ("Personal Leave", "Personal Leave"),
+        ("Maternity Leave", "Maternity Leave"),
+        ("Paternity Leave", "Paternity Leave"),
+    ])
+    status = models.CharField(choices=[
+        ("Pending", "Pending"),
+        ("Accept", "Accept"),
+        ("Reject","Reject"),
+        ("Cancel","Cancel"),
+    ])
+    leave_start = models.DateTimeField()
+    leave_end = models.DateTimeField()
+    comment = models.TextField(null=True, blank=True)
+    apply_at = models.DateTimeField(auto_now_add=True)
+    approve_at = models.DateTimeField(null=True, blank=True)
+    update_at = models.DateTimeField(auto_now=True)

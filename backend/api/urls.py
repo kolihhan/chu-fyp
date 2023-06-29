@@ -156,6 +156,14 @@ urlpatterns = [
     path('company/check-in/<int:pk>', CompanyCheckInAPIView.as_view(), name='company-check-in'),
     path('company/check-in/<int:pk>/<int:record_id>', CompanyCheckInAPIView.as_view(), name='company-check-in'),
 
+    # companyEmployeeLeave
+    path('companyEmployeeLeave/create', createLeaveRecord, name='createLeaveRecord'),
+    path('companyEmployeeLeave/get/<int:pk>', getLeaveRecord, name='getLeaveRecord'),
+    path('companyEmployeeLeave/get/employee/all/<int:pk>', getEmployeeAllLeaveRecord, name='getEmployeeAllLeaveRecord'),
+    path('companyEmployeeLeave/get/company/all/<int:pk>', getCompanyAllLeaveRecord, name='getCompanyAllLeaveRecord'),
+    path('companyEmployeeLeave/update/<int:pk>', updateLeaveRecord, name='updateLeaveRecord'),
+    path('companyEmployeeLeave/delete/<int:pk>', deleteLeaveRecord, name='deleteLeaveRecord'),
+
     #companyPromotionRecord
     path('company/promotion/<int:pk>', CompanyPromotionRecordAPIView.as_view(), name='company-promotion'),
     path('company/promotion/<int:pk>/<int:record_id>', CompanyPromotionRecordAPIView.as_view(), name='company-promotion'),
