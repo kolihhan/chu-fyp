@@ -299,3 +299,11 @@ class CompanyAnnouncement(models.Model):
     expire_at = models.DateTimeField(blank=True, null=True)
     def __str__(self):
         return str(self.company_id)
+
+class CompanyEmployeeEvaluate(models.Model):
+    company_id = models.ForeignKey(Company, on_delete=models.CASCADE)
+    companyEmployee_id = models.ForeignKey(CompanyEmployee, on_delete=models.CASCADE)
+    score = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(100)])
+    remark = models.TextField(null=True, blank=True)
+    improvement = models.TextField(null=True, blank=True)
+    date = models.DateField(auto_now_add=True)

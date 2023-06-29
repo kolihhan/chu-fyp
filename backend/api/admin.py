@@ -78,6 +78,9 @@ class AnnouncementGroupAdmin(admin.ModelAdmin):
 class AnnouncementAdmin(admin.ModelAdmin):
     list_display = [f.name for f in models.CompanyAnnouncement._meta.fields]
 
+class CompanyEmployeeEvaluateAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in models.CompanyEmployeeEvaluate._meta.fields]
+
 # Register your models here.
 admin.site.register(UserAccount, UserAccountAdmin)
 admin.site.register(models.UserResume, UserResumeAdmin)
@@ -99,4 +102,5 @@ admin.site.register(models.CompanyCheckIn, checkInAdmin)
 admin.site.register(models.companyCheckInRule, companyCheckInRuleAdmin)
 admin.site.register(models.CompanyAnnouncementGroup, AnnouncementGroupAdmin)
 admin.site.register(models.CompanyAnnouncement, AnnouncementAdmin)
+admin.site.register(models.CompanyEmployeeEvaluate, CompanyEmployeeEvaluateAdmin)
 # admin.site.register(CustomOutstandingToken, CustomOutstandingTokenAdmin)

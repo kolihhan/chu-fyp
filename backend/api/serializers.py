@@ -209,3 +209,8 @@ class CompanyCheckInRuleSerializer(serializers.ModelSerializer):
     class Meta: 
         model = models.companyCheckInRule
         fields = '__all__'
+
+class CompanyEmployeeEvaluateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.CompanyEmployeeEvaluate
+        fields = '__all__'

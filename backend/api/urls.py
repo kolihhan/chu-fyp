@@ -3,6 +3,7 @@ from rest_framework_simplejwt.views import (TokenObtainPairView,
                                             TokenRefreshView, TokenVerifyView)
 
 from .views import *
+from .viewsIntelligent import *
 from . import views
 
 
@@ -165,6 +166,23 @@ urlpatterns = [
 
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     
+    # path('aif/eveluateEmployee', eveluateEmployee, name='eveluateEmployee'),
+    path('companyEmployeeEvaluate/create', createCompanyEmployeeEvaluate, name='createCompanyEmployeeEvaluate'),
+    path('companyEmployeeEvaluate/all', getAllCompanyEmployeeEvaluate, name='getAllCompanyEmployeeEvaluate'),
+    path('companyEmployeeEvaluate/get/<int:pk>', getCompanyEmployeeEvaluate, name='getCompanyEmployeeEvaluate'),
+    path('companyEmployeeEvaluate/get/employee/<int:pk>', getEmployeeCompanyEmployeeEvaluate, name='getEmployeeCompanyEmployeeEvaluate'),
+
+    path('register/multi', registerMulti, name='registerMulti'),
+    path('createCompany/multi', createCompanyMulti, name='createCompanyMulti'),
+    path('deleteCompanys/multi', deleteCompanyMulti, name='createCompanyMulti'),
+    path('createCompanyEmployees', createCompanyEmployeeMulti, name='createCompanyEmployeeMulti'),
+    path('createCompanyEmployeeFeedbackReviewMulti', createCompanyEmployeeFeedbackReviewMulti, name='createCompanyEmployeeFeedbackReviewMulti'),
+    path('calCompanyEmployeeScore', calCompanyEmployeeScore, name='calCompanyEmployeeScore'),
+    path('getCompanyEmployeeEvaluate2/<int:pk>', getCompanyEmployeeEvaluate2, name='getCompanyEmployeeEvaluate2'),
+    path('getCompanyEmployeeEvaluateAll', getCompanyEmployeeEvaluateAll, name='getCompanyEmployeeEvaluateAll'),
+    path('deleteAllCompanyEmployeeEvaluate', deleteAllCompanyEmployeeEvaluate, name='deleteAllCompanyEmployeeEvaluate'),
+    path('companyEmployeeFeedBackReview/get/all', getAllCompanyEmployeeFeedbackReview, name='getAllCompanyEmployeeFeedbackReview'),
+
     
     
 

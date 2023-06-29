@@ -2145,3 +2145,60 @@ class CompanyPromotionRecordAPIView(APIView):
             return Response("Promotion Record 記錄不存在", status=404)
         except Exception as e:
             return Response(str(e), status=500)
+
+# region CompanyEmployeeEvaluate
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def createCompanyEmployeeEvaluate(request):
+    try:
+        data = request.data
+        cev = models.CompanyEmployeeEvaluate.objects.create(
+            company_id = models.Company.objects.get(id=data['company_id']),
+            companyEmployee_id = models.CompanyEmployee.objects.get(id=data['companyEmployee_id']),
+            score = data['score'],
+            remark = data['remark'],
+            improvement = data['improvement']
+        )
+        serializer = serializers.CompanyEmployeeEvaluateSerializer(cev, many=False)
+        return Response({'message':'', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except (models.Company.DoesNotExist, models.CompanyEmployee.DoesNotExist) as ex:
+        return Response({'message': str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def getAllCompanyEmployeeEvaluate(request):
+    try:
+        cev = models.CompanyEmployeeEvaluate.objects.all()
+        serializer = serializers.CompanyEmployeeEvaluateSerializer(cev, many=True)
+        return Response({'message':'', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyEmployeeEvaluate.DoesNotExist as ex:
+        return Response({'message': str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def getCompanyEmployeeEvaluate(request, pk):
+    try:
+        cev = models.CompanyEmployeeEvaluate.objects.get(id=pk)
+        serializer = serializers.CompanyEmployeeEvaluateSerializer(cev, many=False)
+        return Response({'message':'', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyEmployeeEvaluate.DoesNotExist as ex:
+        return Response({'message': str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def getEmployeeCompanyEmployeeEvaluate(request, pk):
+    try:
+        cev = models.CompanyEmployeeEvaluate.objects.filter(companyEmployee_id__id=pk)
+        serializer = serializers.CompanyEmployeeEvaluateSerializer(cev, many=True)
+        return Response({'message':'', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyEmployeeEvaluate.DoesNotExist as ex:
+        return Response({'message': str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+# endregion 

@@ -45,3 +45,12 @@
 
 > feat : 新增功能或物件 \
 > fix : 修復功能或物件
+
+## database 
+- 清除所有資料
+	1. python manage.py flush --noinput 
+	2. python manage.py sqlflush
+	3. python manage.py createsuperuser
+- 更改或新增 table
+	1. python manage.py makemigrations
+	2. python manahe.py migrate
