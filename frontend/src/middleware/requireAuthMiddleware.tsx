@@ -1,30 +1,21 @@
-import { Middleware } from 'redux';
-import { RootState } from '../app/store';
 import { message } from 'antd';
 
-const requireAuthMiddleware: Middleware<{}, RootState> = (store) => (next) => (action) => {
+async function requireAuthMiddleware(store: any) {
+  const { user } = store.getState().auth; 
 
-    const { user } = store.getState().auth; 
+  if (!user) {
+    // 显示错误消息
+    message.error('请登录后再执行此操作');
 
-    if (!user) {
-      const navigateToLogin = () => {
-          // 显示错误消息
-          message.error('请登录后再执行此操作');
+    // 延迟导航到登录页面
+    setTimeout(() => {
+      window.location.href = '/login';
+    }, 500); // 延迟 2 秒导航到登录页面
 
-          // 延迟导航到登录页面
-          setTimeout(() => {
-            window.location.href = '/login';
-          }, 500); // 延迟 2 秒导航到登录页面
-        }
-        
-      
-  
-      navigateToLogin();
-      return; // Return early to prevent further execution of the action
-    }
-  
+    return false;
+  }
 
-  return next(action);
-};
+  return true;
+}
 
 export default requireAuthMiddleware;

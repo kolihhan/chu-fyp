@@ -22,7 +22,7 @@ const ApplyJobModal: React.FC<ApplyJobModalProps> = ({ loggedIn, jobId, jobTitle
     const [isModalVisible, setIsModalVisible] = useState(false);
     
     const resumes = useSelector(selectUserResume);
-    const [selectedResumeId, setSelectedResumeId] = useState(resumes.length > 0 ? resumes[0].title : '');
+    const [selectedResumeId, setSelectedResumeId] = useState(resumes.length > 0 ? resumes[0].id : '');
 
     const handleApply = (jobId: number, selectedResumeId: number) => {
         dispatch(applyJobs(jobId, selectedResumeId));

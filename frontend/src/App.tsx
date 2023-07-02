@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom'; // 导入 useHistory 钩子
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import { RootState } from './app/store';
@@ -12,32 +11,32 @@ import Profile from './pages/ProfilePage';
 import ApplicationDetailsPage from './pages/ApplicationDetailsPage';
 import Navbar from './components/NavBar';
 import { LoadingScreen } from './components/LoadingScreen';
-import { message } from 'antd';
+import ResumePage from './pages/ResumePage';
 
-
-
-
-import { fetchUsersInfo, selectAccessToken } from './reducers/authReducers';
+import { validateUserToken, selectAccessToken } from './reducers/authReducers';
 import { AnyAction } from '@reduxjs/toolkit';
 import { ThunkDispatch } from 'redux-thunk';
+
+import { message } from 'antd';
+import { useNavigate } from 'react-router-dom'; // 导入 useHistory 钩子
 
 const Protected: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const user = useSelector((state: RootState) => state.auth.user);
   const navigate = useNavigate();
   const isMessageDisplayed = useRef(false);
 
-  useEffect(() => {
 
+  useEffect(() => {
     if (!user && !isMessageDisplayed.current) {
+
       message.error('请登录后再执行此操作');
       isMessageDisplayed.current = true;
       navigate('/login');
     }
-  }, [user, navigate]);
+  }, [user]);
 
   return <>{children}</>;
 };
-
 
 const App: React.FC = () => {
 
@@ -47,16 +46,16 @@ const App: React.FC = () => {
   const checkToken = useSelector(selectAccessToken);
 
   useEffect(() => {
-    // 从sessionStorage中获取accessToken
-    const accessToken = sessionStorage.getItem('accessToken');
+    const interval = setInterval(() => {
+      if (checkToken) {
+        dispatch(validateUserToken(checkToken));
+      }
+    }, 300000); // 每隔5min执行一次验证操作
 
-    if (!checkToken && accessToken) {
-       // 将accessToken存储到Redux状态中
-       dispatch(fetchUsersInfo(accessToken));
-    }
-
-  }, [dispatch, checkToken]);
-
+    return () => {
+      clearInterval(interval); // 在组件卸载时清除定时器
+    };
+  }, [checkToken]);
 
   return (
     <Router>
@@ -69,6 +68,8 @@ const App: React.FC = () => {
           <Route path="/detailsPage/:id" element={<ApplicationDetailsPage />} />
 
           <Route path="/profile" element={<Protected><Profile /></Protected>} />
+          <Route path="/resumes" element={<Protected><ResumePage /></Protected>} /> {/* 创建新的resume */}
+          <Route path="/resumes/:id" element={<Protected><ResumePage /></Protected>} /> {/* 编辑现有的resume */}
         </Routes>
       </LoadingScreen>
     </Router>

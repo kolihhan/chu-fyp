@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { register } from '../reducers/authReducers';
-import { AnyAction} from '@reduxjs/toolkit';
+import { AnyAction } from '@reduxjs/toolkit';
 import { ThunkDispatch } from 'redux-thunk';
 import { RootState } from '../app/store';
 import { Form, Input, Button, DatePicker, Select } from 'antd';
@@ -10,10 +10,10 @@ import dayjs from 'dayjs';  // 引入 dayjs 库
 const { Option } = Select;
 
 const Register: React.FC = () => {
-    // 定义 dispatch 类型
-    type AppDispatch = ThunkDispatch<RootState, unknown, AnyAction>;
+  // 定义 dispatch 类型
+  type AppDispatch = ThunkDispatch<RootState, unknown, AnyAction>;
 
-    const dispatch: AppDispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -63,11 +63,11 @@ const Register: React.FC = () => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 
-    dispatch(register(username,email,password,checkPassword,gender,birthday,address,phone,avatarUrl));
-    };
-    
-    return (
-      <div style={{ backgroundColor: '#f0f2f5', padding: '20px', borderRadius: '5px' }}>
+    dispatch(register(username, email, password, checkPassword, gender, birthday, address, phone, avatarUrl));
+  };
+
+  return (
+    <div style={{ backgroundColor: '#f0f2f5', padding: '20px', borderRadius: '5px' }}>
       <h1>Register Page</h1>
       <Form onFinish={handleSubmit}>
         <Form.Item label="Username" name="username" rules={[{ required: true, message: 'Please enter your username' }]}>
@@ -79,37 +79,51 @@ const Register: React.FC = () => {
         <Form.Item label="Password" name="password" rules={[{ required: true, message: 'Please enter your password' }]}>
           <Input.Password value={password} onChange={handlePasswordChange} />
         </Form.Item>
-        <Form.Item label="Confirm Password" name="check-password" rules={[{ required: true, message: 'Please enter your password' }]}>
+        <Form.Item
+          label="Confirm Password"
+          name="check-password"
+          rules={[
+            { required: true, message: 'Please enter your password' },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue('password') === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error('需跟密碼相同'));
+              },
+            }),
+          ]}
+        >
           <Input.Password value={checkPassword} onChange={handleCheckPasswordChange} />
         </Form.Item>
-        <Form.Item label="Gender" name="gender">
-          <Select value={gender} onChange={handleGenderChange}>
-            <Option value="male">Male</Option>
-            <Option value="female">Female</Option>
-            <Option value="other">Other</Option>
-          </Select>
-        </Form.Item>
-        <Form.Item label="Birthday" name="birthday">
-          <DatePicker value={birthday} onChange={handleBirthdayChange} />
-        </Form.Item>
-        <Form.Item label="Address" name="address">
-          <Input value={address} onChange={handleAddressChange} />
-        </Form.Item>
-        <Form.Item label="Phone" name="phone">
-          <Input value={phone} onChange={handlePhoneChange} />
-        </Form.Item>
-        <Form.Item label="Avatar URL" name="avatarUrl">
-          <Input value={avatarUrl} onChange={handleAvatarUrlChange} />
-        </Form.Item>
-        {/* 其他字段以相同的方式添加 */}
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Register
-          </Button>
-        </Form.Item>
+          <Form.Item label="Gender" name="gender">
+            <Select value={gender} onChange={handleGenderChange}>
+              <Option value="male">Male</Option>
+              <Option value="female">Female</Option>
+              <Option value="other">Other</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item label="Birthday" name="birthday">
+            <DatePicker value={birthday} onChange={handleBirthdayChange} />
+          </Form.Item>
+          <Form.Item label="Address" name="address">
+            <Input value={address} onChange={handleAddressChange} />
+          </Form.Item>
+          <Form.Item label="Phone" name="phone">
+            <Input value={phone} onChange={handlePhoneChange} />
+          </Form.Item>
+          <Form.Item label="Avatar URL" name="avatarUrl">
+            <Input value={avatarUrl} onChange={handleAvatarUrlChange} />
+          </Form.Item>
+          {/* 其他字段以相同的方式添加 */}
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              Register
+            </Button>
+          </Form.Item>
       </Form>
     </div>
-    );
-    };
-    
-    export default Register;
+  );
+};
+
+export default Register;

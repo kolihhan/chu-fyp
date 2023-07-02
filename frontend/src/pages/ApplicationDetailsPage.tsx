@@ -44,11 +44,12 @@ const ApplicationDetailsPage: React.FC = () => {
       {application ? (
         <div>
           <h1>Job Details</h1>
+          <p>Company: {application.companyEmployeePosition.company_id.name} </p>
           <p>Title: {application.title}</p>
           <p>Description: {application.description}</p>
           <p>Requirement: {application.requirement}</p>
-          <p>Min Salary: {application.minSalary}</p>
-          <p>Max Salary: {application.maxSalary}</p>
+          <p>Min Salary: {application.min_salary}</p>
+          <p>Max Salary: {application.max_salary}</p>
           {/* 根据您的需求添加其他招聘详细信息字段 */}
           <ApplyJobModal loggedIn={user != null} jobId={applicationId} jobTitle = {application.title}  />
         </div>

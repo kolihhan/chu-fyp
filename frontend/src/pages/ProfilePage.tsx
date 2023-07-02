@@ -1,42 +1,43 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Button, DatePicker, Select, Timeline, Table, Tabs, Popconfirm } from 'antd';
+import { Form, Input, Button, DatePicker, Select, Timeline, Table, Tabs, Popconfirm, Collapse } from 'antd';
 
-import { selectUserResume, selectUserApplicationRecord, fetchResumes, fetchUserApplicationRecord} from '../reducers/userReducers';
+import * as userActions from '../reducers/userReducers';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { AnyAction } from '@reduxjs/toolkit';
 import { ThunkDispatch } from 'redux-thunk';
 import { RootState } from '../app/store';
-import dayjs from 'dayjs';  // 引入 dayjs 库
+import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
+import 'dayjs/locale/zh-cn'; // 导入中文本地化插件
 
 
 const { TabPane } = Tabs;
+const { Panel } = Collapse;
 
 const ProfilePage: React.FC = () => {
   // 定义 dispatch 类型
   type AppDispatch = ThunkDispatch<RootState, unknown, AnyAction>;
 
   const dispatch: AppDispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchUserApplicationRecord());
-  });
-
   const user = useSelector((state: RootState) => state.auth.user);
-  const resumes = useSelector(selectUserResume);
-  const applicationData = useSelector(selectUserApplicationRecord);
+  const userDataWithDayjs = {
+    ...user,
+    birthday: user?.birthday ? dayjs(user.birthday) : null,
+  };
+
+  const resumes = useSelector(userActions.selectUserResume);
+  const applicationData = useSelector(userActions.selectUserApplicationRecord);
+  const navigate = useNavigate();
 
   const { Option } = Select;
-  const [username, setUsername] = useState(user?.username);
-  const [email, setEmail] = useState(user?.email);
-  const [password, setPassword] = useState('');
-  const [checkPassword, setCheckPassword] = useState('');
-  const [gender, setGender] = useState(user?.gender);
-  const [birthday, setBirthday] = useState<dayjs.Dayjs | null>(user?.birthday ?? null);
-  const [address, setAddress] = useState(user?.address);
-  const [phone, setPhone] = useState(user?.phone);
-  const [avatarUrl, setAvatarUrl] = useState(user?.avatarUrl);
   const [activeTab, setActiveTab] = useState('profile');
+  const [userData] = useState(userDataWithDayjs || {});
+
+
+  useEffect(() => {
+    dispatch(userActions.fetchUserApplicationRecord());
+  }, []);
 
   const toggleTab = (tab: string) => {
     if (activeTab !== tab) {
@@ -44,106 +45,67 @@ const ProfilePage: React.FC = () => {
     }
   };
 
-
-  const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUsername(event.target.value);
-  };
-
-  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
-  };
-
-  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.target.value);
-  };
-
-  const handleCheckPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCheckPassword(event.target.value);
-  };
-
-  const handleGenderChange = (value: string) => {
-    setGender(value);
-  };
-
-  const handleBirthdayChange = (date: any) => {
-    setBirthday(date);
-  };
-
-  const handleAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAddress(event.target.value);
-  };
-
-  const handlePhoneChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPhone(event.target.value);
-  };
-
-  const handleAvatarUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAvatarUrl(event.target.value);
-  };
-
-
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-
-    // dispatch(register(username, email, password, checkPassword, gender, birthday, address, phone, avatarUrl));
+  const handleSubmit = (values: any) => {
+    const { username, email, gender, birthday, address, phone, avatarUrl } = values;
+    dispatch(userActions.updateUserInfo(username, email, gender, birthday, address, phone, avatarUrl));
   };
 
   const cancelApplication = (applicationId: number) => {
-    // 取消应聘逻辑
+    dispatch(userActions.cancelApplicationId(applicationId));
   };
 
+  const handleCreate = () => {
+    navigate(`/resumes`);
+  }
+
   const handleEdit = (record: any) => {
-    // 处理删除逻辑，可以调用相应的删除 API 或执行其他操作
+    navigate(`/resumes/${record}`);
   };
 
   const handleDelete = (record: any) => {
-    // 处理删除逻辑，可以调用相应的删除 API 或执行其他操作
+    dispatch(userActions.deleteResume(record));
   };
 
   const acceptOffer = (record: any) => {
-    // 处理删除逻辑，可以调用相应的删除 API 或执行其他操作
+    const status = "Accept";
+    dispatch(userActions.updateOfferStatus(record, status));
   };
 
   const declineOffer = (record: any) => {
-    // 处理删除逻辑，可以调用相应的删除 API 或执行其他操作
+    const status = "Reject";
+    dispatch(userActions.updateOfferStatus(record, status));
   };
 
   return (
     <div>
 
-      <Tabs activeKey={activeTab} onChange={toggleTab}>
-        <TabPane tab="个人资料" key="profile">
-          <Form onFinish={handleSubmit}>
+      <Tabs activeKey={activeTab} onChange={toggleTab} >
+        <TabPane tab="个人资料" key="profile" >
+          <Form onFinish={handleSubmit} initialValues={userData}>
             <Form.Item label="Username" name="username" rules={[{ required: true, message: 'Please enter your username' }]}>
-              <Input value={username} onChange={handleUsernameChange} />
+              <Input />
             </Form.Item>
             <Form.Item label="Email" name="email" rules={[{ required: true, message: 'Please enter your email' }]}>
-              <Input value={email} onChange={handleEmailChange} />
-            </Form.Item>
-            <Form.Item label="Password" name="password" rules={[{ required: true, message: 'Please enter your password' }]}>
-              <Input.Password value={password} onChange={handlePasswordChange} />
-            </Form.Item>
-            <Form.Item label="Confirm Password" name="check-password" rules={[{ required: true, message: 'Please enter your password' }]}>
-              <Input.Password value={checkPassword} onChange={handleCheckPasswordChange} />
+              <Input />
             </Form.Item>
             <Form.Item label="Gender" name="gender">
-              <Select value={gender} onChange={handleGenderChange}>
+              <Select>
                 <Option value="male">Male</Option>
                 <Option value="female">Female</Option>
                 <Option value="other">Other</Option>
               </Select>
             </Form.Item>
             <Form.Item label="Birthday" name="birthday">
-              <DatePicker value={birthday} onChange={handleBirthdayChange} />
+              <DatePicker />
             </Form.Item>
             <Form.Item label="Address" name="address">
-              <Input value={address} onChange={handleAddressChange} />
+              <Input />
             </Form.Item>
             <Form.Item label="Phone" name="phone">
-              <Input value={phone} onChange={handlePhoneChange} />
+              <Input />
             </Form.Item>
             <Form.Item label="Avatar URL" name="avatarUrl">
-              <Input value={avatarUrl} onChange={handleAvatarUrlChange} />
+              <Input />
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">
@@ -151,23 +113,30 @@ const ProfilePage: React.FC = () => {
               </Button>
             </Form.Item>
           </Form>
+
         </TabPane>
 
 
         <TabPane tab="简历管理" key="resume">
+          <div style={{ marginBottom: '16px' }}>
+            <Button type="primary" onClick={handleCreate}>
+              新建
+            </Button>
+          </div>
           <Table dataSource={resumes}>
             <Table.Column
               title="履历"
-              dataIndex="id"
-              key="resume"
-              render={(id, record, index) => (
-                <span>第{index + 1}个履历</span>
+              dataIndex="title" // 修改为"title"
+              key="resume" // 为每列提供唯一的key值，例如："resume"和"actions"
+              render={(title) => ( // 修改参数为"title"
+                <span>{title}</span>
               )}
             />
+
             <Table.Column
               title="操作"
               dataIndex="id"
-              key="actions"
+              key="actions" // 修改为唯一的key值，例如："actions"
               render={(id) => (
                 <div>
                   <Button type="primary" onClick={() => handleEdit(id)}>
@@ -185,6 +154,7 @@ const ProfilePage: React.FC = () => {
               )}
             />
           </Table>
+
         </TabPane>
 
 
@@ -192,30 +162,46 @@ const ProfilePage: React.FC = () => {
 
 
         <TabPane tab="应聘进度" key="application">
-          <Timeline>
+          <Collapse accordion>
             {applicationData.map((application) => (
-              <Timeline.Item key={application.id}>
-                <p>{application.position}</p>
-                <p>{application.status}</p>
-                {application.userOfferRecord ? (
+              <Panel
+                header={
                   <div>
-                    <p>Expected Salary: {application.userOfferRecord.expected_salary}</p>
-                    <p>Provided Salary: {application.userOfferRecord.provided_salary}</p>
-                    <p>Contract Duration: {application.userOfferRecord.contract_duration}</p>
-                    <p>Start Date: {application.userOfferRecord.start_date}</p>
-                    {application.userOfferRecord.end_date && (
-                      <p>End Date: {application.userOfferRecord.end_date}</p>
+                    <span style={{ marginRight: '10px' }}>{application.companyRecruitment_id.companyEmployeePosition.company_id.name} - </span>
+                    <span>{application.companyRecruitment_id.title}</span>
+                  </div>
+                }
+                key={application.id}
+              >
+                <p>Status: {application.status}</p>
+                {application.status === 'Offering' && (
+                  <div>
+                    <p>Expected Salary: {application.userofferrecord.expected_salary}</p>
+                    <p>Provided Salary: {application.userofferrecord.provided_salary}</p>
+                    <p>Contract Duration: {application.userofferrecord.contract_duration}</p>
+                    <p>Start Date: {dayjs(application.userofferrecord.start_date).format('YYYY-MM-DD')}</p>
+                    {application.userofferrecord.end_date && (
+                      <p>End Date: {dayjs(application.userofferrecord.end_date).format('YYYY-MM-DD')}</p>
                     )}
+
                     <Button onClick={() => acceptOffer(application.id)}>Accept Offer</Button>
                     <Button onClick={() => declineOffer(application.id)}>Decline Offer</Button>
                   </div>
-                ) : (
-                  <Button onClick={() => cancelApplication(application.id)}>Cancel Application</Button>
                 )}
-              </Timeline.Item>
-            ))}
-          </Timeline>
 
+                {application.status === 'Pending' && (
+                  <Popconfirm
+                    title="確定取消嗎？"
+                    onConfirm={() => cancelApplication(application.id)}
+                    okText="确定"
+                    cancelText="關閉"
+                  >
+                    <Button>Cancel Application</Button>
+                  </Popconfirm>
+                )}
+              </Panel>
+            ))}
+          </Collapse>
         </TabPane>
       </Tabs>
 

@@ -1,3 +1,6 @@
+import jwtDecode , {JwtPayload} from "jwt-decode";
+import dayjs from 'dayjs';
+
 export const authHeaders = () =>{
   const token = sessionStorage.getItem('accessToken');
   if(token) {
@@ -28,10 +31,10 @@ export const getUserFromToken = (payload: any) => {
   try {
     return {
       id: payload.id,
-      username: payload.username,
+      username: payload.name,
       email: payload.email,
       gender: payload.gender,
-      birthday: payload.birthday ?? null,
+      birthday: payload.birthday ? dayjs(payload.birthday).format("YYYY-MM-DD") : null,
       address: payload.address,
       phone: payload.phone,
       avatarUrl: payload.avatarUrl

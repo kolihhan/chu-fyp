@@ -15,6 +15,14 @@ export const registerApi = (username: string,email: string,password: string,chec
     { headers: authHeaders() }
   );
 
+  export const updateUserInfoApi = (id:number,username: string,email: string,gender: string,birthday: dayjs.Dayjs | null,address: string,phone: string,avatarUrl: string) =>
+  axios.put(
+    `${API_URL}/user/update/${id}`,
+    { name: username,email,gender,birthday: dayjs(birthday).format('YYYY-MM-DD'),address,phone,avatar_url: avatarUrl},
+    { headers: authHeaders() }
+  );
+
+
 export const refreshApi = (accessToken : string) =>
   axios.post(
     `${API_URL}/verify`,
@@ -45,5 +53,38 @@ export const getCertainJobsApi = async (id : number) => {
 };
 
 export const getUserApplicationRecord = async (id : number) => {
-  return axios.get(`${API_URL}/companyRecruitment/get/${id}`, { headers: authHeaders() });
+  return axios.get(`${API_URL}/userApplicationRecord/get/user/all/${id}`, { headers: authHeaders() });
+};
+
+export const cancelApplicationIdApi = async (id : number) => {
+  return axios.post(`${API_URL}/userApplicationRecord/delete/${id}`, null, { headers: authHeaders() });
+};
+
+export const createNewResumeApi = async (value : any) => {
+  return axios.post(`${API_URL}/userResume/create`, 
+  { value},
+  { headers: authHeaders() });
+};
+
+export const updateResumeApi = async (id:number,value : any) => {
+  return axios.put(`${API_URL}/userResume/update/${id}`, 
+  { value},
+  { headers: authHeaders() });
+};
+
+export const deleteResumeApi = async (id:number) => {
+  return axios.delete(`${API_URL}/userResume/delete/${id}`, 
+  { headers: authHeaders() });
+};
+
+export const updateOfferStatusApi = async (id:number,status : any) => {
+  return axios.put(`${API_URL}/userApplicationRecord/update/${id}`, 
+  { status },
+  { headers: authHeaders() });
+};
+
+export const createNewCompanyEmployee = async (id:number,status : any) => {
+  return axios.post(`${API_URL}/userApplicationRecord/update/${id}`, 
+  { status },
+  { headers: authHeaders() });
 };

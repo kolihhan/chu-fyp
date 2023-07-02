@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Card, Col, Input, Row } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { applyJobs, fetchJobs, selectJobs } from '../reducers/userReducers';
+import { fetchJobs, selectJobs } from '../reducers/userReducers';
 
 import { ThunkDispatch } from 'redux-thunk';
 import { RootState } from '../app/store';
@@ -27,7 +27,7 @@ const Home: React.FC = () => {
     setLoading(true);
     dispatch(fetchJobs());
     setLoading(false);
-  }, [dispatch, setLoading]);
+  }, []);
 
 
   const handleViewPage = (jobId: number) => {
@@ -56,7 +56,7 @@ const Home: React.FC = () => {
         {filteredJobs?.map((job) => (
           <Col span={8} key={job.id ?? ''}>
             <Card title={job.title ?? ''} bordered={false}>
-              <p>公司：{job.company ?? ''}</p>
+              <p>公司：{job.companyEmployeePosition.company_id.name ?? ''}</p>
               <p>地点：{job.location ?? ''}</p>
               <p>描述：{job.description ?? ''}</p>
               <ApplyJobModal loggedIn={user != null} jobId={job.id} jobTitle = {job.title} />

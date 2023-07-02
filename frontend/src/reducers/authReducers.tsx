@@ -13,7 +13,7 @@ export interface User {
   username: string,
   email: string,
   gender: string,
-  birthday: dayjs.Dayjs | null,
+  birthday: string | null,
   address: string,
   phone: string,
   avatarUrl: string
@@ -53,12 +53,7 @@ export const login = (
     const response = await loginApi(username, password);
     const token = response.data.access;
     
-    await dispatch(fetchUsersInfo(token));
-
-    message.success('登入成功');
-    setTimeout(() => {
-      window.location.href = '/';
-    }, 500); 
+    dispatch(fetchUsersInfo(token));
 
   } catch (error) {
     console.log(error);
@@ -94,6 +89,9 @@ export const register = (
 };
 
 export const logout = (): ThunkAction<void, RootState, unknown, AnyAction> => async dispatch => {
+  setTimeout(() => {
+    window.location.href = '/';
+  }, 500); 
   removeToken();
   dispatch(setAccessToken(null));
   dispatch(setUser(null));
@@ -104,7 +102,6 @@ export const fetchUsersInfo = (
   accessToken: string
 ): ThunkAction<void, RootState, unknown, AnyAction> => async dispatch => {
   try {
-    
     saveToken(accessToken);
     dispatch(setAccessToken(accessToken));
 
@@ -117,8 +114,33 @@ export const fetchUsersInfo = (
       dispatch(fetchResumes());
     }
 
+    
+    message.success('登入成功');
+    setTimeout(() => {
+      window.location.href = '/';
+    }, 500); 
+    
   } catch (error) {
     console.log(error);
+    message.error("驗證有誤，請聯係客服解決");
+    removeToken();
+    dispatch(setAccessToken(null));
+    dispatch(setUser(null));
+  }
+};
+export const validateUserToken = (
+  accessToken: string
+): ThunkAction<void, RootState, unknown, AnyAction> => async dispatch => {
+  try {
+    
+    const response = await refreshApi(accessToken);
+
+    if (response.status === 201) {
+
+    }
+
+  } catch (error) {
+    message.error("驗證已過期，請重新登入");
     removeToken();
     dispatch(setAccessToken(null));
     dispatch(setUser(null));

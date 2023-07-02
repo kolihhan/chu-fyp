@@ -1,14 +1,50 @@
 import { configureStore, combineReducers, ThunkAction, Action } from '@reduxjs/toolkit';
 import authReducer from '../reducers/authReducers';
 import userReducers from '../reducers/userReducers';
+import employeeReducers from '../reducers/employeeReducers';
 
+import storage from 'redux-persist/lib/storage';
+import { persistReducer, persistStore } from 'redux-persist';
+
+const persistConfig = {
+  key: 'root',
+  storage,
+  whitelist: ['auth', 'user', 'employee'], // 要持久化的 reducer 名称
+};
+
+const authPersistConfig = {
+  key: 'auth',
+  storage,
+};
+
+const userPersistConfig = {
+  key: 'user',
+  storage,
+};
+
+const employeePersistConfig = {
+  key: 'employee',
+  storage,
+};
+
+const authPersistedReducer = persistReducer(authPersistConfig, authReducer);
+const userPersistedReducer = persistReducer(userPersistConfig, userReducers);
+const employeePersistedReducer = persistReducer(employeePersistConfig, employeeReducers);
+
+export const rootReducer = combineReducers({
+  auth: authPersistedReducer,
+  user: userPersistedReducer,
+  employee: employeePersistedReducer,
+});
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
-  reducer: {
-    auth: authReducer,
-    user: userReducers,
-  },
+  reducer: persistedReducer,
 });
+
+export const persistor = persistStore(store);
+
 
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;
