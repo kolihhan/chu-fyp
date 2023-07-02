@@ -47,6 +47,18 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         return user  
+class UserUpdateSerializer(serializers.ModelSerializer):
+
+    password = serializers.CharField(write_only=True, required=False)
+
+    class Meta:
+        model = UserAccount
+        fields = ['id', 'name', 'email', 'password', 'gender', 'birthday', 'address', 'phone', 'avatar_url', 'created_at', 'updated_at']
+        extra_kwargs = {
+            'id': {'read_only': True},
+            'address': {'required': False},
+            'avatar_url': {'required': False}
+        }
     
 # class BossSerializer(ModelSerializer):
 #     class Meta:
@@ -121,12 +133,6 @@ class UserOfferRecordSerializer(serializers.ModelSerializer):
         model = models.UserOfferRecord
         fields = '__all__'
 
-class UserApplicationRecordSerializerTest(serializers.ModelSerializer):
-    userofferrecord = UserOfferRecordSerializer()  # 添加 UserOfferRecord 的序列化器字段
-
-    class Meta:
-        model = models.UserApplicationRecord
-        fields = '__all__'
 
 class UserApplicationRecordSerializer(serializers.ModelSerializer):
     class Meta: 
@@ -145,6 +151,7 @@ class CompanyBenefitsSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class CompanyEmployeePositionSerializer(serializers.ModelSerializer):
+    company_id = CompanySerializer(many=False, read_only=True)
     companyDepartment_id = CompanyDepartmentSerializer(many=False, read_only=True)
     companyPermission_id = CompanyPermissionSerializer(many=True, read_only=True)
     companyBenefits_id = CompanyBenefitsSerializer(many=True, read_only=True)
@@ -218,4 +225,19 @@ class CompanyEmployeeEvaluateSerializer(serializers.ModelSerializer):
 class CompanyEmployeeLeaveRecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.CompanyEmployeeLeaveRecord
+        fields = '__all__'
+
+class UserApplicationRecordSerializerTest(serializers.ModelSerializer):
+    userofferrecord = serializers.SerializerMethodField()
+    companyRecruitment_id = CompanyRecruitmentSerializer(many=False, read_only=True)
+
+    def get_userofferrecord(self, obj):
+        if obj.userofferrecord_set.exists():
+            userofferrecords = UserOfferRecordSerializer(obj.userofferrecord_set.all(), many=True).data
+            return userofferrecords
+        else:
+            return None
+
+    class Meta:
+        model = models.UserApplicationRecord
         fields = '__all__'

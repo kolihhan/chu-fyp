@@ -74,6 +74,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
 # 用戶履歷模型
 class UserResume(models.Model):
     user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
+    title = models.CharField(max_length=15)
     summary = models.TextField()
     experience = models.TextField()
     education = models.TextField()
@@ -82,8 +83,7 @@ class UserResume(models.Model):
     language = models.TextField(default="Chinese")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    def __str__(self):
-        return self.user 
+
 
 # 用戶面試申請模型
 class UserApplicationRecord(models.Model):
@@ -95,11 +95,11 @@ class UserApplicationRecord(models.Model):
         ("Accept", "Accept"),               # 被接受
         ("Reject","Reject"),                # 被拒絕
         ("Interviewing","Interviewing"),    # 面試中 
+        ("Offering", "Offering"),           # 給Offer
         ("Withdrawn","Withdrawn")           # user自己撤回
     ])
     create_at = models.DateTimeField(auto_now_add=True)
-    def __str__(self):
-        return self.user
+
     
 # 用戶面試成功模型
 class UserOfferRecord(models.Model):
@@ -110,8 +110,7 @@ class UserOfferRecord(models.Model):
     start_date = models.DateTimeField()
     end_date = models.DateTimeField(blank=True, null=True)
     create_at = models.DateTimeField(auto_now_add=True)
-    def __str__(self):
-        return self.userApplicationRecord_id
+
     
 # 公司模型
 class Company(models.Model):

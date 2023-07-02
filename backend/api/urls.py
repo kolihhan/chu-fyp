@@ -16,6 +16,8 @@ urlpatterns = [
 
     # user
     path('user/get/multiple/email/<str:pk>', getMultipleUserByEmail, name='getMultipleUserByEmail'),
+    path('user/update/<int:pk>', updateUserInfo, name='updateUserInfo'),
+
 
     # company
     path('company/<str:pk>', getCompany, name='getCompany'),

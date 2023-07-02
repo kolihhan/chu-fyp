@@ -82,6 +82,22 @@ class MyTokenObtainPairView(TokenObtainPairView):
 # class
 
 # region user
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def updateUserInfo(request, pk):
+    try:
+        user = models.UserAccount.objects.get(id=pk)
+    except models.UserAccount.DoesNotExist:
+        return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = serializers.UserUpdateSerializer(user, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getMultipleUserByEmail(request, pk):
@@ -1684,9 +1700,11 @@ def deleteCompanyCheckInRule(request, pk):
 @permission_classes([IsAuthenticated])
 def createUserResume(request):
     try:
-        data = request.data
+        data = request.data['value']
+        user = models.UserAccount.objects.get(id=data['user'])
         createdUserResume = models.UserResume.objects.create(
-            user = models.UserAccount.objects.get(id=data['user']),
+            user = user,
+            title = data['title'],
             summary = data['summary'],
             experience = data['experience'],
             education = data['education'],
@@ -1729,8 +1747,10 @@ def getUserAllResume(request, pk):
 @permission_classes([IsAuthenticated])
 def updateUserResume(request, pk):
     try:
-        data = request.data
+        data = request.data['value']
         updatedUserResume = models.UserResume.objects.get(id=pk)
+        if data.get('title', None) !=None:
+            updatedUserResume.title = data['title']
         if data.get('summary', None) !=None:
             updatedUserResume.summary = data['summary']
         if data.get('experience', None) !=None:
@@ -1775,11 +1795,18 @@ def deleteUserResume(request, pk):
 def createUserApplicationRecord(request):
     try:
         data = request.data
+
+        user_id = data.get('user')
+        companyRecruitment_id = data.get('companyRecruitment_id')
+
+        if models.UserApplicationRecord.objects.filter(user__id= user_id, companyRecruitment_id__id =companyRecruitment_id).exists():
+            return Response({'error': '不可重複應聘'}, status=status.HTTP_400_BAD_REQUEST)
+
         createdUserApplicationRecord = models.UserApplicationRecord.objects.create(
             user = models.UserAccount.objects.get(id=data['user']),
             userResume_id = models.UserResume.objects.get(id=data['userResume_id']),
             companyRecruitment_id = models.CompanyRecruitment.objects.get(id=data['companyRecruitment_id']),
-            # status = data['status']
+            status = "Pending"
         )
         serializer = serializers.UserApplicationRecordSerializer(createdUserApplicationRecord, many=False)
         return Response({'message':'面試申請成功', 'data':serializer.data}, status=status.HTTP_200_OK)
@@ -1804,8 +1831,8 @@ def getUserApplicationRecord(request, pk):
 @permission_classes([IsAuthenticated])
 def getAllUserApplicationRecordByUser(request, pk):
     try:
-        userApplicationRecordData = models.UserApplicationRecord.objects.select_related('userofferrecord').filter(user__id=pk)
-        serializer = serializers.UserApplicationRecordSerializer(userApplicationRecordData, many=True)
+        userApplicationRecordData = models.UserApplicationRecord.objects.select_related('user').prefetch_related('userofferrecord_set').filter(user__id=pk)
+        serializer = serializers.UserApplicationRecordSerializerTest(userApplicationRecordData, many=True)
 
         return Response({'message': '面試申請資料獲取成功', 'data': serializer.data}, status=status.HTTP_200_OK)
     except models.UserApplicationRecord.DoesNotExist as e:
@@ -1819,7 +1846,7 @@ def getAllUserApplicationRecordByUser(request, pk):
 def getAllUserApplicationRecordByCompany(request, pk):
     try:
         userApplicationRecordData = models.UserApplicationRecord.objects.filter(companyRecruitment_id__id=pk)
-        serializer = serializers.UserApplicationRecordSerializerTest(userApplicationRecordData, many=True)
+        serializer = serializers.UserApplicationRecordSerializer(userApplicationRecordData, many=True)
         return Response({'message':'面試申請資料獲取成功', 'data':serializer.data}, status=status.HTTP_200_OK)
     except models.UserApplicationRecord.DoesNotExist as e:
         return Response({'message':'面試申請資料獲取失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
@@ -1841,13 +1868,15 @@ def updateUserApplicationRecord(request, pk):
     except Exception as e:
         return Response({'message':'面試申請更新失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-@api_view(['DELETE'])
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def deleteUserApplicationRecord(request, pk):
     try:
         deletedUserApplicationRecord = models.UserApplicationRecord.objects.get(id=pk)
-        delete = deletedUserApplicationRecord.delete()
-        if delete [0] > 0:
+        deletedUserApplicationRecord.status = "Withdrawn"
+        deletedUserApplicationRecord.save()
+        serializer = serializers.UserApplicationRecordSerializer(deletedUserApplicationRecord, many=False)
+        if serializer.data:
             return Response({'message':'面試申請刪除成功'}, status=status.HTTP_200_OK)
     except models.UserApplicationRecord.DoesNotExist as e:
         return Response({'message':'面試申請刪除失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
