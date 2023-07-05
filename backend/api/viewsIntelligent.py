@@ -607,3 +607,15 @@ def getAllCompanyEmployeeFeedbackReview(request):
         return Response({'message':'員工反饋獲取失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         return Response({'message':'員工反饋獲取失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def getCompanyEmployeeFeedbackReview(request, pk):
+    try:
+        cerf = models.CompanyEmployeeFeedBackReview.objects.filter(feedback_to=pk)
+        serializer = serializers.CompanyEmployeeFeedBackReviewSerializer(cerf, many=True)
+        return Response({'message':'員工反饋獲取成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyEmployeeFeedBackReview.DoesNotExist as e:
+        return Response({'message':'員工反饋獲取失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'員工反饋獲取失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

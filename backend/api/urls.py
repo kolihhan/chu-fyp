@@ -192,7 +192,8 @@ urlpatterns = [
     path('getCompanyEmployeeEvaluateAll', getCompanyEmployeeEvaluateAll, name='getCompanyEmployeeEvaluateAll'),
     path('deleteAllCompanyEmployeeEvaluate', deleteAllCompanyEmployeeEvaluate, name='deleteAllCompanyEmployeeEvaluate'),
     path('companyEmployeeFeedBackReview/get/all', getAllCompanyEmployeeFeedbackReview, name='getAllCompanyEmployeeFeedbackReview'),
-
+    path('companyEmployeeFeedBackReview/get/<int:pk>', getCompanyEmployeeFeedbackReview, name='getCompanyEmployeeFeedbackReview'),
+    
     
     
 
