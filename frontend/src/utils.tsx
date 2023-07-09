@@ -47,3 +47,13 @@ export const getUserFromToken = (payload: any) => {
   }
 };
 
+export const getUserId = () =>{
+  const token: any = sessionStorage.getItem('accessToken');
+  if(token) {
+    return token
+  }else{
+    return 0
+  }
+
+
+};

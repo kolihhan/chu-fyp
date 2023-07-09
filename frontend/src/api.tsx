@@ -1,6 +1,6 @@
 import axios from 'axios';
 import dayjs from 'dayjs';  // 引入 dayjs 库
-import { authHeaders } from './utils';
+import { authHeaders, getUserFromToken, getUserId } from './utils';
 
 const API_URL = 'http://localhost:8000/api';
 
@@ -133,8 +133,7 @@ export const createCheckInApi = async (id:number,status : any) => {
 };
 
 
-
-
-
-
-
+export const getBossAllCompany = async () => {
+  console.log(sessionStorage.getItem('accessToken'))
+  return axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+};

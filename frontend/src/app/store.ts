@@ -2,6 +2,7 @@ import { configureStore, combineReducers, ThunkAction, Action } from '@reduxjs/t
 import authReducer from '../reducers/authReducers';
 import userReducers from '../reducers/userReducers';
 import employeeReducers from '../reducers/employeeReducers';
+import companiesReducers from '../reducers/companiesReducers';
 
 import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
@@ -27,14 +28,21 @@ const employeePersistConfig = {
   storage,
 };
 
+const companiesPersistConfig = {
+  key: 'companies',
+  storage,
+}
+
 const authPersistedReducer = persistReducer(authPersistConfig, authReducer);
 const userPersistedReducer = persistReducer(userPersistConfig, userReducers);
 const employeePersistedReducer = persistReducer(employeePersistConfig, employeeReducers);
+const companiesPersistedReducer = persistReducer(companiesPersistConfig, companiesReducers);
 
 export const rootReducer = combineReducers({
   auth: authPersistedReducer,
   user: userPersistedReducer,
   employee: employeePersistedReducer,
+  companies: companiesPersistedReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

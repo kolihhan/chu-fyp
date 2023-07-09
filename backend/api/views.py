@@ -373,8 +373,11 @@ def deleteCompany(request, pk):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def getBossAllCompany(request, pk):
-    companyData = models.Company.objects.filter(boss_id=pk)
+def getBossAllCompany(request):
+    token = request.META.get('HTTP_AUTHORIZATION', '').split(' ')[1]
+    accessToken = AccessToken(token)
+    userId = accessToken.payload['user_id']
+    companyData = models.Company.objects.filter(boss_id=userId)
     serializer = serializers.CompanySerializer(companyData, many=True)
     return Response(serializer.data)
 

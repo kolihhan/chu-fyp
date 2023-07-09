@@ -24,7 +24,7 @@ urlpatterns = [
     path('createCompany', createCompany, name='createCompany'),
     path('updateCompany/<str:pk>', updateCompany, name='updateCompany'),
     path('deleteCompany/<str:pk>', deleteCompany, name='deleteCompany'),
-    path('boss/company/<str:pk>', getBossAllCompany, name='getBossCompany'),
+    path('boss/company', getBossAllCompany, name='getBossCompany'),
 
     # resume
     path('resume/create', createResume, name='createResume'),

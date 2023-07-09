@@ -23,6 +23,9 @@ import { ThunkDispatch } from 'redux-thunk';
 
 import { Layout, message } from 'antd';
 import { useNavigate } from 'react-router-dom'; // 导入 useHistory 钩子
+import CompanyItem from './components/Company/CompanyItem';
+import CompaniesPage from './pages/companies/admin/CompaniesPage';
+import CompanyDetailPage from './pages/companies/admin/CompanyDetailPage';
 
 const Protected: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -102,6 +105,9 @@ const App: React.FC = () => {
 
 
           {/* Admin */}
+
+          <Route path='/company/list' element={<Protected><CompaniesPage /></Protected>} />
+          <Route path='/company/view/:id' element={<Protected><CompanyDetailPage /></Protected>} />
 
 
         </Routes>
