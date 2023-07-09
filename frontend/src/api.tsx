@@ -83,8 +83,58 @@ export const updateOfferStatusApi = async (id:number,status : any) => {
   { headers: authHeaders() });
 };
 
-export const createNewCompanyEmployee = async (id:number,status : any) => {
-  return axios.post(`${API_URL}/userApplicationRecord/update/${id}`, 
+
+
+export const createFeedbackApi = async (data : any) => {
+  return axios.post(`${API_URL}/companyEmployeeFeedBackReview/create`, 
+  { data },
+  { headers: authHeaders() });
+};
+
+
+
+export const getLeaveRecords = async (id : any) => {
+  return axios.get(`${API_URL}/companyEmployeeLeave/get/employee/all/${id}`, 
+  { headers: authHeaders() });
+};
+
+export const applyLeaveApi = async (data : any) => {
+  return axios.post(`${API_URL}/companyEmployeeLeave/create`, 
+  { data },
+  { headers: authHeaders() });
+};
+
+export const getAllEmployees = async (id : any) => {
+  return axios.get(`${API_URL}/companyEmployee/get/company/all/${id}`, 
+  { headers: authHeaders() });
+};
+
+export const getCompanyAnnouncement = async (Cid:any,id : any) => {
+  return axios.get(`${API_URL}/announcement/get/user/all/${Cid}/${id}`, 
+  { headers: authHeaders() });
+};
+
+export const getSelfFeedbackResponse = async (id : any) => {
+  return axios.get(`${API_URL}/companyEmployeeFeedBackReview/get/${id}`, 
+  { headers: authHeaders() });
+};
+
+
+
+export const getCheckInRecord = async (id : any) => {
+  return axios.get(`${API_URL}/company/check-in/${id}`, 
+  { headers: authHeaders() });
+};
+
+export const createCheckInApi = async (id:number,status : any) => {
+  return axios.post(`${API_URL}/company/check-in/${id}`, 
   { status },
   { headers: authHeaders() });
 };
+
+
+
+
+
+
+

@@ -7,6 +7,7 @@ import { message } from 'antd';
 import dayjs from 'dayjs';  // 引入 dayjs 库
 
 import { fetchResumes } from '../reducers/userReducers';
+import { setEmployees, setSelectCompany } from './employeeReducers';
 
 export interface User {
   id: number,
@@ -17,6 +18,7 @@ export interface User {
   address: string,
   phone: string,
   avatarUrl: string
+  type : string
 }
 
 export interface AuthState {
@@ -89,9 +91,6 @@ export const register = (
 };
 
 export const logout = (): ThunkAction<void, RootState, unknown, AnyAction> => async dispatch => {
-  setTimeout(() => {
-    window.location.href = '/';
-  }, 500); 
   removeToken();
   dispatch(setAccessToken(null));
   dispatch(setUser(null));
@@ -109,8 +108,13 @@ export const fetchUsersInfo = (
 
     if (response) {
       const token = response.data;
-      const user = getUserFromToken(token);
+      const user = getUserFromToken(token.user);
       dispatch(setUser(user));
+      if(token.company_employee){
+        dispatch(setEmployees(token.company_employee));
+        dispatch(setSelectCompany(0));
+      }
+      
       dispatch(fetchResumes());
     }
 
@@ -135,9 +139,6 @@ export const validateUserToken = (
     
     const response = await refreshApi(accessToken);
 
-    if (response.status === 201) {
-
-    }
 
   } catch (error) {
     message.error("驗證已過期，請重新登入");

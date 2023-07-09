@@ -12,7 +12,7 @@ const LoadingContext = createContext<LoadingContextProps>({
 });
 
 const LoadingScreen: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   return (
     <LoadingContext.Provider value={{ loading, setLoading }}>

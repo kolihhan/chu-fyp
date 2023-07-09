@@ -7,6 +7,8 @@ import './index.css';
 import './css/styles.css';
 import './App.css';
 import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import { PersistGate } from 'redux-persist/integration/react';
 
 const container = document.getElementById('root')!;

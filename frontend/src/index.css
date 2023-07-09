@@ -15,3 +15,75 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.ant-dropdown-trigger::after {
+  display: none;
+}
+
+.app-layout {
+  height: 100vh;
+}
+
+.header {
+  background: #f0f0f0;
+  padding: 10px;
+}
+
+.content {
+  display: flex;
+  height: calc(100% - 64px); /* 减去头部高度 */
+  overflow: hidden; /* 添加溢出隐藏，防止内容溢出界面 */
+}
+
+.left-section {
+  width: 70%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.scrollable-box {
+  background: #f8f8f8;
+  border: 1px solid #ddd;
+  padding: 10px;
+  min-height: 50%;
+  margin-bottom: 20px;
+  overflow-y: auto; /* 添加垂直方向溢出自动滚动 */
+}
+
+.collapse-box {
+  margin-bottom: 20px; /* 调整折叠框之间的间距 */
+}
+
+.collapse-content {
+  padding: 10px;
+}
+
+.right-section {
+  width: 30%;
+  padding: 20px;
+  display: flex;
+  align-items: stretch;
+}
+
+.with-scrollbar {
+  background: #f8f8f8;
+  border: 1px solid #ddd;
+  padding: 10px;
+  overflow: auto;
+  max-width: 100%;
+}
+
+.with-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.with-scrollbar::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+
+.with-scrollbar::-webkit-scrollbar-thumb {
+  background: #ccc;
+}
+
+

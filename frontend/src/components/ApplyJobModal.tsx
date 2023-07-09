@@ -10,12 +10,13 @@ import { AnyAction } from '@reduxjs/toolkit';
 import { message } from 'antd';
 
 interface ApplyJobModalProps {
+    isEmployee : boolean;
     loggedIn: boolean;
     jobId: number;
     jobTitle: string;
 }
 
-const ApplyJobModal: React.FC<ApplyJobModalProps> = ({ loggedIn, jobId, jobTitle }) => {
+const ApplyJobModal: React.FC<ApplyJobModalProps> = ({ isEmployee, loggedIn, jobId, jobTitle }) => {
     type AppDispatch = ThunkDispatch<RootState, unknown, AnyAction>;
 
     const dispatch: AppDispatch = useDispatch();
@@ -59,10 +60,12 @@ const ApplyJobModal: React.FC<ApplyJobModalProps> = ({ loggedIn, jobId, jobTitle
     };
 
     return (
-        <>
+        <>  {(!isEmployee) &&
             <Button type="primary" onClick={showModal}>
                 應聘
             </Button>
+            }
+
             <Modal
                 title={`應聘工作 - ${jobTitle}`}
                 open={isModalVisible}

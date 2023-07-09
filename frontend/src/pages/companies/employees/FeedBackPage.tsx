@@ -1,72 +1,79 @@
-// import React, { useState } from 'react';
-// import { Form, Input, Button, Select } from 'antd';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { RootState } from '../app/store';
-// import { createFeedback } from '../reducers/feedbackReducers';
+import React, { useState, useEffect } from 'react';
+import { Form, Input, Button, Select } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../app/store';
+import { createFeedback, selectSelectedCompany, selectSelf } from '../../../reducers/employeeReducers';
 
-// const { Option } = Select;
+import { ThunkDispatch } from 'redux-thunk';
+import { AnyAction } from '@reduxjs/toolkit';
 
-// const FeedBackPage: React.FC = () => {
-//   const [form] = Form.useForm();
-//   const dispatch = useDispatch();
-//   const companyEmployees = useSelector((state: RootState) => state.companyEmployees);
+import { getAllEmployees } from '../../../api';
 
-//   const onFinish = (values: any) => {
-//     dispatch(createFeedback(values));
-//     form.resetFields();
-//   };
+const { Option } = Select;
 
-//   return (
-//     <Form form={form} onFinish={onFinish}>
-//       <Form.Item name="company_id" label="Company ID" rules={[{ required: true, message: 'Please select a company.' }]}>
-//         <Select>
-//           {/* 根据实际需求，使用适当的数据源来渲染选项 */}
-//           {companyEmployees.map((employee) => (
-//             <Option key={employee.id} value={employee.id}>
-//               {employee.name}
-//             </Option>
-//           ))}
-//         </Select>
-//       </Form.Item>
-//       <Form.Item
-//         name="companyEmployee_id"
-//         label="Company Employee ID"
-//         rules={[{ required: true, message: 'Please select an employee.' }]}
-//       >
-//         <Select>
-//           {/* 根据实际需求，使用适当的数据源来渲染选项 */}
-//           {companyEmployees.map((employee) => (
-//             <Option key={employee.id} value={employee.id}>
-//               {employee.name}
-//             </Option>
-//           ))}
-//         </Select>
-//       </Form.Item>
-//       <Form.Item
-//         name="feedback_to"
-//         label="Feedback To"
-//         rules={[{ required: true, message: 'Please select an employee to provide feedback to.' }]}
-//       >
-//         <Select>
-//           {/* 根据实际需求，使用适当的数据源来渲染选项 */}
-//           {companyEmployees.map((employee) => (
-//             <Option key={employee.id} value={employee.id}>
-//               {employee.name}
-//             </Option>
-//           ))}
-//         </Select>
-//       </Form.Item>
-//       <Form.Item name="remarks" label="Remarks" rules={[{ required: true, message: 'Please enter remarks.' }]}>
-//         <Input.TextArea />
-//       </Form.Item>
-//       <Form.Item>
-//         <Button type="primary" htmlType="submit">
-//           Submit
-//         </Button>
-//       </Form.Item>
-//     </Form>
-//   );
-// };
+const FeedBackPage: React.FC = () => {
+  const [form] = Form.useForm();
 
-// export default FeedBackPage;
-export {};
+  type AppDispatch = ThunkDispatch<RootState, unknown, AnyAction>;
+  const dispatch: AppDispatch = useDispatch();
+
+  const [companyEmployees, setCompanyEmployees] = useState<any[]>([]);
+  const employeeId = useSelector(selectSelf);
+  const employeeSelect = useSelector(selectSelectedCompany);
+
+
+  useEffect(() => {
+    // 获取请假记录
+    fetchCompanyEmployees();
+  }, []);
+
+
+  const onFinish = (values: any) => {
+
+    values['company_id'] = employeeId[employeeSelect].company_id;
+    values['companyEmployee_id'] = employeeId[employeeSelect].id;
+
+    dispatch(createFeedback(values));
+    form.resetFields();
+  };
+
+  const fetchCompanyEmployees = async () => {
+    try {
+      const response = await getAllEmployees(employeeId[employeeSelect].company_id);
+      setCompanyEmployees(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+  return (
+    <Form form={form} onFinish={onFinish}>
+      <Form.Item
+        name="feedback_to"
+        label="Feedback To"
+        rules={[{ required: true, message: 'Please select an employee to provide feedback to.' }]}
+      >
+        <Select>
+          {Array.isArray(companyEmployees) &&
+            companyEmployees.map((employee) => (
+              <Option key={employee.id} value={employee.id}>
+                {employee.user_id.name}
+              </Option>
+            ))}
+        </Select>
+
+      </Form.Item>
+      <Form.Item name="remarks" label="Remarks" rules={[{ required: true, message: 'Please enter remarks.' }]}>
+        <Input.TextArea />
+      </Form.Item>
+      <Form.Item>
+        <Button type="primary" htmlType="submit">
+          Submit
+        </Button>
+      </Form.Item>
+    </Form>
+  );
+};
+
+export default FeedBackPage;

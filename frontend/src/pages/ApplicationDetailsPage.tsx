@@ -12,6 +12,7 @@ import { applyJobs, fetchApplicationDetails, selectJobsDetails } from '../reduce
 import ApplyJobModal from '../components/ApplyJobModal';
 
 const ApplicationDetailsPage: React.FC = () => {
+  const employee = useSelector((state: RootState) => state.employee.employees);
   const user = useSelector((state: RootState) => state.auth.user);
   const { id } = useParams<{ id: string | undefined }>();
   const applicationId = parseInt(id || '', 10);
@@ -51,7 +52,7 @@ const ApplicationDetailsPage: React.FC = () => {
           <p>Min Salary: {application.min_salary}</p>
           <p>Max Salary: {application.max_salary}</p>
           {/* 根据您的需求添加其他招聘详细信息字段 */}
-          <ApplyJobModal loggedIn={user != null} jobId={applicationId} jobTitle = {application.title}  />
+          <ApplyJobModal isEmployee={employee != null} loggedIn={user != null} jobId={applicationId} jobTitle = {application.title}  />
         </div>
       ) : null}
     </div>

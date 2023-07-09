@@ -68,7 +68,16 @@ def verify(request):
         user_info = UserAccount.objects.get(pk = user)
         serializer = UserSerializer(user_info,many=False)
 
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        company_employee = models.CompanyEmployee.objects.filter(user_id=user, end_date__isnull=True)
+        company_employee_serializer = serializers.CompanyEmployeeSerializer(company_employee, many=True)
+    
+        # Combine user and company employee data
+        data = {
+            'user': serializer.data,
+            'company_employee': company_employee_serializer.data
+        }
+
+        return Response(data, status=status.HTTP_200_OK)
     
     except InvalidToken:
         return Response({'error': 'Invalid access token.'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -1370,10 +1379,10 @@ def createCompanyEmployeeFeedbackReview(request):
     try:
         data = request.data
         createdCEFR = models.CompanyEmployeeFeedBackReview.objects.create(
-            company_id = models.Company.objects.get(id=data['company_id']),
-            companyEmployee_id = models.CompanyEmployee.objects.get(id=data['companyEmployee_id']),
-            feedback_to = models.CompanyEmployee.objects.get(id=data['feedback_to']),
-            remarks = data['remarks']
+            company_id = models.Company.objects.get(id=data['data']['company_id']),
+            companyEmployee_id = models.CompanyEmployee.objects.get(id=data['data']['companyEmployee_id']),
+            feedback_to = models.CompanyEmployee.objects.get(id=data['data']['feedback_to']),
+            remarks = data['data']['remarks']
         )
         serializer = serializers.CompanyEmployeeFeedBackReviewSerializer(createdCEFR, many=False)
         return Response({'message':'員工反饋成功', 'data':serializer.data}, status=status.HTTP_200_OK)
@@ -2076,16 +2085,27 @@ class CompanyCheckInAPIView(APIView):
 
     def get(self, request, pk):
         companyE = get_object_or_404(models.CompanyEmployee, id=pk)
-        check_ins = CompanyCheckIn.objects.filter(companyEmployee_id=companyE.id)
-        serializer = serializers.CompanyCheckInSerializer(check_ins, many=True)
-        return Response(serializer.data)
+        today = timezone.now().date()
+        check_ins = CompanyCheckIn.objects.filter(companyEmployee_id=companyE.id, create_at__date=today)
+        leave_records = models.CompanyEmployeeLeaveRecord.objects.filter(companyEmployee_id=companyE.id, leave_start__date=today)
+
+        if leave_records.exists():
+            return Response({'status': 3}) 
+
+        if check_ins.exists():
+            last_check_in = check_ins.latest('create_at')
+            if last_check_in.type == 'Check In':
+                return Response({'status': 2})  
+
+
+        return Response({'status': 1})  
 
     def post(self, request,pk):
         companyE = get_object_or_404(models.CompanyEmployee, id=pk)
         data = {
             'companyEmployee_id': companyE.id,
-            'company_id': companyE.company_id,
-            'type': request.data.get('type', 'Check In')
+            'company_id': companyE.company_id.id,
+            'type': request.data.get('status', 'Check In')
         }
         serializer = serializers.CompanyCheckInSerializer(data=data)
         if serializer.is_valid():
@@ -2238,14 +2258,15 @@ def getEmployeeCompanyEmployeeEvaluate(request, pk):
 def createLeaveRecord(request):
     try:
         data = request.data
+
         clr = models.CompanyEmployeeLeaveRecord.objects.create(
-            company_id = models.Company.objects.get(id=data['company_id']),
-            companyEmployee_id = models.CompanyEmployee.objects.get(id=data['companyEmployee_id']),
-            reason = data['reason'],
-            type = data['type'],
+            company_id = models.Company.objects.get(id=data['data']['company_id']),
+            companyEmployee_id = models.CompanyEmployee.objects.get(id=data['data']['companyEmployee_id']),
+            reason = data['data']['reason'],
+            type = data['data']['type'],
             status = "Pending",
-            leave_start = datetime.datetime.strptime(str(data['leave_start']), '%Y-%m-%d %H:%M:%S'),
-            leave_end = datetime.datetime.strptime(str(data['leave_end']), '%Y-%m-%d %H:%M:%S')
+            leave_start = datetime.datetime.strptime(str(data['data']['leave_start']), '%Y-%m-%d %H:%M:%S'),
+            leave_end = datetime.datetime.strptime(str(data['data']['leave_end']), '%Y-%m-%d %H:%M:%S')
         )
         serializer = serializers.CompanyEmployeeLeaveRecordSerializer(clr, many=False)
         return Response({'data': serializer.data}, status=status.HTTP_200_OK)

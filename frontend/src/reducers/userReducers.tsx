@@ -167,7 +167,7 @@ export const updateUserInfo = (
       const response = await updateUserInfoApi(user?.id ?? 0,username,email,gender,birthday,address,phone,avatarUrl);
       message.success('修改成功');
       
-      const userData = getUserFromToken(response);
+      const userData = getUserFromToken(response.data);
       dispatch(setUser(userData));
 
   

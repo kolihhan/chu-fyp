@@ -13,11 +13,15 @@ import Navbar from './components/NavBar';
 import { LoadingScreen } from './components/LoadingScreen';
 import ResumePage from './pages/ResumePage';
 
+import CheckIn from './pages/companies/employees/CheckInPage';
+import FeedBack from './pages/companies/employees/FeedBackPage';
+import ApplicationLeave from './pages/companies/employees/ApplicationLeavePage';
+
 import { validateUserToken, selectAccessToken } from './reducers/authReducers';
 import { AnyAction } from '@reduxjs/toolkit';
 import { ThunkDispatch } from 'redux-thunk';
 
-import { message } from 'antd';
+import { Layout, message } from 'antd';
 import { useNavigate } from 'react-router-dom'; // 导入 useHistory 钩子
 
 const Protected: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -34,6 +38,24 @@ const Protected: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       navigate('/login');
     }
   }, [user]);
+
+  return <>{children}</>;
+};
+
+const ProtectedEmployee: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const employees = useSelector((state: RootState) => state.employee.employees);
+  const navigate = useNavigate();
+  const isMessageDisplayed = useRef(false);
+
+
+  useEffect(() => {
+    if (!employees && !isMessageDisplayed.current) {
+
+      message.error('请登录后再执行此操作');
+      isMessageDisplayed.current = true;
+      navigate('/login');
+    }
+  }, [employees]);
 
   return <>{children}</>;
 };
@@ -58,6 +80,7 @@ const App: React.FC = () => {
   }, [checkToken]);
 
   return (
+    <Layout style={{ minHeight: '100vh' }}>
     <Router>
       <LoadingScreen>
         <Navbar />
@@ -67,12 +90,24 @@ const App: React.FC = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/detailsPage/:id" element={<ApplicationDetailsPage />} />
 
+          {/* Users */}
           <Route path="/profile" element={<Protected><Profile /></Protected>} />
           <Route path="/resumes" element={<Protected><ResumePage /></Protected>} /> {/* 创建新的resume */}
           <Route path="/resumes/:id" element={<Protected><ResumePage /></Protected>} /> {/* 编辑现有的resume */}
+
+          {/* Employees */}
+          <Route path="/company/:companyId/checkIn" element={<ProtectedEmployee><CheckIn /></ProtectedEmployee>} />
+          <Route path="/company/:companyId/feedback" element={<ProtectedEmployee><FeedBack /></ProtectedEmployee>} />
+          <Route path="/company/:companyId/applicationleave" element={<ProtectedEmployee><ApplicationLeave /></ProtectedEmployee>} />
+
+
+          {/* Admin */}
+
+
         </Routes>
       </LoadingScreen>
     </Router>
+    </Layout>
   );
 };
 

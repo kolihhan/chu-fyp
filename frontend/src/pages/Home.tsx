@@ -12,7 +12,7 @@ import ApplyJobModal from '../components/ApplyJobModal';
 
 const Home: React.FC = () => {
   type AppDispatch = ThunkDispatch<RootState, unknown, AnyAction>;
-
+  const employee = useSelector((state: RootState) => state.employee.employees);
   const user = useSelector((state: RootState) => state.auth.user);
   const dispatch: AppDispatch = useDispatch();
   const { setLoading } = useLoading();
@@ -24,7 +24,6 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     document.title = '首頁';
-    setLoading(true);
     dispatch(fetchJobs());
     setLoading(false);
   }, []);
@@ -59,7 +58,7 @@ const Home: React.FC = () => {
               <p>公司：{job.companyEmployeePosition.company_id.name ?? ''}</p>
               <p>地点：{job.location ?? ''}</p>
               <p>描述：{job.description ?? ''}</p>
-              <ApplyJobModal loggedIn={user != null} jobId={job.id} jobTitle = {job.title} />
+              <ApplyJobModal isEmployee={employee != null} loggedIn={user != null} jobId={job.id} jobTitle = {job.title} />
 
               <Button onClick={() => handleViewPage(job.id)}>查看頁面</Button>
             </Card>

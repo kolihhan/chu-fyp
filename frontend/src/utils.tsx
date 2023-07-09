@@ -30,6 +30,7 @@ export const removeToken = () => {
 export const getUserFromToken = (payload: any) => {
   try {
     return {
+      type : payload.type,
       id: payload.id,
       username: payload.name,
       email: payload.email,
