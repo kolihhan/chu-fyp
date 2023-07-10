@@ -32,8 +32,8 @@ const CheckInPage: React.FC = () => {
   const fetchCheckInRecord = async () => {
     try {
       const checkInResponse = await getCheckInRecord(employeeId[employeeSelect].id);
-      const employeeResponse = await getAllEmployees(employeeId[employeeSelect].company_id);
-      const announcementResponse = await getCompanyAnnouncement(employeeId[employeeSelect].company_id, employeeId[employeeSelect].id);
+      const employeeResponse = await getAllEmployees(employeeId[employeeSelect].company_id.id);
+      const announcementResponse = await getCompanyAnnouncement(employeeId[employeeSelect].company_id.id, employeeId[employeeSelect].id);
       const feedbackResponse = await getSelfFeedbackResponse(employeeId[employeeSelect].id);
 
 

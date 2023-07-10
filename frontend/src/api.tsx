@@ -137,3 +137,113 @@ export const getBossAllCompany = async () => {
   console.log(sessionStorage.getItem('accessToken'))
   return axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
 };
+
+export const createCompany = async (data : any) => {
+  return axios.post(`${API_URL}/companyEmployeeLeave/create`, 
+  { data },
+  { headers: authHeaders() });
+};
+
+export const getCompanyById = async (id : number) => {
+  console.log(sessionStorage.getItem('accessToken'))
+  return axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+};
+
+export const getAllEmployeesFeedback = async () => {
+  console.log(sessionStorage.getItem('accessToken'))
+  return axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+};
+
+export const getAllEmployeesPerformance = async () => {
+  console.log(sessionStorage.getItem('accessToken'))
+  return axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+};
+
+export const getAllEmployeesPromotionHistory = async () => {
+  console.log(sessionStorage.getItem('accessToken'))
+  return axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+};
+
+export const createEmployeeTraining = async (data : any) => {
+  console.log(sessionStorage.getItem('accessToken'))
+  return axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+};
+
+export const getAllCompanyTrainings = async () => {
+  console.log(sessionStorage.getItem('accessToken'))
+  return axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+};
+
+export const getAnnouncementsByCompany = async () => {
+  console.log(sessionStorage.getItem('accessToken'))
+  return axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+};
+
+export const getBenefitsByCompany = async () => {
+  console.log(sessionStorage.getItem('accessToken'))
+  return axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+};
+
+export const getCheckInRules = async (id : number) => {
+  console.log(sessionStorage.getItem('accessToken'))
+  return axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+};
+
+export const getCheckInRecords = async (id : number) => {
+  console.log(sessionStorage.getItem('accessToken'))
+  return axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+};
+
+export const createDepartment = async (id : number, data : any) => {
+  console.log(sessionStorage.getItem('accessToken'))
+  return axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+};
+
+
+export const getDepartments = async (id : number) => {
+  console.log(sessionStorage.getItem('accessToken'))
+  return axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+};
+
+export const deleteDepartment = async (id : number) => {
+  console.log(sessionStorage.getItem('accessToken'))
+  return axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+};
+
+export const getRecruitments = async (id : number) => {
+  console.log(sessionStorage.getItem('accessToken'))
+  return axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+};
+
+
+export const createRecruitment = async (id : number, data : any) => {
+  console.log(sessionStorage.getItem('accessToken'))
+  return axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+};
+
+export const deleteRecruitment = async (id : number) => {
+  console.log(sessionStorage.getItem('accessToken'))
+  return axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+};
+
+export const getEmployeePermissions = async (id : number) => {
+  console.log(sessionStorage.getItem('accessToken'))
+  return axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+};
+
+export const updateEmployeePermission = async (id : number, permissionId : number, check : boolean) => {
+  console.log(sessionStorage.getItem('accessToken'))
+  return axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+};
+
+
+export const getEmployeePositions = async (id : number) => {
+  console.log(sessionStorage.getItem('accessToken'))
+  return axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+};
+
+export const getPermissions = async (id : number) => {
+  console.log(sessionStorage.getItem('accessToken'))
+  return axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+};
+

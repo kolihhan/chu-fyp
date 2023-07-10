@@ -26,6 +26,20 @@ import { useNavigate } from 'react-router-dom'; // 导入 useHistory 钩子
 import CompanyItem from './components/Company/CompanyItem';
 import CompaniesPage from './pages/companies/admin/CompaniesPage';
 import CompanyDetailPage from './pages/companies/admin/CompanyDetailPage';
+import CompanyEmployeesPage from './pages/companies/admin/CompanyEmployeesPage';
+import CreateCompaniesPage from './pages/companies/admin/CreateCompaniesPage';
+import EmployeesFeedbackPage from './pages/companies/admin/EmployeesFeedbackPage';
+import EmployeesPerformancePage from './pages/companies/admin/EmployeesPerformancePage';
+import EmployeesPromotionHistoryPage from './pages/companies/admin/EmployeesPromotionHistoryPage';
+import EmployeesTrainingManagementPage from './pages/companies/admin/EmployeesTrainingManagementPage';
+import ManageAnouncementPage from './pages/companies/admin/settings/ManageAnouncementPage';
+import ManageBenefitsPage from './pages/companies/admin/settings/ManageBenefitsPage';
+import ManageCheckInPage from './pages/companies/admin/settings/ManageCheckInPage';
+import ManageDepartmentPage from './pages/companies/admin/settings/ManageDepartmentPage';
+import ManageEmployeesPermissionPage from './pages/companies/admin/settings/ManageEmployeesPermissionPage';
+import ManageEmployeesPositionPage from './pages/companies/admin/settings/ManageEmployeesPositionPage';
+import ManagePermissionPage from './pages/companies/admin/settings/ManagePermissionPage';
+import ManageRecruitmentPage from './pages/companies/admin/settings/ManageRecruitmentPage';
 
 const Protected: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -46,6 +60,24 @@ const Protected: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 };
 
 const ProtectedEmployee: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const user = useSelector((state: RootState) => state.auth.user);
+  const navigate = useNavigate();
+  const isMessageDisplayed = useRef(false);
+
+
+  useEffect(() => {
+    if (!user && !isMessageDisplayed.current) {
+
+      message.error('请登录后再执行此操作');
+      isMessageDisplayed.current = true;
+      navigate('/login');
+    }
+  }, [user]);
+
+  return <>{children}</>;
+};
+
+const ProtectedAdmin: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const employees = useSelector((state: RootState) => state.employee.employees);
   const navigate = useNavigate();
   const isMessageDisplayed = useRef(false);
@@ -106,9 +138,26 @@ const App: React.FC = () => {
 
           {/* Admin */}
 
-          <Route path='/company/list' element={<Protected><CompaniesPage /></Protected>} />
-          <Route path='/company/view/:id' element={<Protected><CompanyDetailPage /></Protected>} />
+          <Route path='admin/company/list' element={<ProtectedAdmin><CompaniesPage /></ProtectedAdmin>} />
+          <Route path='admin/company/create-company' element={<ProtectedAdmin><CreateCompaniesPage /></ProtectedAdmin>} />
+          
+          <Route path='admin/company/:id/view' element={<ProtectedAdmin><CompanyDetailPage /></ProtectedAdmin>} />
+          <Route path='admin/company/:id/employees' element={<ProtectedAdmin><CompanyEmployeesPage /></ProtectedAdmin>} />
+          <Route path='admin/company/:id/feedback' element={<ProtectedAdmin><EmployeesFeedbackPage /></ProtectedAdmin>} />
+          <Route path='admin/company/:id/performance' element={<ProtectedAdmin><EmployeesPerformancePage /></ProtectedAdmin>} />
+          <Route path='admin/company/:id/promotion-history' element={<ProtectedAdmin><EmployeesPromotionHistoryPage /></ProtectedAdmin>} />
+          <Route path='admin/company/:id/training-management' element={<ProtectedAdmin><EmployeesTrainingManagementPage /></ProtectedAdmin>} />
 
+          {/* Admin Settings */}
+          <Route path='admin/company/:id/manage/:employee_id' element={<ProtectedAdmin><ManageEmployeesPermissionPage /></ProtectedAdmin>} />
+
+          <Route path='admin/company/:id/announcement-manage/' element={<ProtectedAdmin><ManageAnouncementPage /></ProtectedAdmin>} />
+          <Route path='admin/company/:id/benefits-manage/' element={<ProtectedAdmin><ManageBenefitsPage /></ProtectedAdmin>} />
+          <Route path='admin/company/:id/checkIn-manage/' element={<ProtectedAdmin><ManageCheckInPage /></ProtectedAdmin>} />
+          <Route path='admin/company/:id/department-manage/' element={<ProtectedAdmin><ManageDepartmentPage /></ProtectedAdmin>} />
+          <Route path='admin/company/:id/position-manage/' element={<ProtectedAdmin><ManageEmployeesPositionPage /></ProtectedAdmin>} />
+          <Route path='admin/company/:id/permission-manage/' element={<ProtectedAdmin><ManagePermissionPage /></ProtectedAdmin>} />
+          <Route path='admin/company/:id/recruitment-manage/' element={<ProtectedAdmin><ManageRecruitmentPage /></ProtectedAdmin>} />
 
         </Routes>
       </LoadingScreen>

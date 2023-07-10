@@ -16,7 +16,7 @@ import { selectSelectedCompany, setSelectCompany } from '../reducers/employeeRed
 const { SubMenu, Item, Divider } = Menu;
 const { Panel } = Collapse;
 
-const DropDownIcon: React.FC<{ isManage: boolean; isEmployee: any[]; companyId: number }> = ({
+export const DropDownIcon: React.FC<{ isManage: boolean; isEmployee: any[]; companyId: number }> = ({
   isManage,
   isEmployee,
   companyId,

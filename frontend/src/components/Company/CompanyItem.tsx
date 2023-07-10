@@ -27,11 +27,11 @@ const ButtonRow: React.FC<ButtonRowProps> = ({id}) => {
     const navigate = useNavigate()
 
     const handlerView = () => {
-        navigate(`/company/view/${id}`)
+        navigate(`/company/${id}/view`)
     }
 
     const handlerEnter = () => {
-        // navigate(`/home`)
+        navigate(`/admin/company/${id}/employees`)
     }
 
     return (

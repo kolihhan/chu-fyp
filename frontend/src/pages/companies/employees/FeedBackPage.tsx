@@ -39,7 +39,7 @@ const FeedBackPage: React.FC = () => {
 
   const fetchCompanyEmployees = async () => {
     try {
-      const response = await getAllEmployees(employeeId[employeeSelect].company_id);
+      const response = await getAllEmployees(employeeId[employeeSelect].company_id.id);
       setCompanyEmployees(response.data);
     } catch (error) {
       console.log(error);
