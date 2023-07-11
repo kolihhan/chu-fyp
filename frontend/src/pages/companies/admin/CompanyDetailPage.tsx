@@ -46,7 +46,7 @@ const CompanyDetailPage: React.FC = () => {
 
   return (
     <div style={{ padding: "15%", paddingTop: "16px", backgroundColor: "#F4F4F4" }}>
-      {company && <CompanyHeader company={company} />}
+      <CompanyHeader company={company} />
       {/* display flex change to block and set the width to 100% */}
       {/* can set the right side panel to bottom */}
       <div style={{ display: "flex", alignItems: "start", justifyContent: "space-between" }}>
@@ -60,65 +60,11 @@ const CompanyDetailPage: React.FC = () => {
             <div
               style={{ display: "flex", alignItems: "start", justifyContent: "space-between", maxWidth: "70%" }}
             >
-              <table>
-                <tbody>
-                  <tr>
-                    <td style={{ paddingRight: "16px", fontSize: "16px" }}>
-                      <b>產業類別</b>
-                    </td>
-                    <td style={{ fontSize: "16px" }}>{company.industry}</td>
-                  </tr>
-                  <tr>
-                    <td style={{ paddingRight: "16px", fontSize: "16px" }}>
-                      <b>員工人數</b>
-                    </td>
-                    <td style={{ fontSize: "16px" }}>{company.employeeCount}</td>
-                  </tr>
-                  <tr>
-                    <td style={{ paddingRight: "16px", fontSize: "16px" }}>
-                      <b>公司網址</b>
-                    </td>
-                    <td style={{ fontSize: "16px" }}>{company.website}</td>
-                  </tr>
-                </tbody>
-              </table>
-              <table>
-                <tbody>
-                  <tr>
-                    <td style={{ paddingRight: "16px", fontSize: "16px" }}>
-                      <b>聯絡人</b>
-                    </td>
-                    <td style={{ fontSize: "16px" }}>{company.contactPerson}</td>
-                  </tr>
-                  <tr>
-                    <td style={{ paddingRight: "16px", fontSize: "16px" }}>
-                      <b>電話</b>
-                    </td>
-                    <td style={{ fontSize: "16px" }}>{company.phone}</td>
-                  </tr>
-                  <tr>
-                    <td style={{ paddingRight: "16px", fontSize: "16px" }}>
-                      <b>地址</b>
-                    </td>
-                    <td style={{ fontSize: "16px" }}>{company.address}</td>
-                  </tr>
-                </tbody>
-              </table>
+              {/* 其他代码略 */}
             </div>
           </Card>
 
-          <Card
-            id="cmpDetailBenefits"
-            style={{ marginTop: "8px" }}
-            bodyStyle={{ backgroundColor: "white", paddingTop: "0px" }}
-            title={<h2 style={{ margin: "0px" }}>{company.companyBenefits}</h2>}
-          >
-            {company.companyBenefits.split("\n").map((benefit: string, index: number) => {
-              return (
-                <div key={index}>{benefit}<br /></div>
-              );
-            })}
-          </Card>
+          {/* 其他代码略 */}
 
           <Card
             id="cmpDetailImage"
@@ -154,33 +100,31 @@ const CompanyDetailPage: React.FC = () => {
           </Card>
         </div>
         <div style={{ width: "30%" }}>
-  <Card
-    id="cmpDetailEmployees"
-    style={{ marginTop: "8px" }}
-    bodyStyle={{ backgroundColor: "white", paddingTop: "0px", maxHeight: "360px", overflowY: "auto" }}
-    title={<h2 style={{ margin: "0px" }}>員工列表</h2>}
-  >
-    {/* Replace with API data */}
-    {company?.employees.map((employee: any) => (
-      <EmployeeItem key={employee.id} id={employee.id} name={employee.name} position={employee.position} />
-    ))}
-  </Card>
+          <Card
+            id="cmpDetailEmployees"
+            style={{ marginTop: "8px" }}
+            bodyStyle={{ backgroundColor: "white", paddingTop: "0px", maxHeight: "360px", overflowY: "auto" }}
+            title={<h2 style={{ margin: "0px" }}>員工列表</h2>}
+          >
+            {company && company?.employees?.map((employee: any) => (
+              <EmployeeItem key={employee.id} id={employee.id} name={employee.name} position={employee.position} />
+            ))}
+          </Card>
 
-  <Card
-    id="cmpDetailRecruitList"
-    style={{ marginTop: "8px" }}
-    bodyStyle={{ backgroundColor: "white", paddingTop: "0px", maxHeight: "360px", overflowY: "auto" }}
-    title={<h2 style={{ margin: "0px" }}>招聘列表</h2>}
-  >
-    {/* Replace with API data */}
-    {company?.recruitments.map((recruitment: any) => (
-      <RecruitmentItem key={recruitment.id} id={recruitment.id} title={recruitment.title} desc={recruitment.description} />
-    ))}
-  </Card>
-</div>
-</div>
-</div>
-);
+          <Card
+            id="cmpDetailRecruitList"
+            style={{ marginTop: "8px" }}
+            bodyStyle={{ backgroundColor: "white", paddingTop: "0px", maxHeight: "360px", overflowY: "auto" }}
+            title={<h2 style={{ margin: "0px" }}>招聘列表</h2>}
+          >
+            {company && company?.recruitments?.map((recruitment: any) => (
+              <RecruitmentItem key={recruitment.id} id={recruitment.id} title={recruitment.title} desc={recruitment.description} />
+            ))}
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default CompanyDetailPage;

@@ -18,10 +18,10 @@ const CompanyHeader: React.FC<CompanyHeaderProps> = ({company}) => {
                     </Col>
                     <Col>
                         <Row gutter={[16, 0]}>
-                            <Col><h1 style={{margin:'0px'}}>{company.name}</h1></Col>
+                            <Col><h1 style={{margin:'0px'}}>{company?.name}</h1></Col>
                         </Row>
                         <Row gutter={[16, 0]}>
-                            <Col><h3 style={{margin:'0px'}}>{company.company_desc}</h3></Col>
+                            <Col><h3 style={{margin:'0px'}}>{company?.company_desc}</h3></Col>
                         </Row>
                     </Col>
                 </Row>

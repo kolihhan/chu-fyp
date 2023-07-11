@@ -1,76 +1,89 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../app/store';
-import { logout } from '../reducers/authReducers';
-import { AnyAction } from '@reduxjs/toolkit';
-import { ThunkDispatch } from 'redux-thunk';
-import { Dropdown, Menu } from 'antd';
-import { DropDownIcon } from './NavBar';
-import { selectSelectedCompany } from '../reducers/employeeReducers';
+import { Layout, Menu } from 'antd';
+import { Link } from 'react-router-dom';
+import {
+  DesktopOutlined,
+  UserOutlined,
+  TeamOutlined,
+  AppstoreOutlined,
+  SolutionOutlined,
+  ApartmentOutlined,
+  ToolOutlined,
+  FileTextOutlined,
+} from '@ant-design/icons';
 
-const { SubMenu, Item } = Menu;
+const { Sider } = Layout;
+const { SubMenu } = Menu;
 
 const AdminNavBar: React.FC = () => {
-    const location = useLocation();
-    const dispatch: ThunkDispatch<RootState, unknown, AnyAction> = useDispatch();
-    const isUser = useSelector((state: RootState) => state.auth.user);
-
-
-    const isEmployee = useSelector((state: RootState) => state.employee.employees);
-    const companyNum = useSelector(selectSelectedCompany);
-    const isAuthenticated = useSelector((state: RootState) => state.auth.accessToken);
-
-    const handleLogout = () => {
-        dispatch(logout());
-    };
-
-    return (
-        <div style={{ backgroundColor: '#f0f2f5', padding: '10px' }}>
-            <Menu mode="vertical" theme="light" style={{ border: 'none' }} selectedKeys={[location.pathname]}>
-                <SubMenu key="sub1" title="公司">
-                    <Item key="list">
-                        <Link to="/admin/company/list">公司列表</Link>
-                    </Item>
-                    <Item key="create-company">
-                        <Link to="/admin/company/create-company">创建公司</Link>
-                    </Item>
-                </SubMenu>
-                <SubMenu key="sub2" title="管理員設定">
-                    <Item key="announcement-manage">
-                        <Link to={`/admin/company/${isEmployee[isEmployee[companyNum].company_id.id].company_id.id}/announcement-manage`}>公告管理</Link>
-                    </Item>
-                    <Item key="benefits-manage">
-                        <Link to={`/admin/company/${isEmployee[companyNum].company_id.id}/benefits-manage`}>福利管理</Link>
-                    </Item>
-                    <Item key="checkIn-manage">
-                        <Link to={`/admin/company/${isEmployee[companyNum].company_id.id}/checkIn-manage`}>打卡管理</Link>
-                    </Item>
-                    <Item key="department-manage">
-                        <Link to={`/admin/company/${isEmployee[companyNum].company_id.id}/department-manage`}>部門管理</Link>
-                    </Item>
-                    <Item key="position-manage">
-                        <Link to={`/admin/company/${isEmployee[companyNum].company_id.id}/position-manage`}>職位管理</Link>
-                    </Item>
-                    <Item key="permission-manage">
-                        <Link to={`/admin/company/${isEmployee[companyNum].company_id.id}/permission-manage`}>權限管理</Link>
-                    </Item>
-                    <Item key="recruitment-manage">
-                        <Link to={`/admin/company/${isEmployee[companyNum].company_id.id}/recruitment-manage`}>招聘管理</Link>
-                    </Item>
-                </SubMenu>
-            </Menu>
-
-            <Menu mode="horizontal" theme="light" selectedKeys={[location.pathname]}>
-                <>
-                    <span className="ml-auto mr-3"></span>
-                </>
-                <DropDownIcon isManage={isUser?.type !== "staff"} isEmployee={isEmployee} companyId={isEmployee[isEmployee[companyNum].company_id.id].company_id} />
-            </Menu>
-
-        </div>
-
-    );
+  return (
+    <Sider width={200} className="site-layout-background">
+      <Menu
+        mode="inline"
+        theme="light"
+        style={{ height: '100%', borderRight: 0 }}
+        defaultOpenKeys={['sub1', 'sub2']}
+        defaultSelectedKeys={['1']}
+      >
+        <SubMenu key="sub1" icon={<UserOutlined />} title="用户管理">
+          <Menu.Item key="1">
+            <Link to="/admin/user/list">用户列表</Link>
+          </Menu.Item>
+          <Menu.Item key="2">
+            <Link to="/admin/user/create">创建用户</Link>
+          </Menu.Item>
+        </SubMenu>
+        <SubMenu key="sub2" icon={<TeamOutlined />} title="公司管理">
+          <Menu.Item key="3">
+            <Link to="/admin/company/list">公司列表</Link>
+          </Menu.Item>
+          <Menu.Item key="4">
+            <Link to="/admin/company/create">创建公司</Link>
+          </Menu.Item>
+        </SubMenu>
+        <SubMenu key="sub3" icon={<AppstoreOutlined />} title="部门管理">
+          <Menu.Item key="5">
+            <Link to="/admin/department/list">部门列表</Link>
+          </Menu.Item>
+          <Menu.Item key="6">
+            <Link to="/admin/department/create">创建部门</Link>
+          </Menu.Item>
+        </SubMenu>
+        <SubMenu key="sub4" icon={<SolutionOutlined />} title="职位管理">
+          <Menu.Item key="7">
+            <Link to="/admin/position/list">职位列表</Link>
+          </Menu.Item>
+          <Menu.Item key="8">
+            <Link to="/admin/position/create">创建职位</Link>
+          </Menu.Item>
+        </SubMenu>
+        <SubMenu key="sub5" icon={<ApartmentOutlined />} title="部门职位管理">
+          <Menu.Item key="9">
+            <Link to="/admin/department-position/list">部门职位列表</Link>
+          </Menu.Item>
+          <Menu.Item key="10">
+            <Link to="/admin/department-position/create">创建部门职位</Link>
+          </Menu.Item>
+        </SubMenu>
+        <SubMenu key="sub6" icon={<ToolOutlined />} title="权限管理">
+          <Menu.Item key="11">
+            <Link to="/admin/permission/list">权限列表</Link>
+          </Menu.Item>
+          <Menu.Item key="12">
+            <Link to="/admin/permission/create">创建权限</Link>
+          </Menu.Item>
+        </SubMenu>
+        <SubMenu key="sub7" icon={<FileTextOutlined />} title="公告管理">
+          <Menu.Item key="13">
+            <Link to="/admin/announcement/list">公告列表</Link>
+          </Menu.Item>
+          <Menu.Item key="14">
+            <Link to="/admin/announcement/create">创建公告</Link>
+          </Menu.Item>
+        </SubMenu>
+      </Menu>
+    </Sider>
+  );
 };
 
 export default AdminNavBar;

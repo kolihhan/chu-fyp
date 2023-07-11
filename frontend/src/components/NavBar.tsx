@@ -40,7 +40,7 @@ export const DropDownIcon: React.FC<{ isManage: boolean; isEmployee: any[]; comp
     menuItems.push(
 
       <Item key="admin-grp" title="管理員專區" icon={<TeamOutlined />} className="menu-group">
-        <Link to="/admin">管理員專區</Link>
+        <Link to="/company/list">管理員專區</Link>
         <Divider />
       </Item>
 
@@ -52,17 +52,17 @@ export const DropDownIcon: React.FC<{ isManage: boolean; isEmployee: any[]; comp
   if (isEmployee && isEmployee[companyNum]) {
     menuItems.push(
       <Menu.ItemGroup key="employee-grp" title={<span><UserOutlined /> 會員專區</span>}>
-      <Menu.Item key="employee-page">
-        <Link to={`/company/${companyId}/checkIn`}>首頁</Link>
-      </Menu.Item>
-      <Menu.Item key="employee-feedback">
-        <Link to={`/company/${companyId}/feedback`}>Feedback</Link>
-      </Menu.Item>
-      <Menu.Item key="employee-application">
-        <Link to={`/company/${companyId}/applicationleave`}>ApplicationLeave</Link>
-      </Menu.Item>
-      <Divider />
-    </Menu.ItemGroup>
+        <Menu.Item key="employee-page">
+          <Link to={`/company/${companyId}/checkIn`}>首頁</Link>
+        </Menu.Item>
+        <Menu.Item key="employee-feedback">
+          <Link to={`/company/${companyId}/feedback`}>Feedback</Link>
+        </Menu.Item>
+        <Menu.Item key="employee-application">
+          <Link to={`/company/${companyId}/applicationleave`}>ApplicationLeave</Link>
+        </Menu.Item>
+        <Divider />
+      </Menu.ItemGroup>
     );
   }
 
@@ -146,15 +146,14 @@ const Navbar: React.FC = () => {
   console.log(companyNum);
   console.log(isEmployee[companyNum]);
 
-  return (isAdminPath) ? (
-    <AdminNavBar />
-  ) : (
+  return (
+
     <div style={{ backgroundColor: '#f0f2f5' }}>
       <Header className="navbar navbar-expand navbar-light bg-light">
         <div className="navbar-brand">
           <a href="/"><img src="#" alt="Logo" /></a>
         </div>
-        <Menu theme="light" mode="horizontal" defaultSelectedKeys={['1']}>
+        <Menu theme="light" mode="horizontal" selectedKeys={[location.pathname]}>
           <Item key="1">
             <Link to='/'>首頁</Link>
           </Item>
@@ -179,7 +178,7 @@ const Navbar: React.FC = () => {
         {isAuthenticated ?
           <DropDownIcon isManage={isUser?.type !== "staff"} isEmployee={isEmployee} companyId={isEmployee[companyNum].company_id} />
           :
-          <Menu>
+          <Menu selectedKeys={[location.pathname]}>
             <Item key="login-key">
               <Link to="/login">Login</Link>
             </Item>
@@ -187,6 +186,10 @@ const Navbar: React.FC = () => {
         }
 
       </Header>
+      
+      {(isAdminPath) &&
+        <AdminNavBar />
+      }
     </div>
   )
 };

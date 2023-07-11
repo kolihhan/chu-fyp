@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Input, Table } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { getAllEmployees } from '../../../api';
-import { useSelector } from 'react-redux';
-import { selectSelectedCompany, selectSelf } from '../../../reducers/employeeReducers';
 
 const CompanyEmployeePage: React.FC = () => {
+  const { id } = useParams<{ id: string | undefined }>();
+  const companyId = Number(id);
+  
   const [employees, setEmployees] = useState<any[]>([]);
   const [searchText, setSearchText] = useState('');
-  const employeeId = useSelector(selectSelf);
-  const employeeSelect = useSelector(selectSelectedCompany);
+
 
   useEffect(() => {
     fetchCompanyEmployees();
@@ -17,7 +17,8 @@ const CompanyEmployeePage: React.FC = () => {
 
   const fetchCompanyEmployees = async () => {
     try {
-      const employeeResponse = await getAllEmployees(employeeId[employeeSelect].company_id.id);
+      const employeeResponse = await getAllEmployees(companyId);
+      console.log(employeeResponse.data);
       setEmployees(employeeResponse.data);
     } catch (error) {
       console.log(error);
@@ -29,7 +30,7 @@ const CompanyEmployeePage: React.FC = () => {
   };
 
   const filteredEmployees = employees.filter((employee) =>
-    employee.user_id.toLowerCase().includes(searchText.toLowerCase())
+    employee.user_id.name.toLowerCase().includes(searchText.toLowerCase())
   );
 
   const columns = [

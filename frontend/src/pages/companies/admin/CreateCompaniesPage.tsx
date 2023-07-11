@@ -2,20 +2,27 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Form, Input, Button } from "antd";
 import { createCompany } from "../../../api";
+import { useLoading } from "../../../components/LoadingScreen";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../app/store";
 
 const CreateCompaniesPage: React.FC = () => {
-  const [loading, setLoading] = useState(false);
   const history = useNavigate();
+  const isUser = useSelector((state: RootState) => state.auth.user);
+  const { setLoading } = useLoading();
+  setLoading(false);
 
   const onFinish = async (values: any) => {
     setLoading(true);
+    values["boss_id"] = isUser?.id;
     try {
       await createCompany(values);
-      history("/"); // 跳转到公司列表页面
+      history("/"); 
     } catch (error) {
       console.log(error);
-      setLoading(false);
+      
     }
+    setLoading(false);
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -79,7 +86,7 @@ const CreateCompaniesPage: React.FC = () => {
         </Form.Item>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit" loading={loading}>
+          <Button type="primary" htmlType="submit">
             创建
           </Button>
         </Form.Item>

@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction  } from '@reduxjs/toolkit';
 import { ThunkAction } from 'redux-thunk';
 import { RootState } from '../app/store';
-import { updateUserInfoApi,getJobsApi, getCertainJobsApi, applyJobsApi, getUserResumes, getUserApplicationRecord, cancelApplicationIdApi, createNewResumeApi, updateResumeApi, deleteResumeApi, updateOfferStatusApi, getBossAllCompany } from '../api';
+import { updateUserInfoApi,getJobsApi, getCertainJobsApi, applyJobsApi, getUserResumes, getUserApplicationRecord, cancelApplicationIdApi, createNewResumeApi, updateResumeApi, deleteResumeApi, updateOfferStatusApi, getBossAllCompany, getCompanyById } from '../api';
 import requireAuthMiddleware from '../middleware/requireAuthMiddleware';
 import { store } from '../app/store';
 

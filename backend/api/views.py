@@ -125,13 +125,13 @@ def createCompany(request):
 
             # region create company
             createdCompany = models.Company.objects.create(
-                name = companyData['name'],
-                email = companyData['email'],
-                phone = companyData['phone'],
-                address = companyData['address'],
-                company_desc = companyData['company_desc'],
-                company_benefits = companyData['company_benefits'],
-                boss_id = models.UserAccount.objects.get(id=companyData['boss_id']),
+                name = companyData['data']['name'],
+                email = companyData['data']['email'],
+                phone = companyData['data']['phone'],
+                address = companyData['data']['address'],
+                company_desc = companyData['data']['company_desc'],
+                company_benefits = companyData['data']['company_benefits'],
+                boss_id = models.UserAccount.objects.get(id=companyData['data']['boss_id']),
             )
             serializer = serializers.CompanySerializer(createdCompany, many=False)
             # endregion create company
@@ -332,6 +332,7 @@ def createCompany(request):
 def getCompany(request, pk):
     companyData = models.Company.objects.get(id=pk)
     serializer = serializers.CompanySerializer(companyData, many=False)
+    print(serializer.data)
     return Response(serializer.data)
 
 @api_view(['PUT'])

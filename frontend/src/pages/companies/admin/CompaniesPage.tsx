@@ -19,14 +19,13 @@ const CompaniesPage: React.FC = () => {
 
   useEffect(() => {
     document.title = "公司";
-    setLoading(true);
     dispatch(bossCompanyAction.fetchCompanies());
     setLoading(false);
     console.log(companies);
   }, []);
 
   const handleCreateCompany = () => {
-    navigate("admin/company/create-company");
+    navigate("/company/create-company");
   };
 
   return (
