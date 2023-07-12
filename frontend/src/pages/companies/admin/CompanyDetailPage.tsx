@@ -45,7 +45,7 @@ const CompanyDetailPage: React.FC = () => {
   };
 
   return (
-    <div style={{ padding: "15%", paddingTop: "16px", backgroundColor: "#F4F4F4" }}>
+    <div style={{ backgroundColor: "#F4F4F4" }}>
       <CompanyHeader company={company} />
       {/* display flex change to block and set the width to 100% */}
       {/* can set the right side panel to bottom */}

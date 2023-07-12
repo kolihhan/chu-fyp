@@ -121,15 +121,28 @@ class Company(models.Model):
     address = models.CharField()
     company_desc = models.TextField()
     company_benefits = models.TextField()
+    logo = models.TextField(default="", null=True, blank=True)
+    industry = models.TextField(default="-")
+    employeeCount = models.PositiveIntegerField(default=1, null=True, blank=True)
+    website = models.CharField(default="-", null=True, blank=True)
+    contact = models.CharField(default="-", null=True, blank=True)
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.name
 
+class CompanyImages(models.Model):
+    company_id = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='comapny_images')
+    image = models.TextField()
+    create_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return self.image
+
 # 公司員工資料模型
 class CompanyEmployee(models.Model):
-    company_id = models.ForeignKey('Company', on_delete=models.CASCADE)
-    user_id = models.ForeignKey('UserAccount', on_delete=models.CASCADE)
+    company_id = models.ForeignKey(Company, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
     companyEmployeePosition_id = models.ForeignKey('CompanyEmployeePosition', on_delete=models.CASCADE)
     salary = models.DecimalField(max_digits=10, decimal_places=2)
     create_at = models.DateTimeField(auto_now_add=True)

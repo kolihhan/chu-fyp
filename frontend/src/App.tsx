@@ -40,6 +40,7 @@ import ManageEmployeesPermissionPage from './pages/companies/admin/settings/Mana
 import ManageEmployeesPositionPage from './pages/companies/admin/settings/ManageEmployeesPositionPage';
 import ManagePermissionPage from './pages/companies/admin/settings/ManagePermissionPage';
 import ManageRecruitmentPage from './pages/companies/admin/settings/ManageRecruitmentPage';
+import AdminNavBar from './components/AdminNavBar';
 
 const Protected: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -119,46 +120,55 @@ const App: React.FC = () => {
     <Router>
       <LoadingScreen>
         <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/detailsPage/:id" element={<ApplicationDetailsPage />} />
+        <div style={{display:'flex', width:'100%', height:'50%', overflowX:'hidden'}}>
+          <div>
+            <AdminNavBar />
+          </div>
+          <div style={{maxWidth:'100%', marginLeft:'16px', marginRight:'16px', flex: 1}}>
+             <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/detailsPage/:id" element={<ApplicationDetailsPage />} />
 
-          {/* Users */}
-          <Route path="/profile" element={<Protected><Profile /></Protected>} />
-          <Route path="/resumes" element={<Protected><ResumePage /></Protected>} /> {/* 创建新的resume */}
-          <Route path="/resumes/:id" element={<Protected><ResumePage /></Protected>} /> {/* 编辑现有的resume */}
+              {/* Users */}
+              <Route path="/profile" element={<Protected><Profile /></Protected>} />
+              <Route path="/resumes" element={<Protected><ResumePage /></Protected>} /> {/* 创建新的resume */}
+              <Route path="/resumes/:id" element={<Protected><ResumePage /></Protected>} /> {/* 编辑现有的resume */}
 
-          {/* Employees */}
-          <Route path="/company/:companyId/checkIn" element={<ProtectedEmployee><CheckIn /></ProtectedEmployee>} />
-          <Route path="/company/:companyId/feedback" element={<ProtectedEmployee><FeedBack /></ProtectedEmployee>} />
-          <Route path="/company/:companyId/applicationleave" element={<ProtectedEmployee><ApplicationLeave /></ProtectedEmployee>} />
+              {/* Employees */}
+              <Route path="/company/:companyId/checkIn" element={<ProtectedEmployee><CheckIn /></ProtectedEmployee>} />
+              <Route path="/company/:companyId/feedback" element={<ProtectedEmployee><FeedBack /></ProtectedEmployee>} />
+              <Route path="/company/:companyId/applicationleave" element={<ProtectedEmployee><ApplicationLeave /></ProtectedEmployee>} />
 
 
-          {/* Admin */}
+              {/* Admin */}
 
-          <Route path='company/list' element={<ProtectedAdmin><CompaniesPage /></ProtectedAdmin>} /> {/* X */}
-          <Route path='company/create-company' element={<ProtectedAdmin><CreateCompaniesPage /></ProtectedAdmin>} />  {/* X */}
-          <Route path='company/:id/view' element={<ProtectedAdmin><CompanyDetailPage /></ProtectedAdmin>} /> {/* 1 */}
+              <Route path='company/list' element={<ProtectedAdmin><CompaniesPage /></ProtectedAdmin>} /> {/* X */}
+              <Route path='company/create-company' element={<ProtectedAdmin><CreateCompaniesPage /></ProtectedAdmin>} />  {/* X */}
+              <Route path='company/:id/view' element={<ProtectedAdmin><CompanyDetailPage /></ProtectedAdmin>} /> {/* 1 */}
 
-          <Route path='admin/company/:id/employees' element={<ProtectedAdmin><CompanyEmployeesPage /></ProtectedAdmin>} />  {/* X */}
-          <Route path='admin/company/:id/feedback' element={<ProtectedAdmin><EmployeesFeedbackPage /></ProtectedAdmin>} />
-          <Route path='admin/company/:id/performance' element={<ProtectedAdmin><EmployeesPerformancePage /></ProtectedAdmin>} />
-          <Route path='admin/company/:id/promotion-history' element={<ProtectedAdmin><EmployeesPromotionHistoryPage /></ProtectedAdmin>} />
-          <Route path='admin/company/:id/training-management' element={<ProtectedAdmin><EmployeesTrainingManagementPage /></ProtectedAdmin>} />
+              <Route path='admin/company/:id/employees' element={<ProtectedAdmin><CompanyEmployeesPage /></ProtectedAdmin>} />  {/* X */}
+              <Route path='admin/company/:id/feedback' element={<ProtectedAdmin><EmployeesFeedbackPage /></ProtectedAdmin>} />
+              <Route path='admin/company/:id/performance' element={<ProtectedAdmin><EmployeesPerformancePage /></ProtectedAdmin>} />
+              <Route path='admin/company/:id/promotion-history' element={<ProtectedAdmin><EmployeesPromotionHistoryPage /></ProtectedAdmin>} />
+              <Route path='admin/company/:id/training-management' element={<ProtectedAdmin><EmployeesTrainingManagementPage /></ProtectedAdmin>} />
 
-          {/* Admin Settings */}
-          <Route path='admin/company/:id/manage/:employee_id' element={<ProtectedAdmin><ManageEmployeesPermissionPage /></ProtectedAdmin>} />
-          <Route path='admin/company/:id/announcement-manage/' element={<ProtectedAdmin><ManageAnouncementPage /></ProtectedAdmin>} />
-          <Route path='admin/company/:id/benefits-manage/' element={<ProtectedAdmin><ManageBenefitsPage /></ProtectedAdmin>} />
-          <Route path='admin/company/:id/checkIn-manage/' element={<ProtectedAdmin><ManageCheckInPage /></ProtectedAdmin>} />
-          <Route path='admin/company/:id/department-manage/' element={<ProtectedAdmin><ManageDepartmentPage /></ProtectedAdmin>} />
-          <Route path='admin/company/:id/position-manage/' element={<ProtectedAdmin><ManageEmployeesPositionPage /></ProtectedAdmin>} />
-          <Route path='admin/company/:id/permission-manage/' element={<ProtectedAdmin><ManagePermissionPage /></ProtectedAdmin>} />
-          <Route path='admin/company/:id/recruitment-manage/' element={<ProtectedAdmin><ManageRecruitmentPage /></ProtectedAdmin>} />
+              {/* Admin Settings */}
+              <Route path='admin/company/:id/manage/:employee_id' element={<ProtectedAdmin><ManageEmployeesPermissionPage /></ProtectedAdmin>} />
+              <Route path='admin/company/:id/announcement-manage/' element={<ProtectedAdmin><ManageAnouncementPage /></ProtectedAdmin>} />
+              <Route path='admin/company/:id/benefits-manage/' element={<ProtectedAdmin><ManageBenefitsPage /></ProtectedAdmin>} />
+              <Route path='admin/company/:id/checkIn-manage/' element={<ProtectedAdmin><ManageCheckInPage /></ProtectedAdmin>} />
+              <Route path='admin/company/:id/department-manage/' element={<ProtectedAdmin><ManageDepartmentPage /></ProtectedAdmin>} />
+              <Route path='admin/company/:id/position-manage/' element={<ProtectedAdmin><ManageEmployeesPositionPage /></ProtectedAdmin>} />
+              <Route path='admin/company/:id/permission-manage/' element={<ProtectedAdmin><ManagePermissionPage /></ProtectedAdmin>} />
+              <Route path='admin/company/:id/recruitment-manage/' element={<ProtectedAdmin><ManageRecruitmentPage /></ProtectedAdmin>} />
 
-        </Routes>
+            </Routes>
+          </div>
+           
+        </div>
+        
       </LoadingScreen>
     </Router>
     </Layout>

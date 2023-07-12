@@ -21,6 +21,7 @@ from django.db import transaction
 from django.utils import timezone
 import logging
 import datetime
+from django.db.models import Count
 
 # from django.db.models import QuerySet
 # from django.http import JsonResponse
@@ -132,9 +133,23 @@ def createCompany(request):
                 company_desc = companyData['data']['company_desc'],
                 company_benefits = companyData['data']['company_benefits'],
                 boss_id = models.UserAccount.objects.get(id=companyData['data']['boss_id']),
+                logo = companyData['data'].get('logo', "-"),
+                industry = companyData['data'].get('industry', "-"),
+                employeeCount = companyData['data'].get('employeeCount', 1),
+                website = companyData['data'].get('website', "-"),
+                contact = companyData['data'].get('contact', "-"),
             )
             serializer = serializers.CompanySerializer(createdCompany, many=False)
             # endregion create company
+
+            # region create image
+            if companyData['data'].get('image', None) != None:
+                for imageUrl in companyData['data']['image']:
+                    createdImage = models.CompanyImages.objects.create(
+                        company_id = createdCompany,
+                        image = imageUrl
+                    )
+            # endregion
 
             # region create an initial Department for the company
             createdDepartment = models.CompanyDepartment.objects.create(
@@ -323,18 +338,31 @@ def createCompany(request):
             # endregion checkInRule
             
         return Response({'message':'公司創建成功', 'data':serializer.data})
-    except:
+    except Exception as e:
         transaction.rollback()
-        return Response({'message':'公司創建失敗，請稍後再嘗試'})
+        return Response({'message':'公司創建失敗，請稍後再嘗試', 'error':str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getCompany(request, pk):
-    companyData = models.Company.objects.get(id=pk)
-    serializer = serializers.CompanySerializer(companyData, many=False)
-    print(serializer.data)
-    return Response(serializer.data)
+    try:
+        companyData = models.Company.objects.get(id=pk)
+        serializer = serializers.CompanySerializer(companyData, many=False)
+        
+        companyImage = models.CompanyImages.objects.filter(company_id=pk)
+        imageSerializer = serializers.CompanyImagesSerializer(companyImage, many=True)
 
+        data = {
+            "company": serializer.data,
+            "images": imageSerializer.data
+        }
+
+        return Response({'data':data, 'message':''}, status=status.HTTP_200_OK)
+    except (models.Company.DoesNotExist, models.CompanyImages.DoesNotExist) as e:
+        return Response({'data': None, 'message':''}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e: 
+        return Response({'data': None, 'message':''}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def updateCompany(request, pk):
@@ -355,9 +383,27 @@ def updateCompany(request, pk):
             originalCompany.company_desc = updatedCompany['company_desc']
         if updatedCompany.get('company_benefits', None)!=None: 
             originalCompany.company_benefits = updatedCompany['company_benefits']
+        if updatedCompany.get('logo', None): 
+            originalCompany.logo = updatedCompany['logo']
+        if updatedCompany.get('industry', None): 
+            originalCompany.industry = updatedCompany['industry']
+        if updatedCompany.get('employeeCount', None): 
+            originalCompany.employeeCount = updatedCompany['employeeCount']
+        if updatedCompany.get('website', None): 
+            originalCompany.website = updatedCompany['website']
+        if updatedCompany.get('contact', None):  
+            originalCompany.contact = updatedCompany['contact']
         originalCompany.save()
         serializer = serializers.CompanySerializer(originalCompany)
-        return Response({'message':'公司修改成功', 'data':serializer.data})
+
+        companyImage = models.CompanyImages.objects.filter(company_id=pk)
+        imageSerializer = serializers.CompanyImagesSerializer(companyImage, many=True)
+
+        data = {
+            "company": serializer.data,
+            "images": imageSerializer.data
+        }
+        return Response({'message':'公司修改成功', 'data':data})
     except models.Company.DoesNotExist:
         return Response({'message':'公司修改失敗，請稍後在嘗試'})
 
@@ -382,7 +428,92 @@ def getBossAllCompany(request):
     serializer = serializers.CompanySerializer(companyData, many=True)
     return Response(serializer.data)
 
-# endregion
+# endregion company
+
+# region companyImage
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def uploadCompanyImage(request):
+    try:
+        imageData = request.data
+        cmpImg = models.CompanyImages.objects.filter(company_id__id=imageData['company_id'])
+        if len(cmpImg) < 5:
+            uploadedImage = models.CompanyImages.objects.create(
+                company_id = models.Company.objects.get(id=imageData['company_id']),
+                image = imageData['image']
+            )
+            serializer = serializers.CompanyImagesSerializer(uploadedImage, many=False)
+            data = {
+                'message': 'upload success', 'data': {
+                    **serializer.data, 
+                    'count': len(cmpImg)+1
+                },
+            }
+            return Response(data, status=status.HTTP_200_OK)
+        else: 
+            return Response({'message':'you can only have 5 images', 'data':None}, status=status.HTTP_400_BAD_REQUEST)
+    except models.Company.DoesNotExist as e:
+        return Response({'data': None, 'message':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e: 
+        return Response({'data': None, 'message':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getCompanyImage(request, pk):
+    try:
+        cmpImg = models.CompanyImages.objects.get(id=pk)
+        serializer = serializers.CompanyImagesSerializer(cmpImg, many=False)
+        return Response({'message':'image get success', 'data': serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyImages.DoesNotExist as e:
+        return Response({'message':str(e), 'data':None}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':str(e), 'data':None}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getCompanyImageByCompany(request, pk):
+    try:
+        cmpImg = models.CompanyImages.objects.filter(company_id__id=pk)
+        serializer = serializers.CompanyImagesSerializer(cmpImg, many=True)
+        return Response({'message':'images get success', 'data': serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyImages.DoesNotExist as e:
+        return Response({'message':str(e), 'data':None}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':str(e), 'data':None}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def updateCompanyImage(request, pk):
+    try:
+        updateData = request.data
+        cmpImg = models.CompanyImages.objects.get(id=pk)
+        cmpImg.image = updateData['image']
+        cmpImg.save()
+        serializer = serializers.CompanyImagesSerializer(cmpImg, many=False)
+        return Response({'message':'update success', 'data': serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyImages.DoesNotExist as e:
+        return Response({'message': str(e), 'data': None}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e: 
+        return Response({'message': str(e), 'data': None}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def deleteCompanyImage(request, pk):
+    try:
+        cmpImg = models.CompanyImages.objects.get(id=pk)
+        delete = cmpImg.delete()
+        if delete[0] > 0:
+            return Response({'message':'delete success', 'data': None}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message':'delete fail', 'data':None}, status=status.HTTP_400_BAD_REQUEST)
+    except models.CompanyImages.DoesNotExist as e:
+        return Response({'message': str(e), 'data': None}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e: 
+        return Response({'message': str(e), 'data': None}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+# endregion CompanyImage
 
 # region resume 
 @api_view(['POST'])

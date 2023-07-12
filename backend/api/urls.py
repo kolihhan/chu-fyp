@@ -26,6 +26,13 @@ urlpatterns = [
     path('deleteCompany/<str:pk>', deleteCompany, name='deleteCompany'),
     path('boss/company', getBossAllCompany, name='getBossCompany'),
 
+    # companyImage
+    path('companyImages/create', uploadCompanyImage, name='uploadCompanyImage'),
+    path('companyImages/get/<int:pk>', getCompanyImage, name='getCompanyImage'),
+    path('companyImages/get/company/<int:pk>', getCompanyImageByCompany, name='getCompanyImageByCompany'),
+    path('companyImages/update/<int:pk>', updateCompanyImage, name='updateCompanyImage'),
+    path('companyImages/delete/<int:pk>', deleteCompanyImage, name='deleteCompanyImage'),
+
     # resume
     path('resume/create', createResume, name='createResume'),
     path('resume/get/<int:pk>', getResume, name='getResume'),

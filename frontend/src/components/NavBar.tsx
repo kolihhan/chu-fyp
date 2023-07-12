@@ -187,9 +187,9 @@ const Navbar: React.FC = () => {
 
       </Header>
       
-      {(isAdminPath) &&
+      {/* {(isAdminPath) &&
         <AdminNavBar />
-      }
+      } */}
     </div>
   )
 };

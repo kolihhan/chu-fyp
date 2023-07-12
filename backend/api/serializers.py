@@ -72,6 +72,11 @@ class CompanySerializer(serializers.ModelSerializer):
         model = models.Company
         fields = '__all__'
 
+class CompanyImagesSerializer(serializers.ModelSerializer):
+    class Meta: 
+        model = models.CompanyImages
+        fields = '__all__'
+
 class CompanyEmployeeSerializer(serializers.ModelSerializer):
     user_id = UserIdAndEmailSerializer(many=False, read_only=True)
     companyEmployeePosition_id = CompanyEmployeePositionPermissionSerializer(many=False, read_only=True)

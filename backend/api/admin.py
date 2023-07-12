@@ -33,6 +33,9 @@ class CompanyAdmin(admin.ModelAdmin):
         return str(obj.boss_id.id) +" "+ obj.boss_id.email
     # _boss_id.short_description = 'Boss'
 
+class CompanyImagesAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in models.CompanyImages._meta.fields]
+
 class CompanyEmployeeAdmin(admin.ModelAdmin):
     list_display = [f.name for f in models.CompanyEmployee._meta.fields]
 
@@ -90,6 +93,7 @@ admin.site.register(models.UserResume, UserResumeAdmin)
 admin.site.register(models.UserApplicationRecord, UserApplicationRecordAdmin)
 admin.site.register(models.UserOfferRecord, UserOfferRecordAdmin)
 admin.site.register(models.Company, CompanyAdmin)
+admin.site.register(models.CompanyImages, CompanyImagesAdmin)
 admin.site.register(models.CompanyEmployee, CompanyEmployeeAdmin)
 admin.site.register(models.CompanyEmployeePosition, CompanyEmployeePositionAdmin)
 admin.site.register(models.CompanyDepartment, CompanyDepartmentAdmin)
