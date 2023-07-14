@@ -34,10 +34,10 @@ const CompanyEmployeePage: React.FC = () => {
   );
 
   const columns = [
-    { title: 'User ID', dataIndex: 'user_id', key: 'user_id' },
+    { title: 'User ID', key: 'user_id', render: (_ : any, record: any) =>  <span>{record.user_id.name}</span> },
     { title: 'Company ID', dataIndex: 'company_id', key: 'company_id' },
     { title: 'Salary', dataIndex: 'salary', key: 'salary' },
-    { title: 'Actions', key: 'actions', render: (_ : any, record: any) => <Link to={`/employee/${record.id}`}>Manage Permissions</Link> },
+    { title: 'Actions', key: 'actions', render: (_ : any, record: any) => <Link to={`/admin/company/${id}/manage/${record.id}`}>Manage Permissions</Link> },
   ];
 
   return (

@@ -134,7 +134,7 @@ export const createCheckInApi = async (id:number,status : any) => {
 
 
 export const getBossAllCompany = async () => {
-  console.log(sessionStorage.getItem('accessToken'))
+  
   return axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
 };
 
@@ -145,142 +145,198 @@ export const createCompany = async (data : any) => {
 };
 
 export const getCompanyById = async (id : number) => {
-  return axios.get( `${API_URL}/company/${id}`, { headers: authHeaders() } )
+  return axios.get( `${API_URL}/company/${id}`, { headers: authHeaders() } );
 };
 
-export const getAllEmployeesFeedback = async () => {
-  console.log(sessionStorage.getItem('accessToken'))
-  return {
-    "data": []
-  };axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+export const getAllEmployeesFeedback = async (id : number) => {
+  return axios.get( `${API_URL}/companyEmployeeFeedBackReview/get/company/all/${id}`, { headers: authHeaders() } );
 };
 
-export const getAllEmployeesPerformance = async () => {
-  console.log(sessionStorage.getItem('accessToken'))
-  return {
-    "data": []
-  };axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+export const getAllEmployeesPerformance = async (id : number) => {
+  return axios.get( `${API_URL}/companyEmployeePerformance/get/company/all/${id}`, { headers: authHeaders() } );
 };
 
-export const getAllEmployeesPromotionHistory = async () => {
-  console.log(sessionStorage.getItem('accessToken'))
-  return {
-    "data": []
-  };axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+export const getAllEmployeesPromotionHistory = async (id : number) => {
+  return axios.get( `${API_URL}/companyPromotionHistory/get/company/all/${id}`, { headers: authHeaders() } );
 };
 
 export const createEmployeeTraining = async (data : any) => {
-  console.log(sessionStorage.getItem('accessToken'))
-  return {
-    "data": []
-  };axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+  return axios.post( `${API_URL}/companyEmployeeTraining/create`, 
+  { data },
+  { headers: authHeaders() } );
 };
 
-export const getAllCompanyTrainings = async () => {
-  console.log(sessionStorage.getItem('accessToken'))
-  return {
-    "data": []
-  };axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+export const getAllCompanyTrainings = async (id : number) => {
+  return axios.get( `${API_URL}/companyTraining/get/company/all/${id}`, { headers: authHeaders() } );
 };
 
-export const getAnnouncementsByCompany = async () => {
-  console.log(sessionStorage.getItem('accessToken'))
-  return {
-    "data": []
-  };axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+export const getAnnouncementsByCompany = async (id : number) => {
+  return axios.get( `${API_URL}/announcement/get/company/all/${id}`, { headers: authHeaders() } );
 };
 
-export const getBenefitsByCompany = async () => {
-  console.log(sessionStorage.getItem('accessToken'))
-  return {
-    "data": []
-  };axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+export const addAnnouncement = async (data: any) => {
+  return axios.post( `${API_URL}/announcement/create`, 
+  { data },
+  { headers: authHeaders() } );
+};
+
+
+export const deleteAnnouncement = async (id : number) => {
+  return axios.delete( `${API_URL}/announcement/delete/${id}`, { headers: authHeaders() } );
+};
+
+
+export const updateAnnouncement = async (id : number , data:any) => {
+  return axios.put( `${API_URL}/announcement/update/${id}`, 
+  { data },
+  { headers: authHeaders() } );
+};
+
+
+export const getBenefitsByCompany = async (id : number) => {
+  return axios.get( `${API_URL}/companyBenefit/get/company/all/${id}`, { headers: authHeaders() } )
+};
+
+export const addBenefit = async (data:any) => {
+  return axios.post( `${API_URL}/companyBenefit/create`, 
+  { data },
+  { headers: authHeaders() } );
+};
+
+export const updateBenefit = async (id:number, data:any) => {
+  return axios.put( `${API_URL}/companyBenefit/update/${id}`,
+  { data },
+  { headers: authHeaders() });
+};
+
+export const deleteBenefit = async (id:number) => {
+  return axios.delete( `${API_URL}/companyBenefit/delete/${id}`, { headers: authHeaders() } )
 };
 
 export const getCheckInRules = async (id : number) => {
-  console.log(sessionStorage.getItem('accessToken'))
-  return {
-    "data": []
-  };axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+  return axios.get( `${API_URL}/companyCheckInRule/get/${id}`, { headers: authHeaders() } )
 };
 
 export const getCheckInRecords = async (id : number) => {
-  console.log(sessionStorage.getItem('accessToken'))
-  return {
-    "data": []
-  };axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+  return axios.get( `${API_URL}/companyCheckIn/get/company/all/${id}`, { headers: authHeaders() } )
 };
 
-export const createDepartment = async (id : number, data : any) => {
-  console.log(sessionStorage.getItem('accessToken'))
-  return {
-    "data": []
-  };axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+export const addCheckInRule = async (data: any) => {
+  return axios.post( `${API_URL}/companyCheckInRule/create`, 
+  { data },
+  { headers: authHeaders() } )
 };
 
+export const updateCheckInRule = async (id : number,data: any) => {
+  return axios.put( `${API_URL}/companyCheckInRule/update/${id}`, 
+  { data },
+  { headers: authHeaders() } )
+};
+
+export const deleteCheckInRule = async (id : number) => {
+  return axios.delete( `${API_URL}/companyCheckInRule/delete/${id}`, { headers: authHeaders() } )
+};
 
 export const getDepartments = async (id : number) => {
-  console.log(sessionStorage.getItem('accessToken'))
-  return {
-    "data": []
-  };axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+  return axios.get( `${API_URL}/companyDepartment/get/company/all/${id}`, { headers: authHeaders() } )
+};
+
+export const createDepartment = async (data : any) => {
+  return axios.post( `${API_URL}/companyDepartment/create`, 
+  { data },
+  { headers: authHeaders() } )
+};
+
+export const updateDepartment = async (id : number, data : any) => {
+  
+  return axios.put( `${API_URL}/companyDepartment/update/${id}`, 
+  { data },
+  { headers: authHeaders() } )
 };
 
 export const deleteDepartment = async (id : number) => {
-  console.log(sessionStorage.getItem('accessToken'))
-  return {
-    "data": []
-  };axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+  return axios.delete( `${API_URL}/companyDepartment/delete/${id}`, { headers: authHeaders() } )
 };
 
 export const getRecruitments = async (id : number) => {
-  console.log(sessionStorage.getItem('accessToken'))
-  return {
-    "data": []
-  };axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+  return axios.get( `${API_URL}/companyRecruitment/get/company/all/${id}`, { headers: authHeaders() } )
 };
 
-
-export const createRecruitment = async (id : number, data : any) => {
-  console.log(sessionStorage.getItem('accessToken'))
-  return {
-    "data": []
-  };axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+export const createRecruitment = async (data : any) => {
+  
+  return axios.post( `${API_URL}/companyRecruitment/create`, 
+  { data },
+  { headers: authHeaders() } )
 };
 
-export const deleteRecruitment = async (id : number) => {
-  console.log(sessionStorage.getItem('accessToken'))
-  return {
-    "data": []
-  };axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+export const updateRecruitment = async (id : number, recruitmentId: number, data: any) => {
+  return axios.put( `${API_URL}/companyRecruitment/update/${recruitmentId}`, 
+  { data },
+  { headers: authHeaders() } )
 };
 
-export const getEmployeePermissions = async (id : number) => {
-  console.log(sessionStorage.getItem('accessToken'))
-  return {
-    "data": []
-  };axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+export const deleteRecruitment = async (id : number, recruitmentId: number) => {
+  
+  return axios.delete( `${API_URL}/companyRecruitment/delete/${recruitmentId}`, { headers: authHeaders() } )
 };
-
-export const updateEmployeePermission = async (id : number, permissionId : number, check : boolean) => {
-  console.log(sessionStorage.getItem('accessToken'))
-  return {
-    "data": []
-  };axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
-};
-
 
 export const getEmployeePositions = async (id : number) => {
-  console.log(sessionStorage.getItem('accessToken'))
-  return {
-    "data": []
-  };axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+  
+  return axios.get( `${API_URL}/companyPosition/get/company/all/${id}`, { headers: authHeaders() } )
+};
+
+export const createPosition = async (data :any) => {
+  
+  return axios.post( `${API_URL}/companyPosition/create`, 
+  { data },
+  { headers: authHeaders() } )
+};
+
+export const updatePosition = async (id : number, positionId: number, data: any) => {
+  
+  return axios.put( `${API_URL}/companyPosition/update/${positionId}`, 
+  { data },
+  { headers: authHeaders() } )
+};
+
+export const deletePosition = async (id : number, positionId: number) => {
+  
+  return axios.get( `${API_URL}/companyPosition/delete/${positionId}`, { headers: authHeaders() } )
 };
 
 export const getPermissions = async (id : number) => {
-  console.log(sessionStorage.getItem('accessToken'))
-  return {
-    "data": []
-  };axios.get( `${API_URL}/boss/company`, { headers: authHeaders() } )
+  
+  return axios.get( `${API_URL}/companyPermission/get/company/all/${id}`, { headers: authHeaders() } )
 };
+
+export const createPermission = async (data: any) => {
+  
+  return axios.post( `${API_URL}/companyPermission/create`, 
+  { data },
+  { headers: authHeaders() } )
+};
+
+
+export const updatePermission = async (id : number, permissionId: number, data: any) => {
+  
+  return axios.put( `${API_URL}/companyPermission/update/${permissionId}`, 
+  { data },
+  { headers: authHeaders() } )
+};
+
+export const deletePermission = async (id : number, permissionId: any) => {
+  
+  return axios.delete( `${API_URL}/companyPermission/delete/${permissionId}`, { headers: authHeaders() } )
+};
+
+export const getEmployeeSettings = async (id : number) => {
+  
+  return axios.get( `${API_URL}/companyPosition/get/employee/${id}`, { headers: authHeaders() } )
+};
+
+export const updateEmployeeSettings = async (id : number, data: any) => {
+  
+  return axios.get( `${API_URL}/companyPosition/get/employee/${id}`, { headers: authHeaders() } )
+};
+
 

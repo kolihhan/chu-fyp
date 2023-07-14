@@ -886,6 +886,18 @@ def createPosition(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
+def getEmployeesSetting(request, pk):
+    try:
+        position = models.CompanyEmployeePosition.objects.get(id=pk)
+        serializer = serializers.CompanyEmployeePositionSerializer(position, many=False)
+        return Response({'message:': '', 'data':serializer.data})
+    except models.CompanyEmployeePosition.DoesNotExist:
+        return Response({'message':'職位不存在'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'職位獲取失敗，請稍後在嘗試', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def getPosition(request, pk):
     try:
         position = models.CompanyEmployeePosition.objects.get(id=pk)
@@ -2215,6 +2227,14 @@ class UserApplicationRecordAPIView(APIView):
             return Response(str(e), status=500)
 
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getAllCompanyCheckInRecord(request,id):
+
+    checkIn_records = CompanyCheckIn.objects.filter(company_id__id = id)
+    serializer = serializers.CompanyCheckInSerializer(checkIn_records, many=True)
+    return Response(serializer.data)
+
 class CompanyCheckInAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -2276,6 +2296,14 @@ class CompanyCheckInAPIView(APIView):
         except Exception as e:
             return Response(str(e), status=500)
 
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getAllCompanyPromotionRecord(request,id):
+
+    promotion_records = CompanyPromotionRecord.objects.filter(company_id = id)
+    serializer = serializers.CompanyPromotionRecordSerializer(promotion_records, many=True)
+    return Response(serializer.data)
 
 class CompanyPromotionRecordAPIView(APIView):
     permission_classes = [IsAuthenticated]

@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Input, Select, Table } from 'antd';
 import { getAllEmployeesFeedback } from '../../../api';
+import { useParams } from 'react-router-dom';
 
 const { Option } = Select;
 
 const EmployeesFeedbackPage: React.FC = () => {
+  const { id } = useParams<{ id: string | undefined }>();
+  const companyId = Number(id);
+
   const [feedbackList, setFeedbackList] = useState<any[]>([]);
   const [searchEmployee, setSearchEmployee] = useState('');
   const [searchContent, setSearchContent] = useState('');
@@ -17,7 +21,7 @@ const EmployeesFeedbackPage: React.FC = () => {
 
   const fetchEmployeesFeedback = async () => {
     try {
-      const response = await getAllEmployeesFeedback();
+      const response = await getAllEmployeesFeedback(companyId);
       setFeedbackList(response.data);
 
       // 获取唯一的员工选项
@@ -50,7 +54,7 @@ const EmployeesFeedbackPage: React.FC = () => {
   };
 
   const columns = [
-    { title: 'Employee ID', dataIndex: 'companyEmployee_id', key: 'companyEmployee_id' },
+    { title: 'Employee Name' , key: 'companyEmployee_id' , render: (_ : any, record: any) =>  <span>{record.companyEmployee_id.user_id.name}</span>},
     { title: 'Company ID', dataIndex: 'company_id', key: 'company_id' },
     { title: 'Remarks', dataIndex: 'remarks', key: 'remarks' },
   ];

@@ -1,12 +1,7 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Table, Button, Modal, Form, Input, DatePicker, InputNumber } from "antd";
-import {
-  getRecruitments,
-  createRecruitment,
-  deleteRecruitment,
-} from "../../../../api";
+import { getRecruitments, createRecruitment, deleteRecruitment, updateRecruitment } from "../../../../api";
 
 const ManageRecruitmentPage: React.FC = () => {
   const { id } = useParams<{ id: string | undefined }>();
@@ -14,6 +9,7 @@ const ManageRecruitmentPage: React.FC = () => {
   const [recruitments, setRecruitments] = useState<any[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
+  const [selectedRecruitment, setSelectedRecruitment] = useState<any | null>(null);
 
   useEffect(() => {
     document.title = "招聘管理";
@@ -29,11 +25,33 @@ const ManageRecruitmentPage: React.FC = () => {
     }
   };
 
-  const handleCreateRecruitment = async (values: any) => {
+  const handleCreateRecruitment = () => {
+    setSelectedRecruitment(null);
+    setIsModalVisible(true);
+  };
+
+  const handleEditRecruitment = (recruitment: any) => {
+    setSelectedRecruitment(recruitment);
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    form.resetFields();
+  };
+
+  const handleRecruitmentSubmit = async (values: any) => {
     try {
-      await createRecruitment(companyId, values);
-      form.resetFields();
+      if (selectedRecruitment) {
+        // Update existing recruitment
+        await updateRecruitment(companyId, selectedRecruitment.id, values);
+      } else {
+        // Create new recruitment
+        await createRecruitment({ ...values, company_id: companyId });
+      }
+
       setIsModalVisible(false);
+      form.resetFields();
       fetchRecruitments();
     } catch (error) {
       console.log(error);
@@ -42,7 +60,7 @@ const ManageRecruitmentPage: React.FC = () => {
 
   const handleDeleteRecruitment = async (recruitmentId: number) => {
     try {
-      await deleteRecruitment(recruitmentId);
+      await deleteRecruitment(companyId, recruitmentId);
       fetchRecruitments();
     } catch (error) {
       console.log(error);
@@ -55,45 +73,57 @@ const ManageRecruitmentPage: React.FC = () => {
     { title: "Start Date", dataIndex: "start_at", key: "start_at" },
     { title: "Employee Need", dataIndex: "employee_need", key: "employee_need" },
     {
-      title: "Actions",
+      title: "操作",
       key: "actions",
       render: (_: any, record: any) => (
-        <Button type="link" onClick={() => handleDeleteRecruitment(record.id)}>
-          Delete
-        </Button>
+        <>
+          <Button type="link" onClick={() => handleEditRecruitment(record)}>
+            编辑
+          </Button>
+          <Button type="link" onClick={() => handleDeleteRecruitment(record.id)}>
+            删除
+          </Button>
+        </>
       ),
     },
   ];
 
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
-
   return (
     <div>
       <h1>招聘管理</h1>
-
-      <Button type="primary" onClick={showModal}>
+      <Button type="primary" onClick={handleCreateRecruitment}>
         创建招聘职位
       </Button>
-
       <Table dataSource={recruitments} columns={columns} />
 
-      <Modal title="创建招聘职位" visible={isModalVisible} onCancel={handleCancel} footer={null}>
-        <Form form={form} onFinish={handleCreateRecruitment}>
-          <Form.Item name="title" label="Title" rules={[{ required: true, message: "请输入职位标题" }]}>
+      <Modal
+        title={selectedRecruitment ? "编辑招聘职位" : "创建招聘职位"}
+        visible={isModalVisible}
+        onCancel={handleCancel}
+        footer={null}
+      >
+        <Form form={form} initialValues={selectedRecruitment} onFinish={handleRecruitmentSubmit}>
+          <Form.Item
+            name="title"
+            label="Title"
+            rules={[{ required: true, message: "请输入职位标题" }]}
+          >
             <Input />
           </Form.Item>
 
-          <Form.Item name="location" label="Location" rules={[{ required: true, message: "请输入地点" }]}>
+          <Form.Item
+            name="location"
+            label="Location"
+            rules={[{ required: true, message: "请输入地点" }]}
+          >
             <Input />
           </Form.Item>
 
-          <Form.Item name="start_at" label="Start Date" rules={[{ required: true, message: "请选择开始日期" }]}>
+          <Form.Item
+            name="start_at"
+            label="Start Date"
+            rules={[{ required: true, message: "请选择开始日期" }]}
+          >
             <DatePicker />
           </Form.Item>
 
@@ -107,7 +137,7 @@ const ManageRecruitmentPage: React.FC = () => {
 
           <Form.Item>
             <Button type="primary" htmlType="submit">
-              创建
+              {selectedRecruitment ? "更新" : "创建"}
             </Button>
           </Form.Item>
         </Form>

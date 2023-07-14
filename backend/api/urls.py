@@ -56,6 +56,7 @@ urlpatterns = [
 
     # position
     path('companyPosition/create', createPosition, name='createPosition'),
+    path('companyPosition/get/employee/<int:pk>', getPosition, name='getPosition'),
     path('companyPosition/get/<int:pk>', getPosition, name='getPosition'),
     path('companyPosition/get/company/all/<int:pk>', getCompanyAllPosition, name='getCompanyAllPosition'),
     path('companyPosition/update/<int:pk>', updatePosition, name='updatePosition'),
@@ -162,6 +163,7 @@ urlpatterns = [
     path('user/application/<int:application_id>', UserApplicationRecordAPIView.as_view(), name='job-application-detail'),
 
     # companyCheckIn
+    path('companyCheckIn/get/company/all/<int:pk>', getAllCompanyCheckInRecord, name='company-AllCheckIn'),
     path('company/check-in/<int:pk>', CompanyCheckInAPIView.as_view(), name='company-check-in'),
     path('company/check-in/<int:pk>/<int:record_id>', CompanyCheckInAPIView.as_view(), name='company-check-in'),
 
@@ -174,6 +176,7 @@ urlpatterns = [
     path('companyEmployeeLeave/delete/<int:pk>', deleteLeaveRecord, name='deleteLeaveRecord'),
 
     #companyPromotionRecord
+    path('companyPromotionHistory/get/company/all/<int:pk>', getAllCompanyPromotionRecord, name='company-AllPromotion'),
     path('company/promotion/<int:pk>', CompanyPromotionRecordAPIView.as_view(), name='company-promotion'),
     path('company/promotion/<int:pk>/<int:record_id>', CompanyPromotionRecordAPIView.as_view(), name='company-promotion'),
 

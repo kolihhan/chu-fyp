@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Table } from "antd";
-import { getEmployeePositions } from "../../../../api";
+import { Table, Button, Modal, Form, Input } from "antd";
+import { getEmployeePositions, createPosition, updatePosition, deletePosition } from "../../../../api";
 
 const ManageEmployeesPositionPage: React.FC = () => {
   const { id } = useParams<{ id: string | undefined }>();
-  const employeeId = Number(id);
+  const companyId = Number(id);
   const [employeePositions, setEmployeePositions] = useState<any[]>([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [form] = Form.useForm();
+  const [selectedPosition, setSelectedPosition] = useState<any | null>(null);
 
   useEffect(() => {
     document.title = "职位管理";
@@ -15,8 +18,49 @@ const ManageEmployeesPositionPage: React.FC = () => {
 
   const fetchEmployeePositions = async () => {
     try {
-      const response = await getEmployeePositions(employeeId);
+      const response = await getEmployeePositions(companyId);
       setEmployeePositions(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleCreatePosition = async (values: any) => {
+    try {
+      const response = await createPosition({ ...values, company_id: companyId });
+      setEmployeePositions([...employeePositions, response.data]);
+      setIsModalVisible(false);
+      form.resetFields();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleEditPosition = (position: any) => {
+    setSelectedPosition(position);
+    setIsModalVisible(true);
+    form.setFieldsValue(position);
+  };
+
+  const handleUpdatePosition = async (values: any) => {
+    try {
+ 
+      const response =  await updatePosition(companyId, selectedPosition.id, values);
+      const updatedPositions = employeePositions.map((position) =>
+        position.id === selectedPosition.id ? response.data : position
+      );
+      setEmployeePositions(updatedPositions);
+      setIsModalVisible(false);
+      form.resetFields();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleDeletePosition = async (positionId: number) => {
+    try {
+      await deletePosition(companyId, positionId);
+      setEmployeePositions(employeePositions.filter((position) => position.id !== positionId));
     } catch (error) {
       console.log(error);
     }
@@ -25,12 +69,71 @@ const ManageEmployeesPositionPage: React.FC = () => {
   const columns = [
     { title: "职位名称", dataIndex: "position_name", key: "position_name" },
     { title: "部门", dataIndex: "department_name", key: "department_name" },
+    {
+      title: "操作",
+      key: "actions",
+      render: (_: any, record: any) => (
+        <>
+          <Button type="link" onClick={() => handleEditPosition(record)}>
+            编辑
+          </Button>
+          <Button type="link" onClick={() => handleDeletePosition(record.id)}>
+            删除
+          </Button>
+        </>
+      ),
+    },
   ];
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    form.resetFields();
+  };
 
   return (
     <div>
       <h1>职位管理</h1>
+
+      <Button type="primary" onClick={showModal}>
+        创建职位
+      </Button>
+
       <Table dataSource={employeePositions} columns={columns} />
+
+      <Modal
+        title={selectedPosition ? "编辑职位" : "创建职位"}
+        visible={isModalVisible}
+        onCancel={handleCancel}
+        footer={null}
+      >
+        <Form form={form} onFinish={selectedPosition ? handleUpdatePosition : handleCreatePosition}>
+          <Form.Item
+            name="position_name"
+            label="职位名称"
+            rules={[{ required: true, message: "请输入职位名称" }]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            name="department_name"
+            label="部门"
+            rules={[{ required: true, message: "请输入部门名称" }]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              {selectedPosition ? "更新" : "创建"}
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 };

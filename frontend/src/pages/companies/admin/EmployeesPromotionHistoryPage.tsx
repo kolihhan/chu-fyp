@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Input, Select, Table } from 'antd';
 import { getAllEmployeesPromotionHistory } from '../../../api';
+import { useParams } from 'react-router-dom';
 
 const { Option } = Select;
 
 const EmployeesPromotionHistoryPage: React.FC = () => {
+  const { id } = useParams<{ id: string | undefined }>();
+  const companyId = Number(id);
+
+  
   const [promotionHistory, setPromotionHistory] = useState<any[]>([]);
   const [searchEmployee, setSearchEmployee] = useState('');
   const [filteredHistory, setFilteredHistory] = useState<any[]>([]);
@@ -16,7 +21,7 @@ const EmployeesPromotionHistoryPage: React.FC = () => {
 
   const fetchPromotionHistory = async () => {
     try {
-      const response = await getAllEmployeesPromotionHistory();
+      const response = await getAllEmployeesPromotionHistory(companyId);
       setPromotionHistory(response.data);
 
       // 获取唯一的员工选项
@@ -43,7 +48,7 @@ const EmployeesPromotionHistoryPage: React.FC = () => {
   };
 
   const columns = [
-    { title: 'Employee ID', dataIndex: 'companyEmployee_id', key: 'companyEmployee_id' },
+    { title: 'Employee Name' , key: 'companyEmployee_id' , render: (_ : any, record: any) =>  <span>{record.companyEmployee_id.user_id.name}</span>},
     { title: 'Company ID', dataIndex: 'company_id', key: 'company_id' },
     { title: 'Previous Position', dataIndex: 'previous_position', key: 'previous_position' },
     { title: 'New Position', dataIndex: 'new_position', key: 'new_position' },

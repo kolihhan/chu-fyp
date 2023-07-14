@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Table, Modal, Form, Input, Button } from "antd";
-import { createDepartment, getDepartments, deleteDepartment } from "../../../../api";
+import { createDepartment, getDepartments, deleteDepartment, updateDepartment } from "../../../../api";
 
 const ManageDepartmentPage: React.FC = () => {
   const { id } = useParams<{ id: string | undefined }>();
@@ -10,6 +10,7 @@ const ManageDepartmentPage: React.FC = () => {
   const [departments, setDepartments] = useState<any[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
+  const [selectedDepartment, setSelectedDepartment] = useState<any | null>(null);
 
   useEffect(() => {
     document.title = "部门管理";
@@ -27,7 +28,7 @@ const ManageDepartmentPage: React.FC = () => {
 
   const handleCreateDepartment = async (values: any) => {
     try {
-      await createDepartment(companyId, values.department_name);
+      await createDepartment({ ...values, company_id: companyId });
       form.resetFields();
       setIsModalVisible(false);
       fetchDepartments();
@@ -45,20 +46,42 @@ const ManageDepartmentPage: React.FC = () => {
     }
   };
 
+  const handleEditDepartment = (department: any) => {
+    setSelectedDepartment(department);
+    setIsModalVisible(true);
+  };
+
+  const handleUpdateDepartment = async (values: any) => {
+    try {
+      await updateDepartment(selectedDepartment.id, values);
+      form.resetFields();
+      setIsModalVisible(false);
+      fetchDepartments();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const columns = [
     { title: "Department Name", dataIndex: "department_name", key: "department_name" },
     {
       title: "Actions",
       key: "actions",
       render: (_: any, record: any) => (
-        <Button type="link" onClick={() => handleDeleteDepartment(record.id)}>
-          Delete
-        </Button>
+        <>
+          <Button type="link" onClick={() => handleEditDepartment(record)}>
+            Edit
+          </Button>
+          <Button type="link" onClick={() => handleDeleteDepartment(record.id)}>
+            Delete
+          </Button>
+        </>
       ),
     },
   ];
 
   const showModal = () => {
+    setSelectedDepartment(null);
     setIsModalVisible(true);
   };
 
@@ -76,15 +99,20 @@ const ManageDepartmentPage: React.FC = () => {
 
       <Table dataSource={departments} columns={columns} />
 
-      <Modal title="创建部门" visible={isModalVisible} onCancel={handleCancel} footer={null}>
-        <Form form={form} onFinish={handleCreateDepartment}>
+      <Modal
+        title={selectedDepartment ? "编辑部门" : "创建部门"}
+        visible={isModalVisible}
+        onCancel={handleCancel}
+        footer={null}
+      >
+        <Form form={form} initialValues={selectedDepartment} onFinish={selectedDepartment ? handleUpdateDepartment : handleCreateDepartment}>
           <Form.Item name="department_name" label="部门名称" rules={[{ required: true, message: "请输入部门名称" }]}>
             <Input />
           </Form.Item>
 
           <Form.Item>
             <Button type="primary" htmlType="submit">
-              创建
+              {selectedDepartment ? "更新" : "创建"}
             </Button>
           </Form.Item>
         </Form>

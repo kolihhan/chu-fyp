@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Button, DatePicker, Form, Input, Select, Table } from 'antd';
 import { createEmployeeTraining, getAllEmployees, getAllCompanyTrainings } from '../../../api';
+import { useParams } from 'react-router-dom';
 
 const { Option } = Select;
 
 const EmployeesTrainingManagementPage: React.FC = () => {
+  const { id } = useParams<{ id: string | undefined }>();
+  const companyId = Number(id);
+
   const [form] = Form.useForm();
   const [employees, setEmployees] = useState<any[]>([]);
   const [trainings, setTrainings] = useState<any[]>([]);
@@ -16,7 +20,7 @@ const EmployeesTrainingManagementPage: React.FC = () => {
 
   const fetchEmployees = async () => {
     try {
-      const response = await getAllEmployees(1);
+      const response = await getAllEmployees(companyId);
       setEmployees(response.data);
     } catch (error) {
       console.log(error);
@@ -25,7 +29,7 @@ const EmployeesTrainingManagementPage: React.FC = () => {
 
   const fetchTrainings = async () => {
     try {
-      const response = await getAllCompanyTrainings();
+      const response = await getAllCompanyTrainings(companyId);
       setTrainings(response.data);
     } catch (error) {
       console.log(error);
