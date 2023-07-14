@@ -21,7 +21,7 @@ const AdminNavBar: React.FC = () => {
   const screenHeight = window.innerHeight;
 
   return (
-    <div style={{height:screenHeight-64, position:'fixed', top:64, bottom:0, left:0, overflowY:'auto', background:'blue'}}>
+    <div style={{height:screenHeight-64, position:'fixed', top:64, bottom:0, left:0, overflowY:'auto', background:'white'}}>
         {(isAdminPath) &&
           <Sider width={200} className="site-layout-background">
             <Menu
