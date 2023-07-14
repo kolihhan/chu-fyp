@@ -148,7 +148,7 @@ const Navbar: React.FC = () => {
 
   return (
 
-    <div style={{ backgroundColor: '#f0f2f5' }}>
+    <div style={{ backgroundColor: '#f0f2f5', zIndex:'1000', position:'fixed', top:0, left:0, right:0 }}>
       <Header className="navbar navbar-expand navbar-light bg-light">
         <div className="navbar-brand">
           <a href="/"><img src="#" alt="Logo" /></a>
