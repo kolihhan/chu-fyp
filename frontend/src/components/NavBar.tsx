@@ -16,10 +16,9 @@ import { selectSelectedCompany, setSelectCompany } from '../reducers/employeeRed
 const { SubMenu, Item, Divider } = Menu;
 const { Panel } = Collapse;
 
-export const DropDownIcon: React.FC<{ isManage: boolean; isEmployee: any[]; companyId: number }> = ({
+export const DropDownIcon: React.FC<{ isManage: boolean; isEmployee: any[];}> = ({
   isManage,
   isEmployee,
-  companyId,
 }) => {
   // 定义 dispatch 类型
   type AppDispatch = ThunkDispatch<RootState, unknown, AnyAction>;
@@ -53,13 +52,13 @@ export const DropDownIcon: React.FC<{ isManage: boolean; isEmployee: any[]; comp
     menuItems.push(
       <Menu.ItemGroup key="employee-grp" title={<span><UserOutlined /> 會員專區</span>}>
         <Menu.Item key="employee-page">
-          <Link to={`/company/${companyId}/checkIn`}>首頁</Link>
+          <Link to={`/company/${isEmployee[companyNum].company_id}/checkIn`}>首頁</Link>
         </Menu.Item>
         <Menu.Item key="employee-feedback">
-          <Link to={`/company/${companyId}/feedback`}>Feedback</Link>
+          <Link to={`/company/${isEmployee[companyNum].company_id}/feedback`}>Feedback</Link>
         </Menu.Item>
         <Menu.Item key="employee-application">
-          <Link to={`/company/${companyId}/applicationleave`}>ApplicationLeave</Link>
+          <Link to={`/company/${isEmployee[companyNum].company_id}/applicationleave`}>ApplicationLeave</Link>
         </Menu.Item>
         <Divider />
       </Menu.ItemGroup>
@@ -176,7 +175,7 @@ const Navbar: React.FC = () => {
         }
 
         {isAuthenticated ?
-          <DropDownIcon isManage={isUser?.type !== "staff"} isEmployee={isEmployee} companyId={isEmployee[companyNum].company_id} />
+          <DropDownIcon isManage={isUser?.type !== "staff"} isEmployee={isEmployee}/>
           :
           <Menu selectedKeys={[location.pathname]}>
             <Item key="login-key">

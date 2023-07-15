@@ -1,20 +1,27 @@
 from django.contrib.auth.backends import BaseBackend
 from .models import UserAccount
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from django.utils.translation import gettext_lazy as _
 
-class UserAccountBackend(BaseBackend):
-    def authenticate(self, request, email=None, password=None, **kwargs):
+from rest_framework_simplejwt.exceptions import AuthenticationFailed, InvalidToken, TokenError
+
+class CustomJWTAuthentication(JWTAuthentication):
+
+    def get_user(self, validated_token):
+
         try:
-            user = UserAccount.objects.get(email=email)
-        except UserAccount.DoesNotExist:
-            return None
+            user_id = validated_token['user_id']
+        except KeyError:
+            raise InvalidToken(_("Token contained no recognizable user identification"))
 
-        if user.check_password(password):
-            return user
-        else:
-            return None
-
-    def get_user(self, user_id):
         try:
-            return UserAccount.objects.get(pk=user_id)
+            user_account = UserAccount.objects.get(id=user_id)
         except UserAccount.DoesNotExist:
-            return None
+            raise AuthenticationFailed(_("User not found"), code="user_not_found")
+        
+        
+        if not user_account.is_active:
+            raise AuthenticationFailed(_("User is inactive"), code="user_inactive")
+
+        return user_account
+
