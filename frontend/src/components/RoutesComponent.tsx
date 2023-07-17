@@ -88,7 +88,7 @@ const RoutesComponent: React.FC = () =>{
     const isAdminPath = location.pathname.startsWith('/admin');
     const [leftSize, setLeftSize] = useState(0)
     useEffect(() => {
-        if (isAdminPath) setLeftSize(232)
+        if (isAdminPath) setLeftSize(216)
         else setLeftSize(16)
     })
     return (

@@ -34,9 +34,9 @@ const CompanyEmployeePage: React.FC = () => {
   );
 
   const columns = [
-    { title: 'User ID', key: 'user_id', render: (_ : any, record: any) =>  <span>{record.user_id.name}</span> },
-    { title: 'Company ID', dataIndex: 'company_id', key: 'company_id' },
-    { title: 'Salary', dataIndex: 'salary', key: 'salary' },
+    { title: 'Employee', key: 'employee', render: (_ : any, record: any) =>  <span>{record.user_id.name}</span> },
+    { title: 'Department', dataIndex: 'department', key: 'department', render:(_ : any, record: any) => <span>{record.companyEmployeePosition_id.companyDepartment_id.department_name }</span> },
+    { title: 'Position', dataIndex: 'position', key: 'position', render:(_ : any, record: any) => <span>{record.companyEmployeePosition_id.position_name}</span> },
     { title: 'Actions', key: 'actions', render: (_ : any, record: any) => <Link to={`/admin/company/${id}/manage/${record.id}`}>Manage Permissions</Link> },
   ];
 
@@ -53,5 +53,26 @@ const CompanyEmployeePage: React.FC = () => {
     </div>
   );
 };
+
+//   const columns = [
+//     { title: 'User ID', key: 'user_id', render: (_ : any, record: any) =>  <span>{record.user_id.name}</span> },
+//     { title: 'Company ID', dataIndex: 'company_id', key: 'company_id' },
+//     { title: 'Salary', dataIndex: 'salary', key: 'salary' },
+//     { title: 'Actions', key: 'actions', render: (_ : any, record: any) => <Link to={`/admin/company/${id}/manage/${record.id}`}>Manage Permissions</Link> },
+//   ];
+
+//   return (
+//     <div>
+//       <h1>Company Employees</h1>
+//       <Input.Search placeholder="Search employee" onSearch={handleSearch} style={{ width: 200, marginBottom: 16 }} />
+//       <Table dataSource={filteredEmployees} columns={columns} />
+
+//       {/* Button to navigate to permission settings page */}
+//       <Button type="primary">
+//         <Link to="/permission-settings">Permission Settings</Link>
+//       </Button>
+//     </div>
+//   );
+// };
 
 export default CompanyEmployeePage;

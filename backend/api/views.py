@@ -351,10 +351,18 @@ def getCompany(request, pk):
         
         companyImage = models.CompanyImages.objects.filter(company_id=pk)
         imageSerializer = serializers.CompanyImagesSerializer(companyImage, many=True)
+        
+        companyEmployee = models.CompanyEmployee.objects.filter(company_id__id=pk)
+        companyEmployeeSerializer = serializers.CompanyEmployeeSerializer(companyEmployee, many=True)
+
+        companyRecruitment = models.CompanyRecruitment.objects.filter(companyEmployeePosition__company_id__id=pk)
+        companyRecruitmentSerializer = serializers.CompanyRecruitmentSerializer(companyRecruitment, many=True)
 
         data = {
             "company": serializer.data,
-            "images": imageSerializer.data
+            "images": imageSerializer.data,
+            "employees": companyEmployeeSerializer.data,
+            "recruitments": companyRecruitmentSerializer.data
         }
 
         return Response({'data':data, 'message':''}, status=status.HTTP_200_OK)
@@ -662,7 +670,8 @@ def getCompanyAllEmployee(request, pk):
 @permission_classes([IsAuthenticated])
 def updateCompanyEmployee(request, pk):
     try:
-        updatedCompanyEmployee = request.data
+        updatedCompanyEmployee = request.data['data']
+        print(updatedCompanyEmployee.get('companyEmployeePosition_id', None))
         originalCompanyEmployee = models.CompanyEmployee.objects.get(id=pk)
         if updatedCompanyEmployee.get('companyEmployeePosition_id', None)!=None:
             originalCompanyEmployee.companyEmployeePosition_id = models.CompanyEmployeePosition.objects.get(id=updatedCompanyEmployee['companyEmployeePosition_id'])
@@ -888,8 +897,8 @@ def createPosition(request):
 @permission_classes([IsAuthenticated])
 def getEmployeesSetting(request, pk):
     try:
-        position = models.CompanyEmployeePosition.objects.get(id=pk)
-        serializer = serializers.CompanyEmployeePositionSerializer(position, many=False)
+        employee = models.CompanyEmployee.objects.get(id=pk)
+        serializer = serializers.CompanyEmployeeIdOnlySerializer(employee, many=False)
         return Response({'message:': '', 'data':serializer.data})
     except models.CompanyEmployeePosition.DoesNotExist:
         return Response({'message':'職位不存在'}, status=status.HTTP_404_NOT_FOUND)
@@ -901,7 +910,7 @@ def getEmployeesSetting(request, pk):
 def getPosition(request, pk):
     try:
         position = models.CompanyEmployeePosition.objects.get(id=pk)
-        serializer = serializers.CompanyEmployeePositionSerializer(position, many=False)
+        serializer = serializers.CompanyEmployeePositionPermissionIdOnlySerializer(position, many=False)
         return Response({'message:': '', 'data':serializer.data})
     except models.CompanyEmployeePosition.DoesNotExist:
         return Response({'message':'職位不存在'}, status=status.HTTP_404_NOT_FOUND)
@@ -913,6 +922,18 @@ def getPosition(request, pk):
 def getCompanyAllPosition(request, pk):
     try:
         position = models.CompanyEmployeePosition.objects.filter(company_id__id=pk)
+        serializer = serializers.CompanyEmployeePositionSerializer(position, many=True)
+        return Response({'message:': '', 'data':serializer.data})
+    except models.CompanyEmployeePosition.DoesNotExist:
+        return Response({'message':'職位不存在'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'職位獲取失敗，請稍後在嘗試', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getDepartmentAllPosition(request, pk):
+    try:
+        position = models.CompanyEmployeePosition.objects.filter(companyDepartment_id__id=pk)
         serializer = serializers.CompanyEmployeePositionSerializer(position, many=True)
         return Response({'message:': '', 'data':serializer.data})
     except models.CompanyEmployeePosition.DoesNotExist:

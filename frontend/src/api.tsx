@@ -285,6 +285,11 @@ export const getEmployeePositions = async (id : number) => {
   return axios.get( `${API_URL}/companyPosition/get/company/all/${id}`, { headers: authHeaders() } )
 };
 
+export const getEmployeePositionsByDepartment = async (id : number) => {
+  
+  return axios.get( `${API_URL}/companyPosition/get/department/all/${id}`, { headers: authHeaders() } )
+};
+
 export const createPosition = async (data :any) => {
   
   return axios.post( `${API_URL}/companyPosition/create`, 
@@ -336,7 +341,10 @@ export const getEmployeeSettings = async (id : number) => {
 
 export const updateEmployeeSettings = async (id : number, data: any) => {
   
-  return axios.get( `${API_URL}/companyPosition/get/employee/${id}`, { headers: authHeaders() } )
+  return axios.put( `${API_URL}/companyEmployee/update/${id}`, {data}, { headers: authHeaders() } )
 };
 
+export const getPositionById = async(id: number) => {
+  return axios.get( `${API_URL}/companyPosition/get/${id}`, { headers: authHeaders() } )
+}
 

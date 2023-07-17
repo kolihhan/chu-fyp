@@ -15,15 +15,21 @@ from .models import UserAccount
 class UserIdAndEmailSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.UserAccount
-        fields = ['id', 'email', 'name']
+        fields = ['id', 'email', 'name', 'avatar_url']
 
 class CompanyPermissionNameAndDescSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.CompanyPermission
         fields = ['id', 'permission_name', 'permission_desc']
 
+class CompanyDepartmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.CompanyDepartment
+        fields = '__all__'
+
 class CompanyEmployeePositionPermissionSerializer(serializers.ModelSerializer):
     companyPermission_id = CompanyPermissionNameAndDescSerializer(many=True, read_only=True)
+    companyDepartment_id = CompanyDepartmentSerializer(many=False, read_only=True)
     class Meta:
         model = models.CompanyEmployeePosition
         fields = '__all__'
@@ -83,6 +89,7 @@ class CompanyEmployeeSerializer(serializers.ModelSerializer):
     class Meta: 
         model = models.CompanyEmployee
         fields = '__all__'
+
 
 class CompanyEmployeeSerializerIdAndUserId(serializers.ModelSerializer):
     user_id = UserIdAndEmailSerializer(many=False, read_only=True)
@@ -246,3 +253,27 @@ class UserApplicationRecordSerializerTest(serializers.ModelSerializer):
     class Meta:
         model = models.UserApplicationRecord
         fields = '__all__'
+
+
+# class CompanyDepartmentSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = models.CompanyDepartment
+#         fields = ['id']
+
+# class CompanyPermissionNameAndDescSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = models.CompanyPermission
+#         fields = ['id', 'permission_name', 'permission_desc']
+
+class CompanyEmployeePositionPermissionIdOnlySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.CompanyEmployeePosition
+        fields = '__all__'
+
+class CompanyEmployeeIdOnlySerializer(serializers.ModelSerializer):
+    user_id = UserIdAndEmailSerializer(many=False, read_only=True)
+    companyEmployeePosition_id = CompanyEmployeePositionPermissionIdOnlySerializer(many=False, read_only=True)
+    class Meta: 
+        model = models.CompanyEmployee
+        fields = '__all__'
+    

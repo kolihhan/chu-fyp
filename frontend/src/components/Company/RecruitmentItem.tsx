@@ -7,18 +7,15 @@ interface RecruitmentItemProps {
 }
 
 const RecruitmentItem: React.FC<RecruitmentItemProps> = ({id, title, desc}) => {
-
-    const imageUrl = 'https://img.freepik.com/free-photo/red-white-cat-i-white-studio_155003-13189.jpg?w=2000'
-
     return (
         <div>
             <Card bodyStyle={{padding:'8px'}} style={{marginBottom:'4px'}}>
                 <div style={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
                     <div>
-                        <Row gutter={[4, 0]} style={{display:'flex', alignItems:'center'}}>
+                        <Row gutter={[4, 0]}>
                             <Col>
-                                <Row><Col style={{fontSize:'16px'}}><b>{title}</b></Col></Row>
-                                <Row><Col>{desc}</Col></Row>
+                                <Row><Col style={{fontSize:'16px', maxHeight: '1.4em', overflow: 'hidden', textOverflow: 'ellipsis', marginRight:'8px'}}><b>{title}</b></Col></Row>
+                                <Row><Col style={{ maxHeight: '1.4em', overflow: 'hidden', textOverflow: 'ellipsis', marginRight:'8px'}}>{desc}</Col></Row>
                             </Col>
                         </Row>
                     </div>

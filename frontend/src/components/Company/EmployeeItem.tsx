@@ -1,15 +1,16 @@
 import { Card, Col, Row, Image, Button } from "antd"
 
 interface EmployeeItemProps {
-    id: Number
-    name: String
-    position: String
+    id: Number,
+    name: String,
+    position: String,
+    avatarUrl: string,
 }
 
-const EmployeeItem: React.FC<EmployeeItemProps> = ({id, name, position}) => {
+const EmployeeItem: React.FC<any> = ({employee}) => {
 
-    const imageUrl = 'https://img.freepik.com/free-photo/red-white-cat-i-white-studio_155003-13189.jpg?w=2000'
-
+    const imageUrl = employee.user_id.avatar_url?employee.user_id.avatar_url:'https://img.freepik.com/free-photo/red-white-cat-i-white-studio_155003-13189.jpg?w=2000'
+    
     return (
         <div>
             <Card bodyStyle={{padding:'8px'}} style={{marginBottom:'4px'}}>
@@ -18,8 +19,8 @@ const EmployeeItem: React.FC<EmployeeItemProps> = ({id, name, position}) => {
                         <Row gutter={[4, 0]} style={{display:'flex', alignItems:'center'}}>
                             <Col><Image src={imageUrl} style={{height:'50px', width:'50px'}}/></Col>
                             <Col>
-                                <Row><Col>{name}</Col></Row>
-                                <Row><Col>{position}</Col></Row>
+                                <Row><Col style={{ maxHeight: '1.4em', overflow: 'hidden', textOverflow: 'ellipsis', marginRight:'8px'}}>{employee.user_id.name}</Col></Row>
+                                <Row><Col style={{ maxHeight: '1.4em', overflow: 'hidden', textOverflow: 'ellipsis', marginRight:'8px'}}>{employee.companyEmployeePosition_id.position_name}</Col></Row>
                             </Col>
                         </Row>
                     </div>

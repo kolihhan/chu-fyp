@@ -56,8 +56,9 @@ urlpatterns = [
 
     # position
     path('companyPosition/create', createPosition, name='createPosition'),
-    path('companyPosition/get/employee/<int:pk>', getPosition, name='getPosition'),
     path('companyPosition/get/<int:pk>', getPosition, name='getPosition'),
+    path('companyPosition/get/employee/<int:pk>', getEmployeesSetting, name='getPosition'),
+    path('companyPosition/get/department/all/<int:pk>', getDepartmentAllPosition, name='getDepartmentAllPosition'),
     path('companyPosition/get/company/all/<int:pk>', getCompanyAllPosition, name='getCompanyAllPosition'),
     path('companyPosition/update/<int:pk>', updatePosition, name='updatePosition'),
     path('companyPosition/delete/<int:pk>', deleteDepartment, name='deleteDepartment'),
