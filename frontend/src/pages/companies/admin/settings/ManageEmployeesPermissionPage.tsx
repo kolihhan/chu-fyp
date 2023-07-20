@@ -24,6 +24,7 @@ const ManageEmployeesSettingPage: React.FC = () => {
   const [form] = Form.useForm();
   const { Option } = Select;
   const navigate = useNavigate()
+  const [isFirstFetchCmpPosition, setIsFirstFetchCmpPosition] = useState(true)
 
   useEffect(() => {
     document.title = "更改权限";
@@ -66,10 +67,14 @@ const ManageEmployeesSettingPage: React.FC = () => {
       const response = await getEmployeePositionsByDepartment(id);
       setAvailablePosition(response.data.data)
       if (response.data.data[0]!==undefined){
-        form.setFieldsValue({
-          position_id: [response.data.data[0]?.id],
-        })
-        fillPermissionAndBenefit(response.data.data[0].id)
+        if(isFirstFetchCmpPosition){
+          setIsFirstFetchCmpPosition(false)
+        }else{
+          form.setFieldsValue({
+            position_id: [response.data.data[0]?.id],
+          })
+          fillPermissionAndBenefit(response.data.data[0].id)
+        }
       }
     }catch (error) {
       console.log(error)
@@ -91,7 +96,7 @@ const ManageEmployeesSettingPage: React.FC = () => {
   const handleUpdateSettings = async (values: any) => {
     try {
       const updateData = {
-        "companyEmployeePosition_id":values
+        "companyEmployeePosition_id":values[0]
       }
       const response = await updateEmployeeSettings(employeeId, updateData);
       if(response.status===200){

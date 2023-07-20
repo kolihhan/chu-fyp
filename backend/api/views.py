@@ -671,7 +671,6 @@ def getCompanyAllEmployee(request, pk):
 def updateCompanyEmployee(request, pk):
     try:
         updatedCompanyEmployee = request.data['data']
-        print(updatedCompanyEmployee.get('companyEmployeePosition_id', None))
         originalCompanyEmployee = models.CompanyEmployee.objects.get(id=pk)
         if updatedCompanyEmployee.get('companyEmployeePosition_id', None)!=None:
             originalCompanyEmployee.companyEmployeePosition_id = models.CompanyEmployeePosition.objects.get(id=updatedCompanyEmployee['companyEmployeePosition_id'])
@@ -683,7 +682,7 @@ def updateCompanyEmployee(request, pk):
     except models.CompanyEmployee.DoesNotExist:
         return Response({'message':'員工不存在'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
-        return Response({"message":"員工資料更新失敗，請稍後再嘗試"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response({"message":"員工資料更新失敗，請稍後再嘗試", "error":str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
