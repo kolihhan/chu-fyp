@@ -8,10 +8,10 @@ export const loginApi = (username: string, password: string) =>
   axios.post(`${API_URL}/login`, { email: username, password: password }, { headers: authHeaders() });
   
 
-export const registerApi = (username: string,email: string,password: string,checkPassword: string,gender: string,birthday: dayjs.Dayjs | null,address: string,phone: string,avatarUrl: string) =>
+export const registerApi = (username: string,email: string,password: string,checkPassword: string,gender: string,birthday: dayjs.Dayjs | null,address: string,phone: string,avatarUrl: string, type:string) =>
   axios.post(
     `${API_URL}/register`,
-    { name: username,email,password,checkPassword,gender,birthday: dayjs(birthday).format('YYYY-MM-DD'),address,phone,avatar_url: avatarUrl},
+    { name: username,email,password,checkPassword,gender,birthday: dayjs(birthday).format('YYYY-MM-DD'),address,phone,avatar_url: avatarUrl, type: type},
     { headers: authHeaders() }
   );
 

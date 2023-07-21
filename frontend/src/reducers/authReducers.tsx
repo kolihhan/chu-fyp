@@ -76,10 +76,11 @@ export const register = (
   birthday: dayjs.Dayjs | null,
   address: string,
   phone: string,
-  avatarUrl: string
+  avatarUrl: string, 
+  type: string,
 ): ThunkAction<void, RootState, unknown, AnyAction> => async dispatch => {
   try {
-    const response = await registerApi(username,email,password,checkPassword,gender,birthday,address,phone,avatarUrl);
+    const response = await registerApi(username,email,password,checkPassword,gender,birthday,address,phone,avatarUrl, type);
 
     if (response.status === 201) {
       message.success('注冊成功');

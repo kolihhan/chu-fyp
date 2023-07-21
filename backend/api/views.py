@@ -43,11 +43,14 @@ from django.db.models import Count
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def register(request):
-    serializer = UserSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response("賬號建立成功", status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response("賬號建立成功", status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e: 
+        return Response({"error":str(e)})
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])

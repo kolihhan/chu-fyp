@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { register } from '../reducers/authReducers';
 import { AnyAction } from '@reduxjs/toolkit';
 import { ThunkDispatch } from 'redux-thunk';
 import { RootState } from '../app/store';
-import { Form, Input, Button, DatePicker, Select } from 'antd';
+import { Form, Input, Button, DatePicker, Select, Upload, message , Image} from 'antd';
 import dayjs from 'dayjs';  // 引入 dayjs 库
+import axios from 'axios';
 
 const { Option } = Select;
 
@@ -24,6 +25,8 @@ const Register: React.FC = () => {
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
   const [avatarUrl, setAvatarUrl] = useState('');
+  const [type, setType] = useState('');
+  const image = "/image/empty.png"
 
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
@@ -61,67 +64,123 @@ const Register: React.FC = () => {
     setAvatarUrl(event.target.value);
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-
-    dispatch(register(username, email, password, checkPassword, gender, birthday, address, phone, avatarUrl));
+  const handlerTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setType(event.target.value);
   };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    dispatch(register(username, email, password, checkPassword, gender, birthday, address, phone, avatarUrl, type));
+  };
+
+
+  useEffect(()=>{
+    document.title = "用戶注冊"
+    if (avatarUrl=='') setAvatarUrl(image)
+  })
+
+  const beforeUpload = (file: any) => {
+    // Limit to only one image
+    if (file.type.indexOf('image/') === -1) {
+      message.error('You can only upload image files!');
+      return false;
+    }
+    return true;
+  };
+
+
+  const uploadImage = async (file:any) => {
+    console.log(file)
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      setAvatarUrl(reader?.result!.toString())
+    };
+  }
 
   return (
     <div style={{ backgroundColor: '#f0f2f5', padding: '20px', borderRadius: '5px' }}>
       <h1>Register Page</h1>
-      <Form onFinish={handleSubmit}>
-        <Form.Item label="Username" name="username" rules={[{ required: true, message: 'Please enter your username' }]}>
-          <Input value={username} onChange={handleUsernameChange} />
-        </Form.Item>
-        <Form.Item label="Email" name="email" rules={[{ required: true, message: 'Please enter your email' }]}>
-          <Input value={email} onChange={handleEmailChange} />
-        </Form.Item>
-        <Form.Item label="Password" name="password" rules={[{ required: true, message: 'Please enter your password' }]}>
-          <Input.Password value={password} onChange={handlePasswordChange} />
-        </Form.Item>
-        <Form.Item
-          label="Confirm Password"
-          name="check-password"
-          rules={[
-            { required: true, message: 'Please enter your password' },
-            ({ getFieldValue }) => ({
-              validator(_, value) {
-                if (!value || getFieldValue('password') === value) {
-                  return Promise.resolve();
-                }
-                return Promise.reject(new Error('需跟密碼相同'));
-              },
-            }),
-          ]}
-        >
-          <Input.Password value={checkPassword} onChange={handleCheckPasswordChange} />
-        </Form.Item>
-          <Form.Item label="Gender" name="gender">
+      
+      <Form onFinish={handleSubmit} labelAlign='left' labelCol={{ span: 1 }} wrapperCol={{ span:24 }}>
+        <div style={{display:'flex', alignItems:'end'}}>
+          <Form.Item label="" name="avatarUrl" style={{height:'100px', width:'100px', marginRight:'16px'}}>
+            <Upload 
+              listType="picture-card" showUploadList={false} multiple={false} maxCount={1} 
+              beforeUpload={beforeUpload}
+              customRequest={({file}) => uploadImage(file)}>
+                <Image preview={false} src={avatarUrl} style={{height:'100px', width:'100px'}}></Image>
+            </Upload>
+          </Form.Item>
+          <Form.Item style={{width:'100%'}} label="用戶名" name="username" labelCol={{span:24}} rules={[{ required: true, message: 'Please enter your username' }]}>
+            <Input value={username} onChange={handleUsernameChange} />
+          </Form.Item>
+        </div>
+        <div>
+          <Form.Item label="電郵"
+            name="email" labelCol={{span:1}} rules={[{ required: true, message: 'Please enter your email' }]}>
+            <Input value={email} onChange={handleEmailChange} />
+          </Form.Item>
+          <Form.Item label="密碼"
+            name="password" rules={[{ required: true, message: 'Please enter your password' }]}>
+            <Input.Password value={password} onChange={handlePasswordChange} />
+          </Form.Item>
+          <Form.Item label="確認密碼"
+            name="check-password"
+            rules={[
+              { required: true, message: 'Please enter your password' },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue('password') === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error('需跟密碼相同'));
+                },
+              }),
+            ]}
+          >
+            <Input.Password value={checkPassword} onChange={handleCheckPasswordChange} />
+          </Form.Item>
+          <Form.Item label="類別" name="type">
+            <Select value={type} onChange={(value) => {setType(value)}}>
+              <Option value="Boss">Boss</Option>
+              <Option value="Employee">Employee</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item label="性別" name="gender">
             <Select value={gender} onChange={handleGenderChange}>
               <Option value="male">Male</Option>
               <Option value="female">Female</Option>
               <Option value="other">Other</Option>
             </Select>
           </Form.Item>
-          <Form.Item label="Birthday" name="birthday">
-            <DatePicker value={birthday} onChange={handleBirthdayChange} />
+          <Form.Item label="生日" name="birthday">
+            <DatePicker value={birthday} style={{width:'100%'}} onChange={handleBirthdayChange} />
           </Form.Item>
-          <Form.Item label="Address" name="address">
+          <Form.Item label="地址" name="address">
             <Input value={address} onChange={handleAddressChange} />
           </Form.Item>
-          <Form.Item label="Phone" name="phone">
+          <Form.Item label="手機" name="phone">
             <Input value={phone} onChange={handlePhoneChange} />
           </Form.Item>
-          <Form.Item label="Avatar URL" name="avatarUrl">
+          {/* <Form.Item label="頭像" name="avatarUrl">
             <Input value={avatarUrl} onChange={handleAvatarUrlChange} />
-          </Form.Item>
-          {/* 其他字段以相同的方式添加 */}
-          <Form.Item>
+          </Form.Item> */}
+        </div>
+        <div style={{width:'100%', textAlign:'right'}}>
+          <Form.Item >
             <Button type="primary" htmlType="submit">
               Register
             </Button>
           </Form.Item>
+        </div>
       </Form>
+
+
+
+
+
+
+
     </div>
   );
 };

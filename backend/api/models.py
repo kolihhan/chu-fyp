@@ -48,13 +48,14 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
         related_name='user_accounts' # add this
     )
 
+    type = models.CharField(default="Employee")
     email = models.EmailField(max_length=255, unique=True)
     name = models.CharField(max_length=255)
     gender = models.CharField(max_length=10)
     birthday = models.DateField()
     address = models.CharField(max_length=255)
     phone = models.CharField(max_length=20)
-    avatar_url = models.URLField(blank=True, null=True)
+    avatar_url = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
