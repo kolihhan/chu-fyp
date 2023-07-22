@@ -20,7 +20,7 @@ const ManageDepartmentPage: React.FC = () => {
   const fetchDepartments = async () => {
     try {
       const response = await getDepartments(companyId);
-      setDepartments(response.data);
+      setDepartments(response.data.data);
     } catch (error) {
       console.log(error);
     }
@@ -63,19 +63,19 @@ const ManageDepartmentPage: React.FC = () => {
   };
 
   const columns = [
-    { title: "Department Name", dataIndex: "department_name", key: "department_name" },
+    { title: "部門", dataIndex: "department_name", key: "department_name" },
     {
-      title: "Actions",
+      title: "",
       key: "actions",
       render: (_: any, record: any) => (
-        <>
-          <Button type="link" onClick={() => handleEditDepartment(record)}>
+        <div style={{textAlign:'right'}}>
+          <Button type="primary" onClick={() => handleEditDepartment(record)} style={{marginRight:'8px'}}>
             Edit
           </Button>
-          <Button type="link" onClick={() => handleDeleteDepartment(record.id)}>
+          <Button type="default" onClick={() => handleDeleteDepartment(record.id)}>
             Delete
           </Button>
-        </>
+        </div>
       ),
     },
   ];
@@ -93,9 +93,11 @@ const ManageDepartmentPage: React.FC = () => {
     <div>
       <h1>部门管理</h1>
 
-      <Button type="primary" onClick={showModal}>
-        创建部门
-      </Button>
+      <div style={{marginBottom:'8px', textAlign:'right', width:'100%'}}>
+        <Button type="primary" onClick={showModal}>
+          创建部门
+        </Button>
+      </div>
 
       <Table dataSource={departments} columns={columns} />
 

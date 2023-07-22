@@ -61,7 +61,7 @@ urlpatterns = [
     path('companyPosition/get/department/all/<int:pk>', getDepartmentAllPosition, name='getDepartmentAllPosition'),
     path('companyPosition/get/company/all/<int:pk>', getCompanyAllPosition, name='getCompanyAllPosition'),
     path('companyPosition/update/<int:pk>', updatePosition, name='updatePosition'),
-    path('companyPosition/delete/<int:pk>', deleteDepartment, name='deleteDepartment'),
+    path('companyPosition/delete/<int:pk>', deletePosition, name='deleteDepartment'),
 
     # permission
     path('companyPermission/create', createCompanyPermission, name='createCompanyPermission'),

@@ -32,6 +32,7 @@ const ButtonRow: React.FC<ButtonRowProps> = ({id}) => {
 
     const handlerEnter = () => {
         navigate(`/admin/company/${id}/employees`)
+        sessionStorage.setItem('companyId', `${id}`)
     }
 
     return (
@@ -59,7 +60,7 @@ const CompanyItem: React.FC<CompanyItemProps> = ({id, title}) => {
       }, []);
 
     return (
-        <div style={{width: '100%', margin: '8px'}}>
+        <div style={{width: '100%', marginBottom: '8px'}}>
             <Card title={title} extra={<ButtonRow id={id}/>} bodyStyle={{display:'none'}}/>
         </div>
     )

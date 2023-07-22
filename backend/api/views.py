@@ -721,7 +721,7 @@ def deleteCompanyEmployee(request, pk):
 @permission_classes([IsAuthenticated])
 def createDepartment(request):
     try:
-        departmentData = request.data
+        departmentData = request.data['data']
         createdDepartment = models.CompanyDepartment.objects.create(
             company_id = models.Company.objects.get(id=departmentData['company_id']),
             department_name = departmentData['department_name'],
@@ -759,7 +759,7 @@ def getCompanyAllDepartment(request, pk):
 @permission_classes([IsAuthenticated])
 def updateDepartment(request, pk):
     try:
-        departmentData = request.data
+        departmentData = request.data['data']
         department = models.CompanyDepartment.objects.get(id=pk)
         department.department_name = departmentData.get('department_name', department.department_name)
         department.save()
@@ -979,7 +979,7 @@ def updatePosition(request, pk):
     
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
-def deleteDepartment(request, pk):
+def deletePosition(request, pk):
     try:
         deletedDepartment = models.CompanyEmployeePosition.objects.get(id=pk)
         delete = deletedDepartment.delete()

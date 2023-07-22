@@ -72,7 +72,6 @@ const Register: React.FC = () => {
     dispatch(register(username, email, password, checkPassword, gender, birthday, address, phone, avatarUrl, type));
   };
 
-
   useEffect(()=>{
     document.title = "用戶注冊"
     if (avatarUrl=='') setAvatarUrl(image)
@@ -86,7 +85,6 @@ const Register: React.FC = () => {
     }
     return true;
   };
-
 
   const uploadImage = async (file:any) => {
     console.log(file)
@@ -162,9 +160,6 @@ const Register: React.FC = () => {
           <Form.Item label="手機" name="phone">
             <Input value={phone} onChange={handlePhoneChange} />
           </Form.Item>
-          {/* <Form.Item label="頭像" name="avatarUrl">
-            <Input value={avatarUrl} onChange={handleAvatarUrlChange} />
-          </Form.Item> */}
         </div>
         <div style={{width:'100%', textAlign:'right'}}>
           <Form.Item >
@@ -174,13 +169,6 @@ const Register: React.FC = () => {
           </Form.Item>
         </div>
       </Form>
-
-
-
-
-
-
-
     </div>
   );
 };

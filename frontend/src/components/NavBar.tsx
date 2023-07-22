@@ -127,7 +127,7 @@ const CompanySwitcher: React.FC<{ isEmployee: any[], companyNum: number }> = ({ 
   return (
     <Dropdown overlay={menu}>
       <a className="ml-auto mr-3 ant-dropdown-link" href='' onClick={(e) => e.preventDefault()}>
-        {isEmployee[companyNum].name}
+        {/* {isEmployee[companyNum].name} */}
       </a>
     </Dropdown>
   );

@@ -115,6 +115,8 @@ const RoutesComponent: React.FC = () =>{
                 <Route path='company/list' element={<ProtectedAdmin><CompaniesPage /></ProtectedAdmin>} /> {/* X */}
                 <Route path='company/create-company' element={<ProtectedAdmin><CreateCompaniesPage /></ProtectedAdmin>} />  {/* X */}
                 <Route path='company/:id/view' element={<ProtectedAdmin><CompanyDetailPage /></ProtectedAdmin>} /> {/* 1 */}
+                <Route path='admin/company/list' element={<ProtectedAdmin><CompaniesPage /></ProtectedAdmin>} /> {/* X */}
+                <Route path='admin/company/create' element={<ProtectedAdmin><CreateCompaniesPage /></ProtectedAdmin>} />  {/* X */}
 
                 <Route path='admin/company/:id/employees' element={<ProtectedAdmin><CompanyEmployeesPage /></ProtectedAdmin>} />  {/* X */}
                 <Route path='admin/company/:id/feedback' element={<ProtectedAdmin><EmployeesFeedbackPage /></ProtectedAdmin>} />

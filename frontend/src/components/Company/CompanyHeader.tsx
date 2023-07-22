@@ -1,4 +1,5 @@
 import { Card, Col, Image, Row } from "antd"
+import { useEffect, useState } from "react"
 
 interface CompanyHeaderProps{
     company: any
@@ -6,7 +7,11 @@ interface CompanyHeaderProps{
 
 const CompanyHeader: React.FC<CompanyHeaderProps> = ({company}) => {
     
-    const imageUrl = 'https://img.freepik.com/free-photo/red-white-cat-i-white-studio_155003-13189.jpg?w=2000'
+    const [imageUrl, setImageUrl] = useState("/image/empty.png")
+
+    useEffect(() => {
+        setImageUrl(company?.logo ? company.logo : "/image/empty.png")
+    })
 
     return (
         <div>
