@@ -306,7 +306,7 @@ export const updatePosition = async (id : number, positionId: number, data: any)
 
 export const deletePosition = async (id : number, positionId: number) => {
   
-  return axios.get( `${API_URL}/companyPosition/delete/${positionId}`, { headers: authHeaders() } )
+  return axios.delete( `${API_URL}/companyPosition/delete/${positionId}`, { headers: authHeaders() } )
 };
 
 export const getPermissions = async (id : number) => {

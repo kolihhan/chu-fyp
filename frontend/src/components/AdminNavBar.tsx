@@ -26,11 +26,11 @@ const AdminNavBar: React.FC = () => {
   const linkCompanyList = `/admin/company/list`
   const linkCreateCompany = `/admin/company/create`
   const linkManageDepartment = `/admin/company/${id}/department-manage/`
-  const linkCreateDepartment = `/admin/department/create` //todo
-  const linkPosition = `/admin/position/list` //todo
-  const linkCreatePosition = `/admin/position/create` //todo
+  // const linkCreateDepartment = `/admin/department/create`
+  const linkPosition = `admin/company/${id}/position-manage`
+  // const linkCreatePosition = `/admin/position/create`
   const linkPermission = `/admin/permission/list` //todo
-  const linkCreatePermission = `/admin/permission/create` //todo
+  // const linkCreatePermission = `/admin/permission/create`  // no need to has create permission page
   const linkAnnouncement = `/admin/permission/create` //todo
   const linkCreateAnnouncement = `/admin/permission/create` //todo
 
@@ -64,17 +64,17 @@ const AdminNavBar: React.FC = () => {
                 <Menu.Item key="5">
                   <Link to={linkManageDepartment}>部门列表</Link>
                 </Menu.Item>
-                <Menu.Item key="6">
+                {/* <Menu.Item key="6">
                   <Link to={linkCreateDepartment}>创建部门</Link>
-                </Menu.Item>
+                </Menu.Item> */}
               </SubMenu>
               <SubMenu key="sub4" icon={<SolutionOutlined />} title="职位管理">
                 <Menu.Item key="7">
                   <Link to={linkPosition}>职位列表</Link>
                 </Menu.Item>
-                <Menu.Item key="8">
+                {/* <Menu.Item key="8">
                   <Link to={linkCreatePosition}>创建职位</Link>
-                </Menu.Item>
+                </Menu.Item> */}
               </SubMenu>
               {/* <SubMenu key="sub5" icon={<ApartmentOutlined />} title="部门职位管理">
                 <Menu.Item key="9">
@@ -84,14 +84,14 @@ const AdminNavBar: React.FC = () => {
                   <Link to="/admin/department-position/create">创建部门职位</Link>
                 </Menu.Item>
               </SubMenu> */}
-              <SubMenu key="sub6" icon={<ToolOutlined />} title="权限管理">
+              {/* <SubMenu key="sub6" icon={<ToolOutlined />} title="权限管理">
                 <Menu.Item key="11">
                   <Link to={linkPermission}>权限列表</Link>
                 </Menu.Item>
                 <Menu.Item key="12">
                   <Link to={linkCreatePermission}>创建权限</Link>
                 </Menu.Item>
-              </SubMenu>
+              </SubMenu> */}
               <SubMenu key="sub7" icon={<FileTextOutlined />} title="公告管理">
                 <Menu.Item key="13">
                   <Link to={linkAnnouncement}>公告列表</Link>

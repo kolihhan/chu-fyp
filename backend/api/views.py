@@ -867,7 +867,7 @@ def deleteBenefit(request, pk):
 def createPosition(request):
     try:
         with transaction.atomic():
-            positionData = request.data
+            positionData = request.data['data']
             createdPosition = models.CompanyEmployeePosition.objects.create(
                 company_id = models.Company.objects.get(id=positionData['company_id']),
                 position_name = positionData['position_name'],
@@ -947,13 +947,13 @@ def getDepartmentAllPosition(request, pk):
 @permission_classes([IsAuthenticated])
 def updatePosition(request, pk):
     try:
-        positionData = request.data
+        positionData = request.data['data']
         updatedPosition = models.CompanyEmployeePosition.objects.get(id=pk)
 
         updatedPosition.position_name = positionData.get('position_name', updatedPosition.position_name)
 
         if positionData.get('companyDepartment_id', None)!=None: 
-            updatedPosition.companyDepartment_id = positionData['companyDepartment_id']
+            updatedPosition.companyDepartment_id = models.CompanyDepartment.objects.get(id=positionData['companyDepartment_id'])
         
         companyPermissions = []
         if positionData.get('companyPermission_id', None)!=None:

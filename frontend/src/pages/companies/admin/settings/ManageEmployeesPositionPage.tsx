@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Table, Button, Modal, Form, Input } from "antd";
-import { getEmployeePositions, createPosition, updatePosition, deletePosition } from "../../../../api";
+import { Table, Button, Modal, Form, Input, Select } from "antd";
+import { getEmployeePositions, createPosition, updatePosition, deletePosition, getDepartments } from "../../../../api";
 
 const ManageEmployeesPositionPage: React.FC = () => {
   const { id } = useParams<{ id: string | undefined }>();
@@ -10,16 +10,25 @@ const ManageEmployeesPositionPage: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
   const [selectedPosition, setSelectedPosition] = useState<any | null>(null);
+  const [availableDepartments, setAvailableDepartments] = useState<any[]>([]);
 
   useEffect(() => {
     document.title = "职位管理";
     fetchEmployeePositions();
+    fetchDepartment();
   }, []);
 
   const fetchEmployeePositions = async () => {
     try {
       const response = await getEmployeePositions(companyId);
-      setEmployeePositions(response.data);
+      console.log(response.data.data)
+      response.data.data.forEach((item: any) => {
+        const department_name = item?.companyDepartment_id?.department_name || '';
+        item['department_name'] = department_name;
+        item['companyDepartment_id'] = item?.companyDepartment_id?.id;
+
+      })
+      setEmployeePositions(response.data.data);
     } catch (error) {
       console.log(error);
     }
@@ -28,7 +37,8 @@ const ManageEmployeesPositionPage: React.FC = () => {
   const handleCreatePosition = async (values: any) => {
     try {
       const response = await createPosition({ ...values, company_id: companyId });
-      setEmployeePositions([...employeePositions, response.data]);
+      // setEmployeePositions([...employeePositions, response.data.data]);
+      fetchEmployeePositions();
       setIsModalVisible(false);
       form.resetFields();
     } catch (error) {
@@ -42,14 +52,19 @@ const ManageEmployeesPositionPage: React.FC = () => {
     form.setFieldsValue(position);
   };
 
+  const fetchDepartment = async () => {
+    const response = await getDepartments(companyId);
+    setAvailableDepartments(response.data.data);
+  }
+
   const handleUpdatePosition = async (values: any) => {
     try {
- 
       const response =  await updatePosition(companyId, selectedPosition.id, values);
-      const updatedPositions = employeePositions.map((position) =>
-        position.id === selectedPosition.id ? response.data : position
-      );
-      setEmployeePositions(updatedPositions);
+      // const updatedPositions = employeePositions.map((position) =>
+      //   position.id === selectedPosition.id ? response.data.data : position
+      // );
+      // setEmployeePositions(updatedPositions);
+      fetchEmployeePositions();
       setIsModalVisible(false);
       form.resetFields();
     } catch (error) {
@@ -114,17 +129,24 @@ const ManageEmployeesPositionPage: React.FC = () => {
           <Form.Item
             name="position_name"
             label="职位名称"
-            rules={[{ required: true, message: "请输入职位名称" }]}
-          >
+            rules={[{ required: true, message: "请输入职位名称" }]} >
             <Input />
           </Form.Item>
 
           <Form.Item
-            name="department_name"
+            name="companyDepartment_id"
             label="部门"
-            rules={[{ required: true, message: "请输入部门名称" }]}
-          >
-            <Input />
+            rules={[{ required: true, message: "请输入部门名称" }]} >
+            <Select showSearch optionFilterProp="children" 
+                filterOption={(input, option) =>
+                  option?.props?.children?.toString()?.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }>
+                {availableDepartments?.map((department: any) => (
+                  <Select.Option key={department.id} value={department.id}>
+                    {department.department_name}
+                  </Select.Option>
+                ))}
+              </Select>
           </Form.Item>
 
           <Form.Item>
