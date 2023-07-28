@@ -31,7 +31,7 @@ const ButtonRow: React.FC<ButtonRowProps> = ({id}) => {
     }
 
     const handlerEnter = () => {
-        navigate(`/admin/company/${id}/employees`)
+        navigate(`/admin/company/employees`)
         sessionStorage.setItem('companyId', `${id}`)
     }
 

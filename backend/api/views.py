@@ -1164,11 +1164,11 @@ def deleteAnnouncementGroup(request, pk):
 def postAnnouncement(request):
     try:
         with transaction.atomic():
-            annData = request.data
+            annData = request.data['data']
             companyId = annData['company_id']
             companyEmployeeId = annData['companyEmployee_id']
 
-            groupIds = annData['group']
+            groupIds = annData.get('group', [])
             groups = []
             for groupId in groupIds:
                 group = models.CompanyAnnouncementGroup.objects.get(id=groupId)
@@ -1182,6 +1182,7 @@ def postAnnouncement(request):
                 expire_at = annData.get('expire_at', None)
             )
             postedAnnouncement.group.set(groups)
+            postedAnnouncement.save()
             serializer = serializers.CompanyAnnouncementSerializer(postedAnnouncement, many=False)
             return Response({'message':'公告發佈成功','data':serializer.data}, status=status.HTTP_200_OK)
     except (models.CompanyAnnouncementGroup.DoesNotExist, models.CompanyEmployee.DoesNotExist) as e:
@@ -1206,7 +1207,7 @@ def getAnnouncement(request, pk):
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def updateAnnouncement(request, pk):
-    updatedAnnouncement = request.data
+    updatedAnnouncement = request.data['data']
     try:
         with transaction.atomic():
             originalAnnouncement = models.CompanyAnnouncement.objects.get(id=pk)

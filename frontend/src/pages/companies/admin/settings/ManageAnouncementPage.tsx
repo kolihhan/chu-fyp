@@ -9,7 +9,7 @@ import dayjs from 'dayjs';
 
 const ManageAnnouncementPage: React.FC = () => {
   const { id } = useParams<{ id: string | undefined }>();
-  const companyId = Number(id);
+  const companyId = Number(sessionStorage.getItem('companyId'));
 
   const employeeId = useSelector(selectSelf);
   const employeeSelect = useSelector(selectSelectedCompany);
@@ -26,7 +26,7 @@ const ManageAnnouncementPage: React.FC = () => {
   const fetchAnnouncements = async () => {
     try {
       const response = await getAnnouncementsByCompany(companyId);
-      setAnnouncements(response.data);
+      setAnnouncements(response.data.data);
     } catch (error) {
       console.log(error);
     }
@@ -96,12 +96,18 @@ const ManageAnnouncementPage: React.FC = () => {
   const handleEdit = (record: any) => {
     record.expire_at = dayjs(record.expire_at).format("YYYY-MM-DD")
     setSelectedAnnouncement(record);
+    form.setFieldsValue({
+      expire_at: dayjs(record.expire_at)
+    })
     setModalVisible(true);
   };
 
   const handleModalCancel = () => {
     setModalVisible(false);
     form.resetFields();
+    form.setFieldsValue({
+      expire_at: null
+    })
   };
 
   const handleModalSubmit = () => {
@@ -125,6 +131,7 @@ const ManageAnnouncementPage: React.FC = () => {
         onCancel={handleModalCancel}
         onOk={handleModalSubmit}
         destroyOnClose
+        title="發佈公告"
       >
         <Form form={form} initialValues={selectedAnnouncement}>
           <Form.Item name="title" label="標題" rules={[{ required: true }]}>

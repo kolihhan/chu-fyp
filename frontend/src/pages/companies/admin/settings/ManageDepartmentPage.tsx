@@ -6,7 +6,7 @@ import { createDepartment, getDepartments, deleteDepartment, updateDepartment } 
 
 const ManageDepartmentPage: React.FC = () => {
   const { id } = useParams<{ id: string | undefined }>();
-  const companyId = Number(id);
+  const companyId = Number(sessionStorage.getItem('companyId'));
   const [departments, setDepartments] = useState<any[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();

@@ -118,19 +118,19 @@ const RoutesComponent: React.FC = () =>{
                 <Route path='admin/company/list' element={<ProtectedAdmin><CompaniesPage /></ProtectedAdmin>} /> {/* X */}
                 <Route path='admin/company/create' element={<ProtectedAdmin><CreateCompaniesPage /></ProtectedAdmin>} />  {/* X */}
 
-                <Route path='admin/company/:id/employees' element={<ProtectedAdmin><CompanyEmployeesPage /></ProtectedAdmin>} />  {/* X */}
+                <Route path='admin/company/employees' element={<ProtectedAdmin><CompanyEmployeesPage /></ProtectedAdmin>} />  {/* X */}
                 <Route path='admin/company/:id/feedback' element={<ProtectedAdmin><EmployeesFeedbackPage /></ProtectedAdmin>} />
                 <Route path='admin/company/:id/performance' element={<ProtectedAdmin><EmployeesPerformancePage /></ProtectedAdmin>} />
                 <Route path='admin/company/:id/promotion-history' element={<ProtectedAdmin><EmployeesPromotionHistoryPage /></ProtectedAdmin>} />
                 <Route path='admin/company/:id/training-management' element={<ProtectedAdmin><EmployeesTrainingManagementPage /></ProtectedAdmin>} />
 
                 {/* Admin Settings */}
-                <Route path='admin/company/:id/manage/:employee_id' element={<ProtectedAdmin><ManageEmployeesPermissionPage /></ProtectedAdmin>} />
-                <Route path='admin/company/:id/announcement-manage/' element={<ProtectedAdmin><ManageAnouncementPage /></ProtectedAdmin>} />
+                <Route path='admin/company/manage/:employee_id' element={<ProtectedAdmin><ManageEmployeesPermissionPage /></ProtectedAdmin>} />
+                <Route path='admin/company/announcement-manage/' element={<ProtectedAdmin><ManageAnouncementPage /></ProtectedAdmin>} />
                 <Route path='admin/company/:id/benefits-manage/' element={<ProtectedAdmin><ManageBenefitsPage /></ProtectedAdmin>} />
                 <Route path='admin/company/:id/checkIn-manage/' element={<ProtectedAdmin><ManageCheckInPage /></ProtectedAdmin>} />
-                <Route path='admin/company/:id/department-manage/' element={<ProtectedAdmin><ManageDepartmentPage /></ProtectedAdmin>} />
-                <Route path='admin/company/:id/position-manage/' element={<ProtectedAdmin><ManageEmployeesPositionPage /></ProtectedAdmin>} />
+                <Route path='admin/company/department-manage/' element={<ProtectedAdmin><ManageDepartmentPage /></ProtectedAdmin>} />
+                <Route path='admin/company/position-manage/' element={<ProtectedAdmin><ManageEmployeesPositionPage /></ProtectedAdmin>} />
                 <Route path='admin/company/:id/permission-manage/' element={<ProtectedAdmin><ManagePermissionPage /></ProtectedAdmin>} />
                 <Route path='admin/company/:id/recruitment-manage/' element={<ProtectedAdmin><ManageRecruitmentPage /></ProtectedAdmin>} />
 

@@ -5,7 +5,7 @@ import { getEmployeePositions, createPosition, updatePosition, deletePosition, g
 
 const ManageEmployeesPositionPage: React.FC = () => {
   const { id } = useParams<{ id: string | undefined }>();
-  const companyId = Number(id);
+  const companyId = Number(sessionStorage.getItem('companyId'));
   const [employeePositions, setEmployeePositions] = useState<any[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();

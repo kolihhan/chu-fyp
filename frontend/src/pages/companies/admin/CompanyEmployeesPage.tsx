@@ -5,7 +5,8 @@ import { getAllEmployees } from '../../../api';
 
 const CompanyEmployeePage: React.FC = () => {
   const { id } = useParams<{ id: string | undefined }>();
-  const companyId = Number(id);
+  // const companyId = Number(id);
+  const companyId = sessionStorage.getItem('companyId')
   
   const [employees, setEmployees] = useState<any[]>([]);
   const [searchText, setSearchText] = useState('');
@@ -37,7 +38,7 @@ const CompanyEmployeePage: React.FC = () => {
     { title: 'Employee', key: 'employee', render: (_ : any, record: any) =>  <span>{record.user_id.name}</span> },
     { title: 'Department', dataIndex: 'department', key: 'department', render:(_ : any, record: any) => <span>{record.companyEmployeePosition_id.companyDepartment_id.department_name }</span> },
     { title: 'Position', dataIndex: 'position', key: 'position', render:(_ : any, record: any) => <span>{record.companyEmployeePosition_id.position_name}</span> },
-    { title: 'Actions', key: 'actions', render: (_ : any, record: any) => <Link to={`/admin/company/${id}/manage/${record.id}`}>Manage Permissions</Link> },
+    { title: 'Actions', key: 'actions', render: (_ : any, record: any) => <Link to={`/admin/company/manage/${record.id}`}>Manage Permissions</Link> },
   ];
 
   return (
