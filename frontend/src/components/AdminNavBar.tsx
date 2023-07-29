@@ -44,12 +44,12 @@ const AdminNavBar: React.FC = () => {
               style={{ height: '100%', borderRight: 0 }}
               defaultOpenKeys={['sub1', 'sub2']}
               defaultSelectedKeys={['1']} >
-              <SubMenu key="sub1" icon={<UserOutlined />} title="用户管理">
+              <SubMenu key="sub1" icon={<UserOutlined />} title="職員管理">
                 <Menu.Item key="1">
                   <Link to={linkEmployeeList}>公司職員</Link>
                 </Menu.Item>
                 <Menu.Item key="2">
-                  <Link to={linkCreateEmployee}>创建用户</Link>
+                  <Link to={linkCreateEmployee}>新增職員</Link>
                 </Menu.Item>
               </SubMenu>
               <SubMenu key="sub2" icon={<TeamOutlined />} title="公司管理">
@@ -60,12 +60,10 @@ const AdminNavBar: React.FC = () => {
                   <Link to={linkCreateCompany}>创建公司</Link>
                 </Menu.Item>
               </SubMenu>
-              <SubMenu key="sub3" icon={<AppstoreOutlined />} title="部门管理">
+              <SubMenu key="sub3" icon={<AppstoreOutlined />} title="部門&職位管理">
                 <Menu.Item key="5">
                   <Link to={linkManageDepartment}>部门列表</Link>
                 </Menu.Item>
-              </SubMenu>
-              <SubMenu key="sub4" icon={<SolutionOutlined />} title="职位管理">
                 <Menu.Item key="7">
                   <Link to={linkPosition}>职位列表</Link>
                 </Menu.Item>

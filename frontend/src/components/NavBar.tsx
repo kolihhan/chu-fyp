@@ -52,7 +52,7 @@ export const DropDownIcon: React.FC<{ isManage: boolean; isEmployee: any[];}> = 
     menuItems.push(
       <Menu.ItemGroup key="employee-grp" title={<span><UserOutlined /> 會員專區</span>}>
         <Menu.Item key="employee-page">
-          <Link to={`/company/${isEmployee[companyNum].company_id}/checkIn`}>首頁</Link>
+          <Link to={`/company/checkIn`}>首頁</Link>
         </Menu.Item>
         <Menu.Item key="employee-feedback">
           <Link to={`/company/${isEmployee[companyNum].company_id}/feedback`}>Feedback</Link>
@@ -175,7 +175,8 @@ const Navbar: React.FC = () => {
         }
 
         {isAuthenticated ?
-          <DropDownIcon isManage={isUser?.type !== "staff"} isEmployee={isEmployee}/>
+          // <DropDownIcon isManage={isUser?.type !== "staff"} isEmployee={isEmployee}/>
+          <DropDownIcon isManage={sessionStorage.getItem("role")=="Boss"} isEmployee={isEmployee}/>
           :
           <Menu selectedKeys={[location.pathname]}>
             <Item key="login-key">

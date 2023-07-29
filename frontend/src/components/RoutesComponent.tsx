@@ -105,7 +105,7 @@ const RoutesComponent: React.FC = () =>{
                 <Route path="/resumes/:id" element={<Protected><ResumePage /></Protected>} /> {/* 编辑现有的resume */}
 
                 {/* Employees */}
-                <Route path="/company/:companyId/checkIn" element={<ProtectedEmployee><CheckInPage /></ProtectedEmployee>} />
+                <Route path="/company/checkIn" element={<ProtectedEmployee><CheckInPage /></ProtectedEmployee>} />
                 <Route path="/company/:companyId/feedback" element={<ProtectedEmployee><FeedBackPage /></ProtectedEmployee>} />
                 <Route path="/company/:companyId/applicationleave" element={<ProtectedEmployee><ApplicationLeavePage /></ProtectedEmployee>} />
 

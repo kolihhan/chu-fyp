@@ -72,6 +72,7 @@ urlpatterns = [
 
     # companyEmployee
     path('companyEmployee/create', createCompanyEmployee, name='createCompanyEmployee'),
+    path('companyEmployee/get/user/<str:pk>', getUserCompanyEmployee, name='getUserCompanyEmployee'),
     path('companyEmployee/get/<str:pk>', getCompanyEmployee, name='getCompanyEmployee'),
     path('companyEmployee/get/company/all/<str:pk>', getCompanyAllEmployee, name='getCompanyAllEmployee'),
     path('companyEmployee/update/<str:pk>', updateCompanyEmployee, name='updateCompanyEmployee'),

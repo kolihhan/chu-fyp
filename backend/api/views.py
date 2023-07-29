@@ -655,6 +655,19 @@ def createMultipleCompanyEmployee(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
+def getUserCompanyEmployee(request, pk):
+    try: 
+        companyEmployee = models.CompanyEmployee.objects.get(user_id__id=pk)
+        serializer = serializers.CompanyEmployeeSerializer(companyEmployee, many=False)
+        return Response(serializer.data)
+    except models.CompanyEmployee.DoesNotExist as e: 
+        return Response({'data':None, 'message':'使用者還未加入公司', 'error':str(e)})
+    except Exception as e: 
+        return Response({'data': None, 'message': '獲取員工失敗', 'error':str(e)})
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def getCompanyEmployee(request, pk):
     # pass in companyEmployee id
     companyEmployee = models.CompanyEmployee.objects.get(id=pk)

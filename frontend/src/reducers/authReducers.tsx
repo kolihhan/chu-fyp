@@ -1,7 +1,7 @@
 import { AnyAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ThunkAction } from 'redux-thunk';
 import { RootState } from '../app/store';
-import { loginApi, registerApi, refreshApi } from '../api';
+import { loginApi, registerApi, refreshApi, getUserEmployee } from '../api';
 import { removeToken, saveToken, getUserFromToken } from '../utils';
 import { message } from 'antd';
 import dayjs from 'dayjs';  // 引入 dayjs 库
@@ -116,14 +116,27 @@ export const fetchUsersInfo = (
         dispatch(setSelectCompany(0));
       }
       
+      message.success('登入成功');
+      setTimeout(async () => {
+        if (user?.type == "Boss"){
+          sessionStorage.setItem("role", "Boss");
+          window.location.href = 'company/list';
+        }else if (user?.type == "Employee"){
+          sessionStorage.setItem("role", "Employee");
+          const response = await getUserEmployee(user?.id)
+          if(response.data!=null){
+            sessionStorage.setItem("employeeId", response.data.id);
+            sessionStorage.setItem("companyId", response.data.company_id);
+            window.location.href = '/company/checkIn'
+          }else{
+            window.location.href = '/'
+          }
+        }
+      }, 500); 
       dispatch(fetchResumes());
     }
 
     
-    message.success('登入成功');
-    setTimeout(() => {
-      window.location.href = '/';
-    }, 500); 
     
   } catch (error) {
     console.log(error);

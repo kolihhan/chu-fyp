@@ -348,3 +348,6 @@ export const getPositionById = async(id: number) => {
   return axios.get( `${API_URL}/companyPosition/get/${id}`, { headers: authHeaders() } )
 }
 
+export const getUserEmployee = async(id: number) => {
+  return axios.get(`${API_URL}/companyEmployee/get/user/${id}`, { headers: authHeaders() })
+}
