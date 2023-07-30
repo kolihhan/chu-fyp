@@ -3,10 +3,11 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Table, Modal, Form, Input, Button } from "antd";
 import { createDepartment, getDepartments, deleteDepartment, updateDepartment } from "../../../../api";
+import { getCookie } from "../../../../utils";
 
 const ManageDepartmentPage: React.FC = () => {
   const { id } = useParams<{ id: string | undefined }>();
-  const companyId = Number(sessionStorage.getItem('companyId'));
+  const companyId = Number(getCookie('companyId'));
   const [departments, setDepartments] = useState<any[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();

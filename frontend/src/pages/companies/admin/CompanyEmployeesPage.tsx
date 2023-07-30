@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Button, Input, Table } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 import { getAllEmployees } from '../../../api';
+import { getCookie } from '../../../utils';
 
 const CompanyEmployeePage: React.FC = () => {
   const { id } = useParams<{ id: string | undefined }>();
   // const companyId = Number(id);
-  const companyId = sessionStorage.getItem('companyId')
+  const companyId = getCookie('companyId')
   
   const [employees, setEmployees] = useState<any[]>([]);
   const [searchText, setSearchText] = useState('');

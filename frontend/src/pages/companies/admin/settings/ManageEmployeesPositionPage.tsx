@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Table, Button, Modal, Form, Input, Select } from "antd";
 import { getEmployeePositions, createPosition, updatePosition, deletePosition, getDepartments } from "../../../../api";
+import { getCookie } from "../../../../utils";
 
 const ManageEmployeesPositionPage: React.FC = () => {
   const { id } = useParams<{ id: string | undefined }>();
-  const companyId = Number(sessionStorage.getItem('companyId'));
+  const companyId = Number(getCookie('companyId'));
   const [employeePositions, setEmployeePositions] = useState<any[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();

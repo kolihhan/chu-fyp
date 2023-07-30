@@ -11,11 +11,12 @@ import {
   getPositionById,
   updateEmployeeSettings,
 } from "../../../../api";
+import { getCookie } from "../../../../utils";
 
 const ManageEmployeesSettingPage: React.FC = () => {
   const { id, employee_id } = useParams<{ id: string | undefined; employee_id: string | undefined }>();
   const employeeId = Number(employee_id);
-  const companyId = Number(sessionStorage.getItem('companyId'));
+  const companyId = Number(getCookie('companyId'));
   const [employeeData, setEmployeeData] = useState<any>();
   const [availableDepartments, setAvailableDepartments] = useState<any[]>([]);
   const [availablePosition, setAvailablePosition] = useState<any[]>([]);

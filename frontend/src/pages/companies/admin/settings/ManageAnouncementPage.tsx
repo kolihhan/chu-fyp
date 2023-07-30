@@ -6,10 +6,11 @@ import { useParams } from "react-router-dom";
 import { selectSelectedCompany, selectSelf } from "../../../../reducers/employeeReducers";
 
 import dayjs from 'dayjs';
+import { getCookie } from "../../../../utils";
 
 const ManageAnnouncementPage: React.FC = () => {
   const { id } = useParams<{ id: string | undefined }>();
-  const companyId = Number(sessionStorage.getItem('companyId'));
+  const companyId = Number(getCookie('companyId'));
 
   const employeeId = useSelector(selectSelf);
   const employeeSelect = useSelector(selectSelectedCompany);

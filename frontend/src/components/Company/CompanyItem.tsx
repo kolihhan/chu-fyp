@@ -8,6 +8,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { RootState } from '../../app/store';
 import { useNavigate } from 'react-router-dom';
 import 'dayjs/locale/zh-cn';
+import { setCookie } from '../../utils';
 
 
 
@@ -32,7 +33,7 @@ const ButtonRow: React.FC<ButtonRowProps> = ({id}) => {
 
     const handlerEnter = () => {
         navigate(`/admin/company/employees`)
-        sessionStorage.setItem('companyId', `${id}`)
+        setCookie("companyId", `${id}`)
     }
 
     return (

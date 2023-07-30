@@ -11,6 +11,7 @@ import { UserOutlined, TeamOutlined } from '@ant-design/icons';
 
 import AdminNavBar from './AdminNavBar';
 import { selectSelectedCompany, setSelectCompany } from '../reducers/employeeReducers';
+import { getCookie } from '../utils';
 
 
 const { SubMenu, Item, Divider } = Menu;
@@ -176,7 +177,7 @@ const Navbar: React.FC = () => {
 
         {isAuthenticated ?
           // <DropDownIcon isManage={isUser?.type !== "staff"} isEmployee={isEmployee}/>
-          <DropDownIcon isManage={sessionStorage.getItem("role")=="Boss"} isEmployee={isEmployee}/>
+          <DropDownIcon isManage={getCookie("role")=="Boss"} isEmployee={isEmployee}/>
           :
           <Menu selectedKeys={[location.pathname]}>
             <Item key="login-key">

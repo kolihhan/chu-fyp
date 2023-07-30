@@ -2,7 +2,7 @@ import jwtDecode , {JwtPayload} from "jwt-decode";
 import dayjs from 'dayjs';
 
 export const authHeaders = () =>{
-  const token = sessionStorage.getItem('accessToken');
+  const token = getCookie('accessToken');
   if(token) {
     return{
       'Content-Type': 'application/json',
@@ -19,11 +19,13 @@ export const authHeaders = () =>{
 
 export const saveToken = (token: string) => {
   sessionStorage.setItem('accessToken', token);
+  setCookie('accessToken', token);
 };
 
 
 export const removeToken = () => {
   sessionStorage.removeItem('accessToken');
+  removeCookie('accessToken');
 };
 
 
@@ -48,7 +50,7 @@ export const getUserFromToken = (payload: any) => {
 };
 
 export const getUserId = () =>{
-  const token: any = sessionStorage.getItem('accessToken');
+  const token: any = getCookie('accessToken');
   if(token) {
     return token
   }else{
@@ -56,4 +58,42 @@ export const getUserId = () =>{
   }
 
 
+};
+
+export const setCookie = (name: string, value: string, days?: number) => {
+  const expirationDate = new Date();
+  if(days==null) days=7
+  expirationDate.setDate(expirationDate.getDate() + days);
+  const cookieValue = `${name}=${encodeURIComponent(value)};expires=${expirationDate.toUTCString()};path=/`;
+  document.cookie = cookieValue;
+};
+
+export const getCookie = (name: string): string | null => {
+  const cookieString = document.cookie;
+  const cookies = cookieString.split(';');
+  for (let i = 0; i < cookies.length; i++) {
+    const cookie = cookies[i].trim();
+    if (cookie.startsWith(`${name}=`)) {
+      return decodeURIComponent(cookie.substring(name.length + 1));
+    }
+  }
+  return null; // Cookie with the given name not found
+};
+
+export const removeCookie = (name: string) => {
+  const expirationDate = new Date();
+  expirationDate.setDate(expirationDate.getDate() - 1);
+  const cookieValue = `${name}=;expires=${expirationDate.toUTCString()};path=/`;
+  document.cookie = cookieValue;
+};
+
+export const removeAllCookies = () => {
+  const cookies = document.cookie.split(";");
+
+  for (let i = 0; i < cookies.length; i++) {
+    const cookie = cookies[i];
+    const eqPos = cookie.indexOf("=");
+    const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+    document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+  }
 };

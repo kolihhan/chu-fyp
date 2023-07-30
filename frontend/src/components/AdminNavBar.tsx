@@ -11,6 +11,7 @@ import {
   ToolOutlined,
   FileTextOutlined,
 } from '@ant-design/icons';
+import { getCookie } from '../utils';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -19,7 +20,7 @@ const AdminNavBar: React.FC = () => {
   const location = useLocation();
   const isAdminPath = location.pathname.startsWith('/admin');
   const screenHeight = window.innerHeight;
-  const id = sessionStorage.getItem('companyId')
+  const id = getCookie('companyId')
 
   const linkEmployeeList = `/admin/company/employees`
   const linkCreateEmployee = `/admin/user/create` //todo

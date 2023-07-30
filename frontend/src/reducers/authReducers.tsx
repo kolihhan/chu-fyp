@@ -2,7 +2,7 @@ import { AnyAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ThunkAction } from 'redux-thunk';
 import { RootState } from '../app/store';
 import { loginApi, registerApi, refreshApi, getUserEmployee } from '../api';
-import { removeToken, saveToken, getUserFromToken } from '../utils';
+import { removeToken, saveToken, getUserFromToken, setCookie, removeCookie, removeAllCookies } from '../utils';
 import { message } from 'antd';
 import dayjs from 'dayjs';  // 引入 dayjs 库
 
@@ -96,6 +96,7 @@ export const logout = (): ThunkAction<void, RootState, unknown, AnyAction> => as
   dispatch(setAccessToken(null));
   dispatch(setUser(null));
   message.success('登出成功');
+  removeAllCookies()
 };
 
 export const fetchUsersInfo = (
@@ -119,14 +120,14 @@ export const fetchUsersInfo = (
       message.success('登入成功');
       setTimeout(async () => {
         if (user?.type == "Boss"){
-          sessionStorage.setItem("role", "Boss");
+          setCookie("role", "Boss");
           window.location.href = 'company/list';
         }else if (user?.type == "Employee"){
-          sessionStorage.setItem("role", "Employee");
+          setCookie("role", "Employee");
           const response = await getUserEmployee(user?.id)
           if(response.data!=null){
-            sessionStorage.setItem("employeeId", response.data.id);
-            sessionStorage.setItem("companyId", response.data.company_id);
+            setCookie("employeeId", response.data.id);
+            setCookie("companyId", response.data.company_id)
             window.location.href = '/company/checkIn'
           }else{
             window.location.href = '/'
