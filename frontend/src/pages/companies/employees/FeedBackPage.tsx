@@ -8,6 +8,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
 
 import { getAllEmployees } from '../../../api';
+import { getCookie } from '../../../utils';
 
 const { Option } = Select;
 
@@ -18,20 +19,19 @@ const FeedBackPage: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
 
   const [companyEmployees, setCompanyEmployees] = useState<any[]>([]);
-  const employeeId = useSelector(selectSelf);
   const employeeSelect = useSelector(selectSelectedCompany);
-
+  const companyId = getCookie('companyId')
+  const employeeId = getCookie('employeeId')
 
   useEffect(() => {
-    // 获取请假记录
     fetchCompanyEmployees();
   }, []);
 
 
   const onFinish = (values: any) => {
 
-    values['company_id'] = employeeId[employeeSelect].company_id;
-    values['companyEmployee_id'] = employeeId[employeeSelect].id;
+    values['company_id'] = companyId;
+    values['companyEmployee_id'] = employeeId;
 
     dispatch(createFeedback(values));
     form.resetFields();
@@ -39,7 +39,7 @@ const FeedBackPage: React.FC = () => {
 
   const fetchCompanyEmployees = async () => {
     try {
-      const response = await getAllEmployees(employeeId[employeeSelect].company_id.id);
+      const response = await getAllEmployees(companyId);
       setCompanyEmployees(response.data);
     } catch (error) {
       console.log(error);

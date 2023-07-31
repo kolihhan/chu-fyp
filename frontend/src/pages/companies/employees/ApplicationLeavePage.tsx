@@ -4,11 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../app/store';
 import { applyLeave, selectSelectedCompany, selectSelf } from '../../../reducers/employeeReducers';
 
-import { getLeaveRecords } from '../../../api';
+import { applyLeaveApi, getLeaveRecords } from '../../../api';
 
 import { AnyAction } from '@reduxjs/toolkit';
 import { ThunkDispatch } from 'redux-thunk';
 import dayjs from 'dayjs';
+import { getCookie } from '../../../utils';
 
 const { RangePicker } = DatePicker;
 
@@ -19,27 +20,32 @@ const ApplicationLeavePage: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
 
   const [leaveRecords, setLeaveRecords] = useState<any[]>([]);
-  const employeeId = useSelector(selectSelf);
   const employeeSelect = useSelector(selectSelectedCompany);
+  const companyId = getCookie('companyId')
+  const employeeId = getCookie('employeeId')
 
   useEffect(() => {
     // 获取请假记录
     fetchDatas();
   }, []);
 
-  const onFinish = (values: any) => {
+  const onFinish = async (values: any) => {
     values['leave_start'] = dayjs(values['leave_start']).format('YYYY-MM-DD HH:mm:ss');
     values['leave_end'] = dayjs(values['leave_end']).format('YYYY-MM-DD HH:mm:ss');
-    values['company_id'] = employeeId[employeeSelect].company_id;
-    values['companyEmployee_id'] = employeeId[employeeSelect].id;
+    values['company_id'] = companyId;
+    values['companyEmployee_id'] = employeeId;
 
-    dispatch(applyLeave(values));
-    form.resetFields();
+    // dispatch(applyLeave(values));
+    const response = await applyLeaveApi(values);
+    if(response.data){
+      form.resetFields();
+      fetchDatas()
+    }
   };
 
   const fetchDatas = async () => {
     try {
-      const response = await getLeaveRecords(employeeId[employeeSelect].id);
+      const response = await getLeaveRecords(employeeId);
       setLeaveRecords(response.data.data);
       console.log(response.data);
 
@@ -54,7 +60,7 @@ const ApplicationLeavePage: React.FC = () => {
     { title: 'Reason', dataIndex: 'reason', key: 'reason' },
     { title: 'Type', dataIndex: 'type', key: 'type' },
     { title: 'Status', dataIndex: 'status', key: 'status' },
-    { title: 'Comment', dataIndex: 'comment', key: 'comment' },
+    { title: 'Comment', dataIndex: 'comment', key: 'comment', render: (text:any) => (text==null?"-":text) },
   ];
   return (
     <div>
