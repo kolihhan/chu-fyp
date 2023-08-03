@@ -8,7 +8,8 @@ import { ThunkDispatch } from 'redux-thunk';
 import { RootState } from '../../app/store';
 import { useNavigate } from 'react-router-dom';
 import 'dayjs/locale/zh-cn';
-import { setCookie } from '../../utils';
+import { getCookie, setCookie } from '../../utils';
+import { getUserEmployee } from '../../api';
 
 
 
@@ -31,7 +32,13 @@ const ButtonRow: React.FC<ButtonRowProps> = ({id}) => {
         navigate(`/company/${id}/view`)
     }
 
-    const handlerEnter = () => {
+    const handlerEnter = async () => {
+        const response = await getUserEmployee(Number(getCookie('userId')))
+        response.data.map((cmp: any) => {
+            if(cmp.company_id==id) {
+                setCookie('employeeId', cmp.id)
+            }
+        })
         navigate(`/admin/company/employees`)
         setCookie("companyId", `${id}`)
     }

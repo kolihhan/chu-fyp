@@ -10,6 +10,7 @@ import {
   ApartmentOutlined,
   ToolOutlined,
   FileTextOutlined,
+  UsergroupAddOutlined
 } from '@ant-design/icons';
 import { getCookie } from '../utils';
 
@@ -28,6 +29,7 @@ const AdminNavBar: React.FC = () => {
   const linkCreateCompany = `/admin/company/create`
   const linkManageDepartment = `/admin/company/department-manage/`
   const linkPosition = `admin/company/position-manage`
+  const linkBenefit = `admin/company/benefits-manage`
   const linkAnnouncement = `admin/company/announcement-manage/`
   // const linkCreateDepartment = `/admin/department/create`
   // const linkCreatePosition = `/admin/position/create`
@@ -60,13 +62,16 @@ const AdminNavBar: React.FC = () => {
                 <Menu.Item key="4">
                   <Link to={linkCreateCompany}>创建公司</Link>
                 </Menu.Item>
-              </SubMenu>
-              <SubMenu key="sub3" icon={<AppstoreOutlined />} title="部門&職位管理">
+              {/* </SubMenu>
+              <SubMenu key="sub3" icon={<AppstoreOutlined />} title="部門&職位管理"> */}
                 <Menu.Item key="5">
                   <Link to={linkManageDepartment}>部门列表</Link>
                 </Menu.Item>
                 <Menu.Item key="7">
                   <Link to={linkPosition}>职位列表</Link>
+                </Menu.Item>
+                <Menu.Item key="8">
+                  <Link to={linkBenefit}>福利管理</Link>
                 </Menu.Item>
               </SubMenu>
               <SubMenu key="sub7" icon={<FileTextOutlined />} title="公告管理">
@@ -74,6 +79,14 @@ const AdminNavBar: React.FC = () => {
                   <Link to={linkAnnouncement}>公告列表</Link>
                 </Menu.Item>
               </SubMenu>
+              {/* <SubMenu key="sub8" icon={<UsergroupAddOutlined/>} title="招聘管理">
+                <Menu.Item key="14">
+                  <Link to="">招聘列表</Link>
+                </Menu.Item>
+                <Menu.Item key="15">
+                  <Link to="">應聘人員</Link>
+                </Menu.Item>
+              </SubMenu> */}
             </Menu>
           </Sider>
         }

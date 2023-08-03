@@ -657,8 +657,8 @@ def createMultipleCompanyEmployee(request):
 @permission_classes([IsAuthenticated])
 def getUserCompanyEmployee(request, pk):
     try: 
-        companyEmployee = models.CompanyEmployee.objects.get(user_id__id=pk)
-        serializer = serializers.CompanyEmployeeSerializer(companyEmployee, many=False)
+        companyEmployee = models.CompanyEmployee.objects.filter(user_id__id=pk)
+        serializer = serializers.CompanyEmployeeSerializer(companyEmployee, many=True)
         return Response(serializer.data)
     except models.CompanyEmployee.DoesNotExist as e: 
         return Response({'data':None, 'message':'使用者還未加入公司', 'error':str(e)})
@@ -805,7 +805,7 @@ def deleteDepartment(request, pk):
 @permission_classes([IsAuthenticated])
 def createBenefit(request):
     try:
-        permissionData = request.data
+        permissionData = request.data['data']
         createdBenefit = models.CompanyBenefits.objects.create(
             company_id = models.Company.objects.get(id=permissionData['company_id']),
             benefit_name = permissionData['benefit_name'],
@@ -847,10 +847,10 @@ def getCompanyAllBenefit(request, pk):
 @permission_classes([IsAuthenticated])
 def updateBenefit(request, pk):
     try:
-        benefitData = request.data
+        benefitData = request.data['data']
         benefit = models.CompanyBenefits.objects.get(id=pk)
         benefit.benefit_name = benefitData.get('benefit_name', benefit.benefit_name)
-        benefit.benefit_desc = benefitData('benefit_desc', benefit.benefit_desc)
+        benefit.benefit_desc = benefitData.get('benefit_desc', benefit.benefit_desc)
         benefit.save()
         serializer = serializers.CompanyBenefitsSerializer(benefit, many=False)
         return Response({'data':serializer.data}, status=status.HTTP_200_OK)
@@ -2287,7 +2287,9 @@ class CompanyCheckInAPIView(APIView):
         if check_ins.exists():
             last_check_in = check_ins.latest('create_at')
             if last_check_in.type == 'Check In':
-                return Response({'status': 2})  
+                return Response({'status': 2})
+            elif last_check_in.type == 'Check Out':
+                return Response({'status': 3})
 
 
         return Response({'status': 1})  

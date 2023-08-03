@@ -28,6 +28,7 @@ import ManageDepartmentPage from "../pages/companies/admin/settings/ManageDepart
 import ManageEmployeesPositionPage from "../pages/companies/admin/settings/ManageEmployeesPositionPage";
 import ManagePermissionPage from "../pages/companies/admin/settings/ManagePermissionPage";
 import ManageRecruitmentPage from "../pages/companies/admin/settings/ManageRecruitmentPage";
+import EmployeeHomePage from "../pages/companies/employees/EmployeeHomePage";
 
 const Protected: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const user = useSelector((state: RootState) => state.auth.user);
@@ -105,6 +106,7 @@ const RoutesComponent: React.FC = () =>{
                 <Route path="/resumes/:id" element={<Protected><ResumePage /></Protected>} /> {/* 编辑现有的resume */}
 
                 {/* Employees */}
+                <Route path="/company/home" element={<ProtectedEmployee><EmployeeHomePage /></ProtectedEmployee>} />
                 <Route path="/company/checkIn" element={<ProtectedEmployee><CheckInPage /></ProtectedEmployee>} />
                 <Route path="/company/feedback" element={<ProtectedEmployee><FeedBackPage /></ProtectedEmployee>} />
                 <Route path="/company/applicationleave" element={<ProtectedEmployee><ApplicationLeavePage /></ProtectedEmployee>} />
@@ -127,7 +129,7 @@ const RoutesComponent: React.FC = () =>{
                 {/* Admin Settings */}
                 <Route path='admin/company/manage/:employee_id' element={<ProtectedAdmin><ManageEmployeesPermissionPage /></ProtectedAdmin>} />
                 <Route path='admin/company/announcement-manage/' element={<ProtectedAdmin><ManageAnouncementPage /></ProtectedAdmin>} />
-                <Route path='admin/company/:id/benefits-manage/' element={<ProtectedAdmin><ManageBenefitsPage /></ProtectedAdmin>} />
+                <Route path='admin/company/benefits-manage/' element={<ProtectedAdmin><ManageBenefitsPage /></ProtectedAdmin>} />
                 <Route path='admin/company/:id/checkIn-manage/' element={<ProtectedAdmin><ManageCheckInPage /></ProtectedAdmin>} />
                 <Route path='admin/company/department-manage/' element={<ProtectedAdmin><ManageDepartmentPage /></ProtectedAdmin>} />
                 <Route path='admin/company/position-manage/' element={<ProtectedAdmin><ManageEmployeesPositionPage /></ProtectedAdmin>} />

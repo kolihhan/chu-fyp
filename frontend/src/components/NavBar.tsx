@@ -53,7 +53,8 @@ export const DropDownIcon: React.FC<{ isManage: boolean; isEmployee: any[];}> = 
     menuItems.push(
       <Menu.ItemGroup key="employee-grp" title={<span><UserOutlined /> 會員專區</span>}>
         <Menu.Item key="employee-page">
-          <Link to={`/company/checkIn`}>首頁</Link>
+          {/* <Link to={`/company/checkIn`}>首頁</Link> */}
+          <Link to={`/company/home`}>首頁</Link>
         </Menu.Item>
         <Menu.Item key="employee-feedback">
           <Link to={`/company/feedback`}>Feedback</Link>

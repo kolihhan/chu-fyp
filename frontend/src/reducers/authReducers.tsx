@@ -121,14 +121,16 @@ export const fetchUsersInfo = (
       setTimeout(async () => {
         if (user?.type == "Boss"){
           setCookie("role", "Boss");
+          setCookie("userId", user?.id);
           window.location.href = 'company/list';
         }else if (user?.type == "Employee"){
           setCookie("role", "Employee");
+          setCookie("userId", user?.id);
           const response = await getUserEmployee(user?.id)
           if(response.data!=null){
-            setCookie("employeeId", response.data.id);
-            setCookie("companyId", response.data.company_id)
-            window.location.href = '/company/checkIn'
+            setCookie("employeeId", response.data[0].id);
+            setCookie("companyId", response.data[0].company_id)
+            window.location.href = '/company/home'
           }else{
             window.location.href = '/'
           }

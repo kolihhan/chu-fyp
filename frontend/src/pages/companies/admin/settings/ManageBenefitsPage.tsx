@@ -3,10 +3,10 @@ import { useSelector } from "react-redux";
 import { Table, Button, Modal, Form, Input } from "antd";
 import { getBenefitsByCompany, addBenefit, updateBenefit, deleteBenefit } from "../../../../api";
 import { useParams } from "react-router-dom";
+import { getCookie } from "../../../../utils";
 
 const ManageBenefitsPage: React.FC = () => {
-  const { id } = useParams<{ id: string | undefined }>();
-  const companyId = Number(id);
+  const companyId = Number(getCookie('companyId'));
 
   const [benefits, setBenefits] = useState<any[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -20,7 +20,7 @@ const ManageBenefitsPage: React.FC = () => {
   const fetchBenefits = async () => {
     try {
       const response = await getBenefitsByCompany(companyId); 
-      setBenefits(response.data);
+      setBenefits(response.data.data);
     } catch (error) {
       console.log(error);
     }
