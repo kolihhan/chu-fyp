@@ -8,7 +8,7 @@ import RecruitmentItem from "../../../components/Company/RecruitmentItem";
 import { getCompanyById } from "../../../api";
 import EmptyComponent from "../../../components/EmptyComponent";
 
-const CompanyInfo: React.FC<any> = ({company}) => {
+export const CompanyInfo: React.FC<any> = ({company}) => {
   return (
     <div>
       {company?(

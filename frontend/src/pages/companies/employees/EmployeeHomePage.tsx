@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
 import { getCookie } from "../../../utils";
 import { Button, Card, Col, Modal, Row, Table } from "antd";
-import { createCheckInApi, getAnnouncementsByCompany, getCheckInRecord } from "../../../api";
+import { createCheckInApi, getAnnouncementsByCompany, getCheckInRecord, getCompanyById } from "../../../api";
 import dayjs from 'dayjs';
 import { Label } from "reactstrap";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../app/store";
+import CompanyHeader from "../../../components/Company/CompanyHeader";
+import { CompanyInfo } from "../admin/CompanyDetailPage";
+import EmployeeItem from "../../../components/Company/EmployeeItem";
+import EmptyComponent from "../../../components/EmptyComponent";
 
 const EmployeeHomePage: React.FC = () => {
     const companyId = Number(getCookie('companyId'))
@@ -15,13 +19,13 @@ const EmployeeHomePage: React.FC = () => {
     const [announcements, setAnnouncements] = useState<any[]>([]);
     const [modalVisible, setModalVisible] = useState(false)
     const [selectedAnnouncement, setSelectedAnnouncement] = useState<any>(null)
-    const [checkInText, setCheckInText] = useState("签到")
-    const [checkInStatus, setCheckInStatus] = useState(1)
+    const [company, setCompany] = useState<any>();
+    const [companyEmployees, setCompanyEmployees] = useState([])
     
     useEffect(() => {
         document.title = "公司首頁"
         fetchAnnouncements();
-        checkIsCheckin()
+        fetchCompany();
     }, []);
 
     const fetchAnnouncements = async () => {
@@ -65,73 +69,40 @@ const EmployeeHomePage: React.FC = () => {
         },
       ];
 
-    const handleCheckIn = async () => {
-        const response = await createCheckInApi(employeeId,"Check In")
-        if(response.status==201){
-            checkIsCheckin()
-        }else{
-            // prompt error
+    const fetchCompany = async () => {
+        try {
+          const response = await getCompanyById(companyId);
+          setCompany(response.data.data.company);
+          const aa:any = [
+            ...response.data.data.employees,
+          ]
+          setCompanyEmployees(aa)
+        //   setCompanyRecruitments(response.data.data.recruitments)
+        } catch (error) {
+          console.log(error);
         }
-
-    };
-
-    const handleCheckOut = async () => {
-        const response = await createCheckInApi(employeeId,"Check Out");
-        if(response.status==201){
-            checkIsCheckin()
-        }else{
-            // prompt error
-        }
-    };
-
-    const handleButtonCheckIn = () => {
-        if(checkInStatus===1){
-            handleCheckIn()
-        }else if(checkInStatus===2){
-            handleCheckOut()
-        }else {
-            //handleCheckOutAlready
-        }
-    }
-
-    const checkIsCheckin = async () => {
-        const checkInResponse = await getCheckInRecord(employeeId);
-        if(checkInResponse.data.status===1){
-            setCheckInStatus(1)
-            setCheckInText("签到")
-        }else if(checkInResponse.data.status===2){
-            setCheckInStatus(2)
-            setCheckInText("签出")
-        }else {
-            setCheckInStatus(3)
-            setCheckInText("已签出")
-        }
-    }
+      };
     return (
-        <div style={{padding:'16px'}}>
-            <div style={{textAlign:'right'}}>
-                <Button 
-                    type="primary" 
-                    onClick={handleButtonCheckIn}
-                    style={{marginBottom:'16px', textAlign:'right'}}>
-                        {checkInText}
-                </Button>
-            </div>
-            <div>
-                <Card>
-                    <h3>最新公告</h3>
-                    <Table dataSource={announcements} columns={columns} pagination={false}/>
-                    <Modal
-                        title="查看公告"
-                        destroyOnClose
-                        visible={modalVisible}
-                        onOk={handleModalCancel}
-                        onCancel={handleModalCancel}
-                        // footer={null} 
-                        cancelButtonProps={{style: {display:"none"}}} >
-                            {
-                                selectedAnnouncement?(
-                                    <>
+        <div style={{ paddingLeft:'10%', paddingRight:'10%', paddingTop: '16px', backgroundColor: "#F4F4F4" }}>
+            <CompanyHeader company={company} checkInButton={true} />
+
+            <div style={{ display: "flex", alignItems: "start", justifyContent: "space-between" }}>
+                <div style={{ width: "70%" }}>
+                    <Card id="cmpAnnouncements"
+                    style={{ marginTop: "8px" }}
+                    bodyStyle={{ backgroundColor: "white", paddingTop: "0px" }}
+                    title={<h2 style={{ margin: "0px" }}>最新公告</h2>} >
+                        <Table dataSource={announcements} columns={columns} pagination={false}/>
+                        <Modal
+                            title="查看公告"
+                            destroyOnClose
+                            visible={modalVisible}
+                            onOk={handleModalCancel}
+                            onCancel={handleModalCancel}
+                            // footer={null} 
+                            cancelButtonProps={{style: {display:"none"}}} >
+                                {selectedAnnouncement?(
+                                <>
                                     <Row gutter={[16,16]} style={{alignItems:'center'}}>
                                         <Col span={4}>
                                             <Label>
@@ -177,16 +148,48 @@ const EmployeeHomePage: React.FC = () => {
                                             </Label>
                                         </Col>
                                     </Row>
-                                    </>
-                                ):(
-                                    <></>
-                                )
+                                </>):(<></>)}
+                            
+                        </Modal>
+                    </Card>
+                    <Card id="cmpDetails"
+                        style={{ marginTop: "8px" }}
+                        bodyStyle={{ backgroundColor: "white", paddingTop: "0px" }}
+                        title={<h2 style={{ margin: "0px" }}>公司信息</h2>} >
+                        <CompanyInfo company={company}/>
+                    </Card>
+                    {/* <Card id="cmpDetailEmployees"
+                        style={{ marginTop: "8px" }}
+                        bodyStyle={{ backgroundColor: "white", paddingTop: "0px", overflowY: "auto", height: 'calc(100vh - 300px)' }}
+                        title={<h2 style={{ margin: "0px" }}>員工列表</h2>} >
+                        {
+                        companyEmployees ? (
+                            companyEmployees.length > 0 ? (
+                            companyEmployees?.map((employee: any) => (
+                                <EmployeeItem key={employee.id} id={employee.id} employee={employee} />
+                            ))
+                            ):( <EmptyComponent /> )
+                        ):( <EmptyComponent /> )
+                        }
+                    </Card> */}
+                </div>
 
-                                
-                            }
-                        
-                    </Modal>
-                </Card>
+                <div style={{ width: '23%', position: 'fixed', top: '235px', right:'10.5%', overflowY: 'auto' }}>
+                    <Card id="cmpDetailEmployees"
+                        style={{ marginTop: "8px" }}
+                        bodyStyle={{ backgroundColor: "white", paddingTop: "0px", overflowY: "auto", height: 'calc(100vh - 300px)' }}
+                        title={<h2 style={{ margin: "0px" }}>員工列表</h2>} >
+                        {
+                        companyEmployees ? (
+                            companyEmployees.length > 0 ? (
+                            companyEmployees?.map((employee: any) => (
+                                <EmployeeItem key={employee.id} id={employee.id} employee={employee} />
+                            ))
+                            ):( <EmptyComponent /> )
+                        ):( <EmptyComponent /> )
+                        }
+                    </Card>
+                </div>
             </div>
         </div>
     )
