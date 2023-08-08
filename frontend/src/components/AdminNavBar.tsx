@@ -31,6 +31,7 @@ const AdminNavBar: React.FC = () => {
   const linkPosition = `admin/company/position-manage`
   const linkBenefit = `admin/company/benefits-manage`
   const linkAnnouncement = `admin/company/announcement-manage/`
+  const linkRecruitment = 'admin/company/recruitment-manage/'
   // const linkCreateDepartment = `/admin/department/create`
   // const linkCreatePosition = `/admin/position/create`
   // const linkPermission = `/admin/permission/list`
@@ -79,14 +80,14 @@ const AdminNavBar: React.FC = () => {
                   <Link to={linkAnnouncement}>公告列表</Link>
                 </Menu.Item>
               </SubMenu>
-              {/* <SubMenu key="sub8" icon={<UsergroupAddOutlined/>} title="招聘管理">
+              <SubMenu key="sub8" icon={<UsergroupAddOutlined/>} title="招聘管理">
                 <Menu.Item key="14">
-                  <Link to="">招聘列表</Link>
+                  <Link to={linkRecruitment}>招聘列表</Link>
                 </Menu.Item>
-                <Menu.Item key="15">
+                {/* <Menu.Item key="15">
                   <Link to="">應聘人員</Link>
-                </Menu.Item>
-              </SubMenu> */}
+                </Menu.Item> */}
+              </SubMenu>
             </Menu>
           </Sider>
         }

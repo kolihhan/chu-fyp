@@ -1665,7 +1665,8 @@ def deleteCompanyEmployeeFeedbackReview(request, pk):
 @permission_classes([AllowAny])
 def getAllCompanyRecruitment(request):
     try:
-        companyRecruitment = models.CompanyRecruitment.objects.all()
+        now = timezone.now()
+        companyRecruitment = models.CompanyRecruitment.objects.filter(Q(close_at__gt=now))
         serializer = serializers.CompanyRecruitmentSerializer(companyRecruitment, many=True)
         return Response({'message': '招聘获取成功', 'data': serializer.data}, status=status.HTTP_200_OK)
     except models.CompanyRecruitment.DoesNotExist as e:
@@ -1677,7 +1678,7 @@ def getAllCompanyRecruitment(request):
 @permission_classes([IsAuthenticated])
 def createCompanyRecruitment(request):
     try:
-        data = request.data
+        data = request.data['data']
         createdCompanyRecruitment = models.CompanyRecruitment.objects.create(
             companyEmployeePosition = models.CompanyEmployeePosition.objects.get(id=data['companyEmployeePosition']),
             title = data['title'],
@@ -1685,17 +1686,17 @@ def createCompanyRecruitment(request):
             requirement = data['requirement'],
             min_salary = data['min_salary'],
             max_salary = data['max_salary'],
-            responsibilities = data['responsibilities'],
+            responsibilities = data.get('responsibilities', False),
             location = data['location'],
-            start_at = datetime.datetime.strptime(data['start_at'], '%Y-%m-%d %H:%M:%S'),   # 2023-05-30 10:00:00
-            offered_at = datetime.datetime.strptime(data['offered_at'], '%Y-%m-%d %H:%M:%S'),
-            close_at = datetime.datetime.strptime(data['close_at'], '%Y-%m-%d %H:%M:%S'),
+            start_at = datetime.datetime.strptime(data['start_at'].split('.')[0].replace('T', ' '), '%Y-%m-%d %H:%M:%S'),   # 2023-05-30 10:00:00
+            offered_at = datetime.datetime.strptime(data['offered_at'].split('.')[0].replace('T', ' '), '%Y-%m-%d %H:%M:%S'),
+            close_at = datetime.datetime.strptime(data['close_at'].split('.')[0].replace('T', ' '), '%Y-%m-%d %H:%M:%S'),
             employee_need = data['employee_need'],
             job_category = data['job_category'],
             job_nature = data['job_nature'],
-            buiness_trip = data['buiness_trip'],
-            working_hour = data['working_hour'],
-            leaving_system = data['leaving_system']
+            buiness_trip = data.get('buiness_trip', False),
+            working_hour = data.get('working_hour', ''),
+            leaving_system = data.get('leaving_system', '')
         )
         serializer = serializers.CompanyRecruitmentSerializer(createdCompanyRecruitment, many=False)
         return Response({'message':'招聘創建成功', 'data':serializer.data}, status=status.HTTP_200_OK)
@@ -1744,7 +1745,7 @@ def getCompanyRecruitmentAppliedUser(request, pk):
 @permission_classes([IsAuthenticated])
 def updateCompanyRecruitment(request, pk):
     try:
-        data = request.data
+        data = request.data['data']
         updatedCompanyRecruitment = models.CompanyRecruitment.objects.get(id=pk)
         if data.get('companyEmployeePosition', None)!=None: 
             updatedCompanyRecruitment.companyEmployeePosition = models.CompanyEmployeePosition.objects.get(id=data['companyEmployeePosition'])
@@ -1763,11 +1764,11 @@ def updateCompanyRecruitment(request, pk):
         if data.get('location', None)!=None: 
             updatedCompanyRecruitment.location = data['location']
         if data.get('start_at', None)!=None: 
-            updatedCompanyRecruitment.start_at = datetime.datetime.strptime(data['start_at'], '%Y-%m-%d %H:%M:%S')   # 2023-05-30 10:00:00
+            updatedCompanyRecruitment.start_at = datetime.datetime.strptime(data['start_at'].split('.')[0].replace('T', ' '), '%Y-%m-%d %H:%M:%S')   # 2023-05-30 10:00:00
         if data.get('offered_at', None)!=None: 
-            updatedCompanyRecruitment.offered_at = datetime.datetime.strptime(data['offered_at'], '%Y-%m-%d %H:%M:%S')
+            updatedCompanyRecruitment.offered_at = datetime.datetime.strptime(data['offered_at'].split('.')[0].replace('T', ' '), '%Y-%m-%d %H:%M:%S')
         if data.get('close_at', None)!=None: 
-            updatedCompanyRecruitment.close_at = datetime.datetime.strptime(data['close_at'], '%Y-%m-%d %H:%M:%S')
+            updatedCompanyRecruitment.close_at = datetime.datetime.strptime(data['close_at'].split('.')[0].replace('T', ' '), '%Y-%m-%d %H:%M:%S')
         if data.get('employee_need', None)!=None: 
             updatedCompanyRecruitment.employee_need = data['employee_need']
         if data.get('job_category', None)!=None: 
@@ -1789,7 +1790,7 @@ def updateCompanyRecruitment(request, pk):
         return Response({'message':'招聘修改失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['PUT'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def closeCompanyRecruitment(request, pk):
     try:
         updatedCompanyRecruitment = models.CompanyRecruitment.objects.get(id=pk)
@@ -1806,7 +1807,7 @@ def closeCompanyRecruitment(request, pk):
 @permission_classes([IsAuthenticated])
 def deleteCompanyRecruitment(request, pk):
     try:
-        deletedCompanyRecruitment = models.UserApplicationRecord.objects.filter(companyRecruitment_id__id=pk)
+        deletedCompanyRecruitment = models.CompanyRecruitment.objects.get(id=pk)
         delete = deletedCompanyRecruitment.delete()
         if delete[0] > 0:
             return Response({'message':'招聘刪除成功'}, status=status.HTTP_200_OK)

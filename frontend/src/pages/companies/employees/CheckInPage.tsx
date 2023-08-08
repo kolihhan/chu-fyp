@@ -42,6 +42,7 @@ const CheckInPage: React.FC = () => {
       setCompanyAnnouncement(announcementResponse.data);
       setIsFeedBackRecode(feedbackResponse.data);
 
+      setIsCheckedIn(1)
     } catch (error) {
       console.log(error);
     }

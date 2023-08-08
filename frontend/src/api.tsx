@@ -280,6 +280,11 @@ export const deleteRecruitment = async (id : number, recruitmentId: number) => {
   return axios.delete( `${API_URL}/companyRecruitment/delete/${recruitmentId}`, { headers: authHeaders() } )
 };
 
+export const closeRecruitment = async (id : number, recruitmentId: number) => {
+
+  return axios.put( `${API_URL}/companyRecruitment/close/${recruitmentId}`, { headers: authHeaders() } )
+};
+
 export const getEmployeePositions = async (id : number) => {
   
   return axios.get( `${API_URL}/companyPosition/get/company/all/${id}`, { headers: authHeaders() } )
