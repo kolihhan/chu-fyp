@@ -2,22 +2,26 @@ import React, { useEffect, useState } from 'react';
 import { Button, Card, Col, Input, Row } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { fetchJobs, selectJobs } from '../reducers/userReducers';
+import { applyJobs, fetchJobs, selectJobs } from '../reducers/userReducers';
 
 import { ThunkDispatch } from 'redux-thunk';
 import { RootState } from '../app/store';
 import { AnyAction } from '@reduxjs/toolkit';
 import { useLoading } from '../components/LoadingScreen';
 import ApplyJobModal from '../components/ApplyJobModal';
+import { getCookie } from '../utils';
 
 const Home: React.FC = () => {
   type AppDispatch = ThunkDispatch<RootState, unknown, AnyAction>;
-  const employee = useSelector((state: RootState) => state.employee.employees);
+  // const employee = useSelector((state: RootState) => state.employee.employees);
   const user = useSelector((state: RootState) => state.auth.user);
   const dispatch: AppDispatch = useDispatch();
   const { setLoading } = useLoading();
   const navigate = useNavigate();
-
+  const role = getCookie('role')
+  const userId = getCookie('userId')
+  const employeeId = getCookie('employeeId')
+  const [isEmployee, setIsEmployee] = useState(false)
   const jobs = useSelector(selectJobs);
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -26,8 +30,12 @@ const Home: React.FC = () => {
     document.title = '首頁';
     dispatch(fetchJobs());
     setLoading(false);
+    if (employeeId==undefined && role!="Boss"){
+      setIsEmployee(false)
+    }else{
+      setIsEmployee(true)
+    }
   }, []);
-
 
   const handleViewPage = (jobId: number) => {
     navigate(`/detailsPage/${jobId}`);
@@ -58,8 +66,8 @@ const Home: React.FC = () => {
               <p>公司：{job.companyEmployeePosition.company_id.name ?? ''}</p>
               <p>地点：{job.location ?? ''}</p>
               <p>描述：{job.description ?? ''}</p>
-              <ApplyJobModal isEmployee={employee != null} loggedIn={user != null} jobId={job.id} jobTitle = {job.title} />
-
+              {/* <ApplyJobModal isEmployee={employee != null} loggedIn={user != null} jobId={job.id} jobTitle = {job.title} /> */}
+              <ApplyJobModal isEmployee={isEmployee} loggedIn={user != null} jobId={job.id} jobTitle = {job.title} />
               <Button onClick={() => handleViewPage(job.id)}>查看頁面</Button>
             </Card>
           </Col>

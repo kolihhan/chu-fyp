@@ -2051,7 +2051,7 @@ def getAllUserApplicationRecordByCompany(request, pk):
 @permission_classes([IsAuthenticated])
 def updateUserApplicationRecord(request, pk):
     try:
-        data = request.data
+        data = request.data['data']
         updatedUserApplicationRecord = models.UserApplicationRecord.objects.get(id=pk)
         updatedUserApplicationRecord.status = data['status']
         updatedUserApplicationRecord.save()

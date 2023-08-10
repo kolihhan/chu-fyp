@@ -52,6 +52,11 @@ export const getCertainJobsApi = async (id : number) => {
   return axios.get(`${API_URL}/companyRecruitment/get/${id}`, { headers: authHeaders() });
 };
 
+// companyRecruitment/get/applied/all
+export const getRecruitmentApplicationRecord = async (id : number) => {
+  return axios.get(`${API_URL}/companyRecruitment/get/applied/all/${id}`, { headers: authHeaders() });
+};
+
 export const getUserApplicationRecord = async (id : number) => {
   return axios.get(`${API_URL}/userApplicationRecord/get/user/all/${id}`, { headers: authHeaders() });
 };
@@ -77,9 +82,9 @@ export const deleteResumeApi = async (id:number) => {
   { headers: authHeaders() });
 };
 
-export const updateOfferStatusApi = async (id:number,status : any) => {
+export const updateOfferStatusApi = async (id:number,data : any) => {
   return axios.put(`${API_URL}/userApplicationRecord/update/${id}`, 
-  { status },
+  { data },
   { headers: authHeaders() });
 };
 

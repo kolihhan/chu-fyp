@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Table, Button, Modal, Form, Input, DatePicker, InputNumber, Row, Col, Select, Checkbox } from "antd";
-import { getRecruitments, createRecruitment, deleteRecruitment, updateRecruitment, getEmployeePositions, closeRecruitment } from "../../../../api";
+import { getRecruitments, createRecruitment, deleteRecruitment, updateRecruitment, getEmployeePositions, closeRecruitment, getRecruitmentApplicationRecord, updateOfferStatusApi } from "../../../../api";
 import { getCookie } from "../../../../utils";
 import dayjs from 'dayjs';
 import locale from 'antd/es/date-picker/locale/zh_CN';
@@ -15,6 +15,8 @@ const ManageRecruitmentPage: React.FC = () => {
   const [selectedRecruitment, setSelectedRecruitment] = useState<any | null>(null);
   const [jobNature, setJobNature] = useState<any | null>(null);
   const [availablePosition, setAvailablePosition] = useState<any[]>([]);
+  const [isRecruitmentApplicantsModalVisible, setIsRecruitmentApplicantsModalVisible] = useState(false);
+  const [recruitmentApplicants, setRecruitmentsApplicants] = useState<any[]>([]);
 
   useEffect(() => {
     document.title = "招聘管理";
@@ -120,6 +122,60 @@ const ManageRecruitmentPage: React.FC = () => {
     }
   };
 
+  const fetchRecruitmentApplicantionRecord = async (recruitmentId: number) => {
+    try {
+      const response = await getRecruitmentApplicationRecord(recruitmentId);
+      setRecruitmentsApplicants(response.data.data)
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleManageApplicants = (recruitmentId: number) => {
+    fetchRecruitmentApplicantionRecord(recruitmentId)
+    setIsRecruitmentApplicantsModalVisible(true)
+  }
+
+  const handleCancelManageApplications = () => {
+    setIsRecruitmentApplicantsModalVisible(false)
+  }
+
+  const handleAcceptApplicants = async (applicantId: number) => {
+    try {
+      await updateOfferStatusApi(applicantId, {status: 'Accept'});
+      const updatedData = recruitmentApplicants.map((applicant) => {
+        return applicant.id === applicantId ? { ...applicant, status:"Accept"} : applicant
+      })
+      setRecruitmentsApplicants(updatedData)
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleRejectApplicants = async (applicantId: number) => {
+    try {
+      await updateOfferStatusApi(applicantId, {status: 'Reject'});
+      const updatedData = recruitmentApplicants.map((applicant) => {
+        return applicant.id === applicantId ? { ...applicant, status:"Reject"} : applicant
+      })
+      setRecruitmentsApplicants(updatedData)
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleContactApplicants = async (applicantId: number) => {
+    try {
+      await updateOfferStatusApi(applicantId, {status: 'Interviewing'});
+      const updatedData = recruitmentApplicants.map((applicant) => {
+        return applicant.id === applicantId ? { ...applicant, status:"Interviewing"} : applicant
+      })
+      setRecruitmentsApplicants(updatedData)
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const columns = [
     { title: "标题", dataIndex: "title", key: "title" },
     { title: "職位", dataIndex: "companyEmployeePosition", key: "companyEmployeePosition",
@@ -155,6 +211,31 @@ const ManageRecruitmentPage: React.FC = () => {
           </Button>
           <Button type="link" onClick={() => handleDeleteRecruitment(record.id)}>
             删除
+          </Button>
+          <Button type="link" onClick={() => handleManageApplicants(record.id)}>
+            應聘人員
+          </Button>
+        </>
+      ),
+    },
+  ];
+
+  const applicantsColumns = [
+    { title: "名字", dataIndex: "user", key: "user" },
+    { title: "電郵", dataIndex: "user", key: "user" },
+    { title: "履歷", dataIndex: "userResume_id", key: "userResume_id" },
+    { title: "狀態", dataIndex: "status", key: "status"},
+    { title: "操作", key: "actions",
+      render: (_: any, record: any) => (
+        <>
+          <Button type="link" onClick={() => handleAcceptApplicants(record.id)}>
+            Accept
+          </Button>
+          <Button type="link" onClick={() => handleRejectApplicants(record.id)}>
+            Reject
+          </Button>
+          <Button type="link" onClick={() => handleContactApplicants(record.id)}>
+            Contact
           </Button>
         </>
       ),
@@ -292,6 +373,14 @@ const ManageRecruitmentPage: React.FC = () => {
           </Form.Item>
         </Form>
       </Modal>
+
+      <Modal width='80%' bodyStyle={{maxHeight:'70vh', overflowY: 'auto'}}
+        title="應聘人員管理"
+        visible={isRecruitmentApplicantsModalVisible}
+        onCancel={handleCancelManageApplications}
+        footer={null}>
+          <Table dataSource={recruitmentApplicants} columns={applicantsColumns} />
+        </Modal>
     </div>
   );
 };

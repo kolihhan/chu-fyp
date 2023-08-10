@@ -127,13 +127,16 @@ export const fetchUsersInfo = (
           setCookie("role", "Employee");
           setCookie("userId", user?.id);
           const response = await getUserEmployee(user?.id)
-          if(response.data!=null){
+          console.log(response.data)
+          if(response.data!=null && response.data.length > 0){
             setCookie("employeeId", response.data[0].id);
             setCookie("companyId", response.data[0].company_id)
             window.location.href = '/company/home'
           }else{
             window.location.href = '/'
           }
+        }else{
+          window.location.href = '/'
         }
       }, 500); 
       dispatch(fetchResumes());
