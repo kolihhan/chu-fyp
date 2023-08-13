@@ -140,11 +140,11 @@ const ManageRecruitmentPage: React.FC = () => {
     setIsRecruitmentApplicantsModalVisible(false)
   }
 
-  const handleAcceptApplicants = async (applicantId: number) => {
+  const handleOfferApplicants = async (applicantId: number) => {
     try {
-      await updateOfferStatusApi(applicantId, {status: 'Accept'});
+      await updateOfferStatusApi(applicantId, {status: 'Offering'});
       const updatedData = recruitmentApplicants.map((applicant) => {
-        return applicant.id === applicantId ? { ...applicant, status:"Accept"} : applicant
+        return applicant.id === applicantId ? { ...applicant, status:"Offering"} : applicant
       })
       setRecruitmentsApplicants(updatedData)
     } catch (error) {
@@ -228,8 +228,8 @@ const ManageRecruitmentPage: React.FC = () => {
     { title: "操作", key: "actions",
       render: (_: any, record: any) => (
         <>
-          <Button type="link" onClick={() => handleAcceptApplicants(record.id)}>
-            Accept
+          <Button type="link" onClick={() => handleOfferApplicants(record.id)}>
+            Offer
           </Button>
           <Button type="link" onClick={() => handleRejectApplicants(record.id)}>
             Reject
