@@ -10,7 +10,9 @@ import { RootState } from '../app/store';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn'; // 导入中文本地化插件
-import { cancelApplicationIdApi, updateOfferStatusApi } from '../api';
+import { cancelApplicationIdApi, createCompanyEmployee, updateOfferStatusApi } from '../api';
+import { getCookie } from '../utils';
+import { logout } from '../reducers/authReducers';
 
 
 const { TabPane } = Tabs;
@@ -34,6 +36,9 @@ const ProfilePage: React.FC = () => {
   const { Option } = Select;
   const [activeTab, setActiveTab] = useState('profile');
   const [userData] = useState(userDataWithDayjs || {});
+
+  const userId = getCookie('userId')
+  const employeeId = getCookie('employeeId')
 
 
   useEffect(() => {
@@ -72,13 +77,14 @@ const ProfilePage: React.FC = () => {
     dispatch(userActions.deleteResume(record));
   };
 
-  const acceptOffer = async (record: number) => {
+  const acceptOffer = async (record: any) => {
     // const status = "Accept";
     // dispatch(userActions.updateOfferStatus(record, status));
-    const response = await updateOfferStatusApi(record,{status: 'Accept'});
+    const response = await updateOfferStatusApi(record.id ,{status: 'Accept'});
     if(response.status == 200){
       message.success('操作成功');
       dispatch(userActions.fetchUserApplicationRecord());
+      createEmployee(record)
     }
   };
 
@@ -87,10 +93,23 @@ const ProfilePage: React.FC = () => {
     // dispatch(userActions.updateOfferStatus(record, status));
     const response = await updateOfferStatusApi(record,{status: 'Reject'});
     if(response.status == 200){
-      message.success('操作成功');
       dispatch(userActions.fetchUserApplicationRecord());
     }
   };
+
+  const createEmployee = async (record: any) => {
+    const data = {
+      company_id: record.companyRecruitment_id.companyEmployeePosition.company_id.id,
+      user_id: userId,
+      companyEmployeePosition_id: record.companyRecruitment_id.companyEmployeePosition.id,
+      salary: record.companyRecruitment_id.max_salary
+    } 
+    const response = await createCompanyEmployee(data)
+    if(response.status == 200){
+      dispatch(logout());
+      message.success('操作成功，請重新登入');
+    }
+  }
 
   return (
     <div>
@@ -246,28 +265,34 @@ const ProfilePage: React.FC = () => {
                 key={application.id}>
 
                 <div style={{textAlign:'right'}}>
-                {application.status === 'Offering' && (
-                  <>
-                    <Popconfirm title="確定接受嗎？"okText="确定"cancelText="關閉"
-                      onConfirm={() => acceptOffer(application.id)} >
-                      <Button type="primary" style={{marginRight:'8px'}}>Accept Offer</Button>
-                  </Popconfirm>
-                    <Popconfirm title="確定拒絕嗎？"okText="确定"cancelText="關閉"
-                      onConfirm={() => declineOffer(application.id)} >
-                      <Button danger style={{marginRight:'8px'}}>Decline Offer</Button>
-                  </Popconfirm>
-                  </>
-                )}
+                  {employeeId == null?(
+                    <>
+                      {application.status === 'Offering' && (
+                      <>
+                        <Popconfirm title="確定接受嗎？"okText="确定"cancelText="關閉"
+                          onConfirm={() => acceptOffer(application)} >
+                          <Button type="primary" style={{marginRight:'8px'}}>Accept Offer</Button>
+                        </Popconfirm>
+                        <Popconfirm title="確定拒絕嗎？"okText="确定"cancelText="關閉"
+                          onConfirm={() => declineOffer(application.id)} >
+                          <Button danger style={{marginRight:'8px'}}>Decline Offer</Button>
+                        </Popconfirm>
+                      </>
+                      )}
+                    
+                      {(application.status !== 'Accept' && application.status !== 'Reject' && application.status !== 'Withdrawn') && (
+                        <Popconfirm
+                          title="確定取消嗎？"
+                          onConfirm={() => cancelApplication(application.id)}
+                          okText="确定"
+                          cancelText="關閉">
+                          <Button type="default" style={{marginRight:'8px'}}>Cancel Application</Button>
+                        </Popconfirm>
+                      )}
+                    </>
+                    ):(<></>)
+                  }
                 
-                {(application.status !== 'Accept' && application.status !== 'Reject' && application.status !== 'Withdrawn') && (
-                  <Popconfirm
-                    title="確定取消嗎？"
-                    onConfirm={() => cancelApplication(application.id)}
-                    okText="确定"
-                    cancelText="關閉">
-                    <Button type="default" style={{marginRight:'8px'}}>Cancel Application</Button>
-                  </Popconfirm>
-                )}
                 <Button type="link" style={{marginRight:'8px'}}>查看</Button>
               </div>
               </Panel>

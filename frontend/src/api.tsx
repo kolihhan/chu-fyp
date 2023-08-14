@@ -34,6 +34,10 @@ export const getUserResumes = (user : number) => {
   return axios.get(`${API_URL}/resume/get/user/${user}`, { headers: authHeaders() });
 };
 
+export const getResume = (user : number) => {  
+  return axios.get(`${API_URL}/userResume/get/${user}`, { headers: authHeaders() });
+};
+
 export const getJobsApi = async () => {
   return axios.get(`${API_URL}/companyRecruitment/get/company/all`, { headers: authHeaders() });
 };
@@ -361,3 +365,10 @@ export const getPositionById = async(id: number) => {
 export const getUserEmployee = async(id: number) => {
   return axios.get(`${API_URL}/companyEmployee/get/user/${id}`, { headers: authHeaders() })
 }
+
+export const createCompanyEmployee = async (data : any) => {
+  return axios.post(`${API_URL}/companyEmployee/create`, 
+  { data },
+  { headers: authHeaders() });
+};
+

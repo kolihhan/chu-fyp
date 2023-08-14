@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Table, Button, Modal, Form, Input, DatePicker, InputNumber, Row, Col, Select, Checkbox } from "antd";
-import { getRecruitments, createRecruitment, deleteRecruitment, updateRecruitment, getEmployeePositions, closeRecruitment, getRecruitmentApplicationRecord, updateOfferStatusApi } from "../../../../api";
+import { getRecruitments, createRecruitment, deleteRecruitment, updateRecruitment, getEmployeePositions, closeRecruitment, getRecruitmentApplicationRecord, updateOfferStatusApi, getResume } from "../../../../api";
 import { getCookie } from "../../../../utils";
 import dayjs from 'dayjs';
 import locale from 'antd/es/date-picker/locale/zh_CN';
@@ -17,6 +17,9 @@ const ManageRecruitmentPage: React.FC = () => {
   const [availablePosition, setAvailablePosition] = useState<any[]>([]);
   const [isRecruitmentApplicantsModalVisible, setIsRecruitmentApplicantsModalVisible] = useState(false);
   const [recruitmentApplicants, setRecruitmentsApplicants] = useState<any[]>([]);
+  const [isResumeModalVisible, setIsResumeModalVisible] = useState(false);
+  const [resume, setResume] = useState<any>();
+  const [resumeUserName, setResumeUserName] = useState<any>();
 
   useEffect(() => {
     document.title = "招聘管理";
@@ -140,39 +143,57 @@ const ManageRecruitmentPage: React.FC = () => {
     setIsRecruitmentApplicantsModalVisible(false)
   }
 
-  const handleOfferApplicants = async (applicantId: number) => {
-    try {
-      await updateOfferStatusApi(applicantId, {status: 'Offering'});
-      const updatedData = recruitmentApplicants.map((applicant) => {
-        return applicant.id === applicantId ? { ...applicant, status:"Offering"} : applicant
-      })
-      setRecruitmentsApplicants(updatedData)
-    } catch (error) {
-      console.log(error);
+  const handleCheckResume = async (resumeId: any, resumeUserName: any) => {
+    setIsResumeModalVisible(true)
+    const response = await getResume(resumeId)
+    setResume(response.data.data)
+    setResumeUserName(resumeUserName)
+  }
+
+  const handleCancelCheckResume = () => {
+    setIsResumeModalVisible(false)
+    setResume(null)
+  }
+
+  const handleOfferApplicants = async (applicantId: any) => {
+    if(applicantId.status!="Accept"){
+      try {
+        await updateOfferStatusApi(applicantId.id, {status: 'Offering'});
+        const updatedData = recruitmentApplicants.map((applicant) => {
+          return applicant.id === applicantId.id ? { ...applicant, status:"Offering"} : applicant
+        })
+        setRecruitmentsApplicants(updatedData)
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
-  const handleRejectApplicants = async (applicantId: number) => {
-    try {
-      await updateOfferStatusApi(applicantId, {status: 'Reject'});
-      const updatedData = recruitmentApplicants.map((applicant) => {
-        return applicant.id === applicantId ? { ...applicant, status:"Reject"} : applicant
-      })
-      setRecruitmentsApplicants(updatedData)
-    } catch (error) {
-      console.log(error);
+  const handleRejectApplicants = async (applicantId: any) => {
+    if(applicantId.status!="Accept"){
+      try {
+        await updateOfferStatusApi(applicantId.id, {status: 'Reject'});
+        const updatedData = recruitmentApplicants.map((applicant) => {
+          return applicant.id === applicantId.id ? { ...applicant, status:"Reject"} : applicant
+        })
+        setRecruitmentsApplicants(updatedData)
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
-  const handleContactApplicants = async (applicantId: number) => {
-    try {
-      await updateOfferStatusApi(applicantId, {status: 'Interviewing'});
-      const updatedData = recruitmentApplicants.map((applicant) => {
-        return applicant.id === applicantId ? { ...applicant, status:"Interviewing"} : applicant
-      })
-      setRecruitmentsApplicants(updatedData)
-    } catch (error) {
-      console.log(error);
+  const handleContactApplicants = async (applicantId: any) => {
+    if(applicantId.status!="Accept"){
+      try {
+        await updateOfferStatusApi(applicantId.id, {status: 'Interviewing'});
+        const updatedData = recruitmentApplicants.map((applicant) => {
+          return applicant.id === applicantId.id ? { ...applicant, status:"Interviewing"} : applicant
+        })
+        setRecruitmentsApplicants(updatedData)
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -221,20 +242,37 @@ const ManageRecruitmentPage: React.FC = () => {
   ];
 
   const applicantsColumns = [
-    { title: "名字", dataIndex: "user", key: "user" },
-    { title: "電郵", dataIndex: "user", key: "user" },
-    { title: "履歷", dataIndex: "userResume_id", key: "userResume_id" },
+    { title: "名字", dataIndex: "user", key: "user",
+      render: (_: any, record: any) => (
+        <span>{record.user.name}</span>
+      )
+    },
+    { title: "電郵", dataIndex: "user", key: "user" ,
+      render: (_: any, record: any) => (
+        <span>{record.user.email}</span>
+      )
+    },
+    { title: "履歷", dataIndex: "userResume_id", key: "userResume_id" ,
+      render: (_: any, record: any) => (
+        <>
+          <Button type="link" style={{paddingLeft:'0px'}}
+            onClick={() => handleCheckResume(record.userResume_id, record.user.name)}>
+              查看履歷
+          </Button>
+        </>
+      )
+    },
     { title: "狀態", dataIndex: "status", key: "status"},
     { title: "操作", key: "actions",
       render: (_: any, record: any) => (
         <>
-          <Button type="link" onClick={() => handleOfferApplicants(record.id)}>
+          <Button type="link" onClick={() => handleOfferApplicants(record)}>
             Offer
           </Button>
-          <Button type="link" onClick={() => handleRejectApplicants(record.id)}>
+          <Button type="link" onClick={() => handleRejectApplicants(record)}>
             Reject
           </Button>
-          <Button type="link" onClick={() => handleContactApplicants(record.id)}>
+          <Button type="link" onClick={() => handleContactApplicants(record)}>
             Contact
           </Button>
         </>
@@ -374,13 +412,46 @@ const ManageRecruitmentPage: React.FC = () => {
         </Form>
       </Modal>
 
-      <Modal width='80%' bodyStyle={{maxHeight:'70vh', overflowY: 'auto'}}
+      <Modal width='60%' bodyStyle={{maxHeight:'50vh', overflowY: 'auto'}}
         title="應聘人員管理"
         visible={isRecruitmentApplicantsModalVisible}
         onCancel={handleCancelManageApplications}
         footer={null}>
           <Table dataSource={recruitmentApplicants} columns={applicantsColumns} />
-        </Modal>
+      </Modal>
+      
+      <Modal width='60%' bodyStyle={{maxHeight:'70vh', overflowY: 'auto'}}
+        title={`${resumeUserName} 履歷`}
+        visible={isResumeModalVisible}
+        onCancel={handleCancelCheckResume}
+        footer={null}>
+          {resume?(
+            <Form form={form} initialValues={resume} labelAlign="left" labelCol={{ span: 4 }} wrapperCol={{ span:24 }}>
+              <Form.Item label="Title" name="title">
+                <span>{resume.title}</span>
+              </Form.Item>
+              <Form.Item label="Summary" name="summary">
+                <span>{resume.summary}</span>
+              </Form.Item>
+              <Form.Item label="Experience" name="experience">
+                <span>{resume.experience}</span>
+              </Form.Item>
+              <Form.Item label="Education" name="education">
+                <span>{resume.education}</span>
+              </Form.Item>
+              <Form.Item label="Skills" name="skills">
+                <span>{resume.skills}</span>
+              </Form.Item>
+              <Form.Item label="Preferred Work" name="prefer_work">
+                <span>{resume.prefer_work}</span>
+              </Form.Item>
+              <Form.Item label="Language" name="language">
+                <span>{resume.language}</span>
+              </Form.Item>
+            </Form>
+          ):(<></>)}
+          
+      </Modal>
     </div>
   );
 };

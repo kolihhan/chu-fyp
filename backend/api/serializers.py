@@ -147,6 +147,7 @@ class UserOfferRecordSerializer(serializers.ModelSerializer):
 
 
 class UserApplicationRecordSerializer(serializers.ModelSerializer):
+    user = UserIdAndEmailSerializer(many=False, read_only=True)
     class Meta: 
         model = models.UserApplicationRecord
         fields = '__all__'

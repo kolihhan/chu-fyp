@@ -615,21 +615,21 @@ def deleteResume(request, pk):
 @permission_classes([IsAuthenticated])
 def createCompanyEmployee(request):
     try:
-        employeeData = request.data
+        employeeData = request.data['data']
         createdCompanyEmployee  = models.CompanyEmployee.objects.create(
-            company_id = models.Company.objects.get(id=employeeData["company_id"]),
+            company_id = models.Company.objects.get(id=employeeData['company_id']),
             user_id = models.UserAccount.objects.get(id=employeeData['user_id']),
             companyEmployeePosition_id = models.CompanyEmployeePosition.objects.get(id=employeeData['companyEmployeePosition_id']),
-            salary = employeeData['salary'],
+            salary = employeeData['salary']
         )
         serializer = serializers.CompanyEmployeeSerializer(createdCompanyEmployee, many=False)
         if(createdCompanyEmployee.id):
-            return Response({"message":"員工增加成功", "data":serializer.data})
-        else: return Response({"message":"員工增加失敗"})
+            return Response({"message":"員工增加成功", "data":serializer.data}, status=status.HTTP_200_OK)
+        else: return Response({"message":"員工增加失敗"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     except (models.Company.DoesNotExist, models.UserAccount.DoesNotExist, models.CompanyEmployeePosition.DoesNotExist):
-        return Response({"message": "公司、使用者帳號或員工職位不存在"})
+        return Response({"message": "公司、使用者帳號或員工職位不存在"}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
-        return Response({"message": "員工增加失敗", "error": str(e)})
+        return Response({"message": "員工增加失敗", "error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
