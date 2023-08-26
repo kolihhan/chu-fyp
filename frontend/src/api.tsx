@@ -107,6 +107,17 @@ export const getLeaveRecords = async (id : any) => {
   { headers: authHeaders() });
 };
 
+export const getCompanyAllLeaveRecords = async (id : any) => {
+  return axios.get(`${API_URL}/companyEmployeeLeave/get/company/all/${id}`, 
+  { headers: authHeaders() });
+};
+
+export const updateLeaveRecords = async (id : any, data: any) => {
+  return axios.put(`${API_URL}/companyEmployeeLeave/update/${id}`, 
+  { data },
+  { headers: authHeaders() });
+};
+
 export const applyLeaveApi = async (data : any) => {
   return axios.post(`${API_URL}/companyEmployeeLeave/create`, 
   { data },

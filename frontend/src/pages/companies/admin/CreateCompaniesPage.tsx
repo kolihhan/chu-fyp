@@ -55,7 +55,7 @@ const CreateCompaniesPage: React.FC = () => {
 
   return (
     <div>
-      <h1>创建公司</h1>
+      <h1>創建公司</h1>
       <Form
         onFinish={onFinish} onFinishFailed={onFinishFailed}
         labelCol={{ span: 1 }} wrapperCol={{ span:24 }} labelAlign='left'>

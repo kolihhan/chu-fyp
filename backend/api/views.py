@@ -2518,7 +2518,7 @@ def getCompanyAllLeaveRecord(request, pk):
 @permission_classes([IsAuthenticated])
 def updateLeaveRecord(request, pk):
     try:
-        data = request.data
+        data = request.data['data']
         ulr = models.CompanyEmployeeLeaveRecord.objects.get(id=pk)
         if data.get('reason', None) != None:
             ulr.reason = data['reason']
@@ -2527,13 +2527,13 @@ def updateLeaveRecord(request, pk):
         if data.get('status', None) != None:
             ulr.status = data['status']
         if data.get('leave_start', None) != None:
-            ulr.leave_start = datetime.datetime.strptime(data['leave_start'], '%Y-%m-%d %H:%M:%S')
+            ulr.leave_start = datetime.datetime.strptime(data['leave_start'].split('.')[0].replace('T', ' '), '%Y-%m-%d %H:%M:%S')
         if data.get('leave_end', None) != None:
-            ulr.leave_end = datetime.datetime.strptime(data['leave_end'], '%Y-%m-%d %H:%M:%S')
+            ulr.leave_end = datetime.datetime.strptime(data['leave_end'].split('.')[0].replace('T', ' '), '%Y-%m-%d %H:%M:%S')
         if data.get('comment', None) != None:
             ulr.comment = data['comment']
         if data.get('approve_at', None) != None:
-            ulr.approve_at = datetime.datetime.strptime(data['approve_at'], '%Y-%m-%d %H:%M:%S')
+            ulr.approve_at = datetime.datetime.strptime(data['approve_at'].split('.')[0].replace('T', ' '), '%Y-%m-%d %H:%M:%S')
         
         ulr.save()
         serializer = serializers.CompanyEmployeeLeaveRecordSerializer(ulr, many=False)

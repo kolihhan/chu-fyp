@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { ThunkDispatch } from "redux-thunk";
 import { RootState } from "../../../app/store";
 import { AnyAction } from "redux";
-import { getUserId } from "../../../utils";
+import { getCookie, getUserId, setCookie } from "../../../utils";
 import { Button } from "antd";
 import EmptyComponent from "../../../components/EmptyComponent";
 
@@ -25,6 +25,9 @@ const CompaniesPage: React.FC = () => {
     dispatch(bossCompanyAction.fetchCompanies());
     setLoading(false);
     console.log(companies);
+    if(getCookie('companyId')==null) {
+      setCookie("companyId", companies[0].id)
+    }
   }, []);
 
   const handleCreateCompany = () => {
@@ -38,7 +41,7 @@ const CompaniesPage: React.FC = () => {
         <div>
           <div style={{textAlign:'right', marginBottom:'8px'}}>
             <Button type="primary" onClick={handleCreateCompany} >
-              创建公司
+              創建公司
             </Button>
           </div>
           {
@@ -52,7 +55,7 @@ const CompaniesPage: React.FC = () => {
             <EmptyComponent />
             <div style={{width:'100%', marginBottom:'8px'}}>
               <Button type="primary" onClick={handleCreateCompany} style={{width:'100%'}}>
-                创建公司
+                創建公司
               </Button>
             </div>
           </div>

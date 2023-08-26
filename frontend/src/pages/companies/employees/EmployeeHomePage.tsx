@@ -174,7 +174,8 @@ const EmployeeHomePage: React.FC = () => {
                     </Card> */}
                 </div>
 
-                <div style={{ width: '23%', position: 'fixed', top: '235px', right:'10.5%', overflowY: 'auto' }}>
+                <div style={{ width: '29%'}}>
+                {/* <div style={{ width: '23%', position: 'fixed', top: '235px', right:'10.5%', overflowY: 'auto' }}> */}
                     <Card id="cmpDetailEmployees"
                         style={{ marginTop: "8px" }}
                         bodyStyle={{ backgroundColor: "white", paddingTop: "0px", overflowY: "auto", height: 'calc(100vh - 300px)' }}

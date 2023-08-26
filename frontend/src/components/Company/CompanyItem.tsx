@@ -29,7 +29,7 @@ const ButtonRow: React.FC<ButtonRowProps> = ({id}) => {
     const navigate = useNavigate()
 
     const handlerView = () => {
-        navigate(`/company/${id}/view`)
+        navigate(`/company/view`)
     }
 
     const handlerEnter = async () => {

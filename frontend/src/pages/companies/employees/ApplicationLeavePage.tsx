@@ -62,6 +62,7 @@ const ApplicationLeavePage: React.FC = () => {
     { title: 'Status', dataIndex: 'status', key: 'status' },
     { title: 'Comment', dataIndex: 'comment', key: 'comment', render: (text:any) => (text==null?"-":text) },
   ];
+
   return (
     <div>
       <h1>Application Leave</h1>

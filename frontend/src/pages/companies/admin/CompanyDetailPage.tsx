@@ -7,6 +7,7 @@ import EmployeeItem from "../../../components/Company/EmployeeItem";
 import RecruitmentItem from "../../../components/Company/RecruitmentItem";
 import { getCompanyById } from "../../../api";
 import EmptyComponent from "../../../components/EmptyComponent";
+import { getCookie } from "../../../utils";
 
 export const CompanyInfo: React.FC<any> = ({company}) => {
   return (
@@ -126,8 +127,7 @@ const CompanyImage: React.FC<any> = ({companyImage, company}) => {
 }
 
 const CompanyDetailPage: React.FC = () => {
-  const { id } = useParams<{ id: string | undefined }>();
-  const companyId = Number(id);
+  const companyId = Number(getCookie('companyId'))
   const [company, setCompany] = useState<any>();
   const [companyImage, setCompanyImage] = useState([])
   const [companyEmployees, setCompanyEmployees] = useState([])

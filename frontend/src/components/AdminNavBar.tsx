@@ -25,6 +25,7 @@ const AdminNavBar: React.FC = () => {
 
   const linkEmployeeList = `/admin/company/employees`
   const linkCreateEmployee = `/admin/user/create` //todo
+  const linkManageLeave = `/admin/company/leave-manage` //todo
   const linkCompanyList = `/admin/company/list`
   const linkCreateCompany = `/admin/company/create`
   const linkManageDepartment = `/admin/company/department-manage/`
@@ -55,14 +56,17 @@ const AdminNavBar: React.FC = () => {
                 <Menu.Item key="2">
                   <Link to={linkCreateEmployee}>新增職員</Link>
                 </Menu.Item>
+                <Menu.Item key="3">
+                  <Link to={linkManageLeave}>請假管理</Link>
+                </Menu.Item>
               </SubMenu>
               <SubMenu key="sub2" icon={<TeamOutlined />} title="公司管理">
-                <Menu.Item key="3">
+                {/* <Menu.Item key="3">
                   <Link to={linkCompanyList}>公司列表</Link>
                 </Menu.Item>
                 <Menu.Item key="4">
                   <Link to={linkCreateCompany}>创建公司</Link>
-                </Menu.Item>
+                </Menu.Item> */}
               {/* </SubMenu>
               <SubMenu key="sub3" icon={<AppstoreOutlined />} title="部門&職位管理"> */}
                 <Menu.Item key="5">

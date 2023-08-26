@@ -29,6 +29,7 @@ import ManageEmployeesPositionPage from "../pages/companies/admin/settings/Manag
 import ManagePermissionPage from "../pages/companies/admin/settings/ManagePermissionPage";
 import ManageRecruitmentPage from "../pages/companies/admin/settings/ManageRecruitmentPage";
 import EmployeeHomePage from "../pages/companies/employees/EmployeeHomePage";
+import ManageEmployeeLeavePage from "../pages/companies/admin/settings/ManageEmployeeLeavePage";
 
 const Protected: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const user = useSelector((state: RootState) => state.auth.user);
@@ -116,7 +117,7 @@ const RoutesComponent: React.FC = () =>{
 
                 <Route path='company/list' element={<ProtectedAdmin><CompaniesPage /></ProtectedAdmin>} /> {/* X */}
                 <Route path='company/create-company' element={<ProtectedAdmin><CreateCompaniesPage /></ProtectedAdmin>} />  {/* X */}
-                <Route path='company/:id/view' element={<ProtectedAdmin><CompanyDetailPage /></ProtectedAdmin>} /> {/* 1 */}
+                <Route path='company/view' element={<ProtectedAdmin><CompanyDetailPage /></ProtectedAdmin>} /> {/* 1 */}
                 <Route path='admin/company/list' element={<ProtectedAdmin><CompaniesPage /></ProtectedAdmin>} /> {/* X */}
                 <Route path='admin/company/create' element={<ProtectedAdmin><CreateCompaniesPage /></ProtectedAdmin>} />  {/* X */}
 
@@ -135,6 +136,7 @@ const RoutesComponent: React.FC = () =>{
                 <Route path='admin/company/position-manage/' element={<ProtectedAdmin><ManageEmployeesPositionPage /></ProtectedAdmin>} />
                 <Route path='admin/company/:id/permission-manage/' element={<ProtectedAdmin><ManagePermissionPage /></ProtectedAdmin>} />
                 <Route path='admin/company/recruitment-manage/' element={<ProtectedAdmin><ManageRecruitmentPage /></ProtectedAdmin>} />
+                <Route path='admin/company/leave-manage/' element={<ProtectedAdmin><ManageEmployeeLeavePage /></ProtectedAdmin>} />
 
             </Routes>
         </div>
