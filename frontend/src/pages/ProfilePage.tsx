@@ -39,10 +39,17 @@ const ProfilePage: React.FC = () => {
 
   const userId = getCookie('userId')
   const employeeId = getCookie('employeeId')
+  const role = getCookie("role")
+  const [showJobApply, setShowJobApply] = useState(false)
 
 
   useEffect(() => {
     dispatch(userActions.fetchUserApplicationRecord());
+    if(role=="Boss" || employeeId!=null){
+      setShowJobApply(false)
+    }else{
+      setShowJobApply(true)
+    }
   }, []);
 
   const toggleTab = (tab: string) => {
@@ -191,59 +198,11 @@ const ProfilePage: React.FC = () => {
 
         </TabPane>
 
-        <TabPane tab="应聘进度" key="application">
-          {/* {applicationData.map((application) => (
-            <Card bodyStyle={{padding:'8px'}} style={{marginBottom:'4px'}}
-            title={
-                <div style={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
-                  <div>
-                      <Row gutter={[4, 0]} style={{display:'flex', alignItems:'center'}}>
-                          <Col><Image src={application.companyRecruitment_id.companyEmployeePosition.company_id.logo} style={{height:'50px', width:'50px'}}/></Col>
-                          <Col>
-                              <Row><Col>
-                                {application.companyRecruitment_id.companyEmployeePosition.company_id.name}
-                                <span> - </span>
-                                {application.companyRecruitment_id.title}
-                              </Col></Row>
-                          </Col>
-                      </Row>
-                  </div>
-                  <div>
-                    <span>{application.status}</span>
-                  </div>
-               </div>
-            }>
-              <div style={{}}>
-                {application.status === 'Offering' && (
-                  <>
-                    <Button type="primary" style={{marginRight:'8px'}} onClick={() => acceptOffer(application.id)}>
-                      Accept Offer
-                    </Button>
-                    <Button danger style={{marginRight:'8px'}} onClick={() => declineOffer(application.id)}>
-                      Decline Offer
-                    </Button>
-                  </>
-                )}
-                
-                {(application.status !== 'Reject' && application.status !== 'Withdrawn') && (
-                  <Popconfirm
-                    title="確定取消嗎？"
-                    onConfirm={() => cancelApplication(application.id)}
-                    okText="确定"
-                    cancelText="關閉">
-                    <Button type="default" style={{marginRight:'8px'}}>Cancel Application</Button>
-                  </Popconfirm>
-                )}
-                <Button type="link" style={{marginRight:'8px'}}>查看</Button>
-              </div>
-            </Card>
-          ))} */}
-
-
-          <Collapse accordion>
-            {applicationData.map((application) => (
-              <Panel style={{backgroundColor:'white'}}
-                header={
+        {showJobApply?(
+          <TabPane tab="應聘進度" key="application">
+            {/* {applicationData.map((application) => (
+              <Card bodyStyle={{padding:'8px'}} style={{marginBottom:'4px'}}
+              title={
                   <div style={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
                     <div>
                         <Row gutter={[4, 0]} style={{display:'flex', alignItems:'center'}}>
@@ -258,47 +217,97 @@ const ProfilePage: React.FC = () => {
                         </Row>
                     </div>
                     <div>
-                      <span style={{marginRight:'16px'}}>{application.status}</span>
+                      <span>{application.status}</span>
                     </div>
-                  </div>
-              }
-                key={application.id}>
-
-                <div style={{textAlign:'right'}}>
-                  {employeeId == null?(
+                </div>
+              }>
+                <div style={{}}>
+                  {application.status === 'Offering' && (
                     <>
-                      {application.status === 'Offering' && (
-                      <>
-                        <Popconfirm title="確定接受嗎？"okText="确定"cancelText="關閉"
-                          onConfirm={() => acceptOffer(application)} >
-                          <Button type="primary" style={{marginRight:'8px'}}>Accept Offer</Button>
-                        </Popconfirm>
-                        <Popconfirm title="確定拒絕嗎？"okText="确定"cancelText="關閉"
-                          onConfirm={() => declineOffer(application.id)} >
-                          <Button danger style={{marginRight:'8px'}}>Decline Offer</Button>
-                        </Popconfirm>
-                      </>
-                      )}
-                    
-                      {(application.status !== 'Accept' && application.status !== 'Reject' && application.status !== 'Withdrawn') && (
-                        <Popconfirm
-                          title="確定取消嗎？"
-                          onConfirm={() => cancelApplication(application.id)}
-                          okText="确定"
-                          cancelText="關閉">
-                          <Button type="default" style={{marginRight:'8px'}}>Cancel Application</Button>
-                        </Popconfirm>
-                      )}
+                      <Button type="primary" style={{marginRight:'8px'}} onClick={() => acceptOffer(application.id)}>
+                        Accept Offer
+                      </Button>
+                      <Button danger style={{marginRight:'8px'}} onClick={() => declineOffer(application.id)}>
+                        Decline Offer
+                      </Button>
                     </>
-                    ):(<></>)
-                  }
-                
-                <Button type="link" style={{marginRight:'8px'}}>查看</Button>
-              </div>
-              </Panel>
-            ))}
-          </Collapse>
-        </TabPane>
+                  )}
+                  
+                  {(application.status !== 'Reject' && application.status !== 'Withdrawn') && (
+                    <Popconfirm
+                      title="確定取消嗎？"
+                      onConfirm={() => cancelApplication(application.id)}
+                      okText="确定"
+                      cancelText="關閉">
+                      <Button type="default" style={{marginRight:'8px'}}>Cancel Application</Button>
+                    </Popconfirm>
+                  )}
+                  <Button type="link" style={{marginRight:'8px'}}>查看</Button>
+                </div>
+              </Card>
+            ))} */}
+
+
+            <Collapse accordion>
+              {applicationData.map((application) => (
+                <Panel style={{backgroundColor:'white'}}
+                  header={
+                    <div style={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
+                      <div>
+                          <Row gutter={[4, 0]} style={{display:'flex', alignItems:'center'}}>
+                              <Col><Image src={application.companyRecruitment_id.companyEmployeePosition.company_id.logo} style={{height:'50px', width:'50px'}}/></Col>
+                              <Col>
+                                  <Row><Col>
+                                    {application.companyRecruitment_id.companyEmployeePosition.company_id.name}
+                                    <span> - </span>
+                                    {application.companyRecruitment_id.title}
+                                  </Col></Row>
+                              </Col>
+                          </Row>
+                      </div>
+                      <div>
+                        <span style={{marginRight:'16px'}}>{application.status}</span>
+                      </div>
+                    </div>
+                }
+                  key={application.id}>
+
+                  <div style={{textAlign:'right'}}>
+                    {employeeId == null?(
+                      <>
+                        {application.status === 'Offering' && (
+                        <>
+                          <Popconfirm title="確定接受嗎？"okText="确定"cancelText="關閉"
+                            onConfirm={() => acceptOffer(application)} >
+                            <Button type="primary" style={{marginRight:'8px'}}>Accept Offer</Button>
+                          </Popconfirm>
+                          <Popconfirm title="確定拒絕嗎？"okText="确定"cancelText="關閉"
+                            onConfirm={() => declineOffer(application.id)} >
+                            <Button danger style={{marginRight:'8px'}}>Decline Offer</Button>
+                          </Popconfirm>
+                        </>
+                        )}
+                      
+                        {(application.status !== 'Accept' && application.status !== 'Reject' && application.status !== 'Withdrawn') && (
+                          <Popconfirm
+                            title="確定取消嗎？"
+                            onConfirm={() => cancelApplication(application.id)}
+                            okText="确定"
+                            cancelText="關閉">
+                            <Button type="default" style={{marginRight:'8px'}}>Cancel Application</Button>
+                          </Popconfirm>
+                        )}
+                      </>
+                      ):(<></>)
+                    }
+                  
+                  <Button type="link" style={{marginRight:'8px'}}>查看</Button>
+                </div>
+                </Panel>
+              ))}
+            </Collapse>
+          </TabPane>
+        ):(<></>)}
       </Tabs>
 
 
