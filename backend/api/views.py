@@ -72,7 +72,7 @@ def verify(request):
         user_info = UserAccount.objects.get(pk = user)
         serializer = UserSerializer(user_info,many=False)
 
-        company_employee = models.CompanyEmployee.objects.filter(user_id=user, end_date__isnull=True)
+        company_employee = models.CompanyEmployee.objects.filter(Q(user_id=user) & (Q(end_date__isnull=True) | Q(end_date__gte=timezone.now())))
         company_employee_serializer = serializers.CompanyEmployeeSerializer(company_employee, many=True)
     
         # Combine user and company employee data
@@ -362,7 +362,7 @@ def getCompany(request, pk):
         companyImage = models.CompanyImages.objects.filter(company_id=pk)
         imageSerializer = serializers.CompanyImagesSerializer(companyImage, many=True)
         
-        companyEmployee = models.CompanyEmployee.objects.filter(company_id__id=pk)
+        companyEmployee = models.CompanyEmployee.objects.filter(Q(company_id__id=pk) & (Q(end_date__isnull=True) | Q(end_date__gte=timezone.now())))
         companyEmployeeSerializer = serializers.CompanyEmployeeSerializer(companyEmployee, many=True)
 
         companyRecruitment = models.CompanyRecruitment.objects.filter(companyEmployeePosition__company_id__id=pk)

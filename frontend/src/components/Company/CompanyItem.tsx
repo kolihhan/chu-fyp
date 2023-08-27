@@ -28,8 +28,15 @@ const ButtonRow: React.FC<ButtonRowProps> = ({id}) => {
 
     const navigate = useNavigate()
 
-    const handlerView = () => {
+    const handlerView = async () => {
+        const response = await getUserEmployee(Number(getCookie('userId')))
+        response.data.map((cmp: any) => {
+            if(cmp.company_id==id) {
+                setCookie('employeeId', cmp.id)
+            }
+        })
         navigate(`/company/view`)
+        setCookie("companyId", `${id}`)
     }
 
     const handlerEnter = async () => {
