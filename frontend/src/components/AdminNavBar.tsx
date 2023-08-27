@@ -53,9 +53,6 @@ const AdminNavBar: React.FC = () => {
                 <Menu.Item key="1">
                   <Link to={linkEmployeeList}>公司職員</Link>
                 </Menu.Item>
-                <Menu.Item key="2">
-                  <Link to={linkCreateEmployee}>新增職員</Link>
-                </Menu.Item>
                 <Menu.Item key="3">
                   <Link to={linkManageLeave}>請假管理</Link>
                 </Menu.Item>

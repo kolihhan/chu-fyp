@@ -115,13 +115,13 @@ const ManageEmployeesPositionPage: React.FC = () => {
       <h1>职位管理</h1>
 
       <Button type="primary" onClick={showModal}>
-        创建职位
+        創建職位
       </Button>
 
       <Table dataSource={employeePositions} columns={columns} />
 
       <Modal
-        title={selectedPosition ? "编辑职位" : "创建职位"}
+        title={selectedPosition ? "編輯職位" : "創建職位"}
         visible={isModalVisible}
         onCancel={handleCancel}
         footer={null}
@@ -129,15 +129,15 @@ const ManageEmployeesPositionPage: React.FC = () => {
         <Form form={form} onFinish={selectedPosition ? handleUpdatePosition : handleCreatePosition}>
           <Form.Item
             name="position_name"
-            label="职位名称"
-            rules={[{ required: true, message: "请输入职位名称" }]} >
+            label="職位名稱"
+            rules={[{ required: true, message: "請輸入職位名稱" }]} >
             <Input />
           </Form.Item>
 
           <Form.Item
             name="companyDepartment_id"
-            label="部门"
-            rules={[{ required: true, message: "请输入部门名称" }]} >
+            label="部門"
+            rules={[{ required: true, message: "請輸入部門名稱" }]} >
             <Select showSearch optionFilterProp="children" 
                 filterOption={(input, option) =>
                   option?.props?.children?.toString()?.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -152,7 +152,7 @@ const ManageEmployeesPositionPage: React.FC = () => {
 
           <Form.Item>
             <Button type="primary" htmlType="submit">
-              {selectedPosition ? "更新" : "创建"}
+              {selectedPosition ? "更新" : "創建"}
             </Button>
           </Form.Item>
         </Form>

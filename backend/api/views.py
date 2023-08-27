@@ -117,6 +117,13 @@ def getMultipleUserByEmail(request, pk):
     userList = models.UserAccount.objects.filter(email__contains=pk)
     serializer = serializers.UserIdAndEmailSerializer(userList, many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getUserByEmail(request, pk):
+    user = models.UserAccount.objects.get(email=pk)
+    serializer = serializers.UserIdAndEmailSerializer(user, many=False)
+    return Response(serializer.data)
 # endregion
 
 # region company
