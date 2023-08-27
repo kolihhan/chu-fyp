@@ -389,3 +389,9 @@ export const createCompanyEmployee = async (data : any) => {
   { headers: authHeaders() });
 };
 
+export const fireCompanyEmployee = async (id: number) => {
+  return axios.put(`${API_URL}/companyEmployee/fire/${id}`, 
+  { id },
+  { headers: authHeaders() });
+};
+

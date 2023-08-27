@@ -664,7 +664,8 @@ def createMultipleCompanyEmployee(request):
 @permission_classes([IsAuthenticated])
 def getUserCompanyEmployee(request, pk):
     try: 
-        companyEmployee = models.CompanyEmployee.objects.filter(user_id__id=pk)
+        today = timezone.now()
+        companyEmployee = models.CompanyEmployee.objects.filter(Q(user_id__id=pk) & (Q(end_date__isnull=True) | Q(end_date__gte=today)))
         serializer = serializers.CompanyEmployeeSerializer(companyEmployee, many=True)
         return Response(serializer.data)
     except models.CompanyEmployee.DoesNotExist as e: 
@@ -685,7 +686,10 @@ def getCompanyEmployee(request, pk):
 @permission_classes([IsAuthenticated])
 def getCompanyAllEmployee(request, pk):
     # pass in company id
-    companyEmployee = models.CompanyEmployee.objects.filter(company_id=pk)
+    today = timezone.now()
+    companyEmployee = models.CompanyEmployee.objects.filter(
+        Q(company_id=pk) & (Q(end_date__isnull=True) | Q(end_date__gte=today))
+    )
     serializer = serializers.CompanyEmployeeSerializer(companyEmployee, many=True)
     return Response(serializer.data)
 

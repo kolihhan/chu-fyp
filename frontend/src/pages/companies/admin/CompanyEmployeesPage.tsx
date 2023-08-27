@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Input, InputNumber, Modal, Pagination, Select, Table, message } from 'antd';
 import { Link, useParams } from 'react-router-dom';
-import { createCompanyEmployee, getAllEmployees, getEmployeePositions, getUserByEmail } from '../../../api';
+import { createCompanyEmployee, fireCompanyEmployee, getAllEmployees, getEmployeePositions, getUserByEmail } from '../../../api';
 import { getCookie } from '../../../utils';
 
 const CompanyEmployeePage: React.FC = () => {
@@ -58,6 +58,14 @@ const CompanyEmployeePage: React.FC = () => {
     }
   }
 
+  const fireEmployee = async (id:number) => {
+      const response = await fireCompanyEmployee(id)
+      if(response.status==200){
+        message.success('解雇成功')
+        fetchCompanyEmployees();
+      }
+  }
+
   const handleInviteEmployee = () => {
     setModalVisible(true)
   }
@@ -81,7 +89,12 @@ const CompanyEmployeePage: React.FC = () => {
     { title: 'Employee', key: 'employee', render: (_ : any, record: any) =>  <span>{record.user_id.name}</span> },
     { title: 'Department', dataIndex: 'department', key: 'department', render:(_ : any, record: any) => <span>{record.companyEmployeePosition_id.companyDepartment_id.department_name }</span> },
     { title: 'Position', dataIndex: 'position', key: 'position', render:(_ : any, record: any) => <span>{record.companyEmployeePosition_id.position_name}</span> },
-    { title: 'Actions', key: 'actions', render: (_ : any, record: any) => <Link to={`/admin/company/manage/${record.id}`}>Manage Permissions</Link> },
+    { title: 'Actions', key: 'actions', render: (_ : any, record: any) => (
+      <>
+        <Link to={`/admin/company/manage/${record.id}`}>Manage Permissions</Link>
+        <Button type='link' onClick={() => fireEmployee(record.id)}>Fire Employee</Button>
+      </>
+    )},
   ];
 
     // Pagination configuration
