@@ -30,6 +30,7 @@ import ManagePermissionPage from "../pages/companies/admin/settings/ManagePermis
 import ManageRecruitmentPage from "../pages/companies/admin/settings/ManageRecruitmentPage";
 import EmployeeHomePage from "../pages/companies/employees/EmployeeHomePage";
 import ManageEmployeeLeavePage from "../pages/companies/admin/settings/ManageEmployeeLeavePage";
+import EmployeesRecruitmentRecommendation from "../pages/companies/admin/EmployeesRecruitmentRecommendation";
 
 const Protected: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const user = useSelector((state: RootState) => state.auth.user);
@@ -126,7 +127,8 @@ const RoutesComponent: React.FC = () =>{
                 <Route path='admin/company/:id/performance' element={<ProtectedAdmin><EmployeesPerformancePage /></ProtectedAdmin>} />
                 <Route path='admin/company/:id/promotion-history' element={<ProtectedAdmin><EmployeesPromotionHistoryPage /></ProtectedAdmin>} />
                 <Route path='admin/company/:id/training-management' element={<ProtectedAdmin><EmployeesTrainingManagementPage /></ProtectedAdmin>} />
-
+                <Route path="admin/company/:id/recommend" element={<ProtectedAdmin><EmployeesRecruitmentRecommendation /></ProtectedAdmin>} />
+                
                 {/* Admin Settings */}
                 <Route path='admin/company/manage/:employee_id' element={<ProtectedAdmin><ManageEmployeesPermissionPage /></ProtectedAdmin>} />
                 <Route path='admin/company/announcement-manage/' element={<ProtectedAdmin><ManageAnouncementPage /></ProtectedAdmin>} />

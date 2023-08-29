@@ -1,15 +1,30 @@
-from rest_framework.response import Response
+import datetime
+from datetime import datetime, timedelta
+
+import random
+import numpy as np
+import spacy
+
+from django.db import transaction
+from django.db.models import Q
+from django.utils import timezone
+from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework import status
-from . import models
-from . import serializers
-from django.db.models import Q
-from django.db import transaction
-from django.utils import timezone
-import datetime
-import random
+
+from . import models, serializers
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
+from faker import Faker
+from gensim.models import Word2Vec
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity, linear_kernel
+from .models import (Company, CompanyEmployeePosition, CompanyRecruitment,
+                     UserAccount, UserApplicationRecord, UserResume)
 
 # feedbackRemarkList = ['毀壞公司財物','辱駡同事','得罪客戶','解決問題','提升業績','缺乏工作效率','未達到工作目標','未能準時完成工作任務','公司帶來利益','不遵守公司政策和程序','缺乏團隊合作精神','態度不積極或消極','拖延工作','不負責任地處理工作','忽略客戶的需求和反饋','經常出現錯誤或粗心大意','經常與同事發生衝突或矛盾','逃避責任或找借口','違反公司的機密和保密政策',]
 feedback_remark_list_g = ['積極解決問題', '提升業績', '創造公司利潤', '無私地捐獻資源給公司', '高效率完成工作', '準時達成工作目標', '提前完成工作任務', '細心處理工作', '積極態度', '關心同事', '充分滿足客戶需求', '勤奮工作', '負責任處理工作', '承擔錯誤和負責任', '良好的團隊合作精神', '尊重公司機密和保密政策', '主動學習和成長', '創新和提出改進建議', '善於溝通和協作', '尊重多樣性和包容性']
@@ -619,3 +634,47 @@ def getCompanyEmployeeFeedbackReview(request, pk):
         return Response({'message':'員工反饋獲取失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         return Response({'message':'員工反饋獲取失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+nlp = spacy.load('en_core_web_sm')
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_recommendations(request):
+    job_id = request.GET.get('job_id')
+
+    if not job_id:
+        return JsonResponse({'error': 'Missing job_id parameter'}, status=400)
+
+    try:
+        job = CompanyRecruitment.objects.get(pk=job_id)
+    except CompanyRecruitment.DoesNotExist:
+        return JsonResponse({'error': 'Job not found'}, status=404)
+
+    job_requirements = job.requirement
+    applicationRecord = UserApplicationRecord.objects.filter(companyRecruitment_id__id=job_id)
+
+    candidates = []
+    for record in applicationRecord:
+        candidates.append(record.userResume_id)
+    
+    # 使用 spaCy 进行文本预处理和计算相似度
+    job_doc = nlp(job_requirements)
+    candidate_docs = [nlp(c.summary + ' ' + c.experience + ' ' + c.education + ' ' + c.skills) for c in candidates]
+
+    tfidf_vectorizer = TfidfVectorizer()
+    tfidf_matrix = tfidf_vectorizer.fit_transform([job_doc.text] + [doc.text for doc in candidate_docs])
+    tfidf_similarities = cosine_similarity(tfidf_matrix[0:1], tfidf_matrix[1:]).flatten()
+
+    # 排序相似度
+    similar_candidates = [
+        {
+            'resume_id': candidate.id,
+            'similarity_score': sim_score,
+            'resume_text': candidate.summary + ' ' + candidate.experience + ' ' + candidate.education + ' ' + candidate.skills
+        }
+        for candidate, sim_score in zip(candidates, tfidf_similarities)
+    ]
+
+    similar_candidates.sort(key=lambda x: x['similarity_score'], reverse=True)
+
+    return JsonResponse({'job_requirements': job_requirements, 'candidates': similar_candidates})

@@ -207,9 +207,7 @@ urlpatterns = [
     path('companyEmployeeFeedBackReview/get/all', getAllCompanyEmployeeFeedbackReview, name='getAllCompanyEmployeeFeedbackReview'),
     path('companyEmployeeFeedBackReview/get/<int:pk>', getCompanyEmployeeFeedbackReview, name='getCompanyEmployeeFeedbackReview'),
     
-    
-    
-
+    path('get_recommendations', get_recommendations, name='testRecommendation'),
 
 ]
 

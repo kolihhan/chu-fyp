@@ -395,3 +395,11 @@ export const fireCompanyEmployee = async (id: number) => {
   { headers: authHeaders() });
 };
 
+export const getIDRecommendations = async(id: number) => {
+  return axios.get(`${API_URL}/get_recommendations`, { 
+    headers: authHeaders(),
+    params: {
+      job_id: id,
+    },
+  })
+}
