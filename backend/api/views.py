@@ -365,7 +365,7 @@ def getCompany(request, pk):
         companyEmployee = models.CompanyEmployee.objects.filter(Q(company_id__id=pk) & (Q(end_date__isnull=True) | Q(end_date__gte=timezone.now())))
         companyEmployeeSerializer = serializers.CompanyEmployeeSerializer(companyEmployee, many=True)
 
-        companyRecruitment = models.CompanyRecruitment.objects.filter(companyEmployeePosition__company_id__id=pk)
+        companyRecruitment = models.CompanyRecruitment.objects.filter(Q(companyEmployeePosition__company_id__id=pk) & (Q(close_at__isnull=True) | Q(close_at__gte=timezone.now())))
         companyRecruitmentSerializer = serializers.CompanyRecruitmentSerializer(companyRecruitment, many=True)
 
         data = {

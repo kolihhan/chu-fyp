@@ -289,7 +289,7 @@ const ManageRecruitmentPage: React.FC = () => {
       <Table dataSource={recruitments} columns={columns} />
 
       <Modal width='80%' bodyStyle={{maxHeight:'70vh', overflowY: 'auto'}}
-        title={selectedRecruitment ? "编辑招聘职位" : "创建招聘职位"}
+        title={selectedRecruitment ? "編輯招聘職位" : "創建招聘職位"}
         visible={isModalVisible}
         onCancel={handleCancel}
         footer={null} >
@@ -298,22 +298,22 @@ const ManageRecruitmentPage: React.FC = () => {
           <Form.Item
             name="title"
             label="招聘標題"
-            rules={[{ required: true, message: "请输入招聘标题" }]}>
+            rules={[{ required: true, message: "請輸入招聘標題" }]}>
             <Input placeholder="招聘標題"/>
           </Form.Item>
 
           <Form.Item
             name="description"
             label="描述"
-            rules={[{ required: true, message: "请输入招聘描述" }]}>
+            rules={[{ required: true, message: "請輸入招聘描述" }]}>
             <Input.TextArea autoSize={{minRows:1, maxRows:6}} placeholder="描述工作内容" />
           </Form.Item>
           
           <Form.Item
             name="companyEmployeePosition"
             label="職位"
-            rules={[{ required: true, message: "请输入招聘职位" }]}>
-            <Select placeholder="全职">
+            rules={[{ required: true, message: "请輸入招聘職位" }]}>
+            <Select placeholder="全職">
               {availablePosition.map((position) => (
                 <Option value={position.id}>{position.position_name}</Option>
               ))}
@@ -323,7 +323,7 @@ const ManageRecruitmentPage: React.FC = () => {
           <Form.Item
             name="requirement"
             label="要求"
-            rules={[{ required: true, message: "请输入能力要求" }]}>
+            rules={[{ required: true, message: "请輸入能力要求" }]}>
             <Input.TextArea autoSize={{minRows:1, maxRows:6}} placeholder="完成工作需要的基本能力" />
           </Form.Item>
           
@@ -346,7 +346,7 @@ const ManageRecruitmentPage: React.FC = () => {
           <Form.Item
             name="location"
             label="地點"
-            rules={[{ required: true, message: "请输入地点" }]}
+            rules={[{ required: true, message: "请輸入地點" }]}
           >
             <Input placeholder="公司/居家辦公" />
           </Form.Item>
@@ -377,7 +377,7 @@ const ManageRecruitmentPage: React.FC = () => {
           <Form.Item
             name="employee_need"
             label="招聘人數"
-            rules={[{ required: true, message: "请输入需要的员工人数" }]}
+            rules={[{ required: true, message: "请輸入需要的员工人数" }]}
           >
             <InputNumber min={1} placeholder="1" />
           </Form.Item>

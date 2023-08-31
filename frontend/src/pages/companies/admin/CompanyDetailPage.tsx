@@ -208,7 +208,7 @@ const CompanyDetailPage: React.FC = () => {
             {companyRecruitments ? (
               companyRecruitments.length > 0 ? (
                 companyRecruitments.map((recruitment: any) => (
-                  <RecruitmentItem key={recruitment.id} id={recruitment.id} title={recruitment.title} desc={recruitment.description} />
+                  <RecruitmentItem key={recruitment.id} recruitmentItem={recruitment} />
                 ))
               ):(<EmptyComponent /> )
             ):( <EmptyComponent /> )
