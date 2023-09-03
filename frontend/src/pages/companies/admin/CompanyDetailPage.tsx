@@ -188,7 +188,7 @@ const CompanyDetailPage: React.FC = () => {
 
         <div style={{ flex: 3, padding: "0px", display:'flex', flexDirection:'column', height: 'calc(100vh - 250px)' }}>
           <Card id="cmpDetailEmployees"
-           style={{flex:'none', overflowY: "auto"}}
+           style={{flex:'1', overflowY: "auto"}}
            bodyStyle={{ backgroundColor: "white", paddingTop: "0px", overflowY: "auto" }}
             title={<h2 style={{ margin: "0px" }}>員工列表</h2>} >
             {
@@ -203,7 +203,7 @@ const CompanyDetailPage: React.FC = () => {
           </Card>
 
           <Card id="cmpDetailRecruitList"
-           style={{flex:'auto', overflowY: "auto"}}
+           style={{flex:'1', overflowY: "auto"}}
            bodyStyle={{ backgroundColor: "white", paddingTop: "0px", overflowY: "auto" }}
             title={<h2 style={{ margin: "0px" }}>招聘列表</h2>} >
             {companyRecruitments ? (
