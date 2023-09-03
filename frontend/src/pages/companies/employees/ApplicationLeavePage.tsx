@@ -1,4 +1,4 @@
-import { Button, DatePicker, Form, Input, Select, Table } from 'antd';
+import { Button, Card, Col, DatePicker, Form, Input, Row, Select, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../app/store';
@@ -65,53 +65,58 @@ const ApplicationLeavePage: React.FC = () => {
 
   return (
     <div>
-      <h1>Application Leave</h1>
-
+      {/* 请假表单 */}      
+      <Card title="請假申請" style={{marginBottom:'16px'}} bodyStyle={{paddingBottom:'0px'}}>
+        <Form form={form} onFinish={onFinish}>
+          <Row gutter={[16,0]}>
+            <Col>
+              <Form.Item name="leave_start" label="Start Date"
+                rules={[{ required: true, message: 'Please select a start date.' }]} >
+                  <DatePicker showTime />
+              </Form.Item>
+            </Col>
+            <Col>
+              <Form.Item name="leave_end" label="End Date"
+                rules={[{ required: true, message: 'Please select an end date.' }]} >
+                  <DatePicker showTime />
+              </Form.Item>
+            </Col>
+            <Col>
+              <Form.Item name="type" label="Leave Type"
+                rules={[{ required: true, message: 'Please select a leave type.' }]} >
+                  <Select style={{minWidth:"200px"}}>
+                    <Option value="Annual Leave">Annual Leave</Option>
+                    <Option value="Sick Leave">Sick Leave</Option>
+                    <Option value="Personal Leave">Personal Leave</Option>
+                    <Option value="Maternity Leave">Maternity Leave</Option>
+                    <Option value="Paternity Leave">Paternity Leave</Option>
+                  </Select>
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={[16,0]}>
+            <Col flex='auto'>
+              <Form.Item name="reason" label="Reason" 
+                rules={[{ required: true, message: 'Please enter a reason.' }]} >
+                  <Input.TextArea rows={1} autoSize={{ minRows: 1, maxRows: 4 }} />
+              </Form.Item>
+            </Col>
+            <Col flex='none' style={{textAlign:'right'}}>
+              <Form.Item>
+                <Button type="primary" htmlType="submit">
+                  Submit
+                </Button>
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form>
+      </Card>
+      
       {/* 请假记录 */}
-      <Table dataSource={Array.isArray(leaveRecords) ? leaveRecords : []} columns={columns} />
+      <Card title="請假記錄" bodyStyle={{paddingBottom:'0px'}}>
+      <Table dataSource={Array.isArray(leaveRecords) ? leaveRecords : []} columns={columns} bordered />
+      </Card>
 
-      {/* 请假表单 */}
-      <Form form={form} onFinish={onFinish}>
-        <Form.Item
-          name="leave_start"
-          label="Start Date"
-          rules={[{ required: true, message: 'Please select a start date.' }]}
-        >
-          <DatePicker showTime />
-        </Form.Item>
-        <Form.Item
-          name="leave_end"
-          label="End Date"
-          rules={[{ required: true, message: 'Please select an end date.' }]}
-        >
-          <DatePicker showTime />
-        </Form.Item>
-        <Form.Item
-          name="reason"
-          label="Reason"
-          rules={[{ required: true, message: 'Please enter a reason.' }]}
-        >
-          <Input.TextArea />
-        </Form.Item>
-        <Form.Item
-          name="type"
-          label="Leave Type"
-          rules={[{ required: true, message: 'Please select a leave type.' }]}
-        >
-          <Select>
-            <Option value="Annual Leave">Annual Leave</Option>
-            <Option value="Sick Leave">Sick Leave</Option>
-            <Option value="Personal Leave">Personal Leave</Option>
-            <Option value="Maternity Leave">Maternity Leave</Option>
-            <Option value="Paternity Leave">Paternity Leave</Option>
-          </Select>
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
-      </Form>
     </div>
   );
 };
