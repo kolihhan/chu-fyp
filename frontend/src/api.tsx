@@ -178,6 +178,13 @@ export const getAllEmployeesFeedback = async (id : number) => {
   return axios.get( `${API_URL}/companyEmployeeFeedBackReview/get/company/all/${id}`, { headers: authHeaders() } );
 };
 
+export const getAllEmployeesFeedbackFrom = async (id : number) => {
+  return axios.get( `${API_URL}/companyEmployeeFeedBackReview/get/employee/by/all/${id}`, { headers: authHeaders() } );
+};
+export const getAllEmployeesFeedbackTo = async (id : number) => {
+  return axios.get( `${API_URL}/companyEmployeeFeedBackReview/get/employee/to/all/${id}`, { headers: authHeaders() } );
+};
+
 export const getAllEmployeesPerformance = async (id : number) => {
   return axios.get( `${API_URL}/companyEmployeePerformance/get/company/all/${id}`, { headers: authHeaders() } );
 };
