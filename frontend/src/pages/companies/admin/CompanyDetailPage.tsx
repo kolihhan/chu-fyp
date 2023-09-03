@@ -155,40 +155,41 @@ const CompanyDetailPage: React.FC = () => {
   })
 
   return (
-    <div style={{ padding: "15%", paddingTop: "16px", backgroundColor: "#F4F4F4" }}>
+    <div style={{ paddingLeft: "10%", paddingRight:'10%', paddingTop: "16px", backgroundColor: "#F4F4F4" }}>
       <CompanyHeader company={company} />
 
-      {/* display flex change to block and set the width to 100% */}
+      {/* display flex change to block  */}
       {/* can set the right side panel to bottom */}
 
       <div style={{ display: "flex", alignItems: "start", justifyContent: "space-between" }}>
-        <div style={{ width: "70%", marginRight: "8px" }}>
+        
+        <div style={{ flex: 7, background:"transparent", padding: "0px", display:'flex', flexDirection:'column', height: 'calc(100vh - 250px)' }}>
           <Card id="cmpDetails"
-            style={{ marginTop: "8px" }}
-            bodyStyle={{ backgroundColor: "white", paddingTop: "0px" }}
+            style={{flex:'none', overflowY: "auto"}}
+            bodyStyle={{ backgroundColor: "white", paddingTop: "0px", overflowY: "auto" }}
             title={<h2 style={{ margin: "0px" }}>公司信息</h2>} >
             <CompanyInfo company={company}/>
           </Card>
 
           <Card id="cmpDetailBenefits"
-            style={{ marginTop: "8px" }}
-            bodyStyle={{ backgroundColor: "white", paddingTop: "0px" }}
+           style={{flex:'none', overflowY: "auto"}}
+           bodyStyle={{ backgroundColor: "white", paddingTop: "0px", overflowY: "auto" }}
             title={<h2 style={{ margin: "0px" }}>公司福利</h2>} >
             <CompanyBenefits company={company}/>
           </Card>
 
           <Card id="cmpDetailImage"
-            style={{ marginTop: "8px" }}
-            bodyStyle={{ backgroundColor: "white", paddingTop: "0px" }}
+            style={{flex:'auto', overflowY: "auto"}}
+            bodyStyle={{ backgroundColor: "white", paddingTop: "0px", overflowY: "auto" }}
             title={<h2 style={{ margin: "0px" }}>公司環境照片</h2>} >
             <CompanyImage companyImage={companyImage} company={company}/>
           </Card>
         </div>
 
-        <div style={{ width: "30%" }}>
+        <div style={{ flex: 3, padding: "0px", display:'flex', flexDirection:'column', height: 'calc(100vh - 250px)' }}>
           <Card id="cmpDetailEmployees"
-            style={{ marginTop: "8px" }}
-            bodyStyle={{ backgroundColor: "white", paddingTop: "0px", maxHeight: "290px", overflowY: "auto" }}
+           style={{flex:'none', overflowY: "auto"}}
+           bodyStyle={{ backgroundColor: "white", paddingTop: "0px", overflowY: "auto" }}
             title={<h2 style={{ margin: "0px" }}>員工列表</h2>} >
             {
               companyEmployees ? (
@@ -202,8 +203,8 @@ const CompanyDetailPage: React.FC = () => {
           </Card>
 
           <Card id="cmpDetailRecruitList"
-            style={{ marginTop: "8px" }}
-            bodyStyle={{ backgroundColor: "white", paddingTop: "0px", maxHeight: "290px", overflowY: "auto", display:'block', alignItems: "center", justifyContent: "center" }}
+           style={{flex:'auto', overflowY: "auto"}}
+           bodyStyle={{ backgroundColor: "white", paddingTop: "0px", overflowY: "auto" }}
             title={<h2 style={{ margin: "0px" }}>招聘列表</h2>} >
             {companyRecruitments ? (
               companyRecruitments.length > 0 ? (

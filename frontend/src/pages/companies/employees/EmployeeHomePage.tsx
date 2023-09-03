@@ -84,14 +84,15 @@ const EmployeeHomePage: React.FC = () => {
       };
     return (
         <div style={{ paddingLeft:'10%', paddingRight:'10%', paddingTop: '16px', backgroundColor: "#F4F4F4" }}>
+            
             <CompanyHeader company={company} checkInButton={true} />
 
-            <div style={{ display: "flex", alignItems: "start", justifyContent: "space-between" }}>
-                <div style={{ width: "70%" }}>
-                    <Card id="cmpAnnouncements"
-                    style={{ marginTop: "8px" }}
-                    bodyStyle={{ backgroundColor: "white", paddingTop: "0px" }}
-                    title={<h2 style={{ margin: "0px" }}>最新公告</h2>} >
+            <div style={{ display: "flex", alignItems: "start", justifyContent: "space-between", marginTop:'8px' }}>
+                <div style={{ flex: 7, background:"transparent", padding: "0px", display:'flex', flexDirection:'column', height: 'calc(100vh - 250px)' }} >
+                    <Card id="cmpAnnouncements" 
+                        style={{flex:'auto', overflowY: "auto"}}
+                        bodyStyle={{ backgroundColor: "white", paddingTop: "0px", overflowY: "auto" }}
+                        title={<h2 style={{ margin: "0px" }}>最新公告</h2>} >
                         <Table dataSource={announcements} columns={columns} pagination={false}/>
                         <Modal
                             title="查看公告"
@@ -153,32 +154,17 @@ const EmployeeHomePage: React.FC = () => {
                         </Modal>
                     </Card>
                     <Card id="cmpDetails"
-                        style={{ marginTop: "8px" }}
+                        style={{ marginTop: "8px", flex:'none' }}
                         bodyStyle={{ backgroundColor: "white", paddingTop: "0px" }}
                         title={<h2 style={{ margin: "0px" }}>公司信息</h2>} >
                         <CompanyInfo company={company}/>
                     </Card>
-                    {/* <Card id="cmpDetailEmployees"
-                        style={{ marginTop: "8px" }}
-                        bodyStyle={{ backgroundColor: "white", paddingTop: "0px", overflowY: "auto", height: 'calc(100vh - 300px)' }}
-                        title={<h2 style={{ margin: "0px" }}>員工列表</h2>} >
-                        {
-                        companyEmployees ? (
-                            companyEmployees.length > 0 ? (
-                            companyEmployees?.map((employee: any) => (
-                                <EmployeeItem key={employee.id} id={employee.id} employee={employee} />
-                            ))
-                            ):( <EmptyComponent /> )
-                        ):( <EmptyComponent /> )
-                        }
-                    </Card> */}
                 </div>
 
-                <div style={{ width: '29%'}}>
-                {/* <div style={{ width: '23%', position: 'fixed', top: '235px', right:'10.5%', overflowY: 'auto' }}> */}
+                <div style={{ flex: 3, padding: "0px", display:'flex', flexDirection:'column', height: 'calc(100vh - 250px)' }} >
                     <Card id="cmpDetailEmployees"
-                        style={{ marginTop: "8px" }}
-                        bodyStyle={{ backgroundColor: "white", paddingTop: "0px", overflowY: "auto", height: 'calc(100vh - 300px)' }}
+                        style={{flex:'auto'}}
+                        bodyStyle={{ backgroundColor: "white", paddingTop: "0px", overflowY: "auto" }}
                         title={<h2 style={{ margin: "0px" }}>員工列表</h2>} >
                         {
                         companyEmployees ? (
@@ -191,6 +177,7 @@ const EmployeeHomePage: React.FC = () => {
                         }
                     </Card>
                 </div>
+
             </div>
         </div>
     )
