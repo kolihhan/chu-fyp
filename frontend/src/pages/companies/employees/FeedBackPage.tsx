@@ -10,6 +10,8 @@ import { AnyAction } from '@reduxjs/toolkit';
 import { createFeedbackApi, getAllEmployees, getAllEmployeesFeedbackFrom, getAllEmployeesFeedbackTo } from '../../../api';
 import { getCookie } from '../../../utils';
 
+import {Chart} from 'react-google-charts';
+
 const { Option } = Select;
 
 const FeedBackPage: React.FC = () => {
@@ -23,8 +25,11 @@ const FeedBackPage: React.FC = () => {
   const companyId = getCookie('companyId')
   const employeeId = Number(getCookie('employeeId'))
   const [modalVisible, setModalVisible] = useState(false)
-  const [feedbackTo, setFeedbackTo] = useState<any>()
   const [feedbackFrom, setFeedbackFrom] = useState<any>()
+  const [feedbackTo, setFeedbackTo] = useState<any>()
+  const [viewFeedbackModalVisible, setViewFeedbackModalVisible] = useState(false)
+  const [pieChartData, setPieChartData] = useState<any>([["Remarks", "Count"]])
+  const [pieChartOptions, setPieChartOptions] = useState<any>()
   const textNothing = '.'
   const feedbackOption = ['積極解決問題', '提升業績', '創造公司利潤', '無私地捐獻資源給公司', '高效率完成工作', '準時達成工作目標', '提前完成工作任務', '細心處理工作', '積極態度', '關心同事', '充分滿足客戶需求', '勤奮工作', '負責任處理工作', '承擔錯誤和負責任', '良好的團隊合作精神', '尊重公司機密和保密政策', '主動學習和成長', '創新和提出改進建議', '善於溝通和協作', '尊重多樣性和包容性', '頻繁發生問題', '導致公司損失', '損害公司財產', '工作效率不足', '未達工作目標', '未能按時完成工作任務', '經常出現錯誤或粗心大意', '缺乏團隊合作精神', '消極態度', '辱罵同事', '忽略客戶需求和反饋', '不遵守公司政策和程序', '拖延或敷衍工作', '逃避責任或找借口', '經常與同事發生衝突或矛盾', '違反公司的機密和保密政策', '忽略專業發展和學習', '不積極尋求改進和創新', '缺乏有效溝通和團隊協作', '不尊重多樣性和缺乏包容性']
 
@@ -68,6 +73,7 @@ const FeedBackPage: React.FC = () => {
         for (let i=0; i< 10-lengthTo; i++){
           responseTo.data.data.push({
             feedback_to:{id: 0, user_id: {name:''}},
+            companyEmployee_id:{id: 0, user_id: {name:''}},
             remarks: textNothing,
           })
         }
@@ -76,14 +82,15 @@ const FeedBackPage: React.FC = () => {
       if(lengthFrom!=0 || responseFrom.data.data.length==0){
         for (let i=0; i< 10-lengthFrom; i++){
             responseFrom.data.data.push({
-            feedback_to:{id: 0, user_id: {name:''}},
-            remarks: textNothing,
+              feedback_to:{id: 0, user_id: {name:''}},
+              companyEmployee_id:{id: 0, user_id: {name:''}},
+              remarks: textNothing,
           })
         }
       }
     }
-    setFeedbackTo(responseTo.data.data)
-    setFeedbackFrom(responseFrom.data.data)
+    setFeedbackFrom(responseTo.data.data)
+    setFeedbackTo(responseFrom.data.data)
   }
 
   const openFeedbackModal = () => {
@@ -91,6 +98,15 @@ const FeedBackPage: React.FC = () => {
   }
   const closeFeedbackModal = () => {
     setModalVisible(false)
+  }
+
+  const openViewFeedbackModal = () => {
+    setViewFeedbackModalVisible(true)
+    setChart()
+  }
+  
+  const closeViewFeedbackModal = () => {
+    setViewFeedbackModalVisible(false)
   }
 
   const columnsFrom = [
@@ -103,17 +119,72 @@ const FeedBackPage: React.FC = () => {
     </span>
     }
   ]
+
+  const columnsTo = [
+    {title: '員工', key:'name', dataIndex:'', 
+      render:(_:any, record:any) => <span>{record.feedback_to.user_id.name}</span>
+    },
+    {title:'remarks', key:'remarks', dataIndex:'',
+      render:(_:any, record:any) => <span style={{ color: record.remarks === textNothing ? 'transparent' : 'inherit' }}>
+      {record.remarks}
+    </span>
+    }
+  ]
+
+  const setChart = () => {
+    if(feedbackFrom!=null){
+      let pcd = [["Remarks", "Count"]]
+      feedbackFrom.filter((fb:any) =>{
+        let existingItemIndex = pcd.findIndex((item:any) => item[0] === fb.remarks);
+        if(existingItemIndex!==-1){
+          pcd[existingItemIndex][1] += 1
+        }else{
+          pcd.push([fb.remarks, 1])
+        }
+      })
+      let indexNothing = pcd.findIndex((item:any) => item[0]===textNothing)
+      pcd.splice(indexNothing, 1)
+      setPieChartData(pcd)
+    }
+  
+    setPieChartOptions({
+      title:'',
+      pieHole: 0.6,
+      is3D: false,
+      pieSliceText:'value',
+      legend:{
+        position:'right',
+        fontSize:'100px'
+      },
+      chartArea:{
+        right:0,top:0,width:'100%',height:'100%'
+      },
+      legendArea:{
+        right:0, top:0, height:'100%'
+      }
+    })
+  }
+
   return (
-    <div>
+    <div style={{marginLeft:'10%', marginRight:'10%'}}>
       <div style={{textAlign:'right'}}>
-        <Button onClick={openFeedbackModal} style={{marginTop:'8px', marginBottom:'8px'}}>Feedback to</Button>
+        <Button onClick={openFeedbackModal} style={{marginTop:'8px', marginBottom:'8px', marginRight:'8px'}}>Feedback to</Button>
+        <Button type="primary" onClick={openViewFeedbackModal} style={{marginTop:'8px', marginBottom:'8px'}}>View</Button>
       </div>
       <div style={{display:'flex', justifyContent:'space-between'}}>
-        <Table dataSource={feedbackFrom} columns={columnsFrom} title={() => '我的評價'}
-          bordered style={{flex:1, height:'100%'}} />
-        <Table dataSource={feedbackTo} columns={columnsFrom} title={() => '評價他人'}
+        <Table dataSource={feedbackTo} columns={columnsTo} title={() => '我評價他人'}
+          bordered style={{flex:1, height:'100%', marginRight:'8px'}} />
+        <Table dataSource={feedbackFrom} columns={columnsFrom} title={() => '他人評價我'}
           bordered style={{flex:1, height:'100%'}} />
       </div>
+
+      <Modal bodyStyle={{margin:0}}
+        title="My Feedback"
+        open={viewFeedbackModalVisible}
+        onCancel={closeViewFeedbackModal}
+        footer={null}>
+            <Chart chartType='PieChart' data={pieChartData} options={pieChartOptions} style={{flex:1}}/>
+      </Modal>
 
       <Modal 
         title="Feedback to"
