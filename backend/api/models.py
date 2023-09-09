@@ -344,3 +344,7 @@ class CompanyEmployeeLeaveRecord(models.Model):
     apply_at = models.DateTimeField(auto_now_add=True)
     approve_at = models.DateTimeField(null=True, blank=True)
     update_at = models.DateTimeField(auto_now=True)
+
+class GradientData(models.Model):
+    w_gradient = models.JSONField()
+    b_gradient = models.FloatField()

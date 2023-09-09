@@ -208,6 +208,8 @@ urlpatterns = [
     path('companyEmployeeFeedBackReview/get/<int:pk>', getCompanyEmployeeFeedbackReview, name='getCompanyEmployeeFeedbackReview'),
     
     path('get_recommendations', get_recommendations, name='testRecommendation'),
+    path('calGradients', calGradients, name='calGradient'),
+    path('calEmployeeScore/<int:pk>', calEmployeeScore, name='calEmployeeScore'),
 
 ]
 

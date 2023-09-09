@@ -279,3 +279,7 @@ class CompanyEmployeeIdOnlySerializer(serializers.ModelSerializer):
         model = models.CompanyEmployee
         fields = '__all__'
     
+class GradientDataSerializer(serializers.ModelSerializer):
+    class Meta: 
+        model = models.GradientData
+        fields = '__all__'
