@@ -410,3 +410,9 @@ export const getIDRecommendations = async(id: number) => {
     },
   })
 }
+
+export const getFeedbackScore = async(id: number) => {
+  return axios.get(`${API_URL}/calEmployeeScore/${id}`, { 
+    headers: authHeaders(),
+  })
+}

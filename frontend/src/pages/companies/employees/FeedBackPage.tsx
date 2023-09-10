@@ -7,7 +7,7 @@ import { createFeedback, selectSelectedCompany, selectSelf } from '../../../redu
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
 
-import { createFeedbackApi, getAllEmployees, getAllEmployeesFeedbackFrom, getAllEmployeesFeedbackTo } from '../../../api';
+import { createFeedbackApi, getAllEmployees, getAllEmployeesFeedbackFrom, getAllEmployeesFeedbackTo, getFeedbackScore } from '../../../api';
 import { getCookie } from '../../../utils';
 
 import {Chart} from 'react-google-charts';
@@ -30,6 +30,7 @@ const FeedBackPage: React.FC = () => {
   const [viewFeedbackModalVisible, setViewFeedbackModalVisible] = useState(false)
   const [pieChartData, setPieChartData] = useState<any>([["Remarks", "Count"]])
   const [pieChartOptions, setPieChartOptions] = useState<any>()
+  const [feedbackScore, setFeedbackScore] = useState("計算中...")
   const textNothing = '.'
   const feedbackOption = ['積極解決問題', '提升業績', '創造公司利潤', '無私地捐獻資源給公司', '高效率完成工作', '準時達成工作目標', '提前完成工作任務', '細心處理工作', '積極態度', '關心同事', '充分滿足客戶需求', '勤奮工作', '負責任處理工作', '承擔錯誤和負責任', '良好的團隊合作精神', '尊重公司機密和保密政策', '主動學習和成長', '創新和提出改進建議', '善於溝通和協作', '尊重多樣性和包容性', '頻繁發生問題', '導致公司損失', '損害公司財產', '工作效率不足', '未達工作目標', '未能按時完成工作任務', '經常出現錯誤或粗心大意', '缺乏團隊合作精神', '消極態度', '辱罵同事', '忽略客戶需求和反饋', '不遵守公司政策和程序', '拖延或敷衍工作', '逃避責任或找借口', '經常與同事發生衝突或矛盾', '違反公司的機密和保密政策', '忽略專業發展和學習', '不積極尋求改進和創新', '缺乏有效溝通和團隊協作', '不尊重多樣性和缺乏包容性']
 
@@ -91,6 +92,7 @@ const FeedBackPage: React.FC = () => {
     }
     setFeedbackFrom(responseTo.data.data)
     setFeedbackTo(responseFrom.data.data)
+    setChart()
   }
 
   const openFeedbackModal = () => {
@@ -102,6 +104,7 @@ const FeedBackPage: React.FC = () => {
 
   const openViewFeedbackModal = () => {
     setViewFeedbackModalVisible(true)
+    calFeedbackScore()
     setChart()
   }
   
@@ -111,7 +114,7 @@ const FeedBackPage: React.FC = () => {
 
   const columnsFrom = [
     {title: '員工', key:'name', dataIndex:'', 
-      render:(_:any, record:any) => <span>{record.feedback_to.user_id.name}</span>
+      render:(_:any, record:any) => <span>{record.companyEmployee_id.user_id.name}</span>
     },
     {title:'remarks', key:'remarks', dataIndex:'',
       render:(_:any, record:any) => <span style={{ color: record.remarks === textNothing ? 'transparent' : 'inherit' }}>
@@ -153,16 +156,20 @@ const FeedBackPage: React.FC = () => {
       is3D: false,
       pieSliceText:'value',
       legend:{
-        position:'right',
-        fontSize:'100px'
+        textStyle: {
+          fontSize: 16,
+        },
       },
       chartArea:{
-        right:0,top:0,width:'100%',height:'100%'
+        left:0,top:0,width:'100%',height:'100%'
       },
-      legendArea:{
-        right:0, top:0, height:'100%'
-      }
     })
+  }
+
+  const calFeedbackScore = async () => {
+    const response = await getFeedbackScore(employeeId)
+    console.log(response.data.data)
+    setFeedbackScore(response.data.data.toFixed(2))
   }
 
   return (
@@ -183,7 +190,15 @@ const FeedBackPage: React.FC = () => {
         open={viewFeedbackModalVisible}
         onCancel={closeViewFeedbackModal}
         footer={null}>
-            <Chart chartType='PieChart' data={pieChartData} options={pieChartOptions} style={{flex:1}}/>
+          <div>
+            <Chart chartType='PieChart' data={pieChartData} options={pieChartOptions}/>
+            <div
+              style={{ position: 'absolute', top: '55%', left: '30%',
+                transform: 'translate(-50%, -50%)',
+                fontSize: '20px', fontWeight: 'bold' }} >
+              {feedbackScore}
+            </div>
+          </div>
       </Modal>
 
       <Modal 

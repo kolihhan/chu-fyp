@@ -396,145 +396,145 @@ def calCompanyEmployeeScore(request):
                 for j in range(len(remark_list)):
                     # region g
                     if remark_list[j] == feedback_remark_list_g[0]:
-                        eScore += score_list[0]
+                        eScore += (score_list[0] + random.randint(0, 2))
                         rmk_g.append(remark_list[j])
                     elif remark_list[j] == feedback_remark_list_g[1]:
-                        eScore += score_list[1]
+                        eScore += (score_list[1] + random.randint(0, 2))
                         rmk_g.append(remark_list[j])
                     elif remark_list[j] == feedback_remark_list_g[2]:
-                        eScore += score_list[2]
+                        eScore += (score_list[2] + random.randint(0, 2))
                         rmk_g.append(remark_list[j])
                     elif remark_list[j] == feedback_remark_list_g[3]:
-                        eScore += score_list[3]
+                        eScore += (score_list[3] + random.randint(0, 2))
                         rmk_g.append(remark_list[j])
                     elif remark_list[j] == feedback_remark_list_g[4]:
-                        eScore += score_list[4]
+                        eScore += (score_list[4] + random.randint(0, 2))
                         rmk_g.append(remark_list[j])
                     elif remark_list[j] == feedback_remark_list_g[5]:
-                        eScore += score_list[5]
+                        eScore += (score_list[5] + random.randint(0, 2))
                         rmk_g.append(remark_list[j])
                     elif remark_list[j] == feedback_remark_list_g[6]:
-                        eScore += score_list[6]
+                        eScore += (score_list[6] + random.randint(0, 2))
                         rmk_g.append(remark_list[j])
                     elif remark_list[j] == feedback_remark_list_g[7]:
-                        eScore += score_list[7]
+                        eScore += (score_list[7] + random.randint(0, 2))
                         rmk_g.append(remark_list[j])
                     elif remark_list[j] == feedback_remark_list_g[8]:
-                        eScore += score_list[8]
+                        eScore += (score_list[8] + random.randint(0, 2))
                         rmk_g.append(remark_list[j])
                     elif remark_list[j] == feedback_remark_list_g[9]:
-                        eScore += score_list[9]
+                        eScore += (score_list[9] + random.randint(0, 2))
                         rmk_g.append(remark_list[j])
                     elif remark_list[j] == feedback_remark_list_g[10]:
-                        eScore += score_list[10]
+                        eScore += (score_list[10] + random.randint(0, 2))
                         rmk_g.append(remark_list[j])
                     elif remark_list[j] == feedback_remark_list_g[11]:
-                        eScore += score_list[11]
+                        eScore += (score_list[11] + random.randint(0, 2))
                         rmk_g.append(remark_list[j])
                     elif remark_list[j] == feedback_remark_list_g[12]:
-                        eScore += score_list[12]
+                        eScore += (score_list[12] + random.randint(0, 2))
                         rmk_g.append(remark_list[j])
                     elif remark_list[j] == feedback_remark_list_g[13]:
-                        eScore += score_list[13]
+                        eScore += (score_list[13] + random.randint(0, 2))
                         rmk_g.append(remark_list[j])
                     elif remark_list[j] == feedback_remark_list_g[14]:
-                        eScore += score_list[14]
+                        eScore += (score_list[14] + random.randint(0, 2))
                         rmk_g.append(remark_list[j])
                     elif remark_list[j] == feedback_remark_list_g[15]:
-                        eScore += score_list[15]
+                        eScore += (score_list[15] + random.randint(0, 2))
                         rmk_g.append(remark_list[j])
                     elif remark_list[j] == feedback_remark_list_g[16]:
-                        eScore += score_list[16]
+                        eScore += (score_list[16] + random.randint(0, 2))
                         rmk_g.append(remark_list[j])
                     elif remark_list[j] == feedback_remark_list_g[17]:
-                        eScore += score_list[17]
+                        eScore += (score_list[17] + random.randint(0, 2))
                         rmk_g.append(remark_list[j])
                     elif remark_list[j] == feedback_remark_list_g[18]:
-                        eScore += score_list[18]
+                        eScore += (score_list[18] + random.randint(0, 2))
                         rmk_g.append(remark_list[j])
                     elif remark_list[j] == feedback_remark_list_g[19]:
-                        eScore += score_list[19]
+                        eScore += (score_list[19] + random.randint(0, 2))
                         rmk_g.append(remark_list[j])
                     # endregion g
                     # region b
                     if remark_list[j] == feedback_remark_list_b[0]:
-                        eScore -= score_list[0]
+                        eScore -= (score_list[0] + random.randint(0, 2))
                         rmk_b.append(remark_list[j])
                         
                     if remark_list[j] == feedback_remark_list_b[1]:
-                        eScore -= score_list[1]
+                        eScore -= (score_list[1] + random.randint(0, 2))
                         rmk_b.append(remark_list[j])
                         
                     if remark_list[j] == feedback_remark_list_b[2]:
-                        eScore -= score_list[2]
+                        eScore -= (score_list[2] + random.randint(0, 2))
                         rmk_b.append(remark_list[j])
                         
                     if remark_list[j] == feedback_remark_list_b[3]:
-                        eScore -= score_list[3]
+                        eScore -= (score_list[3] + random.randint(0, 2))
                         rmk_b.append(remark_list[j])
                         
                     if remark_list[j] == feedback_remark_list_b[4]:
-                        eScore -= score_list[4]
+                        eScore -= (score_list[4] + random.randint(0, 2))
                         rmk_b.append(remark_list[j])
                         
                     if remark_list[j] == feedback_remark_list_b[5]:
-                        eScore -= score_list[5]
+                        eScore -= (score_list[5] + random.randint(0, 2))
                         rmk_b.append(remark_list[j])
                         
                     if remark_list[j] == feedback_remark_list_b[6]:
-                        eScore -= score_list[6]
+                        eScore -= (score_list[6] + random.randint(0, 2))
                         rmk_b.append(remark_list[j])
                         
                     if remark_list[j] == feedback_remark_list_b[7]:
-                        eScore -= score_list[7]
+                        eScore -= (score_list[7] + random.randint(0, 2))
                         rmk_b.append(remark_list[j])
                         
                     if remark_list[j] == feedback_remark_list_b[8]:
-                        eScore -= score_list[8]
+                        eScore -= (score_list[8] + random.randint(0, 2))
                         rmk_b.append(remark_list[j])
                         
                     if remark_list[j] == feedback_remark_list_b[9]:
-                        eScore -= score_list[9]
+                        eScore -= (score_list[9] + random.randint(0, 2))
                         rmk_b.append(remark_list[j])
                         
                     if remark_list[j] == feedback_remark_list_b[10]:
-                        eScore -= score_list[10]
+                        eScore -= (score_list[10] + random.randint(0, 2))
                         rmk_b.append(remark_list[j])
                         
                     if remark_list[j] == feedback_remark_list_b[11]:
-                        eScore -= score_list[11]
+                        eScore -= (score_list[11] + random.randint(0, 2))
                         rmk_b.append(remark_list[j])
                         
                     if remark_list[j] == feedback_remark_list_b[12]:
-                        eScore -= score_list[12]
+                        eScore -= (score_list[12] + random.randint(0, 2))
                         rmk_b.append(remark_list[j])
                         
                     if remark_list[j] == feedback_remark_list_b[13]:
-                        eScore -= score_list[13]
+                        eScore -= (score_list[13] + random.randint(0, 2))
                         rmk_b.append(remark_list[j])
                         
                     if remark_list[j] == feedback_remark_list_b[14]:
-                        eScore -= score_list[14]
+                        eScore -= (score_list[14] + random.randint(0, 2))
                         rmk_b.append(remark_list[j])
                         
                     if remark_list[j] == feedback_remark_list_b[15]:
-                        eScore -= score_list[15]
+                        eScore -= (score_list[15] + random.randint(0, 2))
                         rmk_b.append(remark_list[j])
                         
                     if remark_list[j] == feedback_remark_list_b[16]:
-                        eScore -= score_list[16]
+                        eScore -= (score_list[16] + random.randint(0, 2))
                         rmk_b.append(remark_list[j])
                         
                     if remark_list[j] == feedback_remark_list_b[17]:
-                        eScore -= score_list[17]
+                        eScore -= (score_list[17] + random.randint(0, 2))
                         rmk_b.append(remark_list[j])
                         
                     if remark_list[j] == feedback_remark_list_b[18]:
-                        eScore -= score_list[18]
+                        eScore -= (score_list[18] + random.randint(0, 2))
                         rmk_b.append(remark_list[j])
                         
                     if remark_list[j] == feedback_remark_list_b[19]:
-                        eScore -= score_list[19]
+                        eScore -= (score_list[19] + random.randint(0, 2))
                         rmk_b.append(remark_list[j])
                         
                     # endregion b
@@ -804,7 +804,7 @@ def calGradients(request):
         w_init=np.array([0]*len(remark_list))
         b_init=0
         learning_rate = 0.01
-        run_iter = 10000
+        run_iter = 100000
         w_final, b_final, w_hist, b_hist, c_hist = gradient_descent(x_train, y_train, w_init, b_init, learning_rate, compute_cost, compute_gradient, run_iter, p_iter=1000)
 
         # y_pred = (w_final * x_test).sum(axis=1) + b_final
@@ -839,7 +839,6 @@ def calEmployeeScore(request, pk):
         gradient = models.GradientData.objects.order_by('-id').first()
         serializer = serializers.GradientDataSerializer(gradient, many=False)
 
-        print(serializer.data)
         w_gradient = serializer.data['w_gradient']
         b_gradient = serializer.data['b_gradient']
 
@@ -876,8 +875,6 @@ def calEmployeeScore(request, pk):
         x = x.to_numpy()
 
         score = (w_gradient * x).sum(axis=1) + b_gradient
-        score[0]
-        print(score[0])
         
         return Response({'data': score[0]})
     except models.GradientData.DoesNotExist as e:
