@@ -627,7 +627,8 @@ def createCompanyEmployee(request):
             company_id = models.Company.objects.get(id=employeeData['company_id']),
             user_id = models.UserAccount.objects.get(id=employeeData['user_id']),
             companyEmployeePosition_id = models.CompanyEmployeePosition.objects.get(id=employeeData['companyEmployeePosition_id']),
-            salary = employeeData['salary']
+            salary = employeeData['salary'],
+            skills = employeeData['skills']
         )
         serializer = serializers.CompanyEmployeeSerializer(createdCompanyEmployee, many=False)
         if(createdCompanyEmployee.id):
@@ -1930,7 +1931,7 @@ def getUserResume(request, pk):
     try:
         userResumeData = models.UserResume.objects.get(id=pk)
         serializer = serializers.UserResumeSerializer(userResumeData, many=False)
-        return Response({'message':'履歷獲取成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+        return Response({'message':'履歷獲取成功', 'data':serializer.data }, status=status.HTTP_200_OK)
     except models.UserResume.DoesNotExist as e:
         return Response({'message':'履歷獲取失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:

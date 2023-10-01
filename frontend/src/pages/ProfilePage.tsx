@@ -109,7 +109,8 @@ const ProfilePage: React.FC = () => {
       company_id: record.companyRecruitment_id.companyEmployeePosition.company_id.id,
       user_id: userId,
       companyEmployeePosition_id: record.companyRecruitment_id.companyEmployeePosition.id,
-      salary: record.companyRecruitment_id.max_salary
+      salary: record.companyRecruitment_id.max_salary,
+      skills: record['userResume_id']['skills']
     } 
     const response = await createCompanyEmployee(data)
     if(response.status == 200){
