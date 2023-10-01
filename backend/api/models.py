@@ -77,11 +77,16 @@ class UserResume(models.Model):
     user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
     title = models.CharField(max_length=15)
     summary = models.TextField()
-    experience = models.TextField()
-    education = models.TextField()
-    skills = models.TextField()
-    prefer_work = models.TextField(default="High Salary")
-    language = models.TextField(default="Chinese")
+    experience = models.ManyToManyField('WorkingExperience', blank=True)
+    education = models.ManyToManyField('Education', blank=True)
+    skills = models.JSONField(blank=True, null=True)
+    prefer_work = models.JSONField(blank=True, null=True)
+    language = models.JSONField(blank=True, null=True)
+    # experience = models.TextField()
+    # education = models.TextField()
+    # skills = models.TextField()
+    # prefer_work = models.TextField(default="High Salary")
+    # language = models.TextField(default="Chinese")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -146,6 +151,7 @@ class CompanyEmployee(models.Model):
     user_id = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
     companyEmployeePosition_id = models.ForeignKey('CompanyEmployeePosition', on_delete=models.CASCADE)
     salary = models.DecimalField(max_digits=10, decimal_places=2)
+    skills = models.JSONField(blank=True, null=True)
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
     end_date = models.DateTimeField(null=True, blank=True)
@@ -348,3 +354,40 @@ class CompanyEmployeeLeaveRecord(models.Model):
 class GradientData(models.Model):
     w_gradient = models.JSONField()
     b_gradient = models.FloatField()
+
+class RecommendOptions(models.Model): # recommend option when fill into skills, prefered work, language, ...
+    user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
+    option_name = models.CharField()
+    type = models.CharField()
+    create_at = models.DateTimeField(auto_now=True)
+
+class WorkingExperience(models.Model):
+    user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
+    company_name = models.CharField()
+    position = models.CharField()
+    job_nature = models.CharField() #全職/兼職
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
+    still_employed = models.BooleanField()
+    working_desc = models.TextField()
+
+class Education(models.Model):
+    user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
+    school_name = models.CharField()
+    department_name = models.CharField()
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
+    educational_qualifications = models.CharField(choices=[
+        ("PhD", "PhD"),
+        ("Master", "Master"),
+        ("Degree", "Degree"),
+        ("Diploma", "Diploma"),
+        ("High School", "High School"),
+        ("Higher vocational education", "Higher vocational education"),
+        ("Junior high school (inclusive) and below", "Junior high school (inclusive) and below"),
+    ])
+    status = models.CharField(choices=[
+        ("graduated", "graduated"),
+        ("studying", "studying"),
+        ("drop out of school", "drop out of school")
+    ]),

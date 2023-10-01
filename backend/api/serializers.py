@@ -85,6 +85,7 @@ class CompanyImagesSerializer(serializers.ModelSerializer):
 
 class CompanyEmployeeSerializer(serializers.ModelSerializer):
     user_id = UserIdAndEmailSerializer(many=False, read_only=True)
+    company_id = CompanySerializer(many=False, read_only=True)
     companyEmployeePosition_id = CompanyEmployeePositionPermissionSerializer(many=False, read_only=True)
     class Meta: 
         model = models.CompanyEmployee
@@ -244,6 +245,7 @@ class CompanyEmployeeLeaveRecordSerializer(serializers.ModelSerializer):
 class UserApplicationRecordSerializerTest(serializers.ModelSerializer):
     userofferrecord = serializers.SerializerMethodField()
     companyRecruitment_id = CompanyRecruitmentSerializer(many=False, read_only=True)
+    userResume_id = UserResumeSerializer(many=False, read_only=True)
 
     def get_userofferrecord(self, obj):
         if obj.userofferrecord_set.exists():
@@ -282,4 +284,19 @@ class CompanyEmployeeIdOnlySerializer(serializers.ModelSerializer):
 class GradientDataSerializer(serializers.ModelSerializer):
     class Meta: 
         model = models.GradientData
+        fields = '__all__'
+    
+class RecommendOptionsSerializer(serializers.ModelSerializer):
+    class Meta: 
+        model = models.RecommendOptions
+        fields = '__all__'
+    
+class WorkingExperienceSerializer(serializers.ModelSerializer):
+    class Meta: 
+        model = models.WorkingExperience
+        fields = '__all__'
+    
+class EducationSerializer(serializers.ModelSerializer):
+    class Meta: 
+        model = models.Education
         fields = '__all__'

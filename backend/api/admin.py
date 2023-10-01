@@ -90,6 +90,15 @@ class CompanyEmployeeLeaveRecordAdmin(admin.ModelAdmin):
 class GradientDataAdmin(admin.ModelAdmin):
     list_display = [f.name for f in models.GradientData._meta.fields]
 
+class RecommendOptionsAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in models.RecommendOptions._meta.fields]
+
+class WorkingExperienceAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in models.WorkingExperience._meta.fields]
+
+class EducationAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in models.Education._meta.fields]
+
 # Register your models here.
 admin.site.register(UserAccount, UserAccountAdmin)
 admin.site.register(models.UserResume, UserResumeAdmin)
@@ -115,4 +124,7 @@ admin.site.register(models.CompanyAnnouncement, AnnouncementAdmin)
 admin.site.register(models.CompanyEmployeeEvaluate, CompanyEmployeeEvaluateAdmin)
 admin.site.register(models.CompanyEmployeeLeaveRecord, CompanyEmployeeLeaveRecordAdmin)
 admin.site.register(models.GradientData, GradientDataAdmin)
+admin.site.register(models.RecommendOptions, RecommendOptionsAdmin)
+admin.site.register(models.WorkingExperience, WorkingExperienceAdmin)
+admin.site.register(models.Education, EducationAdmin)
 # admin.site.register(CustomOutstandingToken, CustomOutstandingTokenAdmin)
