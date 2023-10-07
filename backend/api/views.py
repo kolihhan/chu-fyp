@@ -1908,21 +1908,46 @@ def createUserResume(request):
     try:
         data = request.data['value']
         user = models.UserAccount.objects.get(id=data['user'])
+        
+        createdExperience = models.WorkingExperience.objects.create(
+            we_user = user,
+            we_company_name = data['experience']['we_company_name'],
+            position = data['experience']['position'],
+            job_nature = data['experience']['job_nature'],
+            start_date = data['experience']['start_date'],
+            end_date = data['experience']['end_date'],
+            still_employed = data['experience'].get('still_employed', False),
+            working_desc = data['experience']['working_desc']
+        )
+
+        createdEducation = models.Education.objects.create(
+            edu_user = user,
+            school_name = data['education']['school_name'],
+            department_name = data['education']['department_name'],
+            start_date = data['education']['start_date'],
+            end_date = data['education']['end_date'],
+            educational_qualifications = data['education']['educational_qualifications'],
+            school_status = data['education']['school_status']
+        )
+
         createdUserResume = models.UserResume.objects.create(
             user = user,
             title = data['title'],
             summary = data['summary'],
-            experience = data['experience'],
-            education = data['education'],
             skills = data['skills'],
             prefer_work = data['prefer_work'],
-            language = data['language']
+            language = data['language'],
+            experience = createdExperience,
+            education = createdEducation
         )
+
         serializer = serializers.UserResumeSerializer(createdUserResume, many=False)
         return Response({'message':'履歷建立成功', 'data':serializer.data}, status=status.HTTP_200_OK)
     except models.UserAccount.DoesNotExist as e:
+        print(str(e))
         return Response({'message':'履歷建立失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
+        print(str(e))
         return Response({'message':'履歷建立失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 @api_view(['GET'])
@@ -1959,18 +1984,36 @@ def updateUserResume(request, pk):
             updatedUserResume.title = data['title']
         if data.get('summary', None) !=None:
             updatedUserResume.summary = data['summary']
-        if data.get('experience', None) !=None:
-            updatedUserResume.experience = data['experience']
-        if data.get('education', None) !=None:
-            updatedUserResume.education = data['education']
         if data.get('skills', None) !=None:
             updatedUserResume.skills = data['skills']
         if data.get('prefer_work', None) !=None:
             updatedUserResume.prefer_work = data['prefer_work']
         if data.get('language', None) !=None:
             updatedUserResume.language = data['language']
-        
+
         updatedUserResume.save()
+        if data.get('experience', None) !=None:
+            updatedExperience = models.WorkingExperience.objects.get(id=updatedUserResume.experience.id)
+            print(data['experience']['end_date'])
+            updatedExperience.we_company_name = data['experience']['we_company_name']
+            updatedExperience.position = data['experience']['position']
+            updatedExperience.job_nature = data['experience']['job_nature']
+            updatedExperience.start_date = datetime.datetime.strptime(data['experience']['start_date'], '%Y-%m-%dT%H:%M:%S.%fZ')
+            updatedExperience.end_date = datetime.datetime.strptime(data['experience']['end_date'], '%Y-%m-%dT%H:%M:%S.%fZ')
+            updatedExperience.still_employed = data['experience'].get('still_employed', False)
+            updatedExperience.working_desc = data['experience']['working_desc']
+            updatedExperience.save()
+
+        if data.get('education', None) !=None:
+            updatedEducation = models.Education.objects.get(id=updatedUserResume.education.id)
+            updatedEducation.school_name = data['education']['school_name']
+            updatedEducation.department_name = data['education']['department_name']
+            updatedEducation.start_date = datetime.datetime.strptime(data['education']['start_date'], '%Y-%m-%dT%H:%M:%S.%fZ')
+            updatedEducation.end_date = datetime.datetime.strptime(data['education']['end_date'], '%Y-%m-%dT%H:%M:%S.%fZ')
+            updatedEducation.educational_qualifications = data['education']['educational_qualifications']
+            updatedEducation.school_status = data['education']['school_status']
+            updatedEducation.save()
+
         serializer = serializers.UserResumeSerializer(updatedUserResume, many=False)
         return Response({'message':'履歷修改成功', 'data':serializer.data}, status=status.HTTP_200_OK)
     except models.UserAccount.DoesNotExist as e:
@@ -1982,8 +2025,13 @@ def updateUserResume(request, pk):
 @permission_classes([IsAuthenticated])
 def deleteUserResume(request, pk):
     try:
+        print("delete delete")
         deletedUserResume = models.UserResume.objects.get(id=pk)
+        print("deletedUserResume")
+        print(deletedUserResume)
         delete = deletedUserResume.delete()
+        print("deleteUserResume")
+        print(delete[0])
         if delete[0] > 0: 
             return Response({'message':'履歷刪除成功'}, status=status.HTTP_200_OK)
         else: 

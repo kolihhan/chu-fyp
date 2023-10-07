@@ -130,6 +130,11 @@ export const applyLeaveApi = async (data : any) => {
   { headers: authHeaders() });
 };
 
+export const getCompanyEmployees = async (id : any) => {
+  return axios.get(`${API_URL}/companyEmployee/get/${id}`, 
+  { headers: authHeaders() });
+};
+
 export const getAllEmployees = async (id : any) => {
   return axios.get(`${API_URL}/companyEmployee/get/company/all/${id}`, 
   { headers: authHeaders() });

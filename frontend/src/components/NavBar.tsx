@@ -56,6 +56,9 @@ export const DropDownIcon: React.FC<{ isManage: boolean; isEmployee: any[];}> = 
           {/* <Link to={`/company/checkIn`}>首頁</Link> */}
           <Link to={`/company/home`}>首頁</Link>
         </Menu.Item>
+        <Menu.Item key="employee-profile">
+          <Link to={`/company/employee/profile`}>Profile</Link>
+        </Menu.Item>
         <Menu.Item key="employee-feedback">
           <Link to={`/company/feedback`}>Feedback</Link>
         </Menu.Item>

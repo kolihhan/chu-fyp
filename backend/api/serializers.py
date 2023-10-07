@@ -17,6 +17,16 @@ class UserIdAndEmailSerializer(serializers.ModelSerializer):
         model = models.UserAccount
         fields = ['id', 'email', 'name', 'avatar_url']
 
+class WorkingExperienceSerializer(serializers.ModelSerializer):
+    class Meta: 
+        model = models.WorkingExperience
+        fields = '__all__'
+    
+class EducationSerializer(serializers.ModelSerializer):
+    class Meta: 
+        model = models.Education
+        fields = '__all__'
+
 class CompanyPermissionNameAndDescSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.CompanyPermission
@@ -137,6 +147,8 @@ class CompanyAnnouncementSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class UserResumeSerializer(serializers.ModelSerializer):
+    experience = WorkingExperienceSerializer(many=False, read_only=True)
+    education = EducationSerializer(many=False, read_only=True)
     class Meta: 
         model = models.UserResume
         fields = '__all__'
@@ -289,14 +301,4 @@ class GradientDataSerializer(serializers.ModelSerializer):
 class RecommendOptionsSerializer(serializers.ModelSerializer):
     class Meta: 
         model = models.RecommendOptions
-        fields = '__all__'
-    
-class WorkingExperienceSerializer(serializers.ModelSerializer):
-    class Meta: 
-        model = models.WorkingExperience
-        fields = '__all__'
-    
-class EducationSerializer(serializers.ModelSerializer):
-    class Meta: 
-        model = models.Education
         fields = '__all__'

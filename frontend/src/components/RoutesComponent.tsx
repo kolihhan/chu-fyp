@@ -31,6 +31,7 @@ import ManageRecruitmentPage from "../pages/companies/admin/settings/ManageRecru
 import EmployeeHomePage from "../pages/companies/employees/EmployeeHomePage";
 import ManageEmployeeLeavePage from "../pages/companies/admin/settings/ManageEmployeeLeavePage";
 import EmployeesRecruitmentRecommendation from "../pages/companies/admin/EmployeesRecruitmentRecommendation";
+import EmployeeProfilePage from "../pages/companies/employees/EmployeeProfilePage";
 
 const Protected: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const user = useSelector((state: RootState) => state.auth.user);
@@ -111,6 +112,7 @@ const RoutesComponent: React.FC = () =>{
                 <Route path="/company/home" element={<ProtectedEmployee><EmployeeHomePage /></ProtectedEmployee>} />
                 <Route path="/company/checkIn" element={<ProtectedEmployee><CheckInPage /></ProtectedEmployee>} />
                 <Route path="/company/feedback" element={<ProtectedEmployee><FeedBackPage /></ProtectedEmployee>} />
+                <Route path="/company/employee/profile" element={<ProtectedEmployee><EmployeeProfilePage /></ProtectedEmployee>} />
                 <Route path="/company/applicationleave" element={<ProtectedEmployee><ApplicationLeavePage /></ProtectedEmployee>} />
 
 

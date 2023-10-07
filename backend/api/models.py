@@ -77,8 +77,8 @@ class UserResume(models.Model):
     user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
     title = models.CharField(max_length=15)
     summary = models.TextField()
-    experience = models.ManyToManyField('WorkingExperience', blank=True)
-    education = models.ManyToManyField('Education', blank=True)
+    experience = models.OneToOneField('WorkingExperience', blank=True, null=True, on_delete=models.SET_NULL, related_name="ur_we")
+    education = models.OneToOneField('Education', blank=True, null=True, on_delete=models.SET_NULL, related_name="ur_edu")
     skills = models.JSONField(blank=True, null=True)
     prefer_work = models.JSONField(blank=True, null=True)
     language = models.JSONField(blank=True, null=True)
@@ -356,14 +356,14 @@ class GradientData(models.Model):
     b_gradient = models.FloatField()
 
 class RecommendOptions(models.Model): # recommend option when fill into skills, prefered work, language, ...
-    user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
+    # user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
     option_name = models.CharField()
     type = models.CharField()
     create_at = models.DateTimeField(auto_now=True)
 
 class WorkingExperience(models.Model):
-    user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
-    company_name = models.CharField()
+    we_user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
+    we_company_name = models.CharField()
     position = models.CharField()
     job_nature = models.CharField() #全職/兼職
     start_date = models.DateTimeField()
@@ -372,7 +372,7 @@ class WorkingExperience(models.Model):
     working_desc = models.TextField()
 
 class Education(models.Model):
-    user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
+    edu_user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
     school_name = models.CharField()
     department_name = models.CharField()
     start_date = models.DateTimeField()
@@ -384,10 +384,10 @@ class Education(models.Model):
         ("Diploma", "Diploma"),
         ("High School", "High School"),
         ("Higher vocational education", "Higher vocational education"),
-        ("Junior high school (inclusive) and below", "Junior high school (inclusive) and below"),
-    ])
-    status = models.CharField(choices=[
+        ("Junior high school (inclusive) and below", "Junior high school (inclusive) and below")
+    ], default="Degree")
+    school_status = models.CharField(default="graduated", choices=[
         ("graduated", "graduated"),
         ("studying", "studying"),
         ("drop out of school", "drop out of school")
-    ]),
+    ])
