@@ -97,6 +97,9 @@ export const logout = (): ThunkAction<void, RootState, unknown, AnyAction> => as
   dispatch(setUser(null));
   message.success('登出成功');
   removeAllCookies()
+  setTimeout(() => {
+    window.location.href = '/login'
+  }, 100)
 };
 
 export const fetchUsersInfo = (
