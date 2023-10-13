@@ -421,3 +421,42 @@ export const getFeedbackScore = async(id: number) => {
     headers: authHeaders(),
   })
 }
+
+export const getTaskForcesByCompany = async(id: number) => {
+  return axios.get(`${API_URL}/getTaskForcesByCompany/get/${id}`, { 
+    headers: authHeaders(),
+  })
+}
+
+export const fetchTaskForcesById = async(id: number) => {
+  return axios.get(`${API_URL}/fetchTaskForcesById/get/${id}`, { 
+    headers: authHeaders(),
+  })
+  
+}
+
+export const createTaskForces = async (data : any) => {
+  return axios.post(`${API_URL}/createTaskForces`, 
+  { data },
+  { headers: authHeaders() });
+};
+
+export const updateTaskForces = (id:number, values: any) =>
+axios.put(
+  `${API_URL}/user/update/${id}`,
+  { values },
+  { headers: authHeaders() }
+);
+
+export const deleteTaskForce = async(id: number) => {
+  return axios.get(`${API_URL}/calEmployeeScore/${id}`, { 
+    headers: authHeaders(),
+  })
+}
+
+export const createTasks = async (data : any) => {
+  return axios.post(`${API_URL}/companyEmployee/create`, 
+  { data },
+  { headers: authHeaders() });
+};
+

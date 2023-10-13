@@ -33,6 +33,13 @@ import spacy
 from faker import Faker
 from gensim.models import Word2Vec
 
+
+from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
+from sklearn.metrics import pairwise_distances
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import linear_kernel
+from sklearn.neighbors import NearestNeighbors
+
 # feedbackRemarkList = ['毀壞公司財物','辱駡同事','得罪客戶','解決問題','提升業績','缺乏工作效率','未達到工作目標','未能準時完成工作任務','公司帶來利益','不遵守公司政策和程序','缺乏團隊合作精神','態度不積極或消極','拖延工作','不負責任地處理工作','忽略客戶的需求和反饋','經常出現錯誤或粗心大意','經常與同事發生衝突或矛盾','逃避責任或找借口','違反公司的機密和保密政策',]
 feedback_remark_list_g = ['積極解決問題', '提升業績', '創造公司利潤', '無私地捐獻資源給公司', '高效率完成工作', '準時達成工作目標', '提前完成工作任務', '細心處理工作', '積極態度', '關心同事', '充分滿足客戶需求', '勤奮工作', '負責任處理工作', '承擔錯誤和負責任', '良好的團隊合作精神', '尊重公司機密和保密政策', '主動學習和成長', '創新和提出改進建議', '善於溝通和協作', '尊重多樣性和包容性']
 feedback_remark_list_b = ['頻繁發生問題', '導致公司損失', '損害公司財產', '工作效率不足', '未達工作目標', '未能按時完成工作任務', '經常出現錯誤或粗心大意', '缺乏團隊合作精神', '消極態度', '辱罵同事', '忽略客戶需求和反饋', '不遵守公司政策和程序', '拖延或敷衍工作', '逃避責任或找借口', '經常與同事發生衝突或矛盾', '違反公司的機密和保密政策', '忽略專業發展和學習', '不積極尋求改進和創新', '缺乏有效溝通和團隊協作', '不尊重多樣性和缺乏包容性']
@@ -771,6 +778,73 @@ def getCompanyEmployeeFeedbackReview(request, pk):
 
 nlp = spacy.load('en_core_web_sm')
 
+# 将单个简历字典转换为文本
+def convert_resume_to_text(resume):
+    title = resume['title']
+    # summary = ' '.join(resume['summary'])
+    experience = ' '.join(resume['experience'])
+    education = ' '.join(resume['education'])
+    skills = ' '.join(resume['skills'])
+
+    # 分别连接各个字段的文本
+    # {summary}
+    combined_text = f"{title} {experience} {education} {skills}"
+    return combined_text
+
+# 将多份简历字典列表转换为文本
+def convert_resumes_to_text(resumes):
+    resume_texts = []
+    for resume in resumes:
+        resume_text = convert_resume_to_text(resume)
+        resume_texts.append(resume_text)
+
+    return resume_texts  # 返回文本字符串的列表
+
+
+def get_final_recommendations(job_texts, resume_texts, n_neighbors=3):
+    # 使用TF-IDF Vectorizer和Count Vectorizer来处理文本
+    tfidf_vectorizer = TfidfVectorizer()
+    count_vectorizer = CountVectorizer()
+
+    # 对职位要求和简历进行TF-IDF向量化
+    tfidf_matrix_job = tfidf_vectorizer.fit_transform(job_texts)
+    tfidf_matrix_resume = tfidf_vectorizer.transform(resume_texts)
+
+    # 对职位要求和简历进行Count Vectorizer向量化
+    count_matrix_job = count_vectorizer.fit_transform(job_texts)
+    count_matrix_resume = count_vectorizer.transform(resume_texts)
+
+    # 使用TF-IDF计算余弦相似性
+    cosine_similarities_tfidf = cosine_similarity(tfidf_matrix_job, tfidf_matrix_resume)
+
+    # 使用Count Vectorizer计算余弦相似性
+    cosine_similarities_count = cosine_similarity(count_matrix_job, count_matrix_resume)
+
+    # 初始化用于存储推荐的列表
+    final_recommendations = []
+
+    # 遍历每个职位
+    for i in range(len(job_texts)):
+        # 基于TF-IDF找到最相似简历的索引
+        tfidf_indices = cosine_similarities_tfidf[i].argsort()[::-1][:n_neighbors]
+
+        # 基于Count Vectorizer找到最相似简历的索引
+        count_indices = cosine_similarities_count[i].argsort()[::-1][:n_neighbors]
+
+        # 合并两种方法的索引
+        combined_indices = np.union1d(tfidf_indices, count_indices)
+
+        # 按照余弦相似性之和（值越小越好）对推荐进行排序
+        combined_recommendations = [(idx, cosine_similarities_tfidf[i][idx] + cosine_similarities_count[i][idx]) for idx in combined_indices if idx < len(resume_texts)]
+        combined_recommendations.sort(key=lambda x: x[1])
+
+        # 从合并的推荐中提取简历文本
+        recommended_resumes = [resume_texts[idx] for idx, _ in combined_recommendations]
+
+        final_recommendations.append(recommended_resumes)
+
+    return final_recommendations
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_recommendations(request):
@@ -784,32 +858,26 @@ def get_recommendations(request):
     except CompanyRecruitment.DoesNotExist:
         return JsonResponse({'error': 'Job not found'}, status=404)
 
-    job_requirements = job.requirement
+    job_requirements = [job.requirement]
     applicationRecord = UserApplicationRecord.objects.filter(companyRecruitment_id__id=job_id)
 
     candidates = []
     for record in applicationRecord:
-        candidates.append(record.userResume_id)
-    
-    # 使用 spaCy 进行文本预处理和计算相似度
-    job_doc = nlp(job_requirements)
-    candidate_docs = [nlp(c.summary + ' ' + c.experience + ' ' + c.education + ' ' + c.skills) for c in candidates]
-
-    tfidf_vectorizer = TfidfVectorizer()
-    tfidf_matrix = tfidf_vectorizer.fit_transform([job_doc.text] + [doc.text for doc in candidate_docs])
-    tfidf_similarities = cosine_similarity(tfidf_matrix[0:1], tfidf_matrix[1:]).flatten()
-
-    # 排序相似度
-    similar_candidates = [
-        {
-            'resume_id': candidate.id,
-            'similarity_score': sim_score,
-            'resume_text': candidate.summary + ' ' + candidate.experience + ' ' + candidate.education + ' ' + candidate.skills
+        user_resume = record.userResume_id  # 假设userResume_id是UserResume对象的引用
+        # 从UserResume对象中提取所需字段并创建一个简历字典
+        resume_dict = {
+            'title': user_resume.title,
+            'experience': user_resume.experience,
+            'education': user_resume.education,
+            'skills': user_resume.skills,
         }
-        for candidate, sim_score in zip(candidates, tfidf_similarities)
-    ]
+        candidates.append(resume_dict)
 
-    similar_candidates.sort(key=lambda x: x['similarity_score'], reverse=True)
+    similar_candidates = get_final_recommendations(
+                         job_requirements,
+                         convert_resumes_to_text(candidates),
+                         1  
+                        )
 
     return JsonResponse({'job_requirements': job_requirements, 'candidates': similar_candidates})
 

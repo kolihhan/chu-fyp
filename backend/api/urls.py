@@ -211,6 +211,14 @@ urlpatterns = [
     path('calGradients', calGradients, name='calGradient'),
     path('calEmployeeScore/<int:pk>', calEmployeeScore, name='calEmployeeScore'),
 
+
+    path('getTaskForcesByCompany/get/<int:pk>', getTaskForcesByCompany, name='getTaskForcesByCompany'),
+    path('fetchTaskForcesById/get/<int:pk>', fetchTaskForcesById, name='fetchTaskForcesById'),
+    path('createTaskForces', createTaskForces, name='createTaskForces'),
+    path('updateTaskForces/<int:pk>', updateTaskForce, name='updateTaskForces'),
+    path('deleteTaskForce/<int:pk>', deleteTaskForce, name='deleteTaskForce'),
+
+
 ]
 
 # create company

@@ -391,3 +391,47 @@ class Education(models.Model):
         ("studying", "studying"),
         ("drop out of school", "drop out of school")
     ])
+
+class TaskForce(models.Model):
+    company_id = models.ForeignKey(Company, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    created_date = models.DateTimeField(auto_now_add=True)
+    leader = models.ForeignKey(UserAccount, on_delete=models.SET_NULL, null=True)  # 添加負責人字段，關聯到用戶模型，負責人可以為空
+    goals = models.TextField()  # 添加目標字段，用於記錄Task Force的目標或使命
+    deadline = models.DateField(null=True, blank=True)  # 添加截止日期字段，可以為空
+    status = models.CharField(
+        max_length=50,
+        choices=[
+            ("Planning", "策劃中"),
+            ("In Progress", "進行中"),
+            ("Completed", "已完成")
+        ],
+        default="Planning"  # 添加狀態字段，並指定默認狀態為"策劃中"
+    )
+    priority = models.CharField(
+        max_length=50,
+        choices=[
+            ("Low", "低"),
+            ("Medium", "中"),
+            ("High", "高"),
+            ("Emergency", "緊急")  # 添加"Emergency"選項
+        ],
+        default="Medium"
+    )
+
+    def __str__(self):
+        return self.name
+
+
+class Task(models.Model):
+    task_force = models.ForeignKey(TaskForce, on_delete=models.CASCADE)
+    task_name = models.CharField(max_length=255)
+    task_description = models.TextField()
+    assignee = models.ForeignKey(UserAccount, on_delete=models.SET_NULL, null=True)  # 關聯到用戶模型，負責人可以為空
+    status = models.CharField(max_length=50, choices=[("Pending", "待處理"), ("In Progress", "進行中"), ("Completed", "已完成")])
+    due_date = models.DateField()
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.task_name

@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Select } from 'antd';
 import { getAllEmployees, getRecruitments, getIDRecommendations } from '../../../api';
 import { useParams } from 'react-router-dom';
+import { getCookie } from '../../../utils';
 
 const { Option } = Select;
 
 const EmployeesRecruitmentRecommendation: React.FC = () => {
 
-  const { id } = useParams<{ id: string | undefined }>();
-  const companyId = Number(id);
+  // const { id } = useParams<{ id: string | undefined }>();
+  const companyId = Number(getCookie('companyId'));
 
   const [jobList, setJobList] = useState<any[]>([]); // 存储ApplicationRecords
   const [jobId, setJobId] = useState<any>(null); // 用于输入招聘职位ID

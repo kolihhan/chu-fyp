@@ -2619,3 +2619,74 @@ def deleteLeaveRecord(request, pk):
         return Response({'message', str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 # endregion leave
+
+# region taskforces
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getTaskForcesByCompany(request, pk):
+    try:
+        lr = models.TaskForce.objects.filter(company_id__id=pk)
+        serializer = serializers.TaskForceSerializer(lr, many=True)
+        return Response({'data': serializer.data}, status=status.HTTP_200_OK)
+    except models.TaskForce.DoesNotExist as e:
+        return Response({'message': str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def fetchTaskForcesById(request, pk):
+    try:
+        lr = models.TaskForce.objects.get(id=pk)
+        serializer = serializers.TaskForceSerializer(lr, many=True)
+        return Response({'data': serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyEmployeeLeaveRecord.DoesNotExist as e:
+        return Response({'message': str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def createTaskForces(request):
+    try:
+        data = request.data
+        print(data)
+        serializer = serializers.TaskForceSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def updateTaskForce(request, pk):
+    try:
+        task_force = models.TaskForce.objects.get(pk=pk)
+        serializer = serializers.TaskForceSerializer(task_force, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    except models.TaskForce.DoesNotExist:
+        return Response({'error': 'TaskForce not found'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def deleteTaskForce(request, pk):
+    try:
+        task_force = models.TaskForce.objects.get(pk=pk)
+        task_force.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    except models.TaskForce.DoesNotExist:
+        return Response({'error': 'TaskForce not found'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+# endregion taskforces

@@ -32,6 +32,10 @@ import EmployeeHomePage from "../pages/companies/employees/EmployeeHomePage";
 import ManageEmployeeLeavePage from "../pages/companies/admin/settings/ManageEmployeeLeavePage";
 import EmployeesRecruitmentRecommendation from "../pages/companies/admin/EmployeesRecruitmentRecommendation";
 import EmployeeProfilePage from "../pages/companies/employees/EmployeeProfilePage";
+import CompanyTaskForcePage from "../pages/companies/admin/companyTaskList/CompanyTaskForcePage";
+import CompanyCreateTaskForcePage from "../pages/companies/admin/companyTaskList/CompanyCreateTaskForcePage";
+import CompanyCreateTaskPage from "../pages/companies/admin/companyTaskList/companyTask/CompanyCreateTaskPage";
+import CompanyTaskDetailPage from "../pages/companies/admin/companyTaskList/companyTask/CompanyTaskDetailPage";
 
 const Protected: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const user = useSelector((state: RootState) => state.auth.user);
@@ -129,7 +133,7 @@ const RoutesComponent: React.FC = () =>{
                 <Route path='admin/company/:id/performance' element={<ProtectedAdmin><EmployeesPerformancePage /></ProtectedAdmin>} />
                 <Route path='admin/company/:id/promotion-history' element={<ProtectedAdmin><EmployeesPromotionHistoryPage /></ProtectedAdmin>} />
                 <Route path='admin/company/:id/training-management' element={<ProtectedAdmin><EmployeesTrainingManagementPage /></ProtectedAdmin>} />
-                <Route path="admin/company/:id/recommend" element={<ProtectedAdmin><EmployeesRecruitmentRecommendation /></ProtectedAdmin>} />
+                <Route path="admin/company/recommend" element={<ProtectedAdmin><EmployeesRecruitmentRecommendation /></ProtectedAdmin>} />
                 
                 {/* Admin Settings */}
                 <Route path='admin/company/manage/:employee_id' element={<ProtectedAdmin><ManageEmployeesPermissionPage /></ProtectedAdmin>} />
@@ -141,6 +145,15 @@ const RoutesComponent: React.FC = () =>{
                 <Route path='admin/company/:id/permission-manage/' element={<ProtectedAdmin><ManagePermissionPage /></ProtectedAdmin>} />
                 <Route path='admin/company/recruitment-manage/' element={<ProtectedAdmin><ManageRecruitmentPage /></ProtectedAdmin>} />
                 <Route path='admin/company/leave-manage/' element={<ProtectedAdmin><ManageEmployeeLeavePage /></ProtectedAdmin>} />
+
+      
+                <Route path="admin/company/task-list" element={<ProtectedAdmin><CompanyTaskForcePage /></ProtectedAdmin>} />
+                <Route path="admin/company/task-list/create" element={<ProtectedAdmin><CompanyCreateTaskForcePage /></ProtectedAdmin>} /> {/* 创建新的 */}
+                <Route path="admin/company/task-list/:id/update" element={<ProtectedAdmin><CompanyCreateTaskForcePage /></ProtectedAdmin>} /> {/* 编辑现有 */}
+
+                <Route path="admin/company/task-list/:id/details" element={<ProtectedAdmin><CompanyTaskDetailPage /></ProtectedAdmin>} /> {/* 编辑现有 */}
+                <Route path="admin/company/task-list/:id/details/create" element={<ProtectedAdmin><CompanyCreateTaskPage /></ProtectedAdmin>} /> {/* 编辑现有 */}
+
 
             </Routes>
         </div>

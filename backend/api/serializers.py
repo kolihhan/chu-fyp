@@ -302,3 +302,8 @@ class RecommendOptionsSerializer(serializers.ModelSerializer):
     class Meta: 
         model = models.RecommendOptions
         fields = '__all__'
+
+class TaskForceSerializer(serializers.ModelSerializer):
+    class Meta: 
+        model = models.TaskForce
+        fields = '__all__'
