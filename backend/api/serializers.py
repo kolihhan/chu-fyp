@@ -307,3 +307,8 @@ class TaskForceSerializer(serializers.ModelSerializer):
     class Meta: 
         model = models.TaskForce
         fields = '__all__'
+
+class TaskSerializer(serializers.ModelSerializer):
+    class Meta: 
+        model = models.Task
+        fields = '__all__'

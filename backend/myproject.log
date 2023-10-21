@@ -1,16 +1,374 @@
-[07/Oct/2023 16:36:48] WARNING [django.request:241] Not Found: /favicon.ico
-[07/Oct/2023 16:36:48] WARNING [django.request:241] Not Found: /favicon.ico
-[07/Oct/2023 16:36:48] WARNING [django.server:212] "GET /favicon.ico HTTP/1.1" 404 2215
-[07/Oct/2023 16:36:48] WARNING [django.server:212] "GET /favicon.ico HTTP/1.1" 404 2215
-[07/Oct/2023 16:42:47] WARNING [django.request:241] Unauthorized: /api/company/check-in/0
-[07/Oct/2023 16:42:47] WARNING [django.request:241] Unauthorized: /api/company/check-in/0
-[07/Oct/2023 16:42:47] WARNING [django.server:212] "GET /api/company/check-in/0 HTTP/1.1" 401 58
-[07/Oct/2023 16:42:47] WARNING [django.server:212] "GET /api/company/check-in/0 HTTP/1.1" 401 58
-[07/Oct/2023 16:43:12] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 16:43:12] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 16:43:12] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 16:43:12] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 16:44:15] ERROR [django.request:241] Internal Server Error: /api/get_recommendations
+[20/Oct/2023 16:25:27] ERROR [django.request:241] Internal Server Error: /api/login
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+psycopg2.errors.UndefinedColumn: column api_useraccount.type does not exist
+LINE 1: ..."."last_login", "api_useraccount"."is_superuser", "api_usera...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework_simplejwt/views.py", line 43, in post
+    serializer.is_valid(raise_exception=True)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/serializers.py", line 227, in is_valid
+    self._validated_data = self.run_validation(self.initial_data)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/serializers.py", line 429, in run_validation
+    value = self.validate(value)
+  File "/app/backend/api/customToken.py", line 114, in validate
+    user = UserAccount.objects.filter(email=attrs.get('email')).first()
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/query.py", line 1057, in first
+    for obj in queryset[:1]:
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/query.py", line 398, in __iter__
+    self._fetch_all()
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/query.py", line 1881, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1560, in execute_sql
+    cursor.execute(sql, params)
+  File "/usr/local/lib/python3.10/site-packages/django/db/backends/utils.py", line 102, in execute
+    return super().execute(sql, params)
+  File "/usr/local/lib/python3.10/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+  File "/usr/local/lib/python3.10/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/usr/local/lib/python3.10/site-packages/django/db/backends/utils.py", line 84, in _execute
+    with self.db.wrap_database_errors:
+  File "/usr/local/lib/python3.10/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/usr/local/lib/python3.10/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+django.db.utils.ProgrammingError: column api_useraccount.type does not exist
+LINE 1: ..."."last_login", "api_useraccount"."is_superuser", "api_usera...
+                                                             ^
+
+[20/Oct/2023 16:25:27] ERROR [django.request:241] Internal Server Error: /api/login
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+psycopg2.errors.UndefinedColumn: column api_useraccount.type does not exist
+LINE 1: ..."."last_login", "api_useraccount"."is_superuser", "api_usera...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework_simplejwt/views.py", line 43, in post
+    serializer.is_valid(raise_exception=True)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/serializers.py", line 227, in is_valid
+    self._validated_data = self.run_validation(self.initial_data)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/serializers.py", line 429, in run_validation
+    value = self.validate(value)
+  File "/app/backend/api/customToken.py", line 114, in validate
+    user = UserAccount.objects.filter(email=attrs.get('email')).first()
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/query.py", line 1057, in first
+    for obj in queryset[:1]:
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/query.py", line 398, in __iter__
+    self._fetch_all()
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/query.py", line 1881, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1560, in execute_sql
+    cursor.execute(sql, params)
+  File "/usr/local/lib/python3.10/site-packages/django/db/backends/utils.py", line 102, in execute
+    return super().execute(sql, params)
+  File "/usr/local/lib/python3.10/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+  File "/usr/local/lib/python3.10/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/usr/local/lib/python3.10/site-packages/django/db/backends/utils.py", line 84, in _execute
+    with self.db.wrap_database_errors:
+  File "/usr/local/lib/python3.10/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/usr/local/lib/python3.10/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+django.db.utils.ProgrammingError: column api_useraccount.type does not exist
+LINE 1: ..."."last_login", "api_useraccount"."is_superuser", "api_usera...
+                                                             ^
+
+[20/Oct/2023 16:25:27] ERROR [django.server:212] "POST /api/login HTTP/1.1" 500 163434
+[20/Oct/2023 16:25:27] ERROR [django.server:212] "POST /api/login HTTP/1.1" 500 163434
+[20/Oct/2023 16:43:17] WARNING [django.request:241] Not Found: /api/company/check-in/0
+[20/Oct/2023 16:43:17] WARNING [django.request:241] Not Found: /api/company/check-in/0
+[20/Oct/2023 16:43:17] WARNING [django.server:212] "GET /api/company/check-in/0 HTTP/1.1" 404 23
+[20/Oct/2023 16:43:17] WARNING [django.server:212] "GET /api/company/check-in/0 HTTP/1.1" 404 23
+[20/Oct/2023 16:43:17] WARNING [django.request:241] Not Found: /api/company/check-in/0
+[20/Oct/2023 16:43:17] WARNING [django.request:241] Not Found: /api/company/check-in/0
+[20/Oct/2023 16:43:17] WARNING [django.server:212] "GET /api/company/check-in/0 HTTP/1.1" 404 23
+[20/Oct/2023 16:43:17] WARNING [django.server:212] "GET /api/company/check-in/0 HTTP/1.1" 404 23
+[20/Oct/2023 16:43:17] WARNING [django.request:241] Not Found: /api/company/check-in/0
+[20/Oct/2023 16:43:17] WARNING [django.request:241] Not Found: /api/company/check-in/0
+[20/Oct/2023 16:43:17] WARNING [django.server:212] "GET /api/company/check-in/0 HTTP/1.1" 404 23
+[20/Oct/2023 16:43:17] WARNING [django.server:212] "GET /api/company/check-in/0 HTTP/1.1" 404 23
+[20/Oct/2023 16:43:50] WARNING [django.request:241] Bad Request: /api/user/update/1
+[20/Oct/2023 16:43:50] WARNING [django.request:241] Bad Request: /api/user/update/1
+[20/Oct/2023 16:43:50] WARNING [django.server:212] "PUT /api/user/update/1 HTTP/1.1" 400 184
+[20/Oct/2023 16:43:50] WARNING [django.server:212] "PUT /api/user/update/1 HTTP/1.1" 400 184
+[20/Oct/2023 16:44:09] ERROR [django.request:241] Internal Server Error: /api/companyEmployee/create
+[20/Oct/2023 16:44:09] ERROR [django.request:241] Internal Server Error: /api/companyEmployee/create
+[20/Oct/2023 16:44:09] ERROR [django.server:212] "POST /api/companyEmployee/create HTTP/1.1" 500 55
+[20/Oct/2023 16:44:09] ERROR [django.server:212] "POST /api/companyEmployee/create HTTP/1.1" 500 55
+[20/Oct/2023 16:50:49] WARNING [django.request:241] Not Found: /api/getTasksByTfId/get/NaN
+[20/Oct/2023 16:50:49] WARNING [django.request:241] Not Found: /api/getTasksByTfId/get/NaN
+[20/Oct/2023 16:50:49] WARNING [django.server:212] "GET /api/getTasksByTfId/get/NaN HTTP/1.1" 404 35646
+[20/Oct/2023 16:50:49] WARNING [django.server:212] "GET /api/getTasksByTfId/get/NaN HTTP/1.1" 404 35646
+[20/Oct/2023 16:51:58] ERROR [django.request:241] Internal Server Error: /api/companyEmployee/create
+[20/Oct/2023 16:51:58] ERROR [django.request:241] Internal Server Error: /api/companyEmployee/create
+[20/Oct/2023 16:51:58] ERROR [django.server:212] "POST /api/companyEmployee/create HTTP/1.1" 500 55
+[20/Oct/2023 16:51:58] ERROR [django.server:212] "POST /api/companyEmployee/create HTTP/1.1" 500 55
+[20/Oct/2023 16:52:23] WARNING [django.request:241] Bad Request: /api/createTasks
+[20/Oct/2023 16:52:23] WARNING [django.request:241] Bad Request: /api/createTasks
+[20/Oct/2023 16:52:23] WARNING [django.server:212] "POST /api/createTasks HTTP/1.1" 400 155
+[20/Oct/2023 16:52:23] WARNING [django.server:212] "POST /api/createTasks HTTP/1.1" 400 155
+[20/Oct/2023 16:52:29] WARNING [django.request:241] Bad Request: /api/createTasks
+[20/Oct/2023 16:52:29] WARNING [django.request:241] Bad Request: /api/createTasks
+[20/Oct/2023 16:52:29] WARNING [django.server:212] "POST /api/createTasks HTTP/1.1" 400 155
+[20/Oct/2023 16:52:29] WARNING [django.server:212] "POST /api/createTasks HTTP/1.1" 400 155
+[20/Oct/2023 16:53:49] WARNING [django.request:241] Bad Request: /api/createTasks
+[20/Oct/2023 16:53:49] WARNING [django.request:241] Bad Request: /api/createTasks
+[20/Oct/2023 16:53:49] WARNING [django.server:212] "POST /api/createTasks HTTP/1.1" 400 155
+[20/Oct/2023 16:53:49] WARNING [django.server:212] "POST /api/createTasks HTTP/1.1" 400 155
+[20/Oct/2023 16:54:18] WARNING [django.request:241] Bad Request: /api/user/update/1
+[20/Oct/2023 16:54:18] WARNING [django.request:241] Bad Request: /api/user/update/1
+[20/Oct/2023 16:54:18] WARNING [django.server:212] "PUT /api/user/update/1 HTTP/1.1" 400 184
+[20/Oct/2023 16:54:18] WARNING [django.server:212] "PUT /api/user/update/1 HTTP/1.1" 400 184
+[20/Oct/2023 16:56:23] WARNING [django.request:241] Not Found: /api/user/update/2
+[20/Oct/2023 16:56:23] WARNING [django.request:241] Not Found: /api/user/update/2
+[20/Oct/2023 16:56:23] WARNING [django.server:212] "PUT /api/user/update/2 HTTP/1.1" 404 26
+[20/Oct/2023 16:56:23] WARNING [django.server:212] "PUT /api/user/update/2 HTTP/1.1" 404 26
+[20/Oct/2023 16:58:49] WARNING [django.request:241] Bad Request: /api/user/update/1
+[20/Oct/2023 16:58:49] WARNING [django.request:241] Bad Request: /api/user/update/1
+[20/Oct/2023 16:58:49] WARNING [django.server:212] "PUT /api/user/update/1 HTTP/1.1" 400 184
+[20/Oct/2023 16:58:49] WARNING [django.server:212] "PUT /api/user/update/1 HTTP/1.1" 400 184
+[20/Oct/2023 17:00:07] WARNING [django.request:241] Bad Request: /api/user/update/1
+[20/Oct/2023 17:00:07] WARNING [django.request:241] Bad Request: /api/user/update/1
+[20/Oct/2023 17:00:07] WARNING [django.server:212] "PUT /api/user/update/1 HTTP/1.1" 400 184
+[20/Oct/2023 17:00:07] WARNING [django.server:212] "PUT /api/user/update/1 HTTP/1.1" 400 184
+[20/Oct/2023 17:03:16] WARNING [django.request:241] Bad Request: /api/createTasks
+[20/Oct/2023 17:03:16] WARNING [django.request:241] Bad Request: /api/createTasks
+[20/Oct/2023 17:03:16] WARNING [django.server:212] "POST /api/createTasks HTTP/1.1" 400 42
+[20/Oct/2023 17:03:16] WARNING [django.server:212] "POST /api/createTasks HTTP/1.1" 400 42
+[20/Oct/2023 17:03:55] WARNING [django.request:241] Bad Request: /api/createTasks
+[20/Oct/2023 17:03:55] WARNING [django.request:241] Bad Request: /api/createTasks
+[20/Oct/2023 17:03:55] WARNING [django.server:212] "POST /api/createTasks HTTP/1.1" 400 68
+[20/Oct/2023 17:03:55] WARNING [django.server:212] "POST /api/createTasks HTTP/1.1" 400 68
+[20/Oct/2023 17:04:30] WARNING [django.request:241] Bad Request: /api/createTasks
+[20/Oct/2023 17:04:30] WARNING [django.request:241] Bad Request: /api/createTasks
+[20/Oct/2023 17:04:30] WARNING [django.server:212] "POST /api/createTasks HTTP/1.1" 400 46
+[20/Oct/2023 17:04:30] WARNING [django.server:212] "POST /api/createTasks HTTP/1.1" 400 46
+[20/Oct/2023 17:08:48] ERROR [django.security.DisallowedHost:124] Invalid HTTP_HOST header: '61.231.64.27:8000'. You may need to add '61.231.64.27' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "/usr/local/lib/python3.10/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/usr/local/lib/python3.10/site-packages/django/http/request.py", line 167, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '61.231.64.27:8000'. You may need to add '61.231.64.27' to ALLOWED_HOSTS.
+[20/Oct/2023 17:08:48] ERROR [django.security.DisallowedHost:124] Invalid HTTP_HOST header: '61.231.64.27:8000'. You may need to add '61.231.64.27' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "/usr/local/lib/python3.10/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/usr/local/lib/python3.10/site-packages/django/http/request.py", line 167, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '61.231.64.27:8000'. You may need to add '61.231.64.27' to ALLOWED_HOSTS.
+[20/Oct/2023 17:08:48] WARNING [django.request:241] Bad Request: /
+[20/Oct/2023 17:08:48] WARNING [django.request:241] Bad Request: /
+[20/Oct/2023 17:08:48] WARNING [django.server:212] "GET / HTTP/1.1" 400 63180
+[20/Oct/2023 17:08:48] WARNING [django.server:212] "GET / HTTP/1.1" 400 63180
+[20/Oct/2023 17:09:25] ERROR [django.security.DisallowedHost:124] Invalid HTTP_HOST header: '61.231.64.27:8000'. You may need to add '61.231.64.27' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "/usr/local/lib/python3.10/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/usr/local/lib/python3.10/site-packages/django/http/request.py", line 167, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '61.231.64.27:8000'. You may need to add '61.231.64.27' to ALLOWED_HOSTS.
+[20/Oct/2023 17:09:25] ERROR [django.security.DisallowedHost:124] Invalid HTTP_HOST header: '61.231.64.27:8000'. You may need to add '61.231.64.27' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "/usr/local/lib/python3.10/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/usr/local/lib/python3.10/site-packages/django/http/request.py", line 167, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '61.231.64.27:8000'. You may need to add '61.231.64.27' to ALLOWED_HOSTS.
+[20/Oct/2023 17:09:25] WARNING [django.request:241] Bad Request: /admin/
+[20/Oct/2023 17:09:25] WARNING [django.request:241] Bad Request: /admin/
+[20/Oct/2023 17:09:25] WARNING [django.server:212] "GET /admin/ HTTP/1.1" 400 63344
+[20/Oct/2023 17:09:25] WARNING [django.server:212] "GET /admin/ HTTP/1.1" 400 63344
+[20/Oct/2023 17:09:26] ERROR [django.security.DisallowedHost:124] Invalid HTTP_HOST header: '61.231.64.27:8000'. You may need to add '61.231.64.27' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "/usr/local/lib/python3.10/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/usr/local/lib/python3.10/site-packages/django/http/request.py", line 167, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '61.231.64.27:8000'. You may need to add '61.231.64.27' to ALLOWED_HOSTS.
+[20/Oct/2023 17:09:26] ERROR [django.security.DisallowedHost:124] Invalid HTTP_HOST header: '61.231.64.27:8000'. You may need to add '61.231.64.27' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "/usr/local/lib/python3.10/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/usr/local/lib/python3.10/site-packages/django/http/request.py", line 167, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '61.231.64.27:8000'. You may need to add '61.231.64.27' to ALLOWED_HOSTS.
+[20/Oct/2023 17:09:26] WARNING [django.request:241] Bad Request: /
+[20/Oct/2023 17:09:26] WARNING [django.request:241] Bad Request: /
+[20/Oct/2023 17:09:26] WARNING [django.server:212] "GET / HTTP/1.1" 400 63180
+[20/Oct/2023 17:09:26] WARNING [django.server:212] "GET / HTTP/1.1" 400 63180
+[20/Oct/2023 17:09:27] ERROR [django.security.DisallowedHost:124] Invalid HTTP_HOST header: '61.231.64.27:8000'. You may need to add '61.231.64.27' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "/usr/local/lib/python3.10/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/usr/local/lib/python3.10/site-packages/django/http/request.py", line 167, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '61.231.64.27:8000'. You may need to add '61.231.64.27' to ALLOWED_HOSTS.
+[20/Oct/2023 17:09:27] ERROR [django.security.DisallowedHost:124] Invalid HTTP_HOST header: '61.231.64.27:8000'. You may need to add '61.231.64.27' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "/usr/local/lib/python3.10/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/usr/local/lib/python3.10/site-packages/django/http/request.py", line 167, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '61.231.64.27:8000'. You may need to add '61.231.64.27' to ALLOWED_HOSTS.
+[20/Oct/2023 17:09:27] WARNING [django.request:241] Bad Request: /api/session/properties
+[20/Oct/2023 17:09:27] WARNING [django.request:241] Bad Request: /api/session/properties
+[20/Oct/2023 17:09:27] WARNING [django.server:212] "GET /api/session/properties HTTP/1.1" 400 63422
+[20/Oct/2023 17:09:27] WARNING [django.server:212] "GET /api/session/properties HTTP/1.1" 400 63422
+[20/Oct/2023 17:09:29] ERROR [django.request:241] Internal Server Error: /api/getTasksByTfId/get/2
+[20/Oct/2023 17:09:29] ERROR [django.request:241] Internal Server Error: /api/getTasksByTfId/get/2
+[20/Oct/2023 17:09:29] ERROR [django.server:212] "GET /api/getTasksByTfId/get/2 HTTP/1.1" 500 188
+[20/Oct/2023 17:09:29] ERROR [django.server:212] "GET /api/getTasksByTfId/get/2 HTTP/1.1" 500 188
+[20/Oct/2023 17:09:37] ERROR [django.request:241] Internal Server Error: /api/getTasksByTfId/get/2
+[20/Oct/2023 17:09:37] ERROR [django.request:241] Internal Server Error: /api/getTasksByTfId/get/2
+[20/Oct/2023 17:09:37] ERROR [django.server:212] "GET /api/getTasksByTfId/get/2 HTTP/1.1" 500 188
+[20/Oct/2023 17:09:37] ERROR [django.server:212] "GET /api/getTasksByTfId/get/2 HTTP/1.1" 500 188
+[20/Oct/2023 17:12:37] WARNING [django.request:241] Not Found: /api/company/check-in/0
+[20/Oct/2023 17:12:37] WARNING [django.request:241] Not Found: /api/company/check-in/0
+[20/Oct/2023 17:12:37] WARNING [django.server:212] "GET /api/company/check-in/0 HTTP/1.1" 404 23
+[20/Oct/2023 17:12:37] WARNING [django.server:212] "GET /api/company/check-in/0 HTTP/1.1" 404 23
+[20/Oct/2023 17:12:37] WARNING [django.request:241] Not Found: /api/company/check-in/0
+[20/Oct/2023 17:12:37] WARNING [django.request:241] Not Found: /api/company/check-in/0
+[20/Oct/2023 17:12:37] WARNING [django.server:212] "GET /api/company/check-in/0 HTTP/1.1" 404 23
+[20/Oct/2023 17:12:37] WARNING [django.server:212] "GET /api/company/check-in/0 HTTP/1.1" 404 23
+[20/Oct/2023 17:12:37] WARNING [django.request:241] Not Found: /api/company/check-in/0
+[20/Oct/2023 17:12:37] WARNING [django.request:241] Not Found: /api/company/check-in/0
+[20/Oct/2023 17:12:37] WARNING [django.server:212] "GET /api/company/check-in/0 HTTP/1.1" 404 23
+[20/Oct/2023 17:12:37] WARNING [django.server:212] "GET /api/company/check-in/0 HTTP/1.1" 404 23
+[20/Oct/2023 17:12:37] WARNING [django.request:241] Not Found: /api/company/check-in/0
+[20/Oct/2023 17:12:37] WARNING [django.request:241] Not Found: /api/company/check-in/0
+[20/Oct/2023 17:12:37] WARNING [django.server:212] "GET /api/company/check-in/0 HTTP/1.1" 404 23
+[20/Oct/2023 17:12:37] WARNING [django.server:212] "GET /api/company/check-in/0 HTTP/1.1" 404 23
+[20/Oct/2023 17:12:48] WARNING [django.request:241] Not Found: /api/companyEmployeeLeave/get/employee/all/null
+[20/Oct/2023 17:12:48] WARNING [django.request:241] Not Found: /api/companyEmployeeLeave/get/employee/all/null
+[20/Oct/2023 17:12:48] WARNING [django.server:212] "GET /api/companyEmployeeLeave/get/employee/all/null HTTP/1.1" 404 35706
+[20/Oct/2023 17:12:48] WARNING [django.server:212] "GET /api/companyEmployeeLeave/get/employee/all/null HTTP/1.1" 404 35706
+[20/Oct/2023 17:12:50] WARNING [django.request:241] Not Found: /api/company/check-in/0
+[20/Oct/2023 17:12:50] WARNING [django.request:241] Not Found: /api/company/check-in/0
+[20/Oct/2023 17:12:50] WARNING [django.server:212] "GET /api/company/check-in/0 HTTP/1.1" 404 23
+[20/Oct/2023 17:12:50] WARNING [django.server:212] "GET /api/company/check-in/0 HTTP/1.1" 404 23
+[20/Oct/2023 17:12:50] WARNING [django.request:241] Not Found: /api/company/check-in/0
+[20/Oct/2023 17:12:50] WARNING [django.request:241] Not Found: /api/company/check-in/0
+[20/Oct/2023 17:12:50] WARNING [django.server:212] "GET /api/company/check-in/0 HTTP/1.1" 404 23
+[20/Oct/2023 17:12:50] WARNING [django.server:212] "GET /api/company/check-in/0 HTTP/1.1" 404 23
+[20/Oct/2023 17:12:50] WARNING [django.request:241] Not Found: /api/company/check-in/0
+[20/Oct/2023 17:12:50] WARNING [django.request:241] Not Found: /api/company/check-in/0
+[20/Oct/2023 17:12:50] WARNING [django.server:212] "GET /api/company/check-in/0 HTTP/1.1" 404 23
+[20/Oct/2023 17:12:50] WARNING [django.server:212] "GET /api/company/check-in/0 HTTP/1.1" 404 23
+[20/Oct/2023 17:15:57] WARNING [django.request:241] Unauthorized: /api/getTaskForcesByCompany/get/1
+[20/Oct/2023 17:15:57] WARNING [django.request:241] Unauthorized: /api/getTaskForcesByCompany/get/1
+[20/Oct/2023 17:15:57] WARNING [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 401 183
+[20/Oct/2023 17:15:57] WARNING [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 401 183
+[20/Oct/2023 17:16:18] WARNING [django.request:241] Bad Request: /api/updateTaskForces/1
+[20/Oct/2023 17:16:18] WARNING [django.request:241] Bad Request: /api/updateTaskForces/1
+[20/Oct/2023 17:16:18] WARNING [django.server:212] "PUT /api/updateTaskForces/1 HTTP/1.1" 400 155
+[20/Oct/2023 17:16:18] WARNING [django.server:212] "PUT /api/updateTaskForces/1 HTTP/1.1" 400 155
+[20/Oct/2023 17:19:44] ERROR [django.request:241] Internal Server Error: /api/verify
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/rest_framework_simplejwt/backends.py", line 137, in decode
+    return jwt.decode(
+  File "/usr/local/lib/python3.10/site-packages/jwt/api_jwt.py", line 210, in decode
+    decoded = self.decode_complete(
+  File "/usr/local/lib/python3.10/site-packages/jwt/api_jwt.py", line 162, in decode_complete
+    self._validate_claims(
+  File "/usr/local/lib/python3.10/site-packages/jwt/api_jwt.py", line 248, in _validate_claims
+    self._validate_exp(payload, now, leeway)
+  File "/usr/local/lib/python3.10/site-packages/jwt/api_jwt.py", line 304, in _validate_exp
+    raise ExpiredSignatureError("Signature has expired")
+jwt.exceptions.ExpiredSignatureError: Signature has expired
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/rest_framework_simplejwt/tokens.py", line 42, in __init__
+    self.payload = token_backend.decode(token, verify=verify)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework_simplejwt/backends.py", line 152, in decode
+    raise TokenBackendError(_("Token is invalid or expired")) from ex
+rest_framework_simplejwt.exceptions.TokenBackendError: Token is invalid or expired
+
+During handling of the above exception, another exception occurred:
+
 Traceback (most recent call last):
   File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -30,12 +388,36 @@ Traceback (most recent call last):
     response = handler(request, *args, **kwargs)
   File "/usr/local/lib/python3.10/site-packages/rest_framework/decorators.py", line 50, in handler
     return func(*args, **kwargs)
-  File "/app/backend/api/viewsIntelligent.py", line 874, in get_recommendations
-    convert_jobs_to_text(candidates, len(candidates)),
-  File "/app/backend/api/viewsIntelligent.py", line 784, in convert_jobs_to_text
-    requirement = job['requirement']
-TypeError: 'UserResume' object is not subscriptable
-[07/Oct/2023 16:44:15] ERROR [django.request:241] Internal Server Error: /api/get_recommendations
+  File "/app/backend/api/views.py", line 64, in verify
+    token = AccessToken(access_token)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework_simplejwt/tokens.py", line 44, in __init__
+    raise TokenError(_("Token is invalid or expired"))
+rest_framework_simplejwt.exceptions.TokenError: Token is invalid or expired
+[20/Oct/2023 17:19:44] ERROR [django.request:241] Internal Server Error: /api/verify
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/rest_framework_simplejwt/backends.py", line 137, in decode
+    return jwt.decode(
+  File "/usr/local/lib/python3.10/site-packages/jwt/api_jwt.py", line 210, in decode
+    decoded = self.decode_complete(
+  File "/usr/local/lib/python3.10/site-packages/jwt/api_jwt.py", line 162, in decode_complete
+    self._validate_claims(
+  File "/usr/local/lib/python3.10/site-packages/jwt/api_jwt.py", line 248, in _validate_claims
+    self._validate_exp(payload, now, leeway)
+  File "/usr/local/lib/python3.10/site-packages/jwt/api_jwt.py", line 304, in _validate_exp
+    raise ExpiredSignatureError("Signature has expired")
+jwt.exceptions.ExpiredSignatureError: Signature has expired
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/rest_framework_simplejwt/tokens.py", line 42, in __init__
+    self.payload = token_backend.decode(token, verify=verify)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework_simplejwt/backends.py", line 152, in decode
+    raise TokenBackendError(_("Token is invalid or expired")) from ex
+rest_framework_simplejwt.exceptions.TokenBackendError: Token is invalid or expired
+
+During handling of the above exception, another exception occurred:
+
 Traceback (most recent call last):
   File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -55,18 +437,36 @@ Traceback (most recent call last):
     response = handler(request, *args, **kwargs)
   File "/usr/local/lib/python3.10/site-packages/rest_framework/decorators.py", line 50, in handler
     return func(*args, **kwargs)
-  File "/app/backend/api/viewsIntelligent.py", line 874, in get_recommendations
-    convert_jobs_to_text(candidates, len(candidates)),
-  File "/app/backend/api/viewsIntelligent.py", line 784, in convert_jobs_to_text
-    requirement = job['requirement']
-TypeError: 'UserResume' object is not subscriptable
-[07/Oct/2023 16:44:15] ERROR [django.server:212] "GET /api/get_recommendations?job_id=1 HTTP/1.1" 500 100334
-[07/Oct/2023 16:44:15] ERROR [django.server:212] "GET /api/get_recommendations?job_id=1 HTTP/1.1" 500 100334
-[07/Oct/2023 16:44:23] WARNING [django.request:241] Unauthorized: /api/get_recommendations
-[07/Oct/2023 16:44:23] WARNING [django.request:241] Unauthorized: /api/get_recommendations
-[07/Oct/2023 16:44:23] WARNING [django.server:212] "GET /api/get_recommendations?job_id=1 HTTP/1.1" 401 58
-[07/Oct/2023 16:44:23] WARNING [django.server:212] "GET /api/get_recommendations?job_id=1 HTTP/1.1" 401 58
-[07/Oct/2023 16:46:54] ERROR [django.request:241] Internal Server Error: /api/get_recommendations
+  File "/app/backend/api/views.py", line 64, in verify
+    token = AccessToken(access_token)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework_simplejwt/tokens.py", line 44, in __init__
+    raise TokenError(_("Token is invalid or expired"))
+rest_framework_simplejwt.exceptions.TokenError: Token is invalid or expired
+[20/Oct/2023 17:19:44] ERROR [django.request:241] Internal Server Error: /api/verify
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/rest_framework_simplejwt/backends.py", line 137, in decode
+    return jwt.decode(
+  File "/usr/local/lib/python3.10/site-packages/jwt/api_jwt.py", line 210, in decode
+    decoded = self.decode_complete(
+  File "/usr/local/lib/python3.10/site-packages/jwt/api_jwt.py", line 162, in decode_complete
+    self._validate_claims(
+  File "/usr/local/lib/python3.10/site-packages/jwt/api_jwt.py", line 248, in _validate_claims
+    self._validate_exp(payload, now, leeway)
+  File "/usr/local/lib/python3.10/site-packages/jwt/api_jwt.py", line 304, in _validate_exp
+    raise ExpiredSignatureError("Signature has expired")
+jwt.exceptions.ExpiredSignatureError: Signature has expired
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/rest_framework_simplejwt/tokens.py", line 42, in __init__
+    self.payload = token_backend.decode(token, verify=verify)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework_simplejwt/backends.py", line 152, in decode
+    raise TokenBackendError(_("Token is invalid or expired")) from ex
+rest_framework_simplejwt.exceptions.TokenBackendError: Token is invalid or expired
+
+During handling of the above exception, another exception occurred:
+
 Traceback (most recent call last):
   File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -86,14 +486,36 @@ Traceback (most recent call last):
     response = handler(request, *args, **kwargs)
   File "/usr/local/lib/python3.10/site-packages/rest_framework/decorators.py", line 50, in handler
     return func(*args, **kwargs)
-  File "/app/backend/api/viewsIntelligent.py", line 867, in get_recommendations
-    convert_resumes_to_text(candidates),
-  File "/app/backend/api/viewsIntelligent.py", line 798, in convert_resumes_to_text
-    resume_text = convert_resume_to_text(resume)
-  File "/app/backend/api/viewsIntelligent.py", line 783, in convert_resume_to_text
-    title = resume['title']
-TypeError: 'UserResume' object is not subscriptable
-[07/Oct/2023 16:46:54] ERROR [django.request:241] Internal Server Error: /api/get_recommendations
+  File "/app/backend/api/views.py", line 64, in verify
+    token = AccessToken(access_token)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework_simplejwt/tokens.py", line 44, in __init__
+    raise TokenError(_("Token is invalid or expired"))
+rest_framework_simplejwt.exceptions.TokenError: Token is invalid or expired
+[20/Oct/2023 17:19:44] ERROR [django.request:241] Internal Server Error: /api/verify
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/rest_framework_simplejwt/backends.py", line 137, in decode
+    return jwt.decode(
+  File "/usr/local/lib/python3.10/site-packages/jwt/api_jwt.py", line 210, in decode
+    decoded = self.decode_complete(
+  File "/usr/local/lib/python3.10/site-packages/jwt/api_jwt.py", line 162, in decode_complete
+    self._validate_claims(
+  File "/usr/local/lib/python3.10/site-packages/jwt/api_jwt.py", line 248, in _validate_claims
+    self._validate_exp(payload, now, leeway)
+  File "/usr/local/lib/python3.10/site-packages/jwt/api_jwt.py", line 304, in _validate_exp
+    raise ExpiredSignatureError("Signature has expired")
+jwt.exceptions.ExpiredSignatureError: Signature has expired
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/rest_framework_simplejwt/tokens.py", line 42, in __init__
+    self.payload = token_backend.decode(token, verify=verify)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework_simplejwt/backends.py", line 152, in decode
+    raise TokenBackendError(_("Token is invalid or expired")) from ex
+rest_framework_simplejwt.exceptions.TokenBackendError: Token is invalid or expired
+
+During handling of the above exception, another exception occurred:
+
 Traceback (most recent call last):
   File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -113,668 +535,150 @@ Traceback (most recent call last):
     response = handler(request, *args, **kwargs)
   File "/usr/local/lib/python3.10/site-packages/rest_framework/decorators.py", line 50, in handler
     return func(*args, **kwargs)
-  File "/app/backend/api/viewsIntelligent.py", line 867, in get_recommendations
-    convert_resumes_to_text(candidates),
-  File "/app/backend/api/viewsIntelligent.py", line 798, in convert_resumes_to_text
-    resume_text = convert_resume_to_text(resume)
-  File "/app/backend/api/viewsIntelligent.py", line 783, in convert_resume_to_text
-    title = resume['title']
-TypeError: 'UserResume' object is not subscriptable
-[07/Oct/2023 16:46:54] ERROR [django.server:212] "GET /api/get_recommendations?job_id=1 HTTP/1.1" 500 103721
-[07/Oct/2023 16:46:54] ERROR [django.server:212] "GET /api/get_recommendations?job_id=1 HTTP/1.1" 500 103721
-[07/Oct/2023 16:47:00] ERROR [django.request:241] Internal Server Error: /api/get_recommendations
+  File "/app/backend/api/views.py", line 64, in verify
+    token = AccessToken(access_token)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework_simplejwt/tokens.py", line 44, in __init__
+    raise TokenError(_("Token is invalid or expired"))
+rest_framework_simplejwt.exceptions.TokenError: Token is invalid or expired
+[20/Oct/2023 17:19:44] ERROR [django.server:212] "POST /api/verify HTTP/1.1" 500 131459
+[20/Oct/2023 17:19:44] ERROR [django.server:212] "POST /api/verify HTTP/1.1" 500 131459
+[20/Oct/2023 17:19:44] ERROR [django.server:212] "POST /api/verify HTTP/1.1" 500 131459
+[20/Oct/2023 17:19:44] ERROR [django.server:212] "POST /api/verify HTTP/1.1" 500 131459
+[20/Oct/2023 17:19:44] WARNING [django.request:241] Unauthorized: /api/company/check-in/0
+[20/Oct/2023 17:19:44] WARNING [django.request:241] Unauthorized: /api/company/check-in/0
+[20/Oct/2023 17:19:44] WARNING [django.server:212] "GET /api/company/check-in/0 HTTP/1.1" 401 58
+[20/Oct/2023 17:19:44] WARNING [django.server:212] "GET /api/company/check-in/0 HTTP/1.1" 401 58
+[20/Oct/2023 17:21:03] WARNING [django.request:241] Bad Request: /api/updateTaskForces/1
+[20/Oct/2023 17:21:03] WARNING [django.request:241] Bad Request: /api/updateTaskForces/1
+[20/Oct/2023 17:21:03] WARNING [django.server:212] "PUT /api/updateTaskForces/1 HTTP/1.1" 400 155
+[20/Oct/2023 17:21:03] WARNING [django.server:212] "PUT /api/updateTaskForces/1 HTTP/1.1" 400 155
+[20/Oct/2023 17:51:41] WARNING [django.request:241] Unauthorized: /api/fetchTasksByEmployeeId/get/0
+[20/Oct/2023 17:51:41] WARNING [django.request:241] Unauthorized: /api/fetchTasksByEmployeeId/get/0
+[20/Oct/2023 17:51:42] WARNING [django.server:212] "GET /api/fetchTasksByEmployeeId/get/0 HTTP/1.1" 401 183
+[20/Oct/2023 17:51:42] WARNING [django.server:212] "GET /api/fetchTasksByEmployeeId/get/0 HTTP/1.1" 401 183
+[20/Oct/2023 17:51:57] WARNING [django.request:241] Not Found: /api/fetchTasksByEmployeeId/get/0
+[20/Oct/2023 17:51:57] WARNING [django.request:241] Not Found: /api/fetchTasksByEmployeeId/get/0
+[20/Oct/2023 17:51:57] WARNING [django.server:212] "GET /api/fetchTasksByEmployeeId/get/0 HTTP/1.1" 404 49
+[20/Oct/2023 17:51:57] WARNING [django.server:212] "GET /api/fetchTasksByEmployeeId/get/0 HTTP/1.1" 404 49
+[20/Oct/2023 17:52:28] WARNING [django.request:241] Not Found: /api/fetchTasksByEmployeeId/get/0
+[20/Oct/2023 17:52:28] WARNING [django.request:241] Not Found: /api/fetchTasksByEmployeeId/get/0
+[20/Oct/2023 17:52:28] WARNING [django.server:212] "GET /api/fetchTasksByEmployeeId/get/0 HTTP/1.1" 404 49
+[20/Oct/2023 17:52:28] WARNING [django.server:212] "GET /api/fetchTasksByEmployeeId/get/0 HTTP/1.1" 404 49
+[20/Oct/2023 17:52:30] WARNING [django.request:241] Not Found: /api/fetchTasksByEmployeeId/get/0
+[20/Oct/2023 17:52:30] WARNING [django.request:241] Not Found: /api/fetchTasksByEmployeeId/get/0
+[20/Oct/2023 17:52:30] WARNING [django.server:212] "GET /api/fetchTasksByEmployeeId/get/0 HTTP/1.1" 404 49
+[20/Oct/2023 17:52:30] WARNING [django.server:212] "GET /api/fetchTasksByEmployeeId/get/0 HTTP/1.1" 404 49
+[20/Oct/2023 17:53:57] WARNING [django.request:241] Not Found: /api/fetchTasksByEmployeeId/get/0
+[20/Oct/2023 17:53:57] WARNING [django.request:241] Not Found: /api/fetchTasksByEmployeeId/get/0
+[20/Oct/2023 17:53:57] WARNING [django.server:212] "GET /api/fetchTasksByEmployeeId/get/0 HTTP/1.1" 404 49
+[20/Oct/2023 17:53:57] WARNING [django.server:212] "GET /api/fetchTasksByEmployeeId/get/0 HTTP/1.1" 404 49
+[20/Oct/2023 17:55:21] WARNING [django.request:241] Bad Request: /api/register
+[20/Oct/2023 17:55:21] WARNING [django.request:241] Bad Request: /api/register
+[20/Oct/2023 17:55:21] WARNING [django.server:212] "POST /api/register HTTP/1.1" 400 42
+[20/Oct/2023 17:55:21] WARNING [django.server:212] "POST /api/register HTTP/1.1" 400 42
+[20/Oct/2023 17:55:28] WARNING [django.request:241] Bad Request: /api/register
+[20/Oct/2023 17:55:28] WARNING [django.request:241] Bad Request: /api/register
+[20/Oct/2023 17:55:28] WARNING [django.server:212] "POST /api/register HTTP/1.1" 400 42
+[20/Oct/2023 17:55:28] WARNING [django.server:212] "POST /api/register HTTP/1.1" 400 42
+[20/Oct/2023 17:55:35] WARNING [django.request:241] Bad Request: /api/register
+[20/Oct/2023 17:55:35] WARNING [django.request:241] Bad Request: /api/register
+[20/Oct/2023 17:55:35] WARNING [django.server:212] "POST /api/register HTTP/1.1" 400 42
+[20/Oct/2023 17:55:35] WARNING [django.server:212] "POST /api/register HTTP/1.1" 400 42
+[20/Oct/2023 17:56:13] ERROR [django.request:241] Internal Server Error: /api/companyEmployee/create
+[20/Oct/2023 17:56:13] ERROR [django.request:241] Internal Server Error: /api/companyEmployee/create
+[20/Oct/2023 17:56:13] ERROR [django.server:212] "POST /api/companyEmployee/create HTTP/1.1" 500 51
+[20/Oct/2023 17:56:13] ERROR [django.server:212] "POST /api/companyEmployee/create HTTP/1.1" 500 51
+[20/Oct/2023 17:58:35] WARNING [django.request:241] Not Found: /api/fetchTasksByEmployeeId/get/0
+[20/Oct/2023 17:58:35] WARNING [django.request:241] Not Found: /api/fetchTasksByEmployeeId/get/0
+[20/Oct/2023 17:58:35] WARNING [django.server:212] "GET /api/fetchTasksByEmployeeId/get/0 HTTP/1.1" 404 49
+[20/Oct/2023 17:58:35] WARNING [django.server:212] "GET /api/fetchTasksByEmployeeId/get/0 HTTP/1.1" 404 49
+[20/Oct/2023 17:58:45] WARNING [django.request:241] Not Found: /api/fetchTasksByEmployeeId/get/0
+[20/Oct/2023 17:58:45] WARNING [django.request:241] Not Found: /api/fetchTasksByEmployeeId/get/0
+[20/Oct/2023 17:58:45] WARNING [django.server:212] "GET /api/fetchTasksByEmployeeId/get/0 HTTP/1.1" 404 49
+[20/Oct/2023 17:58:45] WARNING [django.server:212] "GET /api/fetchTasksByEmployeeId/get/0 HTTP/1.1" 404 49
+[20/Oct/2023 18:00:21] WARNING [django.request:241] Not Found: /api/fetchTasksByEmployeeId/get/0
+[20/Oct/2023 18:00:21] WARNING [django.request:241] Not Found: /api/fetchTasksByEmployeeId/get/0
+[20/Oct/2023 18:00:21] WARNING [django.server:212] "GET /api/fetchTasksByEmployeeId/get/0 HTTP/1.1" 404 49
+[20/Oct/2023 18:00:21] WARNING [django.server:212] "GET /api/fetchTasksByEmployeeId/get/0 HTTP/1.1" 404 49
+[20/Oct/2023 18:00:24] WARNING [django.request:241] Not Found: /api/fetchTasksByEmployeeId/get/0
+[20/Oct/2023 18:00:24] WARNING [django.request:241] Not Found: /api/fetchTasksByEmployeeId/get/0
+[20/Oct/2023 18:00:24] WARNING [django.server:212] "GET /api/fetchTasksByEmployeeId/get/0 HTTP/1.1" 404 49
+[20/Oct/2023 18:00:24] WARNING [django.server:212] "GET /api/fetchTasksByEmployeeId/get/0 HTTP/1.1" 404 49
+[20/Oct/2023 18:02:42] WARNING [django.request:241] Not Found: /api/fetchTasksByEmployeeId/get/0
+[20/Oct/2023 18:02:42] WARNING [django.request:241] Not Found: /api/fetchTasksByEmployeeId/get/0
+[20/Oct/2023 18:02:42] WARNING [django.server:212] "GET /api/fetchTasksByEmployeeId/get/0 HTTP/1.1" 404 49
+[20/Oct/2023 18:02:42] WARNING [django.server:212] "GET /api/fetchTasksByEmployeeId/get/0 HTTP/1.1" 404 49
+[20/Oct/2023 18:34:09] WARNING [django.request:241] Unauthorized: /api/getTasksByTfId/get/1
+[20/Oct/2023 18:34:09] WARNING [django.request:241] Unauthorized: /api/getTasksByTfId/get/1
+[20/Oct/2023 18:34:09] WARNING [django.server:212] "GET /api/getTasksByTfId/get/1 HTTP/1.1" 401 183
+[20/Oct/2023 18:34:09] WARNING [django.server:212] "GET /api/getTasksByTfId/get/1 HTTP/1.1" 401 183
+[20/Oct/2023 18:37:24] WARNING [django.request:241] Bad Request: /api/updateTasks/2
+[20/Oct/2023 18:37:24] WARNING [django.request:241] Bad Request: /api/updateTasks/2
+[20/Oct/2023 18:37:24] WARNING [django.server:212] "PUT /api/updateTasks/2 HTTP/1.1" 400 42
+[20/Oct/2023 18:37:24] WARNING [django.server:212] "PUT /api/updateTasks/2 HTTP/1.1" 400 42
+[20/Oct/2023 19:08:34] WARNING [django.request:241] Unauthorized: /api/verify
+[20/Oct/2023 19:08:34] WARNING [django.request:241] Unauthorized: /api/verify
+[20/Oct/2023 19:08:34] WARNING [django.server:212] "POST /api/verify HTTP/1.1" 401 183
+[20/Oct/2023 19:08:34] WARNING [django.server:212] "POST /api/verify HTTP/1.1" 401 183
+[20/Oct/2023 19:11:16] WARNING [django.request:241] Unauthorized: /api/getTasksByTfId/get/2
+[20/Oct/2023 19:11:16] WARNING [django.request:241] Unauthorized: /api/getTasksByTfId/get/2
+[20/Oct/2023 19:11:16] WARNING [django.server:212] "GET /api/getTasksByTfId/get/2 HTTP/1.1" 401 58
+[20/Oct/2023 19:11:16] WARNING [django.server:212] "GET /api/getTasksByTfId/get/2 HTTP/1.1" 401 58
+[20/Oct/2023 19:11:20] WARNING [django.request:241] Unauthorized: /api/getTasksByTfId/get/2
+[20/Oct/2023 19:11:20] WARNING [django.request:241] Unauthorized: /api/getTasksByTfId/get/2
+[20/Oct/2023 19:11:20] WARNING [django.server:212] "GET /api/getTasksByTfId/get/2 HTTP/1.1" 401 58
+[20/Oct/2023 19:11:20] WARNING [django.server:212] "GET /api/getTasksByTfId/get/2 HTTP/1.1" 401 58
+[20/Oct/2023 19:12:33] WARNING [django.request:241] Bad Request: /api/updateTasks/1
+[20/Oct/2023 19:12:33] WARNING [django.request:241] Bad Request: /api/updateTasks/1
+[20/Oct/2023 19:12:33] WARNING [django.server:212] "PUT /api/updateTasks/1 HTTP/1.1" 400 58
+[20/Oct/2023 19:12:33] WARNING [django.server:212] "PUT /api/updateTasks/1 HTTP/1.1" 400 58
+[20/Oct/2023 19:42:59] WARNING [django.request:241] Unauthorized: /api/verify
+[20/Oct/2023 19:42:59] WARNING [django.request:241] Unauthorized: /api/verify
+[20/Oct/2023 19:42:59] WARNING [django.server:212] "POST /api/verify HTTP/1.1" 401 183
+[20/Oct/2023 19:42:59] WARNING [django.server:212] "POST /api/verify HTTP/1.1" 401 183
+[20/Oct/2023 19:48:58] WARNING [django.request:241] Unauthorized: /api/getTasksByTfId/get/1
+[20/Oct/2023 19:48:58] WARNING [django.request:241] Unauthorized: /api/getTasksByTfId/get/1
+[20/Oct/2023 19:48:58] WARNING [django.server:212] "GET /api/getTasksByTfId/get/1 HTTP/1.1" 401 58
+[20/Oct/2023 19:48:58] WARNING [django.server:212] "GET /api/getTasksByTfId/get/1 HTTP/1.1" 401 58
+[20/Oct/2023 19:49:04] WARNING [django.request:241] Unauthorized: /api/getTasksByTfId/get/1
+[20/Oct/2023 19:49:04] WARNING [django.request:241] Unauthorized: /api/getTasksByTfId/get/1
+[20/Oct/2023 19:49:04] WARNING [django.server:212] "GET /api/getTasksByTfId/get/1 HTTP/1.1" 401 58
+[20/Oct/2023 19:49:04] WARNING [django.server:212] "GET /api/getTasksByTfId/get/1 HTTP/1.1" 401 58
+[20/Oct/2023 19:49:26] ERROR [django.security.DisallowedHost:124] Invalid HTTP_HOST header: '61.231.64.27:8000'. You may need to add '61.231.64.27' to ALLOWED_HOSTS.
 Traceback (most recent call last):
   File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
-  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/usr/local/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
-    return view_func(*args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
-    return self.dispatch(request, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
-    response = self.handle_exception(exc)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
-    self.raise_uncaught_exception(exc)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
-    raise exc
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
-    response = handler(request, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/decorators.py", line 50, in handler
-    return func(*args, **kwargs)
-  File "/app/backend/api/viewsIntelligent.py", line 867, in get_recommendations
-    convert_resumes_to_text(candidates),
-  File "/app/backend/api/viewsIntelligent.py", line 798, in convert_resumes_to_text
-    resume_text = convert_resume_to_text(resume)
-  File "/app/backend/api/viewsIntelligent.py", line 783, in convert_resume_to_text
-    title = resume['title']
-TypeError: 'UserResume' object is not subscriptable
-[07/Oct/2023 16:47:00] ERROR [django.request:241] Internal Server Error: /api/get_recommendations
+  File "/usr/local/lib/python3.10/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "/usr/local/lib/python3.10/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/usr/local/lib/python3.10/site-packages/django/http/request.py", line 167, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '61.231.64.27:8000'. You may need to add '61.231.64.27' to ALLOWED_HOSTS.
+[20/Oct/2023 19:49:26] ERROR [django.security.DisallowedHost:124] Invalid HTTP_HOST header: '61.231.64.27:8000'. You may need to add '61.231.64.27' to ALLOWED_HOSTS.
 Traceback (most recent call last):
   File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
-  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/usr/local/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
-    return view_func(*args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
-    return self.dispatch(request, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
-    response = self.handle_exception(exc)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
-    self.raise_uncaught_exception(exc)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
-    raise exc
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
-    response = handler(request, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/decorators.py", line 50, in handler
-    return func(*args, **kwargs)
-  File "/app/backend/api/viewsIntelligent.py", line 867, in get_recommendations
-    convert_resumes_to_text(candidates),
-  File "/app/backend/api/viewsIntelligent.py", line 798, in convert_resumes_to_text
-    resume_text = convert_resume_to_text(resume)
-  File "/app/backend/api/viewsIntelligent.py", line 783, in convert_resume_to_text
-    title = resume['title']
-TypeError: 'UserResume' object is not subscriptable
-[07/Oct/2023 16:47:00] ERROR [django.server:212] "GET /api/get_recommendations?job_id=1 HTTP/1.1" 500 103721
-[07/Oct/2023 16:47:00] ERROR [django.server:212] "GET /api/get_recommendations?job_id=1 HTTP/1.1" 500 103721
-[07/Oct/2023 16:52:20] ERROR [django.request:241] Internal Server Error: /api/get_recommendations
-Traceback (most recent call last):
-  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/usr/local/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
-    return view_func(*args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
-    return self.dispatch(request, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
-    response = self.handle_exception(exc)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
-    self.raise_uncaught_exception(exc)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
-    raise exc
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
-    response = handler(request, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/decorators.py", line 50, in handler
-    return func(*args, **kwargs)
-  File "/app/backend/api/viewsIntelligent.py", line 873, in get_recommendations
-    similar_candidates = get_final_recommendations(
-  File "/app/backend/api/viewsIntelligent.py", line 809, in get_final_recommendations
-    tfidf_matrix_job = tfidf_vectorizer.fit_transform(job_texts)
-  File "/usr/local/lib/python3.10/site-packages/sklearn/feature_extraction/text.py", line 2126, in fit_transform
-    X = super().fit_transform(raw_documents)
-  File "/usr/local/lib/python3.10/site-packages/sklearn/base.py", line 1151, in wrapper
-    return fit_method(estimator, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/sklearn/feature_extraction/text.py", line 1361, in fit_transform
-    raise ValueError(
-ValueError: Iterable over raw text documents expected, string object received.
-[07/Oct/2023 16:52:20] ERROR [django.request:241] Internal Server Error: /api/get_recommendations
-Traceback (most recent call last):
-  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/usr/local/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
-    return view_func(*args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
-    return self.dispatch(request, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
-    response = self.handle_exception(exc)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
-    self.raise_uncaught_exception(exc)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
-    raise exc
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
-    response = handler(request, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/decorators.py", line 50, in handler
-    return func(*args, **kwargs)
-  File "/app/backend/api/viewsIntelligent.py", line 873, in get_recommendations
-    similar_candidates = get_final_recommendations(
-  File "/app/backend/api/viewsIntelligent.py", line 809, in get_final_recommendations
-    tfidf_matrix_job = tfidf_vectorizer.fit_transform(job_texts)
-  File "/usr/local/lib/python3.10/site-packages/sklearn/feature_extraction/text.py", line 2126, in fit_transform
-    X = super().fit_transform(raw_documents)
-  File "/usr/local/lib/python3.10/site-packages/sklearn/base.py", line 1151, in wrapper
-    return fit_method(estimator, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/sklearn/feature_extraction/text.py", line 1361, in fit_transform
-    raise ValueError(
-ValueError: Iterable over raw text documents expected, string object received.
-[07/Oct/2023 16:52:20] ERROR [django.server:212] "GET /api/get_recommendations?job_id=1 HTTP/1.1" 500 122955
-[07/Oct/2023 16:52:20] ERROR [django.server:212] "GET /api/get_recommendations?job_id=1 HTTP/1.1" 500 122955
-[07/Oct/2023 16:54:53] ERROR [django.request:241] Internal Server Error: /api/get_recommendations
-Traceback (most recent call last):
-  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/usr/local/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
-    return view_func(*args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
-    return self.dispatch(request, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
-    response = self.handle_exception(exc)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
-    self.raise_uncaught_exception(exc)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
-    raise exc
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
-    response = handler(request, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/decorators.py", line 50, in handler
-    return func(*args, **kwargs)
-  File "/app/backend/api/viewsIntelligent.py", line 873, in get_recommendations
-    similar_candidates = get_final_recommendations(
-  File "/app/backend/api/viewsIntelligent.py", line 809, in get_final_recommendations
-    tfidf_matrix_job = tfidf_vectorizer.fit_transform(job_texts)
-  File "/usr/local/lib/python3.10/site-packages/sklearn/feature_extraction/text.py", line 2126, in fit_transform
-    X = super().fit_transform(raw_documents)
-  File "/usr/local/lib/python3.10/site-packages/sklearn/base.py", line 1151, in wrapper
-    return fit_method(estimator, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/sklearn/feature_extraction/text.py", line 1361, in fit_transform
-    raise ValueError(
-ValueError: Iterable over raw text documents expected, string object received.
-[07/Oct/2023 16:54:53] ERROR [django.request:241] Internal Server Error: /api/get_recommendations
-Traceback (most recent call last):
-  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/usr/local/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
-    return view_func(*args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
-    return self.dispatch(request, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
-    response = self.handle_exception(exc)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
-    self.raise_uncaught_exception(exc)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
-    raise exc
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
-    response = handler(request, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/decorators.py", line 50, in handler
-    return func(*args, **kwargs)
-  File "/app/backend/api/viewsIntelligent.py", line 873, in get_recommendations
-    similar_candidates = get_final_recommendations(
-  File "/app/backend/api/viewsIntelligent.py", line 809, in get_final_recommendations
-    tfidf_matrix_job = tfidf_vectorizer.fit_transform(job_texts)
-  File "/usr/local/lib/python3.10/site-packages/sklearn/feature_extraction/text.py", line 2126, in fit_transform
-    X = super().fit_transform(raw_documents)
-  File "/usr/local/lib/python3.10/site-packages/sklearn/base.py", line 1151, in wrapper
-    return fit_method(estimator, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/sklearn/feature_extraction/text.py", line 1361, in fit_transform
-    raise ValueError(
-ValueError: Iterable over raw text documents expected, string object received.
-[07/Oct/2023 16:54:53] ERROR [django.server:212] "GET /api/get_recommendations?job_id=1 HTTP/1.1" 500 122955
-[07/Oct/2023 16:54:53] ERROR [django.server:212] "GET /api/get_recommendations?job_id=1 HTTP/1.1" 500 122955
-[07/Oct/2023 16:54:57] WARNING [django.request:241] Unauthorized: /api/get_recommendations
-[07/Oct/2023 16:54:57] WARNING [django.request:241] Unauthorized: /api/get_recommendations
-[07/Oct/2023 16:54:57] WARNING [django.server:212] "GET /api/get_recommendations?job_id=1 HTTP/1.1" 401 58
-[07/Oct/2023 16:54:57] WARNING [django.server:212] "GET /api/get_recommendations?job_id=1 HTTP/1.1" 401 58
-[07/Oct/2023 16:56:22] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 16:56:22] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 16:56:22] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 16:56:22] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 16:56:25] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 16:56:25] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 16:56:25] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 16:56:25] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 16:57:06] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 16:57:06] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 16:57:06] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 16:57:06] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 16:57:09] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 16:57:09] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 16:57:09] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 16:57:09] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 16:57:34] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 16:57:34] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 16:57:34] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 16:57:34] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 16:57:46] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 16:57:46] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 16:57:46] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 16:57:46] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 16:57:48] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 16:57:48] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 16:57:48] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 16:57:48] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 16:57:54] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 16:57:54] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 16:57:54] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 16:57:54] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 16:58:21] ERROR [django.request:241] Internal Server Error: /api/get_recommendations
-Traceback (most recent call last):
-  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/usr/local/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
-    return view_func(*args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
-    return self.dispatch(request, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
-    response = self.handle_exception(exc)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
-    self.raise_uncaught_exception(exc)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
-    raise exc
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
-    response = handler(request, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/decorators.py", line 50, in handler
-    return func(*args, **kwargs)
-  File "/app/backend/api/viewsIntelligent.py", line 873, in get_recommendations
-    similar_candidates = get_final_recommendations(
-  File "/app/backend/api/viewsIntelligent.py", line 809, in get_final_recommendations
-    tfidf_matrix_job = tfidf_vectorizer.fit_transform(job_texts)
-  File "/usr/local/lib/python3.10/site-packages/sklearn/feature_extraction/text.py", line 2126, in fit_transform
-    X = super().fit_transform(raw_documents)
-  File "/usr/local/lib/python3.10/site-packages/sklearn/base.py", line 1151, in wrapper
-    return fit_method(estimator, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/sklearn/feature_extraction/text.py", line 1361, in fit_transform
-    raise ValueError(
-ValueError: Iterable over raw text documents expected, string object received.
-[07/Oct/2023 16:58:21] ERROR [django.request:241] Internal Server Error: /api/get_recommendations
-Traceback (most recent call last):
-  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/usr/local/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
-    return view_func(*args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
-    return self.dispatch(request, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
-    response = self.handle_exception(exc)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
-    self.raise_uncaught_exception(exc)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
-    raise exc
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
-    response = handler(request, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/decorators.py", line 50, in handler
-    return func(*args, **kwargs)
-  File "/app/backend/api/viewsIntelligent.py", line 873, in get_recommendations
-    similar_candidates = get_final_recommendations(
-  File "/app/backend/api/viewsIntelligent.py", line 809, in get_final_recommendations
-    tfidf_matrix_job = tfidf_vectorizer.fit_transform(job_texts)
-  File "/usr/local/lib/python3.10/site-packages/sklearn/feature_extraction/text.py", line 2126, in fit_transform
-    X = super().fit_transform(raw_documents)
-  File "/usr/local/lib/python3.10/site-packages/sklearn/base.py", line 1151, in wrapper
-    return fit_method(estimator, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/sklearn/feature_extraction/text.py", line 1361, in fit_transform
-    raise ValueError(
-ValueError: Iterable over raw text documents expected, string object received.
-[07/Oct/2023 16:58:21] ERROR [django.server:212] "GET /api/get_recommendations?job_id=1 HTTP/1.1" 500 122955
-[07/Oct/2023 16:58:21] ERROR [django.server:212] "GET /api/get_recommendations?job_id=1 HTTP/1.1" 500 122955
-[07/Oct/2023 16:59:03] ERROR [django.request:241] Internal Server Error: /api/get_recommendations
-Traceback (most recent call last):
-  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/usr/local/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
-    return view_func(*args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
-    return self.dispatch(request, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
-    response = self.handle_exception(exc)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
-    self.raise_uncaught_exception(exc)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
-    raise exc
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
-    response = handler(request, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/decorators.py", line 50, in handler
-    return func(*args, **kwargs)
-  File "/app/backend/api/viewsIntelligent.py", line 873, in get_recommendations
-    similar_candidates = get_final_recommendations(
-  File "/app/backend/api/viewsIntelligent.py", line 825, in get_final_recommendations
-    _, tfidf_indices = knn_tfidf.kneighbors(cosine_similarities_tfidf)
-  File "/usr/local/lib/python3.10/site-packages/sklearn/neighbors/_base.py", line 808, in kneighbors
-    raise ValueError(
-ValueError: Expected n_neighbors <= n_samples,  but n_samples = 1, n_neighbors = 3
-[07/Oct/2023 16:59:03] ERROR [django.request:241] Internal Server Error: /api/get_recommendations
-Traceback (most recent call last):
-  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/usr/local/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
-    return view_func(*args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
-    return self.dispatch(request, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
-    response = self.handle_exception(exc)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
-    self.raise_uncaught_exception(exc)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
-    raise exc
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
-    response = handler(request, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/decorators.py", line 50, in handler
-    return func(*args, **kwargs)
-  File "/app/backend/api/viewsIntelligent.py", line 873, in get_recommendations
-    similar_candidates = get_final_recommendations(
-  File "/app/backend/api/viewsIntelligent.py", line 825, in get_final_recommendations
-    _, tfidf_indices = knn_tfidf.kneighbors(cosine_similarities_tfidf)
-  File "/usr/local/lib/python3.10/site-packages/sklearn/neighbors/_base.py", line 808, in kneighbors
-    raise ValueError(
-ValueError: Expected n_neighbors <= n_samples,  but n_samples = 1, n_neighbors = 3
-[07/Oct/2023 16:59:03] ERROR [django.server:212] "GET /api/get_recommendations?job_id=1 HTTP/1.1" 500 117433
-[07/Oct/2023 16:59:03] ERROR [django.server:212] "GET /api/get_recommendations?job_id=1 HTTP/1.1" 500 117433
-[07/Oct/2023 17:01:39] ERROR [django.request:241] Internal Server Error: /api/get_recommendations
-Traceback (most recent call last):
-  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/usr/local/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
-    return view_func(*args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
-    return self.dispatch(request, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
-    response = self.handle_exception(exc)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
-    self.raise_uncaught_exception(exc)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
-    raise exc
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
-    response = handler(request, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/decorators.py", line 50, in handler
-    return func(*args, **kwargs)
-  File "/app/backend/api/viewsIntelligent.py", line 873, in get_recommendations
-    similar_candidates = get_final_recommendations(
-  File "/app/backend/api/viewsIntelligent.py", line 839, in get_final_recommendations
-    combined_recommendations.sort(key=lambda idx: cosine_similarities_tfidf[i][idx] + cosine_similarities_count[i][idx])
-  File "/app/backend/api/viewsIntelligent.py", line 839, in <lambda>
-    combined_recommendations.sort(key=lambda idx: cosine_similarities_tfidf[i][idx] + cosine_similarities_count[i][idx])
-IndexError: only integers, slices (`:`), ellipsis (`...`), numpy.newaxis (`None`) and integer or boolean arrays are valid indices
-[07/Oct/2023 17:01:39] ERROR [django.request:241] Internal Server Error: /api/get_recommendations
-Traceback (most recent call last):
-  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/usr/local/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
-    return view_func(*args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
-    return self.dispatch(request, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
-    response = self.handle_exception(exc)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
-    self.raise_uncaught_exception(exc)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
-    raise exc
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
-    response = handler(request, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/decorators.py", line 50, in handler
-    return func(*args, **kwargs)
-  File "/app/backend/api/viewsIntelligent.py", line 873, in get_recommendations
-    similar_candidates = get_final_recommendations(
-  File "/app/backend/api/viewsIntelligent.py", line 839, in get_final_recommendations
-    combined_recommendations.sort(key=lambda idx: cosine_similarities_tfidf[i][idx] + cosine_similarities_count[i][idx])
-  File "/app/backend/api/viewsIntelligent.py", line 839, in <lambda>
-    combined_recommendations.sort(key=lambda idx: cosine_similarities_tfidf[i][idx] + cosine_similarities_count[i][idx])
-IndexError: only integers, slices (`:`), ellipsis (`...`), numpy.newaxis (`None`) and integer or boolean arrays are valid indices
-[07/Oct/2023 17:01:39] ERROR [django.server:212] "GET /api/get_recommendations?job_id=1 HTTP/1.1" 500 118975
-[07/Oct/2023 17:01:39] ERROR [django.server:212] "GET /api/get_recommendations?job_id=1 HTTP/1.1" 500 118975
-[07/Oct/2023 17:01:43] WARNING [django.request:241] Unauthorized: /api/get_recommendations
-[07/Oct/2023 17:01:43] WARNING [django.request:241] Unauthorized: /api/get_recommendations
-[07/Oct/2023 17:01:43] WARNING [django.server:212] "GET /api/get_recommendations?job_id=1 HTTP/1.1" 401 58
-[07/Oct/2023 17:01:43] WARNING [django.server:212] "GET /api/get_recommendations?job_id=1 HTTP/1.1" 401 58
-[07/Oct/2023 17:06:43] ERROR [django.request:241] Internal Server Error: /api/get_recommendations
-Traceback (most recent call last):
-  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/usr/local/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
-    return view_func(*args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
-    return self.dispatch(request, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
-    response = self.handle_exception(exc)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
-    self.raise_uncaught_exception(exc)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
-    raise exc
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
-    response = handler(request, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/decorators.py", line 50, in handler
-    return func(*args, **kwargs)
-  File "/app/backend/api/viewsIntelligent.py", line 869, in get_recommendations
-    similar_candidates = get_final_recommendations(
-  File "/app/backend/api/viewsIntelligent.py", line 835, in get_final_recommendations
-    combined_recommendations.sort(key=lambda idx: cosine_similarities_tfidf[i][idx] + cosine_similarities_count[i][idx])
-  File "/app/backend/api/viewsIntelligent.py", line 835, in <lambda>
-    combined_recommendations.sort(key=lambda idx: cosine_similarities_tfidf[i][idx] + cosine_similarities_count[i][idx])
-IndexError: only integers, slices (`:`), ellipsis (`...`), numpy.newaxis (`None`) and integer or boolean arrays are valid indices
-[07/Oct/2023 17:06:43] ERROR [django.request:241] Internal Server Error: /api/get_recommendations
-Traceback (most recent call last):
-  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/usr/local/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
-    return view_func(*args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
-    return self.dispatch(request, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
-    response = self.handle_exception(exc)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
-    self.raise_uncaught_exception(exc)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
-    raise exc
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
-    response = handler(request, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/decorators.py", line 50, in handler
-    return func(*args, **kwargs)
-  File "/app/backend/api/viewsIntelligent.py", line 869, in get_recommendations
-    similar_candidates = get_final_recommendations(
-  File "/app/backend/api/viewsIntelligent.py", line 835, in get_final_recommendations
-    combined_recommendations.sort(key=lambda idx: cosine_similarities_tfidf[i][idx] + cosine_similarities_count[i][idx])
-  File "/app/backend/api/viewsIntelligent.py", line 835, in <lambda>
-    combined_recommendations.sort(key=lambda idx: cosine_similarities_tfidf[i][idx] + cosine_similarities_count[i][idx])
-IndexError: only integers, slices (`:`), ellipsis (`...`), numpy.newaxis (`None`) and integer or boolean arrays are valid indices
-[07/Oct/2023 17:06:43] ERROR [django.server:212] "GET /api/get_recommendations?job_id=1 HTTP/1.1" 500 120088
-[07/Oct/2023 17:06:43] ERROR [django.server:212] "GET /api/get_recommendations?job_id=1 HTTP/1.1" 500 120088
-[07/Oct/2023 17:06:47] WARNING [django.request:241] Unauthorized: /api/get_recommendations
-[07/Oct/2023 17:06:47] WARNING [django.request:241] Unauthorized: /api/get_recommendations
-[07/Oct/2023 17:06:47] WARNING [django.server:212] "GET /api/get_recommendations?job_id=1 HTTP/1.1" 401 58
-[07/Oct/2023 17:06:47] WARNING [django.server:212] "GET /api/get_recommendations?job_id=1 HTTP/1.1" 401 58
-[07/Oct/2023 17:07:23] ERROR [django.request:241] Internal Server Error: /api/get_recommendations
-Traceback (most recent call last):
-  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/usr/local/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
-    return view_func(*args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
-    return self.dispatch(request, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
-    response = self.handle_exception(exc)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
-    self.raise_uncaught_exception(exc)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
-    raise exc
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
-    response = handler(request, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/decorators.py", line 50, in handler
-    return func(*args, **kwargs)
-  File "/app/backend/api/viewsIntelligent.py", line 870, in get_recommendations
-    similar_candidates = get_final_recommendations(
-  File "/app/backend/api/viewsIntelligent.py", line 835, in get_final_recommendations
-    combined_recommendations.sort(key=lambda idx: cosine_similarities_tfidf[i][idx] + cosine_similarities_count[i][idx])
-  File "/app/backend/api/viewsIntelligent.py", line 835, in <lambda>
-    combined_recommendations.sort(key=lambda idx: cosine_similarities_tfidf[i][idx] + cosine_similarities_count[i][idx])
-IndexError: only integers, slices (`:`), ellipsis (`...`), numpy.newaxis (`None`) and integer or boolean arrays are valid indices
-[07/Oct/2023 17:07:23] ERROR [django.request:241] Internal Server Error: /api/get_recommendations
-Traceback (most recent call last):
-  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/usr/local/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
-    return view_func(*args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
-    return self.dispatch(request, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
-    response = self.handle_exception(exc)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
-    self.raise_uncaught_exception(exc)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
-    raise exc
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
-    response = handler(request, *args, **kwargs)
-  File "/usr/local/lib/python3.10/site-packages/rest_framework/decorators.py", line 50, in handler
-    return func(*args, **kwargs)
-  File "/app/backend/api/viewsIntelligent.py", line 870, in get_recommendations
-    similar_candidates = get_final_recommendations(
-  File "/app/backend/api/viewsIntelligent.py", line 835, in get_final_recommendations
-    combined_recommendations.sort(key=lambda idx: cosine_similarities_tfidf[i][idx] + cosine_similarities_count[i][idx])
-  File "/app/backend/api/viewsIntelligent.py", line 835, in <lambda>
-    combined_recommendations.sort(key=lambda idx: cosine_similarities_tfidf[i][idx] + cosine_similarities_count[i][idx])
-IndexError: only integers, slices (`:`), ellipsis (`...`), numpy.newaxis (`None`) and integer or boolean arrays are valid indices
-[07/Oct/2023 17:07:23] ERROR [django.server:212] "GET /api/get_recommendations?job_id=1 HTTP/1.1" 500 120032
-[07/Oct/2023 17:07:23] ERROR [django.server:212] "GET /api/get_recommendations?job_id=1 HTTP/1.1" 500 120032
-[07/Oct/2023 17:09:22] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:09:22] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:09:22] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:09:22] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:12:07] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:12:07] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:12:07] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:12:07] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:12:09] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:12:09] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:12:09] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:12:09] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:12:12] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:12:12] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:12:12] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:12:12] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:12:31] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:12:31] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:12:31] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:12:31] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:12:31] ERROR [django.request:241] Internal Server Error: /api/companyEmployee/create
-[07/Oct/2023 17:12:31] ERROR [django.request:241] Internal Server Error: /api/companyEmployee/create
-[07/Oct/2023 17:12:31] ERROR [django.server:212] "POST /api/companyEmployee/create HTTP/1.1" 500 55
-[07/Oct/2023 17:12:31] ERROR [django.server:212] "POST /api/companyEmployee/create HTTP/1.1" 500 55
-[07/Oct/2023 17:12:50] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:12:50] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:12:50] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:12:50] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:12:50] ERROR [django.request:241] Internal Server Error: /api/companyEmployee/create
-[07/Oct/2023 17:12:50] ERROR [django.request:241] Internal Server Error: /api/companyEmployee/create
-[07/Oct/2023 17:12:50] ERROR [django.server:212] "POST /api/companyEmployee/create HTTP/1.1" 500 55
-[07/Oct/2023 17:12:50] ERROR [django.server:212] "POST /api/companyEmployee/create HTTP/1.1" 500 55
-[07/Oct/2023 17:13:51] WARNING [django.request:241] Unauthorized: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:13:51] WARNING [django.request:241] Unauthorized: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:13:51] WARNING [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 401 183
-[07/Oct/2023 17:13:51] WARNING [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 401 183
-[07/Oct/2023 17:14:04] WARNING [django.request:241] Unauthorized: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:14:04] WARNING [django.request:241] Unauthorized: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:14:04] WARNING [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 401 183
-[07/Oct/2023 17:14:04] WARNING [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 401 183
-[07/Oct/2023 17:14:04] WARNING [django.request:241] Unauthorized: /api/createTaskForces
-[07/Oct/2023 17:14:04] WARNING [django.request:241] Unauthorized: /api/createTaskForces
-[07/Oct/2023 17:14:04] WARNING [django.server:212] "POST /api/createTaskForces HTTP/1.1" 401 183
-[07/Oct/2023 17:14:04] WARNING [django.server:212] "POST /api/createTaskForces HTTP/1.1" 401 183
-[07/Oct/2023 17:14:35] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:14:35] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:14:35] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:14:35] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:14:45] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:14:45] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:14:45] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:14:45] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:14:45] WARNING [django.request:241] Bad Request: /api/createTaskForces
-[07/Oct/2023 17:14:45] WARNING [django.request:241] Bad Request: /api/createTaskForces
-[07/Oct/2023 17:14:45] WARNING [django.server:212] "POST /api/createTaskForces HTTP/1.1" 400 155
-[07/Oct/2023 17:14:45] WARNING [django.server:212] "POST /api/createTaskForces HTTP/1.1" 400 155
-[07/Oct/2023 17:15:57] WARNING [django.request:241] Unauthorized: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:15:57] WARNING [django.request:241] Unauthorized: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:15:57] WARNING [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 401 58
-[07/Oct/2023 17:15:57] WARNING [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 401 58
-[07/Oct/2023 17:16:46] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:16:46] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:16:46] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:16:46] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:16:49] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:16:49] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:16:49] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:16:49] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:18:01] WARNING [django.request:241] Bad Request: /api/createTaskForces
-[07/Oct/2023 17:18:01] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:18:01] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:18:01] WARNING [django.request:241] Bad Request: /api/createTaskForces
-[07/Oct/2023 17:18:01] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:18:01] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:18:01] WARNING [django.server:212] "POST /api/createTaskForces HTTP/1.1" 400 155
-[07/Oct/2023 17:18:01] WARNING [django.server:212] "POST /api/createTaskForces HTTP/1.1" 400 155
-[07/Oct/2023 17:18:19] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:18:19] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:18:19] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:18:19] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:18:19] WARNING [django.request:241] Bad Request: /api/createTaskForces
-[07/Oct/2023 17:18:19] WARNING [django.request:241] Bad Request: /api/createTaskForces
-[07/Oct/2023 17:18:19] WARNING [django.server:212] "POST /api/createTaskForces HTTP/1.1" 400 155
-[07/Oct/2023 17:18:19] WARNING [django.server:212] "POST /api/createTaskForces HTTP/1.1" 400 155
-[07/Oct/2023 17:19:37] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:19:37] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:19:37] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:19:37] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:19:37] WARNING [django.request:241] Bad Request: /api/createTaskForces
-[07/Oct/2023 17:19:37] WARNING [django.request:241] Bad Request: /api/createTaskForces
-[07/Oct/2023 17:19:37] WARNING [django.server:212] "POST /api/createTaskForces HTTP/1.1" 400 155
-[07/Oct/2023 17:19:37] WARNING [django.server:212] "POST /api/createTaskForces HTTP/1.1" 400 155
-[07/Oct/2023 17:24:14] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:24:14] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:24:14] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:24:14] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:25:07] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:25:07] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:25:07] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:25:07] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:25:41] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:25:41] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:25:41] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:25:41] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:25:51] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:25:51] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:25:51] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:25:51] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:26:07] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:26:07] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:26:07] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:26:07] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:26:07] WARNING [django.request:241] Bad Request: /api/createTaskForces
-[07/Oct/2023 17:26:07] WARNING [django.request:241] Bad Request: /api/createTaskForces
-[07/Oct/2023 17:26:07] WARNING [django.server:212] "POST /api/createTaskForces HTTP/1.1" 400 155
-[07/Oct/2023 17:26:07] WARNING [django.server:212] "POST /api/createTaskForces HTTP/1.1" 400 155
-[07/Oct/2023 17:27:12] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:27:12] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:27:12] ERROR [django.request:241] Internal Server Error: /api/createTaskForces
-[07/Oct/2023 17:27:12] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:27:12] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:27:12] ERROR [django.request:241] Internal Server Error: /api/createTaskForces
-[07/Oct/2023 17:27:12] ERROR [django.server:212] "POST /api/createTaskForces HTTP/1.1" 500 49
-[07/Oct/2023 17:27:12] ERROR [django.server:212] "POST /api/createTaskForces HTTP/1.1" 500 49
-[07/Oct/2023 17:27:28] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:27:28] ERROR [django.request:241] Internal Server Error: /api/getTaskForcesByCompany/get/1
-[07/Oct/2023 17:27:28] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:27:28] ERROR [django.server:212] "GET /api/getTaskForcesByCompany/get/1 HTTP/1.1" 500 205
-[07/Oct/2023 17:27:28] ERROR [django.request:241] Internal Server Error: /api/createTaskForces
-[07/Oct/2023 17:27:28] ERROR [django.request:241] Internal Server Error: /api/createTaskForces
-[07/Oct/2023 17:27:28] ERROR [django.server:212] "POST /api/createTaskForces HTTP/1.1" 500 49
-[07/Oct/2023 17:27:28] ERROR [django.server:212] "POST /api/createTaskForces HTTP/1.1" 500 49
-[07/Oct/2023 17:27:53] WARNING [django.request:241] Bad Request: /api/createTaskForces
-[07/Oct/2023 17:27:53] WARNING [django.request:241] Bad Request: /api/createTaskForces
-[07/Oct/2023 17:27:53] WARNING [django.server:212] "POST /api/createTaskForces HTTP/1.1" 400 155
-[07/Oct/2023 17:27:53] WARNING [django.server:212] "POST /api/createTaskForces HTTP/1.1" 400 155
-[07/Oct/2023 17:49:16] WARNING [django.request:241] Unauthorized: /api/verify
-[07/Oct/2023 17:49:16] WARNING [django.request:241] Unauthorized: /api/verify
-[07/Oct/2023 17:49:16] WARNING [django.server:212] "POST /api/verify HTTP/1.1" 401 183
-[07/Oct/2023 17:49:16] WARNING [django.server:212] "POST /api/verify HTTP/1.1" 401 183
+  File "/usr/local/lib/python3.10/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "/usr/local/lib/python3.10/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/usr/local/lib/python3.10/site-packages/django/http/request.py", line 167, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '61.231.64.27:8000'. You may need to add '61.231.64.27' to ALLOWED_HOSTS.
+[20/Oct/2023 19:49:26] WARNING [django.request:241] Bad Request: /
+[20/Oct/2023 19:49:26] WARNING [django.request:241] Bad Request: /
+[20/Oct/2023 19:49:26] WARNING [django.server:212] "GET / HTTP/1.1" 400 63180
+[20/Oct/2023 19:49:26] WARNING [django.server:212] "GET / HTTP/1.1" 400 63180
+[20/Oct/2023 20:11:04] WARNING [django.request:241] Not Found: /api/updateTasks/undefined
+[20/Oct/2023 20:11:04] WARNING [django.request:241] Not Found: /api/updateTasks/undefined
+[20/Oct/2023 20:11:04] WARNING [django.server:212] "PUT /api/updateTasks/undefined HTTP/1.1" 404 35866
+[20/Oct/2023 20:11:04] WARNING [django.server:212] "PUT /api/updateTasks/undefined HTTP/1.1" 404 35866
+[21/Oct/2023 06:16:27] WARNING [django.request:241] Bad Request: /api/updateTasks/3
+[21/Oct/2023 06:16:27] WARNING [django.request:241] Bad Request: /api/updateTasks/3
+[21/Oct/2023 06:16:27] WARNING [django.server:212] "PUT /api/updateTasks/3 HTTP/1.1" 400 60
+[21/Oct/2023 06:16:27] WARNING [django.server:212] "PUT /api/updateTasks/3 HTTP/1.1" 400 60
+[21/Oct/2023 06:17:33] WARNING [django.request:241] Bad Request: /api/updateTasks/3
+[21/Oct/2023 06:17:33] WARNING [django.request:241] Bad Request: /api/updateTasks/3
+[21/Oct/2023 06:17:33] WARNING [django.server:212] "PUT /api/updateTasks/3 HTTP/1.1" 400 42
+[21/Oct/2023 06:17:33] WARNING [django.server:212] "PUT /api/updateTasks/3 HTTP/1.1" 400 42

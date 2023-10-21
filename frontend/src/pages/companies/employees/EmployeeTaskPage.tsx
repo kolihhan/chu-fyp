@@ -1,21 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Select, Button, message } from 'antd';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { getCookie } from '../../../utils';
+import { fetchTasksByEmployeeId, updateTasks } from '../../../api';
 
 const { Option } = Select;
 
 const EmployeeTaskPage: React.FC = () => {
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState([] as any);
   const [selectedTask, setSelectedTask] = useState(null);
+  const employeeId = getCookie('employeeId');
 
   useEffect(() => {
-    // 在此处使用fetch或其他API调用来获取员工的任务列表
-    // 假设您有一个API端点返回员工任务列表
-    fetch('https://api.example.com/employee-tasks') 
-      .then((response) => response.json())
-      .then((data) => setTasks(data))
-      .catch((error) => console.error('Error fetching employee tasks:', error));
+    fetchTasks();
   }, []);
+
+  const fetchTasks = async () => {
+    try {
+      const response = await fetchTasksByEmployeeId(Number(employeeId) ? 1 : 1); // 使用从Cookie获取的employeeId
+
+      setTasks([response.data.data]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const columns = [
     {
@@ -32,7 +40,7 @@ const EmployeeTaskPage: React.FC = () => {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
-      render: (text : any, record : any) => (
+      render: (text: any, record: any) => (
         <Select
           defaultValue={text}
           style={{ width: 120 }}
@@ -51,18 +59,18 @@ const EmployeeTaskPage: React.FC = () => {
     },
   ];
 
-  const handleStatusChange = (record : any, value : any) => {
-    // 在此处处理状态更改，并向后端发送更新请求
-    // 假设您有一个API端点用于更新任务状态
-    const updatedTasks : any = tasks.map((task : any) => {
+  const handleStatusChange = (record: any, value: any) => {
+    let data : any = [];
+    const updatedTasks: any = tasks.map((task: any) => {
       if (task.id === record.id) {
         task.status = value;
+        data = task;
       }
       return task;
     });
 
-    // 模拟API请求成功后的更新
     setTasks(updatedTasks);
+    updateTasks(record.id,data);
     message.success('Status updated successfully');
   };
 

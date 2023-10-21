@@ -65,6 +65,9 @@ export const DropDownIcon: React.FC<{ isManage: boolean; isEmployee: any[];}> = 
         <Menu.Item key="employee-application">
           <Link to={`/company/applicationleave`}>ApplicationLeave</Link>
         </Menu.Item>
+        <Menu.Item key="employee-tasks">
+          <Link to={`/company/tasks`}>Tasks</Link>
+        </Menu.Item>
         <Divider />
       </Menu.ItemGroup>
     );

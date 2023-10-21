@@ -441,22 +441,46 @@ export const createTaskForces = async (data : any) => {
   { headers: authHeaders() });
 };
 
-export const updateTaskForces = (id:number, values: any) =>
+export const updateTaskForces = (id:number, data: any) =>
 axios.put(
-  `${API_URL}/user/update/${id}`,
-  { values },
+  `${API_URL}/updateTaskForces/${id}`,
+  { data },
   { headers: authHeaders() }
 );
 
 export const deleteTaskForce = async(id: number) => {
-  return axios.get(`${API_URL}/calEmployeeScore/${id}`, { 
+  return axios.delete(`${API_URL}/deleteTaskForce/${id}`, { 
     headers: authHeaders(),
   })
 }
 
 export const createTasks = async (data : any) => {
-  return axios.post(`${API_URL}/companyEmployee/create`, 
+  return axios.post(`${API_URL}/createTasks`, 
   { data },
   { headers: authHeaders() });
 };
 
+export const getTasksByTf_id = async(id: number) => {
+  return axios.get(`${API_URL}/getTasksByTfId/get/${id}`, { 
+    headers: authHeaders(),
+  })
+}
+
+export const updateTasks = (id:number, data: any) =>
+axios.put(
+  `${API_URL}/updateTasks/${id}`,
+  { data },
+  { headers: authHeaders() }
+);
+
+export const deleteTasks= async(id: number) => {
+  return axios.delete(`${API_URL}/deleteTasks/${id}`, { 
+    headers: authHeaders(),
+  })
+}
+
+export const fetchTasksByEmployeeId = async(id: number) => {
+  return axios.get(`${API_URL}/fetchTasksByEmployeeId/get/${id}`, { 
+    headers: authHeaders(),
+  })
+}

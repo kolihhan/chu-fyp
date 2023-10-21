@@ -37,6 +37,7 @@ const FeedBackPage: React.FC = () => {
   useEffect(() => {
     fetchCompanyEmployees();
     fetchFeedbackData()
+    console.log(employeeId);
   }, []);
 
 

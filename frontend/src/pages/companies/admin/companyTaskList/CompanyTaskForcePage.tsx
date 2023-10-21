@@ -78,12 +78,12 @@ const CompanyTaskForcePage: React.FC = () => {
       key: 'actions',
       render: (id: any) => (
         <div>
-         <a href={`admin/company/task-list/${id}/details`}>
+         <a href={`/admin/company/task-list/${id}/details`}>
            <Button type="primary">
              View
            </Button>
          </a>
-         <a href={`admin/company/task-list/${id}/update`}>
+         <a href={`/admin/company/task-list/${id}/update`}>
            <Button type="primary">
              Edit
            </Button>

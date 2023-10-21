@@ -218,6 +218,12 @@ urlpatterns = [
     path('updateTaskForces/<int:pk>', updateTaskForce, name='updateTaskForces'),
     path('deleteTaskForce/<int:pk>', deleteTaskForce, name='deleteTaskForce'),
 
+    path('getTasksByTfId/get/<int:pk>', getTasksByTF_id, name='getTasksByTF_id'),
+    path('fetchTasksByEmployeeId/get/<int:pk>', fetchTasksByEmployeeId, name='fetchTasksByEmployeeId'),
+    path('createTasks', createTasks, name='createTasks'),
+    path('updateTasks/<int:pk>', updateTasks, name='updateTasks'),
+    path('deleteTasks/<int:pk>', deleteTasks, name='deleteTasks'),
+
 
 ]
 

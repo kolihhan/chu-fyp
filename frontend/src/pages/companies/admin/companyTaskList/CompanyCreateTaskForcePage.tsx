@@ -12,7 +12,7 @@ const CompanyCreateTaskForcePage: React.FC = () => {
   const [form] = Form.useForm();
   const [priority, setPriority] = useState('Medium');
   const [status, setStatus] = useState('Planning');
-  const [taskForce, setTaskForce] = useState({}); // 将taskForce初始化为一个空对象
+
 
   const handlePriorityChange = (value: string) => {
     setPriority(value);
@@ -31,29 +31,40 @@ const CompanyCreateTaskForcePage: React.FC = () => {
   const fetchTaskForceById = async () => {
     try {
       const response = await fetchTaskForcesById(Number(id)); 
-      setTaskForce(response.data.data);
+      form.setFieldsValue(response.data.data); // Set form initial values here
     } catch (error) {
       console.log(error);
     }
   };
-  
 
   const onFinish = (values: any) => {
     if (id) {
+      values['company_id'] = Number(getCookie('companyId'));
       updateTaskForces(Number(id), values);
     } else {
+      
       values['company_id'] = Number(getCookie('companyId'));
-      console.log(values);
       createTaskForces(values);
     }
 
-    navigate(`/admin/company/task-list`);
+    //navigate(`/admin/company/task-list`);
+  };
+
+  const recommendLeader = (values: any) => {
+
+    //navigate(`/admin/company/task-list`);
   };
 
   return (
     <div>
       <h1>{id ? 'Update' : 'Create'} Task Force</h1>
-      <Form form={form} onFinish={onFinish} initialValues={taskForce}>
+      <Form form={form} onFinish={onFinish}>
+      <Form.Item
+          label="Task Force Title"
+          name="name"
+        >
+          <Input />
+        </Form.Item>
         <Form.Item
           label="Task Force Description"
           name="description"
@@ -61,13 +72,26 @@ const CompanyCreateTaskForcePage: React.FC = () => {
           <Input.TextArea />
         </Form.Item>
           
-        <Form.Item
-          label="Leader Name"
-          name="leader"
-        >
-          <Input />
-        </Form.Item>
-          
+
+        <Input.Group compact>
+  <Form.Item label="Leader Name" name="leader">
+    <Select
+      showSearch
+      placeholder="Select an leader"
+      optionFilterProp="children"
+      filterOption={(input, option) =>
+        String(option?.children)?.toLowerCase().indexOf(input.toLowerCase()) >= 0
+      }
+    >
+      <Select.Option value={1}>Leader 1</Select.Option>
+      <Select.Option value={2}>Leader 2</Select.Option>
+      <Select.Option value={3}>Leader 3</Select.Option>
+    </Select>
+</Form.Item>
+<Button type="primary" onClick={recommendLeader}>
+      Recommend
+    </Button>
+  </Input.Group>
         <Form.Item
           label="Goals"
           name="goals"

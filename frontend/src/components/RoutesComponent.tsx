@@ -36,6 +36,7 @@ import CompanyTaskForcePage from "../pages/companies/admin/companyTaskList/Compa
 import CompanyCreateTaskForcePage from "../pages/companies/admin/companyTaskList/CompanyCreateTaskForcePage";
 import CompanyCreateTaskPage from "../pages/companies/admin/companyTaskList/companyTask/CompanyCreateTaskPage";
 import CompanyTaskDetailPage from "../pages/companies/admin/companyTaskList/companyTask/CompanyTaskDetailPage";
+import EmployeeTaskPage from "../pages/companies/employees/EmployeeTaskPage";
 
 const Protected: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const user = useSelector((state: RootState) => state.auth.user);
@@ -118,7 +119,7 @@ const RoutesComponent: React.FC = () =>{
                 <Route path="/company/feedback" element={<ProtectedEmployee><FeedBackPage /></ProtectedEmployee>} />
                 <Route path="/company/employee/profile" element={<ProtectedEmployee><EmployeeProfilePage /></ProtectedEmployee>} />
                 <Route path="/company/applicationleave" element={<ProtectedEmployee><ApplicationLeavePage /></ProtectedEmployee>} />
-
+                <Route path="/company/tasks" element={<ProtectedEmployee><EmployeeTaskPage /></ProtectedEmployee>} />
 
                 {/* Admin */}
 

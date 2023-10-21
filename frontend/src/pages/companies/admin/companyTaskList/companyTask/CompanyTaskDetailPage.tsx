@@ -1,106 +1,133 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Card, Form, Input, Collapse } from 'antd';
+import { Button, Card, Form, Input, Collapse, Select } from 'antd';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useParams } from 'react-router-dom';
+import { getTasksByTf_id, updateTasks } from '../../../../../api';
 
 const { Panel } = Collapse;
 
 const CompanyTaskDetailPage: React.FC = () => {
-  const [members, setMembers] = useState<string[]>([]); // 存储成员列表
-  const [selectedMember, setSelectedMember] = useState<string | null>(null); // 存储当前选中的成员
-  const [memberTasks, setMemberTasks] = useState<any[]>([]); // 存储选中成员的任务列表
-  const [editMode, setEditMode] = useState(false); // 用于切换编辑模式
-  const [form] = Form.useForm(); // 表单实例
+  const { Option } = Select;
+  const [memberTasks, setMemberTasks] = useState<any[]>([]);
+  const [editMode, setEditMode] = useState<{ [key: number]: boolean }>({});
+  const [selectedMember, setSelectedMember] = useState<string>('');
+  const [form] = Form.useForm();
+  const { id } = useParams<{ id: string | undefined }>();
 
+  const uniqueAssignees = Array.from(new Set(memberTasks.map(task => task.assignee)));
   useEffect(() => {
-    // 在此处使用fetch或其他API调用来获取成员列表
-    fetch('https://api.example.com/members') // 替换为您的API端点
-      .then((response) => response.json())
-      .then((data) => setMembers(data))
-      .catch((error) => console.error('Error fetching members:', error));
+    fetchTasksByTf_id();
   }, []);
 
+  const fetchTasksByTf_id = async () => {
+    try {
+      const response = await getTasksByTf_id(Number(id));
+      setMemberTasks(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleMemberSelect = (member: string) => {
-    // 当用户选择一个成员时，更新selectedMember状态以显示任务列表
     setSelectedMember(member);
-    // 清空任务列表
-    setMemberTasks([]);
-    // 退出编辑模式
-    setEditMode(false);
-
-    // 在此处使用fetch或其他API调用来获取选中成员的任务列表
-    fetch(`https://api.example.com/members/${member}/tasks`) // 替换为您的API端点
-      .then((response) => response.json())
-      .then((data) => setMemberTasks(data))
-      .catch((error) => console.error('Error fetching member tasks:', error));
   };
 
-  const handleEdit = () => {
-    // 启用编辑模式
-    setEditMode(true);
+  const handleEdit = (taskId: number) => {
+    setEditMode({ ...editMode, [taskId]: !editMode[taskId] });
   };
 
-  const handleSave = () => {
-    // 在此处处理更新任务的逻辑，可以向后端发送PUT请求
-    const updatedTask = form.getFieldsValue();
-    console.log('Updated Task:', updatedTask);
-
-    // 退出编辑模式
-    setEditMode(false);
+  const handleSave = (taskId: number) => {
+    const data = form.getFieldsValue();
+    data['task_force'] = Number(id);
+    updateTasks(taskId, data);
+    setEditMode({ ...editMode, [taskId]: false });
   };
 
-  const handleCreateTask = () => {
-    // 在此处处理创建新任务的逻辑，可以弹出模态框或导航到创建任务页面
-    console.log('Create New Task');
+  const recommendAssignee = (values: any) => {
+    // Handle recommendation logic here
   };
 
   return (
     <div>
-      <Button type="primary" onClick={handleCreateTask}>
-        Create New Task
-      </Button>
+      <a href={`/admin/company/task-list/${id}/details/create`}>
+        <Button type="primary">Create New Task</Button>
+      </a>
       <h1>Member Task List</h1>
-      {members.map((member) => (
-        <Card key={member}>
-          <Button onClick={() => handleMemberSelect(member)}>{member}</Button>
-          {selectedMember === member && (
-            <Collapse>
-              {memberTasks.map((task) => (
-                <Panel header={task.task_name} key={task.id}>
-                  {editMode ? (
-                    <Form form={form} onFinish={handleSave}>
-                      {/* 编辑表单字段 */}
-                      <Form.Item
-                        label="Task Name"
-                        name="task_name"
-                        initialValue={task.task_name}
-                        rules={[{ required: true, message: 'Please enter the task name!' }]}
-                      >
-                        <Input />
-                      </Form.Item>
-                      {/* 其他表单字段 */}
-                      <Form.Item>
-                        <Button type="primary" htmlType="submit">
-                          Save
-                        </Button>
-                      </Form.Item>
-                    </Form>
-                  ) : (
-                    <>
-                      <p>{task.task_description}</p>
-                      <p>Assignee: {task.assignee}</p>
-                      <p>Status: {task.status}</p>
-                      <p>Due Date: {task.due_date}</p>
-                    </>
-                  )}
-                  <Button type="primary" onClick={handleEdit}>
-                    Edit
-                  </Button>
-                </Panel>
-              ))}
-            </Collapse>
-          )}
+      {uniqueAssignees.map((assignee, index) => (
+        <Card key={index} onClick={() => handleMemberSelect(assignee)}>
+          <Button>{assignee}</Button>
         </Card>
       ))}
+      <Collapse>
+        <Panel header={selectedMember} key="1">
+          {memberTasks
+            .filter(task => task.assignee === selectedMember)
+            .map(task => (
+              <Card key={task.id}>
+                {editMode[task.id] ? (
+                  <Form form={form} onFinish={() => handleSave(task.id)} initialValues={task}>
+                    <Form.Item
+                      label="Task Name"
+                      name="task_name"
+                      rules={[{ required: true, message: 'Please enter the task name!' }]}
+                    >
+                      <Input />
+                    </Form.Item>
+                    <Form.Item label="Task Description" name="task_description">
+                      <Input.TextArea />
+                    </Form.Item>
+                    <Input.Group compact>
+                      <Form.Item label="Assignee" name="assignee">
+                        <Select
+                          showSearch
+                          placeholder="Select an assignee"
+                          optionFilterProp="children"
+                          filterOption={(input, option) =>
+                            String(option?.children)?.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                          }
+                        >
+                          {/* Add options for assignee here */}
+                          <Select.Option value={1}>Leader 1</Select.Option>
+                          <Select.Option value={2}>Leader 2</Select.Option>
+                          <Select.Option value={3}>Leader 3</Select.Option>
+                          <Select.Option value={null}>NULL Leader</Select.Option>
+                        </Select>
+                      </Form.Item>
+                      <Button type="primary" onClick={recommendAssignee}>
+                        Recommend
+                      </Button>
+                    </Input.Group>
+                    <Form.Item label="Status" name="status">
+                      <Select>
+                        <Option value="Pending">待處理</Option>
+                        <Option value="In Progress">進行中</Option>
+                        <Option value="Completed">已完成</Option>
+                      </Select>
+                    </Form.Item>
+                    <Form.Item label="Due Date" name="due_date">
+                      <Input type="date" />
+                    </Form.Item>
+                    <Form.Item>
+                      <Button type="primary" htmlType="submit">
+                        Save
+                      </Button>
+                    </Form.Item>
+                  </Form>
+                ) : (
+                  <>
+                    <p>{task.task_description}</p>
+                    <p>Assignee: {task.assignee}</p>
+                    <p>Status: {task.status}</p>
+                    <p>Due Date: {task.due_date}</p>
+                  </>
+                )}
+                <Button type="primary" onClick={() => handleEdit(task.id)}>
+                  {editMode[task.id] ? "Return" : "Edit"}
+                </Button>
+              </Card>
+            ))}
+        </Panel>
+      </Collapse>
     </div>
   );
 };

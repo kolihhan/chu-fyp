@@ -397,7 +397,7 @@ class TaskForce(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
     created_date = models.DateTimeField(auto_now_add=True)
-    leader = models.ForeignKey(UserAccount, on_delete=models.SET_NULL, null=True)  # 添加負責人字段，關聯到用戶模型，負責人可以為空
+    leader = models.ForeignKey(CompanyEmployee, on_delete=models.SET_NULL, null=True)  # 添加負責人字段，關聯到用戶模型，負責人可以為空
     goals = models.TextField()  # 添加目標字段，用於記錄Task Force的目標或使命
     deadline = models.DateField(null=True, blank=True)  # 添加截止日期字段，可以為空
     status = models.CharField(
@@ -428,7 +428,7 @@ class Task(models.Model):
     task_force = models.ForeignKey(TaskForce, on_delete=models.CASCADE)
     task_name = models.CharField(max_length=255)
     task_description = models.TextField()
-    assignee = models.ForeignKey(UserAccount, on_delete=models.SET_NULL, null=True)  # 關聯到用戶模型，負責人可以為空
+    assignee = models.ForeignKey(CompanyEmployee, on_delete=models.SET_NULL, null=True)  # 關聯到用戶模型，負責人可以為空
     status = models.CharField(max_length=50, choices=[("Pending", "待處理"), ("In Progress", "進行中"), ("Completed", "已完成")])
     due_date = models.DateField()
     created_date = models.DateTimeField(auto_now_add=True)
