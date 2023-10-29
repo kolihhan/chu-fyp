@@ -1,5 +1,5 @@
 import datetime
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 import string
 
 from django.db import transaction
@@ -1077,3 +1077,140 @@ def calEmployeeScore(request, pk):
         return Response({'message':'分數計算失敗', 'error': str(e)})
     except Exception as e:
         return Response({'message':'分數計算失敗', 'error':str(e)}) 
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def createMultiTask(requeset):
+    try:
+        allUsers = models.CompanyEmployee.objects.all()
+        for user in allUsers:
+            print("user:")
+            print(user)
+
+            taskForceName = f"taskForce_{user.user_id.name}"
+            deadline = date.today() + timedelta(days=100)
+            createdTaskForce1 = models.TaskForce.objects.create(
+                company_id = user.company_id,
+                name = f"{taskForceName}_Low", 
+                description = f"{taskForceName} description", 
+                leader = user,
+                goals = f"{taskForceName} goals",
+                deadline = deadline,
+                status = "In Progress",
+                priority = "Low"
+            )
+            createdTaskForce2 = models.TaskForce.objects.create(
+                company_id = user.company_id,
+                name = f"{taskForceName}_Medium", 
+                description = f"{taskForceName} description", 
+                leader = user,
+                goals = f"{taskForceName} goals",
+                deadline = deadline,
+                status = "In Progress",
+                priority = "Medium"
+            )
+            createdTaskForce3 = models.TaskForce.objects.create(
+                company_id = user.company_id,
+                name = f"{taskForceName}_High", 
+                description = f"{taskForceName} description", 
+                leader = user,
+                goals = f"{taskForceName} goals",
+                deadline = deadline,
+                status = "In Progress",
+                priority = "High"
+            )
+            createdTaskForce4 = models.TaskForce.objects.create(
+                company_id = user.company_id,
+                name = f"{taskForceName}_Emergency", 
+                description = f"{taskForceName} description", 
+                leader = user,
+                goals = f"{taskForceName} goals",
+                deadline = deadline,
+                status = "In Progress",
+                priority = "Emergency"
+            )
+
+            taskCount = random.randint(1,5)
+            for i in range(1,taskCount+1):
+                priorityN = random.randint(0,4)
+                if(priorityN==0): createdTaskForce = createdTaskForce1
+                elif(priorityN==1): createdTaskForce = createdTaskForce2
+                elif(priorityN==2): createdTaskForce = createdTaskForce3
+                elif(priorityN==3): createdTaskForce = createdTaskForce4
+                print(i)
+                dueDate = date.today() + timedelta(days=random.randint(0,31))
+
+                createdTask = models.Task.objects.create(
+                    task_force = createdTaskForce,
+                    task_name = f"task {i}",
+                    task_description =  f"task {i} description",
+                    assignee = user,
+                    status = "Pending",
+                    due_date = dueDate
+                )
+        return Response({'message':'success create multi task'}, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({'message':'fail to create multiple task', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def extendsTasksDueDate(request, day):
+    try:
+        tasks = models.Task.objects.all()
+        for task in tasks:
+            task.due_date = task.due_date + timedelta(days=day)
+            task.save()
+        return Response({'message':'extends success'}, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({'message':'extends fail', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def extendsTaskDueDate(request, pk, day):
+    try:
+        task = models.Task.objects.get(id=pk)
+        task.due_date = task.due_date + timedelta(days=day)
+        task.save()
+        return Response({'message':'extends success'}, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({'message':'extends fail', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def generateTimetable(request, pk):
+    try:
+        tasks = models.Task.objects.filter(assignee=models.CompanyEmployee.objects.get(id=pk))
+        serializer = serializers.TaskSerializer(tasks, many=True)
+        tasks_df = pd.DataFrame(serializer.data, columns=["id", "task_name", "priority", "due_date", "task_force"])
+        tasks_df["priority"] = tasks_df["task_force"].apply(lambda task_force: 
+            4 if task_force['priority'] == "Emergency" else
+            3 if task_force['priority'] == "High" else
+            2 if task_force['priority'] == "Medium" else
+            1 if task_force['priority'] == "Low" else 0
+        )
+        tasks_df.drop(columns=["task_force"], inplace=True)
+        tasks_df['days'] = tasks_df['due_date'].apply(
+            lambda duedate: (datetime.strptime(duedate, '%Y-%m-%d') - datetime.now()).days + 2
+        )
+        tasks_df['duration'] = tasks_df['days'] * 3
+        sorted_tasks = tasks_df.sort_values(by=['days', 'priority', 'duration'], ascending=[True, False, True])
+
+        for i in range(len(sorted_tasks)):
+            current_task = sorted_tasks.iloc[i]
+            if i > 0 and current_task['priority'] > sorted_tasks.iloc[i - 1]['priority'] and current_task['days'] <= sorted_tasks.iloc[i - 1]['days'] + 2:
+                sorted_tasks.iloc[i] = sorted_tasks.iloc[i-1]
+                sorted_tasks.iloc[i-1] = current_task
+        
+        timetable = {}
+        available_slots = list(range(9, 12)) + list(range(13,18))
+        slot = -1
+        for task in sorted_tasks.itertuples():
+            for i in range(task.duration):
+                slot+=1
+                if(slot>=8): break
+                timetable[f"T{available_slots[slot]}"] = task.task_name
+
+        return Response({'message':'success', 'data':timetable}, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({'message':'fail', 'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

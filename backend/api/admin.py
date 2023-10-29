@@ -99,6 +99,12 @@ class WorkingExperienceAdmin(admin.ModelAdmin):
 class EducationAdmin(admin.ModelAdmin):
     list_display = [f.name for f in models.Education._meta.fields]
 
+class TaskForceAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in models.TaskForce._meta.fields]
+
+class TaskAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in models.Task._meta.fields]
+
 # Register your models here.
 admin.site.register(UserAccount, UserAccountAdmin)
 admin.site.register(models.UserResume, UserResumeAdmin)
@@ -127,4 +133,6 @@ admin.site.register(models.GradientData, GradientDataAdmin)
 admin.site.register(models.RecommendOptions, RecommendOptionsAdmin)
 admin.site.register(models.WorkingExperience, WorkingExperienceAdmin)
 admin.site.register(models.Education, EducationAdmin)
+admin.site.register(models.TaskForce, TaskForceAdmin)
+admin.site.register(models.Task, TaskAdmin)
 # admin.site.register(CustomOutstandingToken, CustomOutstandingTokenAdmin)

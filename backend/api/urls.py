@@ -206,7 +206,11 @@ urlpatterns = [
     path('deleteAllCompanyEmployeeEvaluate', deleteAllCompanyEmployeeEvaluate, name='deleteAllCompanyEmployeeEvaluate'),
     path('companyEmployeeFeedBackReview/get/all', getAllCompanyEmployeeFeedbackReview, name='getAllCompanyEmployeeFeedbackReview'),
     path('companyEmployeeFeedBackReview/get/<int:pk>', getCompanyEmployeeFeedbackReview, name='getCompanyEmployeeFeedbackReview'),
-    
+    path('task/createMulti', createMultiTask, name='createMultiTask'),
+    path('task/extendsTasksDueDate/<int:day>', extendsTasksDueDate, name='extendsTasksDueDate'),
+    path('task/extendsTaskDueDate/<int:pk>/<int:day>', extendsTaskDueDate, name='extendsTaskDueDate'),
+    path('task/generateTimetable/<int:pk>', generateTimetable, name='generateTimetable'),
+
     path('get_recommendations', get_recommendations, name='testRecommendation'),
     path('calGradients', calGradients, name='calGradient'),
     path('calEmployeeScore/<int:pk>', calEmployeeScore, name='calEmployeeScore'),
