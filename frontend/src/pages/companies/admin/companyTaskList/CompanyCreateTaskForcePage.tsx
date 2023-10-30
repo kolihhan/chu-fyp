@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Select } from 'antd';
+import { Form, Input, Button, Select, message } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
-import { createTaskForces, fetchTaskForcesById, updateTaskForces } from '../../../../api';
+import { createTaskForces, findSuitableAssignee, fetchTaskForcesById, getAllEmployees, updateTaskForces } from '../../../../api';
 import { getCookie } from '../../../../utils';
 
 const { Option } = Select;
@@ -12,6 +12,10 @@ const CompanyCreateTaskForcePage: React.FC = () => {
   const [form] = Form.useForm();
   const [priority, setPriority] = useState('Medium');
   const [status, setStatus] = useState('Planning');
+  const companyId = Number(getCookie('companyId'));
+  const [selectedAssignee, setSelectedAssignee] = useState<number | null>(null);
+  const [assignees, setAssignees] = useState([]);
+
 
 
   const handlePriorityChange = (value: string) => {
@@ -22,12 +26,23 @@ const CompanyCreateTaskForcePage: React.FC = () => {
     setStatus(value);
   };
 
+
   useEffect(() => {
     if (id) {
       fetchTaskForceById();
     }
+    fetchAssignees();
   }, [id]);
 
+  const fetchAssignees = async () => {
+    try {
+      const response2 = await getAllEmployees(companyId);
+      setAssignees(response2.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
   const fetchTaskForceById = async () => {
     try {
       const response = await fetchTaskForcesById(Number(id)); 
@@ -50,10 +65,24 @@ const CompanyCreateTaskForcePage: React.FC = () => {
     //navigate(`/admin/company/task-list`);
   };
 
-  const recommendLeader = (values: any) => {
-
-    //navigate(`/admin/company/task-list`);
+  const recommendLeader = async() => {
+    const { description, name } = form.getFieldsValue(); // 获取表单字段的值
+  
+    if (!description || !name) {
+      message.error('任务描述和标题是必填项。');
+      return; // 停止继续执行
+    }
+  
+    // 在这里编写查找适合的人选的逻辑，假设找到了适合的人选，将其存储在selectedAssignee中
+    const selectedAssignee = await findSuitableAssignee(companyId,description, name);
+  
+    if (selectedAssignee.data.data) {
+      setSelectedAssignee(selectedAssignee.data.data);
+    } else {
+      message.error('没有找到适合给定任务描述和标题的领导。');
+    }
   };
+  
 
   return (
     <div>
@@ -82,10 +111,14 @@ const CompanyCreateTaskForcePage: React.FC = () => {
       filterOption={(input, option) =>
         String(option?.children)?.toLowerCase().indexOf(input.toLowerCase()) >= 0
       }
+      value={selectedAssignee}
     >
-      <Select.Option value={1}>Leader 1</Select.Option>
-      <Select.Option value={2}>Leader 2</Select.Option>
-      <Select.Option value={3}>Leader 3</Select.Option>
+
+      {assignees.map((assignee  : any) => (
+        <Select.Option key={assignee.value} value={assignee.value}>
+            {assignee.label}
+        </Select.Option>
+        ))}
     </Select>
 </Form.Item>
 <Button type="primary" onClick={recommendLeader}>

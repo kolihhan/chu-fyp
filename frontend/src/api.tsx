@@ -484,3 +484,9 @@ export const fetchTasksByEmployeeId = async(id: number) => {
     headers: authHeaders(),
   })
 }
+
+export const findSuitableAssignee = async(id:number,description: string, title: string) => {
+  return axios.get(`${API_URL}/recommendAssignee/${id}/get/${description}/${title}`, { 
+    headers: authHeaders(),
+  })
+}

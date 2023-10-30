@@ -212,6 +212,7 @@ urlpatterns = [
     path('task/generateTimetable/<int:pk>', generateTimetable, name='generateTimetable'),
 
     path('get_recommendations', get_recommendations, name='testRecommendation'),
+    path('recommendAssignee/<int:id>/get/<str:description>/<str:title>/', get_recommendations, name='testRecommendation'),
     path('calGradients', calGradients, name='calGradient'),
     path('calEmployeeScore/<int:pk>', calEmployeeScore, name='calEmployeeScore'),
 

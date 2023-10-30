@@ -1,14 +1,34 @@
-import React from 'react';
-import { Form, Input, Button, Select } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Form, Input, Button, Select, message } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
-import { createTasks } from '../../../../../api';
+import { createTasks, findSuitableAssignee, getAllEmployees } from '../../../../../api';
+import { getCookie } from '../../../../../utils';
 
 
 const CompanyCreateTaskPage: React.FC = () => {
   const { id } = useParams<{ id: string | undefined }>();
   const { Option } = Select;
+  const [form] = Form.useForm();
   const navigate = useNavigate();
-  const onFinish = (values: any) => {
+  const companyId = Number(getCookie('companyId'));
+  const [selectedAssignee, setSelectedAssignee] = useState<number | null>(null);
+  const [assignees, setAssignees] = useState([]);
+
+
+useEffect(() => {
+  fetchAssignees();
+  }, []);
+
+const fetchAssignees = async () => {
+    try {
+      const response2 = await getAllEmployees(companyId);
+      setAssignees(response2.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+const onFinish = (values: any) => {
     
     values['task_force'] = Number(id);
     createTasks(values);
@@ -16,15 +36,29 @@ const CompanyCreateTaskPage: React.FC = () => {
     //navigate(`/admin/company/task-list/${id}/details`);
   };
 
-const recommendAssignee = (values: any) => {
+const recommendAssignee = async() => {
 
-    //navigate(`/admin/company/task-list`);
+  const { task_description, task_name } = form.getFieldsValue(); // 获取表单字段的值
+  
+  if (!task_description || !task_name) {
+    message.error('任务描述和标题是必填项。');
+    return; // 停止继续执行
+  }
+
+  // 在这里编写查找适合的人选的逻辑，假设找到了适合的人选，将其存储在selectedAssignee中
+  const selectedAssignee = await findSuitableAssignee(companyId,task_description, task_name);
+
+  if (selectedAssignee.data.data) {
+    setSelectedAssignee(selectedAssignee.data.data);
+  } else {
+    message.error('没有找到适合给定任务描述和标题的领导。');
+  }
 };
 
   return (
     <div>
       <h1>Create or Update Task</h1>
-      <Form onFinish={onFinish}>
+      <Form onFinish={onFinish} form={form}>
         <Form.Item
           label="Task Name"
           name="task_name"
@@ -48,10 +82,14 @@ const recommendAssignee = (values: any) => {
       filterOption={(input, option) =>
         String(option?.children)?.toLowerCase().indexOf(input.toLowerCase()) >= 0
       }
+      value={selectedAssignee}
     >
-      <Select.Option value={1}>Leader 1</Select.Option>
-      <Select.Option value={2}>Leader 2</Select.Option>
-      <Select.Option value={3}>Leader 3</Select.Option>
+
+      {assignees.map((assignee  : any) => (
+        <Select.Option key={assignee.value} value={assignee.value}>
+            {assignee.label}
+        </Select.Option>
+        ))}
     </Select>
 </Form.Item>
 <Button type="primary" onClick={recommendAssignee}>

@@ -1,18 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Card, Form, Input, Collapse, Select } from 'antd';
+import { Button, Card, Form, Input, Collapse, Select, message } from 'antd';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useParams } from 'react-router-dom';
-import { getTasksByTf_id, updateTasks } from '../../../../../api';
+import { findSuitableAssignee, getAllEmployees, getTasksByTf_id, updateTasks } from '../../../../../api';
+import { getCookie } from '../../../../../utils';
 
 const { Panel } = Collapse;
 
 const CompanyTaskDetailPage: React.FC = () => {
   const { Option } = Select;
+  const companyId = Number(getCookie('companyId'));
   const [memberTasks, setMemberTasks] = useState<any[]>([]);
   const [editMode, setEditMode] = useState<{ [key: number]: boolean }>({});
   const [selectedMember, setSelectedMember] = useState<string>('');
   const [form] = Form.useForm();
   const { id } = useParams<{ id: string | undefined }>();
+
+  const [selectedAssignee, setSelectedAssignee] = useState<number | null>(null);
+  const [assignees, setAssignees] = useState([]);
 
   const uniqueAssignees = Array.from(new Set(memberTasks.map(task => task.assignee)));
   useEffect(() => {
@@ -22,7 +27,9 @@ const CompanyTaskDetailPage: React.FC = () => {
   const fetchTasksByTf_id = async () => {
     try {
       const response = await getTasksByTf_id(Number(id));
+      const response2 = await getAllEmployees(companyId);
       setMemberTasks(response.data.data);
+      setAssignees(response2.data.data);
     } catch (error) {
       console.log(error);
     }
@@ -43,8 +50,23 @@ const CompanyTaskDetailPage: React.FC = () => {
     setEditMode({ ...editMode, [taskId]: false });
   };
 
-  const recommendAssignee = (values: any) => {
-    // Handle recommendation logic here
+  const recommendAssignee = async() => {
+
+    const { task_description, task_name } = form.getFieldsValue(); // 获取表单字段的值
+  
+    if (!task_description || !task_name) {
+      message.error('任务描述和标题是必填项。');
+      return; // 停止继续执行
+    }
+  
+    // 在这里编写查找适合的人选的逻辑，假设找到了适合的人选，将其存储在selectedAssignee中
+    const selectedAssignee = await findSuitableAssignee(companyId,task_description, task_name);
+  
+    if (selectedAssignee.data.data) {
+      setSelectedAssignee(selectedAssignee.data.data);
+    } else {
+      message.error('没有找到适合给定任务描述和标题的Assignee。');
+    }
   };
 
   return (
@@ -85,12 +107,14 @@ const CompanyTaskDetailPage: React.FC = () => {
                           filterOption={(input, option) =>
                             String(option?.children)?.toLowerCase().indexOf(input.toLowerCase()) >= 0
                           }
+                          value={selectedAssignee}
                         >
-                          {/* Add options for assignee here */}
-                          <Select.Option value={1}>Leader 1</Select.Option>
-                          <Select.Option value={2}>Leader 2</Select.Option>
-                          <Select.Option value={3}>Leader 3</Select.Option>
-                          <Select.Option value={null}>NULL Leader</Select.Option>
+
+                        {assignees.map((assignee : any) => (
+                          <Select.Option key={assignee.value } value={assignee.value}>
+                              {assignee.label}
+                          </Select.Option>
+                          ))}
                         </Select>
                       </Form.Item>
                       <Button type="primary" onClick={recommendAssignee}>

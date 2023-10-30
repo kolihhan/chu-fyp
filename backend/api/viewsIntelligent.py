@@ -839,7 +839,7 @@ def get_final_recommendations(job_texts, resume_texts, n_neighbors=3):
         combined_recommendations.sort(key=lambda x: x[1])
 
         # 从合并的推荐中提取简历文本
-        recommended_resumes = [resume_texts[idx] for idx, _ in combined_recommendations]
+        recommended_resumes = [(resume_texts[idx], 100 - i) for i, (idx, _) in enumerate(combined_recommendations)]
 
         final_recommendations.append(recommended_resumes)
 
@@ -881,6 +881,37 @@ def get_recommendations(request):
 
     return JsonResponse({'job_requirements': job_requirements, 'candidates': similar_candidates})
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_tfRecommend(request, id, description, title):
+    job_requirements = [description + title]
+    applicationRecord = CompanyEmployee.objects.filter(company_id=id)
+
+    recommended_resumes = []  # 用于存储推荐候选人的简历
+
+    for record in applicationRecord:
+        user_employee = record.user_id  # 获取与CompanyEmployee关联的UserAccount对象
+        try:
+            user_resume = UserResume.objects.get(user=user_employee)  # 获取与UserAccount关联的UserResume对象
+            # 获取用户的简历信息
+            resume_dict = {
+                'title': user_resume.title,
+                'experience': user_resume.experience,
+                'education': user_resume.education,
+                'skills': user_resume.skills,
+            }
+            recommended_resumes.append(resume_dict)
+        except UserResume.DoesNotExist:
+            # 如果没有与用户关联的简历，可以在这里处理
+            pass
+
+    similar_candidates = get_final_recommendations(
+        job_requirements,
+        convert_resumes_to_text(recommended_resumes),
+        1
+    )
+
+    return JsonResponse({'job_requirements': job_requirements, 'candidates': similar_candidates})
 
 def compute_cost(x, y, w, b):
   y_pred = (x * w).sum(axis=1) + b
