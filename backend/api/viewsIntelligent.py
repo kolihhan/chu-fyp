@@ -885,14 +885,14 @@ def get_recommendations(request):
 @permission_classes([IsAuthenticated])
 def get_tfRecommend(request, id, description, title):
     job_requirements = [description + title]
-    applicationRecord = CompanyEmployee.objects.filter(company_id=id)
+    applicationRecord = models.CompanyEmployee.objects.filter(company_id=id)
 
     recommended_resumes = []  # 用于存储推荐候选人的简历
 
     for record in applicationRecord:
         user_employee = record.user_id  # 获取与CompanyEmployee关联的UserAccount对象
         try:
-            user_resume = UserResume.objects.get(user=user_employee)  # 获取与UserAccount关联的UserResume对象
+            user_resume = models.UserResume.objects.filter(user=user_employee).first()  # 获取与UserAccount关联的UserResume对象
             # 获取用户的简历信息
             resume_dict = {
                 'title': user_resume.title,
