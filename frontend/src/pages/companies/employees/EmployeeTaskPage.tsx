@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Table, Select, Button, message } from 'antd';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { getCookie } from '../../../utils';
-import { fetchTasksByEmployeeId, updateTasks } from '../../../api';
+import { fetchTasksByEmployeeId, generateTimetable, updateTasks } from '../../../api';
 
 const { Option } = Select;
 
 const EmployeeTaskPage: React.FC = () => {
   const [tasks, setTasks] = useState([] as any);
   const [selectedTask, setSelectedTask] = useState(null);
-  const employeeId = getCookie('employeeId');
+  const employeeId = Number(getCookie('employeeId'));
 
   useEffect(() => {
     fetchTasks();
@@ -17,8 +17,8 @@ const EmployeeTaskPage: React.FC = () => {
 
   const fetchTasks = async () => {
     try {
-      const response = await fetchTasksByEmployeeId(Number(employeeId) ? 1 : 1); // 使用从Cookie获取的employeeId
-
+      const response = await fetchTasksByEmployeeId(employeeId); // 使用从Cookie获取的employeeId
+      console.log(response.data.data)
       setTasks([response.data.data]);
     } catch (error) {
       console.log(error);
