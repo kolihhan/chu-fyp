@@ -2712,8 +2712,8 @@ def getTasksByTF_id(request, pk):
 @permission_classes([IsAuthenticated])
 def fetchTasksByEmployeeId(request, pk):
     try:
-        lr = models.Task.objects.get(assignee__id=pk)
-        serializer = serializers.TaskSerializer(lr)  # Remove many=True
+        lr = models.Task.objects.filter(assignee__id=pk)
+        serializer = serializers.TaskSerializer(lr, many=True)  # Remove many=True
         return Response({'data': serializer.data}, status=status.HTTP_200_OK)
     except models.Task.DoesNotExist as e:  # Correct the exception
         return Response({'message': str(e)}, status=status.HTTP_404_NOT_FOUND)

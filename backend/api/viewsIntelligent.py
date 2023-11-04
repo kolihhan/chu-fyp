@@ -1240,7 +1240,13 @@ def generateTimetable(request, pk):
             for i in range(task.duration):
                 slot+=1
                 if(slot>=8): break
-                timetable[f"T{available_slots[slot]}"] = task.task_name
+                timetable[slot] = {
+                    "time": f"0{available_slots[slot]}:00" if(available_slots[slot]<10) else f"{available_slots[slot]}:00",
+                    "id": task.id,
+                    "task_name": task.task_name, 
+                    "priority":task.priority,
+                    "due_date": task.due_date
+                    }
 
         return Response({'message':'success', 'data':timetable}, status=status.HTTP_200_OK)
     except Exception as e:

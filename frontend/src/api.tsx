@@ -490,3 +490,9 @@ export const findSuitableAssignee = async(id:number,description: string, title: 
     headers: authHeaders(),
   })
 }
+
+export const generateTimetable = async(companyEmployeeId:number) => {
+  return axios.get(`${API_URL}/task/generateTimetable/${companyEmployeeId}`, { 
+    headers: authHeaders(),
+  })
+}

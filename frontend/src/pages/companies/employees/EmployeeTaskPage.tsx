@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Select, Button, message } from 'antd';
+import { Table, Select, Button, message, Timeline, Drawer } from 'antd';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { getCookie } from '../../../utils';
 import { fetchTasksByEmployeeId, generateTimetable, updateTasks } from '../../../api';
@@ -9,10 +9,13 @@ const { Option } = Select;
 const EmployeeTaskPage: React.FC = () => {
   const [tasks, setTasks] = useState([] as any);
   const [selectedTask, setSelectedTask] = useState(null);
+  const [timetable, setTimetable] = useState<any>([]);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const employeeId = Number(getCookie('employeeId'));
 
   useEffect(() => {
     fetchTasks();
+    generateTimeTable()
   }, []);
 
   const fetchTasks = async () => {
@@ -24,6 +27,30 @@ const EmployeeTaskPage: React.FC = () => {
       console.log(error);
     }
   };
+
+  const generateTimeTable = async() => {
+    try{
+      let tt = []
+      const response = await generateTimetable(employeeId)
+      console.log(response.data.data)
+      setTimetable(response.data.data)
+      for(let i=0; i<8; i++){
+        console.log(response.data.data[i])
+        let priority = response.data.data[i].priority
+        let color = priority==4? 'red' : priority==3? 'orange' : priority==2? 'yellow' : priority==1? 'green' : 'blue'
+        tt.push({
+          color: color,
+          label: <p>{response.data.data[i].time}</p>,
+          children: <p>{response.data.data[i].task_name}</p>
+        })
+      }
+      console.log(tt)
+      setTimetable(tt)
+      // setTimetable(tt)
+    }catch(error){
+      console.log(error)
+    }
+  }
 
   const columns = [
     {
@@ -74,10 +101,23 @@ const EmployeeTaskPage: React.FC = () => {
     message.success('Status updated successfully');
   };
 
+  const showDrawer = () => {
+    setDrawerOpen(true)
+  }
+  const closeDrawer = () => {
+    setDrawerOpen(false)
+  }
+
   return (
     <div>
-      <h1>Your Tasks</h1>
+      <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+        <h1>Your Tasks</h1>
+        <Button type='primary' onClick={showDrawer}>時間表</Button>
+      </div>
       <Table dataSource={tasks} columns={columns} />
+      <Drawer title="時間表" placement='left' open={drawerOpen} onClose={closeDrawer}>
+        <Timeline mode="left" items={timetable} />
+      </Drawer>
     </div>
   );
 };
