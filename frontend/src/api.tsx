@@ -496,3 +496,9 @@ export const generateTimetable = async(companyEmployeeId:number) => {
     headers: authHeaders(),
   })
 }
+
+export const getChartData = async(id:number) => {
+  return axios.get(`${API_URL}/hr-data/${id}`, { 
+    headers: authHeaders(),
+  })
+}

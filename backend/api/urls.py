@@ -229,6 +229,8 @@ urlpatterns = [
     path('updateTasks/<int:pk>', updateTasks, name='updateTasks'),
     path('deleteTasks/<int:pk>', deleteTasks, name='deleteTasks'),
 
+    # 其他URL路由
+    path('hr-data/<int:pk>', get_HRChartData, name='get_hr_data'),
 
 ]
 

@@ -10,9 +10,9 @@ import jwt
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken
-from .serializers import UserSerializer, UserResumeSerializer, UserApplicationRecordSerializer
+from .serializers import CompanyEmployeeSerializer, CompanySerializer, UserOfferRecordSerializer, UserSerializer, UserResumeSerializer, UserApplicationRecordSerializer
 from .customToken import MyTokenObtainPairSerializer
-from .models import UserAccount, UserResume, CompanyPermission , Company, UserApplicationRecord, CompanyCheckIn, companyCheckInRule, CompanyPromotionRecord
+from .models import CompanyEmployee, UserAccount, UserOfferRecord, UserResume, CompanyPermission , Company, UserApplicationRecord, CompanyCheckIn, companyCheckInRule, CompanyPromotionRecord
 from rest_framework.exceptions import NotFound, ValidationError
 from . import models
 from . import serializers
@@ -2763,3 +2763,39 @@ def deleteTasks(request, pk):
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 # endregion tasks
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_HRChartData(request, pk):
+    
+
+    # 获取用户履历信息
+    user_resumes = UserResume.objects.all()
+    user_resume_serializer = UserResumeSerializer(user_resumes, many=True)
+
+    # 获取用户面试申请记录
+    user_applications = UserApplicationRecord.objects.all()
+    user_application_serializer = UserApplicationRecordSerializer(user_applications, many=True)
+
+    # 获取用户面试成功记录
+    user_offers = UserOfferRecord.objects.all()
+    user_offer_serializer = UserOfferRecordSerializer(user_offers, many=True)
+
+    # 获取公司信息
+    companies = Company.objects.all()
+    company_serializer = CompanySerializer(companies, many=True)
+
+    # 获取公司员工信息
+    company_employees = CompanyEmployee.objects.all()
+    company_employee_serializer = CompanyEmployeeSerializer(company_employees, many=True)
+
+    # 构建包含所有数据的响应字典
+    hr_data = {
+        'user_resumes': user_resume_serializer.data,
+        'user_applications': user_application_serializer.data,
+        'user_offers': user_offer_serializer.data,
+        'companies': company_serializer.data,
+        'company_employees': company_employee_serializer.data,
+    }
+
+    return Response(hr_data)
