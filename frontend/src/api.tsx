@@ -422,6 +422,12 @@ export const getFeedbackScore = async(id: number) => {
   })
 }
 
+export const getCompanyAllFeedbackScore = async(id: number) => {
+  return axios.get(`${API_URL}/calCompanyAllEmployeeScore/${id}`, { 
+    headers: authHeaders(),
+  })
+}
+
 export const getTaskForcesByCompany = async(id: number) => {
   return axios.get(`${API_URL}/getTaskForcesByCompany/get/${id}`, { 
     headers: authHeaders(),

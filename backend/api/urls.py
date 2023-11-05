@@ -215,6 +215,7 @@ urlpatterns = [
     path('recommendAssignee/<int:id>/get/<str:description>/<str:title>/', get_recommendations, name='testRecommendation'),
     path('calGradients', calGradients, name='calGradient'),
     path('calEmployeeScore/<int:pk>', calEmployeeScore, name='calEmployeeScore'),
+    path('calCompanyAllEmployeeScore/<int:pk>', calCompanyAllEmployeeScore, name='calCompanyAllEmployeeScore'),
 
 
     path('getTaskForcesByCompany/get/<int:pk>', getTaskForcesByCompany, name='getTaskForcesByCompany'),

@@ -9,6 +9,7 @@ import { getCompanyById } from "../../../api";
 import EmptyComponent from "../../../components/EmptyComponent";
 import { getCookie } from "../../../utils";
 import EmployeeData from "../../../components/Company/EmployeeData";
+import DashboardEmployeeScore from "../../../components/Company/DashboardEmployeeScore";
 
 export const CompanyInfo: React.FC<any> = ({company}) => {
   return (
@@ -164,8 +165,9 @@ const CompanyDetailPage: React.FC = () => {
 
       <div style={{ display: "flex", alignItems: "start", justifyContent: "space-between" }}>
 
-        <div style={{ flex: 7, background:"transparent", padding: "0px", display:'flex', flexDirection:'column', height: 'calc(100vh - 250px)' }}>
+        <div style={{ flex: 7, background:"transparent", padding: "0px", display:'flex', flexDirection:'column', height: 'calc(100vh - 250px)', overflowY:'auto'}}>
           <EmployeeData />
+          <DashboardEmployeeScore />
           <Card id="cmpDetails"
             style={{flex:'none', overflowY: "auto"}}
             bodyStyle={{ backgroundColor: "white", paddingTop: "0px", overflowY: "auto" }}
