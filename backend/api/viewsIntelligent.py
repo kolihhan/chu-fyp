@@ -59,7 +59,7 @@ def generateRecommendOptions(request):
             createRecommendOptions = models.RecommendOptions.objects.create(
                 option_name=it, type="skills"
             )
-        for it in language:
+        for it in languages:
             createRecommendOptions = models.RecommendOptions.objects.create(
                 option_name=it, type="language"
             )
