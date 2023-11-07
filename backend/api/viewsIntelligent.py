@@ -46,44 +46,26 @@ feedback_remark_list_b = ['頻繁發生問題', '導致公司損失', '損害公
 feedback_improvement = ['著重於問題預防和風險管理，確保在解決問題之前預測和處理潛在的問題，以減少頻繁發生的情況','評估業績提升策略的風險和潛在影響，制定可行的計劃和措施，並監控結果以確保不會對公司造成損失','著重於有效的資源管理和保護公司財產，確保在追求利潤的同時，不會對公司財產造成損害','提高工作效率，包括時間管理和任務優先順序的設定，以更有效地利用資源並提高工作效率','制定明確的工作目標和計劃，確保時間分配合理，並監控進度以確保達到工作目標','加強時間管理和優先順序的設定，並建立有效的工作計劃，以確保準時完成工作任務','加強對細節的關注，仔細檢查工作內容，並培養更高的注意力和專注力，以避免經常出現錯誤或粗心失誤','鼓勵團隊合作，積極參與和支持團隊成員，並在工作中表現出協作和共享的態度','鼓勵主動解決問題，積極參與團隊討論和解決方案的提出，以更全面地展現積極的工作態度','尊重同事，避免辱罵和貶低他人，並以友善和建設性的方式與同事進行溝通和解決衝突','重視客戶需求和反饋，主動與客戶溝通，並采取措施以提高客戶滿意度和關注客戶反饋','遵守公司政策和程序，確保工作行為符合公司的要求和規定','提高時間管理能力，確保按時完成工作任務，並以負責任的態度對待每個工作','更加勇於承擔責任，認真面對錯誤，並尋找解決問題的方法，而不是逃避責任或找借口','加強與同事之間的溝通和協調，尊重彼此觀點，並尋求解決衝突的方式和方法，以營造更和諧的工作環境','確保理解並遵守公司的機密和保密政策，妥善保護公司機密信息，並避免洩露或不當使用','積極追求專業發展和學習機會，主動參與培訓、研討會等活動，並持續提升專業技能','鼓勵主動提出改進建議，思考創新解決方案，並積極參與團隊的改進和創新活動','具備善於溝通和協作的能力，但缺乏有效溝通和團隊協作的技巧','增加對不同觀點和背景的理解和接納，建立一個包容和互相尊重的工作環境，並避免偏見或歧視行為',]
 score_list_g = [100, 100, 100, 99, 100, 100, 99, 99, 99, 100, 100, 99, 100, 100, 99, 100, 99, 100, 99, 99]
 score_list_b = [20, 30, 30, 15, 20, 20, 15, 15, 15, 20, 20, 15, 20, 20, 15, 20, 15, 20, 15, 15]
-
-
-# region eveluateEmployee
-# @api_view(['GET'])
-# @permission_classes([AllowAny])
-# def eveluateEmployee(request):   
-#     # current_dir = os.getcwd()
-#     # # Define the path to the script
-#     # script_path = os.path.join(current_dir, 'intelligentFunction.py')
-
-#     feedbackReviewJsonFilePath = 'api/intelligentFunction/feedbackReview.json'
-
-#     feedback_reviews = models.CompanyEmployeeFeedBackReview.objects.all()
-#     serializer = serializers.CompanyEmployeeFeedBackReviewSerializer(feedback_reviews, many=True)
-#     serializer_data = serializer.data
-#     with open(feedbackReviewJsonFilePath, "w") as file:
-#         json.dump(serializer.data, file)
-#     # print("serializer: ",serializer.data)
-    
-#     # Define the command with arguments
-#     command = ['python', 'api/intelligentFunction/intelligentFunction.py', '--v1', 'Chia', '--v2', '18']
-#     file_path = os.path.abspath('C:/Users/chiajy/Desktop/intelligentFunction.py')
-#     # command = ['python', file_path, '--v1', 'Chia', '--v2', '18']
-#     # Run the command
-#     process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-#     stdout, stderr = process.communicate()
-#     return_code = process.returncode
-
-
-#     return Response(
-#         {
-#             "stdout": stdout.decode(), 
-#             "stderr": stderr,
-#             "return_code":return_code
-
-#         }
-#     )
-# endregion eveluateEmployee
+skills = ["Kotlin", "Java", "Android Studio", "MVVM", "TypeScript", "JavaScript", "iOS", "Web", "MySQL", "HTML", "CSS", "Git", "RESTful API Design", "JSON", "Node.js", "React", "Angular", "Vue.js", "Redux", "Responsive Web Design", "Unit Testing", "CI/CD", "Docker", "SQL", "NoSQL Databases", "Web Security", "Agile/Scrum", "Software Architecture", "Debugging", "Performance Optimization", "DevOps"]
+languages = ["Chinese", "English", "Malay", "Indian", "Spanish", "Japanese", "French", "German", "Arabic", "Russian", "Portuguese", "Italian", "Turkish", "Polish", "Greek", "Vietnamese"]
+educationQualificationList = ["PhD", "Master", "Degree", "Diploma", "High School", "Higher vocational education", "Junior high school (inclusive) and below"]
+schoolStatusList = ["graduated", "studying", "drop out of school"]
+preferWork = ["android developer", "java developer", "kotlin developer", "android"]
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def generateRecommendOptions(request):
+    try:
+        for it in skills:
+            createRecommendOptions = models.RecommendOptions.objects.create(
+                option_name=it, type="skills"
+            )
+        for it in language:
+            createRecommendOptions = models.RecommendOptions.objects.create(
+                option_name=it, type="language"
+            )
+        return Response({'message':'generte recommend options success'})    
+    except Exception as e: 
+        return Response({'message':'generte recommend options fail', 'error':str(e)})    
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -103,6 +85,52 @@ def registerMulti(request):
         return Response("賬號建立成功", status=status.HTTP_201_CREATED)
     except: 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def generateMultiUserResume(request):
+    allUserAccount = models.UserAccount.objects.all()
+    try:
+        for userAccount in allUserAccount:
+            createdExperience = models.WorkingExperience.objects.create(
+                we_user = userAccount,
+                we_company_name = f"company before {userAccount.id}",
+                position = "android developer",
+                job_nature = "全職",
+                start_date = datetime.now(),
+                end_date = datetime.now(),
+                still_employed = False,
+                working_desc = "build android app with android studio using kotlin and java"
+            )
+
+            createdEducation = models.Education.objects.create(
+                edu_user = userAccount,
+                school_name = "school 1",
+                department_name = "IT",
+                start_date = datetime.now(),
+                end_date = datetime.now(),
+                educational_qualifications = random.choice(educationQualificationList),
+                school_status = random.choice(schoolStatusList)
+            )
+
+            myLanguage = random.sample(languages, random.randint(0,5))
+            if "Chinese" not in myLanguage: 
+                 myLanguage.append("Chinese")
+                 random.shuffle(myLanguage)
+            createdResume = models.UserResume.objects.create(
+                user = userAccount, 
+                title = f"Resume {userAccount.name}",
+                summary = f"Resume of {userAccount.name}",
+                experience = createdExperience,
+                education = createdEducation,
+                skills = random.sample(skills, random.randint(1, 10)),
+                prefer_work = random.sample(preferWork, random.randint(1, 4)),
+                language = myLanguage,
+            )
+        return Response({'message': 'resums generate success'})
+    except Exception as e:
+        return Response({'message':'resume generate fail', 'error':str(e)})
+        
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])

@@ -210,6 +210,8 @@ urlpatterns = [
     path('task/extendsTasksDueDate/<int:day>', extendsTasksDueDate, name='extendsTasksDueDate'),
     path('task/extendsTaskDueDate/<int:pk>/<int:day>', extendsTaskDueDate, name='extendsTaskDueDate'),
     path('task/generateTimetable/<int:pk>', generateTimetable, name='generateTimetable'),
+    path('generateMultiUserResume', generateMultiUserResume, name='generateMultiUserResume'),
+    path('generateRecommendOptions', generateRecommendOptions, name='generateRecommendOptions'),
 
     path('get_recommendations', get_recommendations, name='testRecommendation'),
     path('recommendAssignee/<int:id>/get/<str:description>/<str:title>/', get_recommendations, name='testRecommendation'),
