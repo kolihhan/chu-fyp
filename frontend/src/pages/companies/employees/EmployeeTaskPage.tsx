@@ -22,7 +22,7 @@ const EmployeeTaskPage: React.FC = () => {
     try {
       const response = await fetchTasksByEmployeeId(employeeId); // 使用从Cookie获取的employeeId
       console.log(response.data.data)
-      setTasks([response.data.data]);
+      setTasks(response.data.data);
     } catch (error) {
       console.log(error);
     }
