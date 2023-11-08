@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import render,get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
@@ -12,7 +13,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken
 from .serializers import CompanyEmployeeSerializer, CompanySerializer, UserOfferRecordSerializer, UserSerializer, UserResumeSerializer, UserApplicationRecordSerializer
 from .customToken import MyTokenObtainPairSerializer
-from .models import CompanyEmployee, UserAccount, UserOfferRecord, UserResume, CompanyPermission , Company, UserApplicationRecord, CompanyCheckIn, companyCheckInRule, CompanyPromotionRecord
+from .models import CompanyDepartment, CompanyEmployee, CompanyEmployeePosition, UserAccount, UserOfferRecord, UserResume, CompanyPermission , Company, UserApplicationRecord, CompanyCheckIn, companyCheckInRule, CompanyPromotionRecord
 from rest_framework.exceptions import NotFound, ValidationError
 from . import models
 from . import serializers
@@ -2765,37 +2766,36 @@ def deleteTasks(request, pk):
 # endregion tasks
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def get_HRChartData(request, pk):
-    
+    try:
+        company = Company.objects.get(pk=pk)
 
-    # 获取用户履历信息
-    user_resumes = UserResume.objects.all()
-    user_resume_serializer = UserResumeSerializer(user_resumes, many=True)
+        # Get all employees in the company
+        all_employees = CompanyEmployee.objects.filter(company_id=company)
 
-    # 获取用户面试申请记录
-    user_applications = UserApplicationRecord.objects.all()
-    user_application_serializer = UserApplicationRecordSerializer(user_applications, many=True)
+        # Calculate gender distribution for all employees
+        male_count = all_employees.filter(user_id__gender='Male').count()
+        female_count = all_employees.filter(user_id__gender='Female').count()
+        gender_distribution = [{'name': 'Male', 'value': male_count}, {'name': 'Female', 'value': female_count}]
 
-    # 获取用户面试成功记录
-    user_offers = UserOfferRecord.objects.all()
-    user_offer_serializer = UserOfferRecordSerializer(user_offers, many=True)
+        # Calculate age distribution for all employees based on 'birthday' field
+        age_distribution = all_employees.values('user_id__birthday').annotate(count=Count('user_id__birthday')).order_by('user_id__birthday')
 
-    # 获取公司信息
-    companies = Company.objects.all()
-    company_serializer = CompanySerializer(companies, many=True)
+        # Calculate department distribution
+        department_distribution = CompanyEmployeePosition.objects.filter(company_id=company).values('companyDepartment_id__department_name').annotate(employeeCount=Count('companyemployee')).values('companyDepartment_id__department_name', 'employeeCount')
 
-    # 获取公司员工信息
-    company_employees = CompanyEmployee.objects.all()
-    company_employee_serializer = CompanyEmployeeSerializer(company_employees, many=True)
 
-    # 构建包含所有数据的响应字典
-    hr_data = {
-        'user_resumes': user_resume_serializer.data,
-        'user_applications': user_application_serializer.data,
-        'user_offers': user_offer_serializer.data,
-        'companies': company_serializer.data,
-        'company_employees': company_employee_serializer.data,
-    }
+        # Calculate education level distribution
+        education_level_distribution = all_employees.values('user_id__userresume__education__educational_qualifications').annotate(count=Count('user_id__userresume__education__educational_qualifications'))
+        
+        hr_chart_data = {
+            'genderDistribution': gender_distribution,
+            'ageDistribution': list(age_distribution),
+            'departmentDistribution': list(department_distribution),
+            'educationLevelDistribution': list(education_level_distribution),
+        }
 
-    return Response(hr_data)
+        return Response(hr_chart_data)
+    except Company.DoesNotExist:
+        return Response({'error': 'Company not found'}, status=404)
