@@ -809,15 +809,20 @@ nlp = spacy.load('en_core_web_sm')
 
 # 将单个简历字典转换为文本
 def convert_resume_to_text(resume):
+    print(resume)
+    experienceS = serializers.WorkingExperienceSerializer(resume['experience'])
+    
+    educationS = serializers.EducationSerializer(resume['education'])
     title = resume['title']
     # summary = ' '.join(resume['summary'])
-    experience = ' '.join(resume['experience'])
-    education = ' '.join(resume['education'])
+    # experience = ' '.join(resume['experience'])
+    # education = ' '.join(resume['education'])
     skills = ' '.join(resume['skills'])
 
     # 分别连接各个字段的文本
     # {summary}
-    combined_text = f"{title} {experience} {education} {skills}"
+    combined_text = f"{title} {experienceS.data} {educationS.data} {skills}"
+    print("hhhhhhhhhhhh")
     return combined_text
 
 # 将多份简历字典列表转换为文本
@@ -913,7 +918,8 @@ def get_recommendations(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_tfRecommend(request, id, description, title):
-    job_requirements = [description + title]
+    job_requirements = [description, title]
+
     applicationRecord = models.CompanyEmployee.objects.filter(company_id=id)
 
     recommended_resumes = []  # 用于存储推荐候选人的简历
