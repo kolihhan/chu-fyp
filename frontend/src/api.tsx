@@ -460,6 +460,12 @@ export const deleteTaskForce = async(id: number) => {
   })
 }
 
+export const getTaskForceMilestone = async(id: number) => {
+  return axios.get(`${API_URL}/taskForce/milestone/${id}`, { 
+    headers: authHeaders(),
+  })
+}
+
 export const createTasks = async (data : any) => {
   return axios.post(`${API_URL}/createTasks`, 
   { data },

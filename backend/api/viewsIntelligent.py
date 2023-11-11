@@ -1301,6 +1301,30 @@ def createMultiTask(requeset):
         return Response({'message':'fail to create multiple task', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getTaskForceMilestone(request, pk):
+    try:
+        milestone = []
+        currentYear = timezone.now().year
+        previousDueDate = None
+        currentProgress = 0
+        index = -1
+        tfs = models.Task.objects.filter(task_force__id=pk).order_by('due_date')
+        for tf in tfs:
+            if previousDueDate and tf.due_date == previousDueDate:
+                tf.due_date += datetime.timedelta(days=1) 
+            dueDate = tf.due_date.strftime('%b %d') if tf.due_date.year == currentYear else tf.due_date.strftime('%Y %b %d')
+            milestone.append({'taskId':tf.id, 'taskName':tf.task_name, 'date':dueDate})
+            previousDueDate = tf.due_date
+            if tf.due_date < timezone.now().date():
+                currentProgress += 1
+        return Response({'message':'get miletone success', 'data':{'milestone':milestone, 'current':currentProgress}})
+    except models.Task.DoesNotExist:
+        return Response({'error': str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['GET'])
 @permission_classes([AllowAny])
 def extendsTasksDueDate(request, day):
     try:

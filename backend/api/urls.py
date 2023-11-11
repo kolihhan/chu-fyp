@@ -225,6 +225,7 @@ urlpatterns = [
     path('createTaskForces', createTaskForces, name='createTaskForces'),
     path('updateTaskForces/<int:pk>', updateTaskForce, name='updateTaskForces'),
     path('deleteTaskForce/<int:pk>', deleteTaskForce, name='deleteTaskForce'),
+    path('taskForce/milestone/<int:pk>', getTaskForceMilestone, name='getTaskForceMilestone'),
 
     path('getTasksByTfId/get/<int:pk>', getTasksByTF_id, name='getTasksByTF_id'),
     path('fetchTasksByEmployeeId/get/<int:pk>', fetchTasksByEmployeeId, name='fetchTasksByEmployeeId'),

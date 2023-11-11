@@ -2700,10 +2700,12 @@ def deleteTaskForce(request, pk):
 @permission_classes([IsAuthenticated])
 def getTasksByTF_id(request, pk):
     try:
+        taskForce = models.TaskForce.objects.get(id=pk)
         lr = models.Task.objects.filter(task_force__id=pk)
+        tfSerializer = serializers.TaskForceSerializer(taskForce, many=False)
         serializer = serializers.TaskSerializer(lr, many=True)
-        return Response({'data': serializer.data}, status=status.HTTP_200_OK)
-    except models.Task.DoesNotExist as e:
+        return Response({'data': serializer.data, 'taskForce':tfSerializer.data}, status=status.HTTP_200_OK)
+    except (models.Task.DoesNotExist, models.task_force.DoesNotExist) as e:
         return Response({'message': str(e)}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         return Response({'message': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
