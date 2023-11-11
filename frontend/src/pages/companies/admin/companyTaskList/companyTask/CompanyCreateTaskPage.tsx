@@ -37,14 +37,14 @@ const onFinish = (values: any) => {
   };
 
   const recommendAssignee = async () => {
-    const { description, name } = form.getFieldsValue();
+    const { task_description, task_name } = form.getFieldsValue();
   
-    if (!description || !name) {
+    if (!task_description || !task_name) {
       message.error('任务描述和标题是必填项。');
       return;
     }
   
-    const selectAssignee = await findSuitableAssignee(companyId, description, name);
+    const selectAssignee = await findSuitableAssignee(companyId, task_description, task_name);
   
     if (selectAssignee.data) {
       const firstIndex = selectAssignee.data.candidates[0];

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Card, Form, Input, Collapse, Select, message, Steps } from 'antd';
+import { Button, Card, Form, Input, Collapse, Select, message, Steps, Descriptions } from 'antd';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useParams } from 'react-router-dom';
 import { findSuitableAssignee, getAllEmployees, getTaskForceMilestone, getTasksByTf_id, updateTasks } from '../../../../../api';
@@ -13,18 +13,21 @@ const CompanyTaskDetailPage: React.FC = () => {
   const [memberTasks, setMemberTasks] = useState<any[]>([]);
   const [editMode, setEditMode] = useState<{ [key: number]: boolean }>({});
   const [selectedMember, setSelectedMember] = useState<string>('');
+  const [selectedMemberName, setselectedMemberName] = useState<string>('');
   const [form] = Form.useForm();
   const { id } = useParams<{ id: string | undefined }>();
-  
+
   const [selectedAssignee, setSelectedAssignee] = useState<number | null>(null);
   const [assignees, setAssignees] = useState<any[]>([]);
   const [milestone, setMilestone] = useState<any[]>([]);
   const [milestoneCurrent, setMileStoneCurrent] = useState(0);
   const [taskForce, setTaskForce] = useState<any>({});
-  const {Step} = Steps
+  const { Step } = Steps
 
-  const uniqueAssignees = Array.from(new Set(memberTasks.map(task => task.assignee)));
-  
+  const uniqueAssigneeIds = Array.from(new Set(memberTasks.map(task => task.assignee)));
+  // Filter assigneesData based on uniqueAssigneeIds
+  const uniqueAssignees = assignees.filter(assignee => uniqueAssigneeIds.includes(assignee.id));
+
   useEffect(() => {
     fetchTasksByTf_id();
     getMilestone()
@@ -43,22 +46,24 @@ const CompanyTaskDetailPage: React.FC = () => {
   };
 
   const getMilestone = async () => {
-    try{
+    try {
       const response = await getTaskForceMilestone(Number(id))
       console.log(response.data.data)
       let items: any = []
       response.data.data.milestone.map((milestone: any) => {
-        items.push({title: milestone.date, description:milestone.taskName})
+        items.push({ title: milestone.date, description: milestone.taskName })
       })
       setMilestone(items)
       setMileStoneCurrent(response.data.data.current)
-    }catch(error){
+    } catch (error) {
       console.log(error)
     }
   }
 
   const handleMemberSelect = (member: string) => {
     setSelectedMember(member);
+    // Assuming selectedMember is the ID of the selected assignee
+    setselectedMemberName(uniqueAssignees.find(assignee => assignee.id === Number(member))?.user_id.name);
   };
 
   const handleEdit = (taskId: number) => {
@@ -73,29 +78,29 @@ const CompanyTaskDetailPage: React.FC = () => {
   };
 
   const recommendAssignee = async () => {
-    const { description, name } = form.getFieldsValue();
-  
-    if (!description || !name) {
+    const { task_description, task_name } = form.getFieldsValue();
+
+    if (!task_description || !task_name) {
       message.error('任务描述和标题是必填项。');
       return;
     }
-  
-    const selectAssignee = await findSuitableAssignee(companyId, description, name);
-  
+
+    const selectAssignee = await findSuitableAssignee(companyId, task_description, task_name);
+
     if (selectAssignee.data) {
       const firstIndex = selectAssignee.data.candidates[0];
       const firstArray = firstIndex[0];
       const defaultId = firstArray[0];
-  
+
       if (typeof defaultId === 'string') {
         const getId = defaultId.match(/'id': (\d+)/g);
         if (getId) {
           const ids = getId.map(match => (match.match(/\d+/)?.[0] ?? ''));
           const selectedId = Number(ids[0]);
-  
+
           // 获取选中的assignee对象
-          const selectedAssigneeObject : any = assignees.find(assignee => assignee.user_id.id === selectedId);
-    
+          const selectedAssigneeObject: any = assignees.find(assignee => assignee.user_id.id === selectedId);
+
           if (selectedAssigneeObject) {
             form.setFieldsValue({ assignee: selectedAssigneeObject.id });
           } else {
@@ -114,35 +119,58 @@ const CompanyTaskDetailPage: React.FC = () => {
 
   return (
     <div>
-      <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h1>{taskForce['name']}</h1>
         <a href={`/admin/company/task-list/${id}/details/create`}>
           <Button type="primary">Create New Task</Button>
         </a>
       </div>
-      <div style={{display:'flex', justifyContent:'space-between', alignItems:'start'}}>
-        <div style={{flex:2, display:'flex', overflowY:'auto', height: 'calc(100vh - 125px)', marginRight:'8px'}}>
-          <Card title={<center>Milestone</center>} style={{flex:1}}>
-            <Steps direction="vertical" size="small" current={milestoneCurrent} 
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
+        <div style={{ flex: 2, display: 'flex', overflowY: 'auto', height: 'calc(100vh - 125px)', marginRight: '8px' }}>
+          <Card title={<center>Milestone</center>} style={{ flex: 1 }}>
+            <Steps direction="vertical" size="small" current={milestoneCurrent}
               style={{ display: 'flex', flexWrap: 'wrap' }}>
               {milestone.map((item, index) => (
-                <Step key={index} title={item.title} description={item.description} style={{ flex: '1 1 auto', marginBottom:'16px'}} />
+                <Step key={index} title={item.title} description={item.description} style={{ flex: '1 1 auto', marginBottom: '16px' }} />
               ))}
             </Steps>
           </Card>
         </div>
-        <div style={{flex:10, overflowY:'auto', height: 'calc(100vh - 125px)'}}>
-          {uniqueAssignees.map((assignee, index) => (
-            <Card key={index} onClick={() => handleMemberSelect(assignee)}>
-              <Button>{assignee}</Button>
+        <div style={{ flex: 10, overflowY: 'auto', height: 'calc(100vh - 125px)' }}>
+
+          <Card key={"summary"}>
+            <Card>
+              <Descriptions title="Task Force Details" bordered column={1}>
+                <Descriptions.Item label="Task Force Name">{taskForce.name}</Descriptions.Item>
+                <Descriptions.Item label="Description">{taskForce.description}</Descriptions.Item>
+                <Descriptions.Item label="Goals">{taskForce.goals}</Descriptions.Item>
+                <Descriptions.Item label="Deadline">{taskForce.deadline}</Descriptions.Item>
+                <Descriptions.Item label="Status">{taskForce.status}</Descriptions.Item>
+                {/* Add other task force details as needed */}
+              </Descriptions>
             </Card>
-          ))}
+            <Select
+              id="assigneeSelect"
+              onChange={(value) => handleMemberSelect(value)}
+              placeholder="Select an assignee"
+              style={{ width: '100%', marginTop: '5px' }}
+            >
+              {uniqueAssignees.map((assignee, index) => (
+                <Option key={index} value={assignee.id}>
+                  {assignee.user_id.name}
+                </Option>
+              ))}
+            </Select>
+          </Card>
+
+
           <Collapse>
-            <Panel header={selectedMember} key="1">
+            <Panel header={selectedMemberName ? `${selectedMemberName}'s tasks` : ""} key="1">
+
               {memberTasks
                 .filter(task => task.assignee === selectedMember)
                 .map(task => (
-                  <Card key={task.id}>
+                  <Card key={task.id} style={{ margin: '10px 0' }}>
                     {editMode[task.id] ? (
                       <Form form={form} onFinish={() => handleSave(task.id)} initialValues={task}>
                         <Form.Item
@@ -167,12 +195,12 @@ const CompanyTaskDetailPage: React.FC = () => {
                               value={selectedAssignee}
                             >
 
-                            {assignees.map((assignee: any, index) => (
-                              <Select.Option key={index} value={assignee.id}>
-                                {assignee.user_id.name}
-                              </Select.Option>
-                            ))}
-                          </Select>
+                              {assignees.map((assignee: any, index) => (
+                                <Select.Option key={index} value={assignee.id}>
+                                  {assignee.user_id.name}
+                                </Select.Option>
+                              ))}
+                            </Select>
                           </Form.Item>
                           <Button type="primary" onClick={recommendAssignee}>
                             Recommend
@@ -213,7 +241,7 @@ const CompanyTaskDetailPage: React.FC = () => {
 
       </div>
 
-      
+
     </div>
   );
 };
