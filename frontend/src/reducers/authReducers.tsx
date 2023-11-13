@@ -138,7 +138,7 @@ export const fetchUsersInfo = (
           console.log(response.data)
           if(response.data!=null && response.data.length > 0){
             setCookie("employeeId", response.data[0].id);
-            setCookie("companyId", response.data[0].company_id)
+            setCookie("companyId", response.data[0].company_id.id)
             window.location.href = '/company/home'
           }else{
             window.location.href = '/'
