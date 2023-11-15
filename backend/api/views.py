@@ -2692,6 +2692,23 @@ def deleteTaskForce(request, pk):
         return Response({'error': 'TaskForce not found'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getTaskFoceByEmployee(request, companyId, employeeId):
+    try:
+        employeeTaskForce = []
+        employee = models.CompanyEmployee.objects.get(id=employeeId)
+        allTaskForce = models.TaskForce.objects.filter(company_id__id=companyId)
+        for taskforce in allTaskForce:
+            task = models.Task.objects.filter(task_force=taskforce, assignee=employee)
+            if task.exists():
+                employeeTaskForce.append(serializers.TaskForceSerializer(taskforce, many=False).data)
+        return Response({'data': employeeTaskForce}, status=status.HTTP_200_OK)
+    except (models.TaskForce.DoesNotExist, models.Task.DoesNotExist) as e:
+        return Response({'message':'fail to get task force by employee'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'fail to get task force by employee'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 # endregion taskforces
 
 
