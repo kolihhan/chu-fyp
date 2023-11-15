@@ -1,5 +1,5 @@
 import datetime
-from datetime import datetime, timedelta, date
+from datetime import timedelta, date
 import string
 
 from django.db import transaction
@@ -98,8 +98,8 @@ def generateMultiUserResume(request):
                 we_company_name = f"company before {userAccount.id}",
                 position = "android developer",
                 job_nature = "全職",
-                start_date = datetime.now(),
-                end_date = datetime.now(),
+                start_date = datetime.datetime.now(),
+                end_date = datetime.datetime.now(),
                 still_employed = False,
                 working_desc = "build android app with android studio using kotlin and java"
             )
@@ -108,8 +108,8 @@ def generateMultiUserResume(request):
                 edu_user = userAccount,
                 school_name = "school 1",
                 department_name = "IT",
-                start_date = datetime.now(),
-                end_date = datetime.now(),
+                start_date = datetime.datetime.now(),
+                end_date = datetime.datetime.now(),
                 educational_qualifications = random.choice(educationQualificationList),
                 school_status = random.choice(schoolStatusList)
             )
@@ -335,8 +335,8 @@ def createCompanyMulti(request):
                     # region create check in rule
                     checkInRule = models.companyCheckInRule.objects.create(
                         company_id = createdCompany,
-                        work_time_start = datetime.strptime('2023-6-11 09:00:00', '%Y-%m-%d %H:%M:%S').time(),
-                        work_time_end = datetime.strptime('2023-6-11 18:00:00', '%Y-%m-%d %H:%M:%S').time(),
+                        work_time_start = datetime.datetime.strptime('2023-6-11 09:00:00', '%Y-%m-%d %H:%M:%S').time(),
+                        work_time_end = datetime.datetime.strptime('2023-6-11 18:00:00', '%Y-%m-%d %H:%M:%S').time(),
                         late_tolerance = timedelta(hours=0,minutes=0)
                     )
                     # endregion checkInRule
@@ -1230,72 +1230,83 @@ def calCompanyAllEmployeeScore(request, pk):
 @permission_classes([AllowAny])
 def createMultiTask(requeset):
     try:
-        allUsers = models.CompanyEmployee.objects.all()
-        for user in allUsers:
-            print("user:")
-            print(user)
+        
+        allCompany = models.Company.objects.all()
+        for company in allCompany:
+            allEmployeeAndBoss = models.CompanyEmployee.objects.filter(company_id=company)
 
-            taskForceName = f"taskForce_{user.user_id.name}"
+            taskForceName = f"taskForce_{company.name}_Low"
             deadline = date.today() + timedelta(days=100)
             createdTaskForce1 = models.TaskForce.objects.create(
-                company_id = user.company_id,
-                name = f"{taskForceName}_Low", 
+                company_id = company,
+                name = f"{taskForceName}", 
                 description = f"{taskForceName} description", 
-                leader = user,
+                leader = random.choice(allEmployeeAndBoss),
                 goals = f"{taskForceName} goals",
                 deadline = deadline,
                 status = "In Progress",
                 priority = "Low"
             )
+            taskForceName = f"taskForce_{company.name}_Medium"
+            deadline = date.today() + timedelta(days=75)
             createdTaskForce2 = models.TaskForce.objects.create(
-                company_id = user.company_id,
-                name = f"{taskForceName}_Medium", 
+                company_id = company,
+                name = f"{taskForceName}", 
                 description = f"{taskForceName} description", 
-                leader = user,
+                leader = random.choice(allEmployeeAndBoss),
                 goals = f"{taskForceName} goals",
                 deadline = deadline,
                 status = "In Progress",
                 priority = "Medium"
             )
+            taskForceName = f"taskForce_{company.name}_High"
+            deadline = date.today() + timedelta(days=50)
             createdTaskForce3 = models.TaskForce.objects.create(
-                company_id = user.company_id,
-                name = f"{taskForceName}_High", 
+                company_id = company,
+                name = f"{taskForceName}", 
                 description = f"{taskForceName} description", 
-                leader = user,
+                leader = random.choice(allEmployeeAndBoss),
                 goals = f"{taskForceName} goals",
                 deadline = deadline,
                 status = "In Progress",
                 priority = "High"
             )
+            taskForceName = f"taskForce_{company.name}_Emergency"
+            deadline = date.today() + timedelta(days=25)
             createdTaskForce4 = models.TaskForce.objects.create(
-                company_id = user.company_id,
-                name = f"{taskForceName}_Emergency", 
+                company_id = company,
+                name = f"{taskForceName}", 
                 description = f"{taskForceName} description", 
-                leader = user,
+                leader = random.choice(allEmployeeAndBoss),
                 goals = f"{taskForceName} goals",
                 deadline = deadline,
                 status = "In Progress",
                 priority = "Emergency"
             )
-
-            taskCount = random.randint(1,5)
-            for i in range(1,taskCount+1):
+            taskCount = random.randint(20,50)
+            for i in range(1, taskCount):
                 priorityN = random.randint(0,4)
-                if(priorityN==0): createdTaskForce = createdTaskForce1
-                elif(priorityN==1): createdTaskForce = createdTaskForce2
-                elif(priorityN==2): createdTaskForce = createdTaskForce3
-                elif(priorityN==3): createdTaskForce = createdTaskForce4
-                print(i)
-                dueDate = date.today() + timedelta(days=random.randint(0,31))
+                if(priorityN==0): 
+                    createdTaskForce = createdTaskForce1
+                    dueDate = date.today() + timedelta(days=random.randint(1,100))
+                elif(priorityN==1): 
+                    createdTaskForce = createdTaskForce2
+                    dueDate = date.today() + timedelta(days=random.randint(1,75))
+                elif(priorityN==2): 
+                    createdTaskForce = createdTaskForce3
+                    dueDate = date.today() + timedelta(days=random.randint(1,50))
+                elif(priorityN==3): 
+                    createdTaskForce = createdTaskForce4
+                    dueDate = date.today() + timedelta(days=random.randint(1,25))
 
                 createdTask = models.Task.objects.create(
                     task_force = createdTaskForce,
                     task_name = f"task {i}",
                     task_description =  f"task {i} description",
-                    assignee = user,
+                    assignee = random.choice(allEmployeeAndBoss),
                     status = "Pending",
                     due_date = dueDate
-                )
+                )        
         return Response({'message':'success create multi task'}, status=status.HTTP_200_OK)
     except Exception as e:
         return Response({'message':'fail to create multiple task', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -1362,7 +1373,7 @@ def generateTimetable(request, pk):
         )
         tasks_df.drop(columns=["task_force"], inplace=True)
         tasks_df['days'] = tasks_df['due_date'].apply(
-            lambda duedate: (datetime.strptime(duedate, '%Y-%m-%d') - datetime.now()).days + 2
+            lambda duedate: (datetime.datetime.strptime(duedate, '%Y-%m-%d') - datetime.datetime.now()).days + 2
         )
         tasks_df['duration'] = tasks_df['days'] * 3
         sorted_tasks = tasks_df.sort_values(by=['days', 'priority', 'duration'], ascending=[True, False, True])
@@ -1390,4 +1401,5 @@ def generateTimetable(request, pk):
 
         return Response({'message':'success', 'data':timetable}, status=status.HTTP_200_OK)
     except Exception as e:
+        print(str(e))
         return Response({'message':'fail', 'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
