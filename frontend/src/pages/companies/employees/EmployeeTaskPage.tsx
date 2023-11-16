@@ -84,6 +84,24 @@ const EmployeeTaskPage: React.FC = () => {
       dataIndex: 'due_date',
       key: 'due_date',
     },
+    {
+      title: 'Priority',
+      dataIndex: 'task_force',
+      key: 'task_force',
+      render: (text: any, record: any) => (
+        console.log(text),
+        <Select
+          disabled
+          defaultValue={text.priority}
+          style={{ width: 120 }}
+        >
+            <Option value="Low">Low</Option>
+            <Option value="Medium">Medium</Option>
+            <Option value="High">High</Option>
+            <Option value="Emergency">Emergency</Option>
+        </Select>
+      ),
+    },
   ];
 
   const handleStatusChange = (record: any, value: any) => {

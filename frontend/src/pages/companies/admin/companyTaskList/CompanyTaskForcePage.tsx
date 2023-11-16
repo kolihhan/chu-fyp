@@ -54,6 +54,9 @@ const CompanyTaskForcePage: React.FC = () => {
       title: 'Leader',
       dataIndex: 'leader',
       key: 'leader',
+      render: (status: any) => {
+        return status.user_id.name;
+      },
     },
     {
       title: 'Status',
@@ -78,16 +81,18 @@ const CompanyTaskForcePage: React.FC = () => {
       key: 'actions',
       render: (id: any) => (
         <div>
-         <a href={`/admin/company/task-list/${id}/details`}>
+         <a className="mr-2" href={`/admin/company/task-list/${id}/details`}>
            <Button type="primary">
              View
            </Button>
          </a>
-         <a href={`/admin/company/task-list/${id}/update`}>
+         
+         <a className="mr-2" href={`/admin/company/task-list/${id}/update`}>
            <Button type="primary">
              Edit
            </Button>
          </a>
+
           <Popconfirm
             title="Are you sure you want to delete this task force?"
             onConfirm={() => handleDelete(id)}

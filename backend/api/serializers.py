@@ -304,7 +304,9 @@ class RecommendOptionsSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class TaskForceSerializer(serializers.ModelSerializer):
-    class Meta: 
+    leader = CompanyEmployeeSerializer(many=False)  # Assuming only one leader per task force
+
+    class Meta:
         model = models.TaskForce
         fields = '__all__'
 
