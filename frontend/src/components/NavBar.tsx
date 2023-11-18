@@ -17,7 +17,7 @@ import { getCookie } from '../utils';
 const { SubMenu, Item, Divider } = Menu;
 const { Panel } = Collapse;
 
-export const DropDownIcon: React.FC<{ isManage: boolean; isEmployee: any[];}> = ({
+export const DropDownIcon: React.FC<{ isManage: boolean; isEmployee: any[]; }> = ({
   isManage,
   isEmployee,
 }) => {
@@ -155,17 +155,18 @@ const Navbar: React.FC = () => {
 
   return (
 
-    <div style={{ backgroundColor: '#f0f2f5', zIndex:'1000', position:'fixed', top:0, left:0, right:0 }}>
+    <div style={{ backgroundColor: '#f0f2f5', zIndex: '1000', position: 'fixed', top: 0, left: 0, right: 0 }}>
       <Header className="navbar navbar-expand navbar-light bg-light">
         <div className="navbar-brand">
-          <a href="/"><img src="#" alt="Logo" /></a>
+          <Link to='/'>
+            <img
+              src="/image/logo.png"
+              alt="首頁"
+              style={{ maxWidth: 75, height: 'auto', marginBottom: '0.25em' }}
+            />
+          </Link>
         </div>
-        <Menu theme="light" mode="horizontal" selectedKeys={[location.pathname]}>
-          <Item key="1">
-            <Link to='/'>首頁</Link>
-          </Item>
 
-        </Menu>
 
         {isEmployee && isEmployee[companyNum] ? (
           <>
@@ -184,7 +185,7 @@ const Navbar: React.FC = () => {
 
         {isAuthenticated ?
           // <DropDownIcon isManage={isUser?.type !== "staff"} isEmployee={isEmployee}/>
-          <DropDownIcon isManage={getCookie("role")=="Boss"} isEmployee={isEmployee}/>
+          <DropDownIcon isManage={getCookie("role") == "Boss"} isEmployee={isEmployee} />
           :
           <Menu selectedKeys={[location.pathname]}>
             <Item key="login-key">
@@ -194,7 +195,7 @@ const Navbar: React.FC = () => {
         }
 
       </Header>
-      
+
       {/* {(isAdminPath) &&
         <AdminNavBar />
       } */}
