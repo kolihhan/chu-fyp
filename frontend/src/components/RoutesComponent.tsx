@@ -37,6 +37,7 @@ import CompanyCreateTaskForcePage from "../pages/companies/admin/companyTaskList
 import CompanyCreateTaskPage from "../pages/companies/admin/companyTaskList/companyTask/CompanyCreateTaskPage";
 import CompanyTaskDetailPage from "../pages/companies/admin/companyTaskList/companyTask/CompanyTaskDetailPage";
 import EmployeeTaskPage from "../pages/companies/employees/EmployeeTaskPage";
+import EmployeeTaskForcePage from "../pages/companies/employees/EmployeeTaskForcePage";
 
 const Protected: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const user = useSelector((state: RootState) => state.auth.user);
@@ -120,9 +121,13 @@ const RoutesComponent: React.FC = () =>{
                 <Route path="/company/employee/profile" element={<ProtectedEmployee><EmployeeProfilePage /></ProtectedEmployee>} />
                 <Route path="/company/applicationleave" element={<ProtectedEmployee><ApplicationLeavePage /></ProtectedEmployee>} />
                 <Route path="/company/tasks" element={<ProtectedEmployee><EmployeeTaskPage /></ProtectedEmployee>} />
+                <Route path="/company/employee/taskforce" element={<ProtectedAdmin><EmployeeTaskForcePage /></ProtectedAdmin>} />
+                <Route path="company/task-list/:id/update" element={<ProtectedAdmin><CompanyCreateTaskForcePage /></ProtectedAdmin>} /> {/* 编辑现有 */}
+                <Route path="company/task-list/:id/details" element={<ProtectedAdmin><CompanyTaskDetailPage /></ProtectedAdmin>} /> {/* 编辑现有 */}
+                <Route path="company/task-list/:id/details/create" element={<ProtectedAdmin><CompanyCreateTaskPage /></ProtectedAdmin>} /> {/* 编辑现有 */}
+
 
                 {/* Admin */}
-
                 <Route path='company/list' element={<ProtectedAdmin><CompaniesPage /></ProtectedAdmin>} /> {/* X */}
                 <Route path='company/create-company' element={<ProtectedAdmin><CreateCompaniesPage /></ProtectedAdmin>} />  {/* X */}
                 <Route path='company/view' element={<ProtectedAdmin><CompanyDetailPage /></ProtectedAdmin>} /> {/* 1 */}

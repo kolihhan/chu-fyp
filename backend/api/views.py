@@ -2701,9 +2701,12 @@ def getTaskFoceByEmployee(request, companyId, employeeId):
         employee = models.CompanyEmployee.objects.get(id=employeeId)
         allTaskForce = models.TaskForce.objects.filter(company_id__id=companyId)
         for taskforce in allTaskForce:
-            task = models.Task.objects.filter(task_force=taskforce, assignee=employee)
-            if task.exists():
+            if taskforce.leader==employee: 
                 employeeTaskForce.append(serializers.TaskForceSerializer(taskforce, many=False).data)
+            else:
+                task = models.Task.objects.filter(task_force=taskforce, assignee=employee)
+                if task.exists():
+                    employeeTaskForce.append(serializers.TaskForceSerializer(taskforce, many=False).data)
         return Response({'data': employeeTaskForce}, status=status.HTTP_200_OK)
     except (models.TaskForce.DoesNotExist, models.Task.DoesNotExist) as e:
         return Response({'message':'fail to get task force by employee'}, status=status.HTTP_404_NOT_FOUND)

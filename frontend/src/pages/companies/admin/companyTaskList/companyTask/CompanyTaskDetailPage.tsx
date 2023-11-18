@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Card, Form, Input, Collapse, Select, message, Steps, Descriptions, Modal, Tooltip } from 'antd';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { findSuitableAssignee, getAllEmployees, getTaskForceMilestone, getTasksByTf_id, updateTasks } from '../../../../../api';
 import { getCookie } from '../../../../../utils';
 
@@ -28,6 +28,8 @@ const CompanyTaskDetailPage: React.FC = () => {
   const uniqueAssigneeIds = Array.from(new Set(memberTasks.map(task => task.assignee)));
   // Filter assigneesData based on uniqueAssigneeIds
   const uniqueAssignees = assignees.filter(assignee => uniqueAssigneeIds.includes(assignee.id));
+  const location = useLocation()
+  const isAdminPath = location.pathname.startsWith('/admin');
 
   useEffect(() => {
     fetchTasksByTf_id();
@@ -142,9 +144,16 @@ const CompanyTaskDetailPage: React.FC = () => {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h1>{taskForce['name']}</h1>
-        <a href={`/admin/company/task-list/${id}/details/create`}>
-          <Button type="primary">Create New Task</Button>
-        </a>
+        {isAdminPath?
+          <a href={`/admin/company/task-list/${id}/details/create`}>
+            <Button type="primary">Create New Task</Button>
+          </a>
+          :
+          <a href={`/company/task-list/${id}/details/create`}>
+            <Button type="primary">Create New Task</Button>
+          </a>
+
+        }
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
         <div style={{ flex: 2, display: 'flex', overflowY: 'auto', height: 'calc(100vh - 125px)', marginRight: '8px' }}>

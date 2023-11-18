@@ -466,6 +466,12 @@ export const getTaskForceMilestone = async(id: number) => {
   })
 }
 
+export const getEmployeeTaskForce = async(companyId: number, employeeId: number) => {
+  return axios.get(`${API_URL}/employee/taskForce/get/${companyId}/${employeeId}`, { 
+    headers: authHeaders(),
+  })
+}
+
 export const createTasks = async (data : any) => {
   return axios.post(`${API_URL}/createTasks`, 
   { data },

@@ -56,14 +56,14 @@ export const DropDownIcon: React.FC<{ isManage: boolean; isEmployee: any[];}> = 
           {/* <Link to={`/company/checkIn`}>首頁</Link> */}
           <Link to={`/company/home`}>首頁</Link>
         </Menu.Item>
-        <Menu.Item key="employee-profile">
-          <Link to={`/company/employee/profile`}>Profile</Link>
-        </Menu.Item>
         <Menu.Item key="employee-feedback">
           <Link to={`/company/feedback`}>Feedback</Link>
         </Menu.Item>
         <Menu.Item key="employee-application">
           <Link to={`/company/applicationleave`}>ApplicationLeave</Link>
+        </Menu.Item>
+        <Menu.Item key="employee-taskforce">
+          <Link to={`/company/employee/taskforce`}>Task Force</Link>
         </Menu.Item>
         <Menu.Item key="employee-tasks">
           <Link to={`/company/tasks`}>Tasks</Link>
