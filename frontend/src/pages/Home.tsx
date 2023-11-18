@@ -67,7 +67,7 @@ const Home: React.FC = () => {
 
   return (
     <div className="container">
-      <h1 className="mt-4 mb-4">欢迎来到招聘信息页面</h1>
+      <h1 className="mt-4 mb-4">招聘信息页面</h1>
       <Input.Search
         placeholder="输入关键词进行搜索"
         value={searchTerm}
@@ -79,7 +79,7 @@ const Home: React.FC = () => {
           noJobsMessage
         ) : (
           currentJobs?.map((job) => (
-            <Col span={8} key={job.id ?? ''}>
+            <Col span={24} sm={12} lg={8} key={job.id}>
               <Card className="mb-4" title={job.title ?? ''} bordered={false}>
                 <p>
                   <strong>公司：</strong>

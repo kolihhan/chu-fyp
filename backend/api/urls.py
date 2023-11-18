@@ -237,7 +237,7 @@ urlpatterns = [
 
     # 其他URL路由
     path('hr-data/<int:pk>', get_HRChartData, name='get_hr_data'),
-
+    path('createRandomJob/get/', createRandomJob, name='createRandomJob'),
 ]
 
 # create company

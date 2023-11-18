@@ -7,8 +7,8 @@ services:
       - '5432:5432' # 映射容器内的 5432 端口到宿主机的 5432 端口
 
     environment:
-      - POSTGRES_PASSWORD=postgres # 设置 PostgreSQL 的密码
-      - POSTGRES_USER=postgres # 设置 PostgreSQL 的用户名
+      - POSTGRES_PASSWORD=postgresTestT12345 # 设置 PostgreSQL 的密码
+      - POSTGRES_USER=postgresTestT12345 # 设置 PostgreSQL 的用户名
       - POSTGRES_DB=postgres # 设置 PostgreSQL 的默认数据库名
 
     volumes:
@@ -34,8 +34,8 @@ services:
       dockerfile: Dockerfile # 指定 Dockerfile 文件名
 
     environment:
-      - POSTGRES_PASSWORD=postgres # 设置 PostgreSQL 的密码
-      - POSTGRES_USER=postgres # 设置 PostgreSQL 的用户名
+      - POSTGRES_PASSWORD=postgresTestT12345 # 设置 PostgreSQL 的密码
+      - POSTGRES_USER=postgresTestT12345 # 设置 PostgreSQL 的用户名
       - POSTGRES_DB=postgres # 设置 PostgreSQL 的默认数据库名
 
     ports:

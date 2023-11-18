@@ -1,5 +1,7 @@
+import random
 from django.http import Http404
 from django.shortcuts import render,get_object_or_404
+from faker import Faker
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -2821,3 +2823,44 @@ def get_HRChartData(request, pk):
         return Response(hr_chart_data)
     except Company.DoesNotExist:
         return Response({'error': 'Company not found'}, status=404)
+    
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def createRandomJob(request):
+    fake = Faker()
+
+    try:
+        job_count = int(50)
+
+        random_jobs = []
+        for _ in range(job_count):
+            random_job = {
+                'companyEmployeePosition': random.choice(models.CompanyEmployeePosition.objects.all()),
+                'title': fake.job(),
+                'description': fake.text(),
+                'requirement': fake.text(),
+                'min_salary': random.randint(30000, 80000),
+                'max_salary': random.randint(80000, 150000),
+                'responsibilities': random.choice([True, False]),
+                'location': fake.city(),
+                'start_at': fake.date_time_between(start_date='-30d', end_date='+30d'),  # Generating a random start date within a range
+                'offered_at': fake.date_time_between(start_date='now', end_date='+30d'),  # Generating a random offered date within the next 30 days
+                'close_at': fake.date_time_between(start_date='now', end_date='+60d'),    # Generating a random close date within the next 60 days
+                'employee_need': random.randint(1, 20),
+                'job_category': fake.word(),
+                'job_nature': random.choice(['Full-time', 'Part-time']),
+                'buiness_trip': random.choice([True, False]),
+                'working_hour': fake.text(max_nb_chars=50),
+                'leaving_system': fake.text(max_nb_chars=50),
+                # Include other fields as needed
+            }
+            random_jobs.append(random_job)
+
+        created_jobs = models.CompanyRecruitment.objects.bulk_create(
+            [models.CompanyRecruitment(**job) for job in random_jobs]
+        )
+
+        return Response({'message': f'{job_count} random job listings created successfully.'}, status=200)
+
+    except Exception as e:
+        return Response({'message': 'Failed to create random job listings.', 'error': str(e)}, status=500)

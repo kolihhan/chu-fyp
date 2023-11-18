@@ -11,7 +11,7 @@ import { UserOutlined, TeamOutlined } from '@ant-design/icons';
 
 import AdminNavBar from './AdminNavBar';
 import { selectSelectedCompany, setSelectCompany } from '../reducers/employeeReducers';
-import { getCookie } from '../utils';
+import { getCookie, setCookie } from '../utils';
 
 
 const { SubMenu, Item, Divider } = Menu;
@@ -115,16 +115,19 @@ const CompanySwitcher: React.FC<{ isEmployee: any[], companyNum: number }> = ({ 
   type AppDispatch = ThunkDispatch<RootState, unknown, AnyAction>;
 
   const dispatch: AppDispatch = useDispatch();
-
+  const [companyName, setCompanyName] = useState(isEmployee[0].company_id.name ?? "");
   const handleCompanySelect = (companyId: number) => {
     dispatch(setSelectCompany(companyId));
+    setCompanyName(isEmployee[companyId].company_id.name ?? "");
+    setCookie("companyId", isEmployee[companyId].company_id.id)
+    window.location.reload();
   };
 
   const menu = (
     <Menu>
       {isEmployee.map((company, i) => (
         <Item key={company.id} onClick={() => handleCompanySelect(i)}>
-          {company.name}
+          {company.company_id.name ?? ""}
           <Divider />
         </Item>
 
@@ -135,7 +138,7 @@ const CompanySwitcher: React.FC<{ isEmployee: any[], companyNum: number }> = ({ 
   return (
     <Dropdown overlay={menu}>
       <a className="ml-auto mr-3 ant-dropdown-link" href='' onClick={(e) => e.preventDefault()}>
-        {/* {isEmployee[companyNum].name} */}
+        { companyName ?? ""}
       </a>
     </Dropdown>
   );
@@ -172,10 +175,11 @@ const Navbar: React.FC = () => {
 
         {role=='Boss' && isEmployee[companyNum] ? (
           <>
+           
             {isEmployee.length > 1 ? (
-              <CompanySwitcher isEmployee={isEmployee} companyNum={isEmployee[companyNum].company_id} />
+              <CompanySwitcher isEmployee={isEmployee} companyNum={isEmployee[companyNum].company_id.id} />
             ) : (
-              <span className="ml-auto mr-3">{isEmployee[companyNum].name ?? ""}</span>
+              <span className="ml-auto mr-3">{isEmployee[companyNum].company_id.name ?? ""}</span>
             )}
           </>
         )
