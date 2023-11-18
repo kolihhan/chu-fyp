@@ -127,8 +127,8 @@ export const fetchUsersInfo = (
           setCookie("userId", user?.id);
           const response = await getUserEmployee(user?.id)
           if(response.data!=null && response.data.length > 0){
-            setCookie("employeeId", response.data[0].id);
-            setCookie("companyId", response.data[0].company_id)
+            setCookie("employeeId", response.data[0].id)
+            setCookie("companyId", response.data[0].company_id.id)
           }
           window.location.href = 'company/list';
         }else if (user?.type == "Employee"){

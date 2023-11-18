@@ -149,16 +149,19 @@ const Navbar: React.FC = () => {
   const isEmployee = useSelector((state: RootState) => state.employee.employees);
   const companyNum = useSelector(selectSelectedCompany);
   const isAuthenticated = useSelector((state: RootState) => state.auth.accessToken);
+  const companyId = getCookie('companyId')
+  const role = getCookie('role')
+  const logoLink = companyId? 'company/home' : '/'
 
   console.log(companyNum);
-  console.log(isEmployee[companyNum]);
+  console.log(isEmployee);
 
   return (
 
     <div style={{ backgroundColor: '#f0f2f5', zIndex: '1000', position: 'fixed', top: 0, left: 0, right: 0 }}>
       <Header className="navbar navbar-expand navbar-light bg-light">
         <div className="navbar-brand">
-          <Link to='/'>
+          <Link to={logoLink}>
             <img
               src="/image/logo.png"
               alt="首頁"
@@ -167,8 +170,7 @@ const Navbar: React.FC = () => {
           </Link>
         </div>
 
-
-        {isEmployee && isEmployee[companyNum] ? (
+        {role=='Boss' && isEmployee[companyNum] ? (
           <>
             {isEmployee.length > 1 ? (
               <CompanySwitcher isEmployee={isEmployee} companyNum={isEmployee[companyNum].company_id} />
