@@ -382,6 +382,43 @@ def createCompanyEmployeeMulti(request):
     except Exception as e:
         return Response({"message": "員工增加失敗", "error": str(e)})
 
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def createCompanyRecruitmentMulti(request):
+    try:
+        companyList = models.Company.objects.all()
+        for company in companyList:
+            companyPositionList = models.CompanyEmployeePosition.objects.filter(company_id=company).exclude(position_name='Boss')
+            start_at = random.randint(1,20)
+            offered_at = random.randint(10,30)
+            close_at = random.randint(20,30)
+            createdCompanyRecruitment = models.CompanyRecruitment.objects.create(
+                companyEmployeePosition = random.choice(companyPositionList),
+                title = f"{company.name} recruitment",
+                description = f"{company.name} recruitment desc",
+                requirement = f"{company.name} requirement",
+                min_salary = round(random.uniform(30000, 35000)/100)*100,
+                max_salary = round(random.uniform(40000, 80000)/100)*100,
+                responsibilities = random.randint(0,10)>5,
+                location = 'home' if random.randint(0,10)>7 else 'company',
+                start_at = datetime.datetime.today() + timedelta(days=start_at), 
+                offered_at = datetime.datetime.today() + timedelta(days=start_at+offered_at), 
+                close_at = datetime.datetime.today() + timedelta(days=start_at+close_at), 
+                employee_need = random.randint(1,4),
+                job_category = 'programmer',
+                job_nature = '全職' if random.randint(0,10)>3 else '兼職',
+                buiness_trip = random.randint(0,10)>5,
+                working_hour = '',
+                leaving_system = ''
+            )
+        serializer = serializers.CompanyRecruitmentSerializer(createdCompanyRecruitment, many=False)
+        return Response({'message':'招聘創建成功', 'data':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyEmployeePosition.DoesNotExist as e:
+        return Response({'message':'招聘創建失敗', 'error':str(e)}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'message':'招聘創建失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def createCompanyEmployeeFeedbackReviewMulti(request):

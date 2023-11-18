@@ -199,6 +199,7 @@ urlpatterns = [
     path('createCompany/multi', createCompanyMulti, name='createCompanyMulti'),
     path('deleteCompanys/multi', deleteCompanyMulti, name='createCompanyMulti'),
     path('createCompanyEmployees', createCompanyEmployeeMulti, name='createCompanyEmployeeMulti'),
+    path('createCompanyRecruitmentMulti', createCompanyRecruitmentMulti, name='createCompanyRecruitmentMulti'),
     path('createCompanyEmployeeFeedbackReviewMulti', createCompanyEmployeeFeedbackReviewMulti, name='createCompanyEmployeeFeedbackReviewMulti'),
     path('calCompanyEmployeeScore', calCompanyEmployeeScore, name='calCompanyEmployeeScore'),
     path('getCompanyEmployeeEvaluate2/<int:pk>', getCompanyEmployeeEvaluate2, name='getCompanyEmployeeEvaluate2'),
