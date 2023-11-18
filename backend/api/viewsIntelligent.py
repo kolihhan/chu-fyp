@@ -822,7 +822,6 @@ def convert_resume_to_text(resume):
     # 分别连接各个字段的文本
     # {summary}
     combined_text = f"{title} {experienceS.data} {educationS.data} {skills}"
-    print("hhhhhhhhhhhh")
     return combined_text
 
 # 将多份简历字典列表转换为文本

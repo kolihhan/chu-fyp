@@ -2655,7 +2655,7 @@ def fetchTaskForcesById(request, pk):
 def createTaskForces(request):
     try:
         data = request.data.get('data', {})  # 获取"data"字段内的数据
-        serializer = serializers.TaskForceSerializer(data=data)
+        serializer = serializers.TaskForceSerializer2(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -2671,7 +2671,7 @@ def updateTaskForce(request, pk):
         data = request.data.get('data', {})  # 获取"data"字段内的数据
         print(data)
         task_force = models.TaskForce.objects.get(pk=pk)
-        serializer = serializers.TaskForceSerializer(task_force, data= data)
+        serializer = serializers.TaskForceSerializer2(task_force, data= data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)

@@ -8,6 +8,7 @@ const { Option } = Select;
 
 const CompanyCreateTaskForcePage: React.FC = () => {
   const { id } = useParams<{ id: string | undefined }>();
+  const [newId, setNewId] = useState<string | undefined>(id) 
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const [priority, setPriority] = useState('Medium');
@@ -29,11 +30,11 @@ const CompanyCreateTaskForcePage: React.FC = () => {
 
 
   useEffect(() => {
-    if (id) {
+    if (newId) {
       fetchTaskForceById();
     }
     fetchAssignees();
-  }, [id]);
+  }, [newId]);
 
   const fetchAssignees = async () => {
     try {
@@ -47,21 +48,34 @@ const CompanyCreateTaskForcePage: React.FC = () => {
   
   const fetchTaskForceById = async () => {
     try {
-      const response = await fetchTaskForcesById(Number(id)); 
+      const response = await fetchTaskForcesById(Number(newId)); 
       form.setFieldsValue(response.data.data); // Set form initial values here
+      form.setFieldsValue({ leader:response.data.data.leader.id })
     } catch (error) {
       console.log(error);
     }
   };
 
-  const onFinish = (values: any) => {
-    if (id) {
+  const onFinish = async (values: any) => {
+    if (newId) {
       values['company_id'] = Number(getCookie('companyId'));
-      updateTaskForces(Number(id), values);
+      const response = await updateTaskForces(Number(newId), values);
+      if(response.status!=200){
+        message.error('Task Force 修改失敗')
+      }else{
+        setNewId(response.data.id)
+        message.success('Task Force 修改成功')
+      }
     } else {
       
       values['company_id'] = Number(getCookie('companyId'));
-      createTaskForces(values);
+      const response = await createTaskForces(values);
+      if(response.status==200){
+        message.success('Task Force 建立失敗')
+      }else{
+        setNewId(response.data.id)
+        message.success('Task Force 建立成功')
+      }
     }
 
     //navigate(`/admin/company/task-list`);
@@ -110,7 +124,7 @@ const CompanyCreateTaskForcePage: React.FC = () => {
 
   return (
     <div>
-      <h1>{id ? 'Update' : 'Create'} Task Force</h1>
+      <h1>{newId ? 'Update' : 'Create'} Task Force</h1>
       <Form form={form} onFinish={onFinish}>
       <Form.Item
           label="Task Force Title"
@@ -181,7 +195,7 @@ const CompanyCreateTaskForcePage: React.FC = () => {
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit">
-            {id ? 'Update' : 'Create'}
+            {newId ? 'Update' : 'Create'}
           </Button>
         </Form.Item>
       </Form>

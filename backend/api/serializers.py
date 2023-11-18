@@ -310,6 +310,11 @@ class TaskForceSerializer(serializers.ModelSerializer):
         model = models.TaskForce
         fields = '__all__'
 
+class TaskForceSerializer2(serializers.ModelSerializer):
+    class Meta:
+        model = models.TaskForce
+        fields = '__all__'
+
 class TaskSerializer(serializers.ModelSerializer):
     task_force = TaskForceSerializer(many=False, read_only=True)
     class Meta: 
