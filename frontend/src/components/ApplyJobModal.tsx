@@ -61,7 +61,7 @@ const ApplyJobModal: React.FC<ApplyJobModalProps> = ({ isEmployee, loggedIn, job
 
     return (
         <>  {(!isEmployee) &&
-            <Button type="primary" onClick={showModal}>
+            <Button className='mr-1' type="primary" onClick={showModal}>
                 應聘
             </Button>
             }

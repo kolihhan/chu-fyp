@@ -117,7 +117,7 @@ const App: React.FC = () => {
   }, [checkToken]);
 
   return (
-    <Layout style={{minHeight:'100vh'}}>
+    <Layout style={{minHeight:'150vh'}}>
     <Router>
       <LoadingScreen>
         <Navbar />
