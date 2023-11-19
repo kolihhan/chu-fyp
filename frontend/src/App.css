@@ -147,3 +147,150 @@
   font-size: 16px;
   margin-bottom: 8px;
 }
+
+/* Chat window container */
+.chat-window {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  width: 60px;
+  overflow: hidden;
+  transition: width 0.3s ease-in-out;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.chat-window.open {
+  width: 300px;
+}
+
+/* Chat icon */
+.chat-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s ease-in-out;
+  color: #007bff;
+  font-size: 24px;
+  line-height: 60px;
+  text-align: center;
+}
+
+.chat-icon.hide {
+  transform: scale(0);
+}
+/* Chat box */
+.chat-box {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: height 0.3s ease-in-out;
+}
+
+/* Chat header */
+.chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  background-color: #f5f5f5;
+  border-radius: 10px 10px 0 0;
+}
+
+.chat-header h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+/* Chat content */
+.chat-content {
+  padding: 12px;
+  background-color: #f9f9f9;
+  overflow-y: auto;
+  max-height: 300px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.chat-message {
+  margin: 8px 0;
+  padding: 8px 12px;
+  border-radius: 20px;
+  max-width: 70%;
+  word-wrap: break-word;
+  animation: fadeIn 0.5s ease;
+}
+
+.user-message {
+  background-color: #007bff;
+  color: #fff;
+  align-self: flex-end;
+}
+
+.bot-message {
+  background-color: #d3d3d3;
+  align-self: flex-start;
+}
+
+/* Chat input */
+.chat-input {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border-top: 1px solid #eee;
+  border-radius: 0 0 10px 10px;
+}
+
+.chat-input input {
+  flex: 1;
+  margin-right: 12px;
+  border: none;
+  padding: 8px;
+  border-radius: 20px;
+  outline: none;
+}
+
+.chat-input button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 20px;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.3s ease;
+}
+
+.chat-input button:hover {
+  background-color: #0056b3;
+}
+
+/* 消息渐现动画效果 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 响应式设计 - 移动设备优化 */
+@media screen and (max-width: 768px) {
+  .chat-window {
+    right: 10px;
+    bottom: 10px;
+  }
+  .chat-window.open {
+    width: calc(100% - 20px);
+  }
+  /* 其他移动设备上的样式调整 */
+}

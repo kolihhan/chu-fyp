@@ -42,6 +42,7 @@ import ManagePermissionPage from './pages/companies/admin/settings/ManagePermiss
 import ManageRecruitmentPage from './pages/companies/admin/settings/ManageRecruitmentPage';
 import AdminNavBar from './components/AdminNavBar';
 import RoutesComponent from './components/RoutesComponent';
+import ChatComponent from './components/ChatModal';
 
 const Protected: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -123,6 +124,7 @@ const App: React.FC = () => {
         <Navbar />
         <AdminNavBar />
         <RoutesComponent/>
+        <ChatComponent />
       </LoadingScreen>
     </Router>
     </Layout>
