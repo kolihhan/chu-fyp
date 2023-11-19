@@ -32,26 +32,25 @@ const ButtonRow: React.FC<ButtonRowProps> = ({id}) => {
     const isEmployee = useSelector((state: RootState) => state.employee.employees);
 
     const handlerView = async () => {
-        const response = await getUserEmployee(Number(getCookie('userId')))
-        response.data.map((cmp: any) => {
-            if(cmp.company_id==id) {
-                setCookie('employeeId', cmp.id)
+        isEmployee.forEach((employee, index) => {
+            if(employee.company_id.id==id) {
+                dispatch(setSelectCompany(index))
+                setCookie('employeeId', employee.id)
+                setCookie("companyId", `${id}`)
+                navigate(`/company/view`)
+                window.location.reload()
             }
         })
-        navigate(`/company/view`)
-        setCookie("companyId", `${id}`)
     }
 
     const handlerEnter = async () => {
-        setCookie("companyId", `${id}`)
         isEmployee.forEach((employee, index) => {
             if(employee.company_id.id==id) {
-                console.log(employee)
                 dispatch(setSelectCompany(index))
-                // setCompanyName(employee.company_id.name);
                 setCookie('employeeId', employee.id)
                 setCookie("companyId", `${id}`)
                 navigate(`/admin/company/employees`)
+                window.location.reload()
             }
         })
     }
