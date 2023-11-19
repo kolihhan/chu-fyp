@@ -109,17 +109,16 @@ export const DropDownIcon: React.FC<{ isManage: boolean; isEmployee: any[]; }> =
   );
 };
 
-
-
-const CompanySwitcher: React.FC<{ isEmployee: any[], companyNum: number }> = ({ isEmployee, companyNum }) => {
+export const CompanySwitcher: React.FC<{ isEmployee: any[], companyNum: number }> = ({ isEmployee, companyNum }) => {
   type AppDispatch = ThunkDispatch<RootState, unknown, AnyAction>;
 
   const dispatch: AppDispatch = useDispatch();
-  const [companyName, setCompanyName] = useState(isEmployee[0].company_id.name ?? "");
+  const [companyName, setCompanyName] = useState(isEmployee[companyNum].company_id.name ?? "");
   const handleCompanySelect = (companyId: number) => {
     dispatch(setSelectCompany(companyId));
     setCompanyName(isEmployee[companyId].company_id.name ?? "");
     setCookie("companyId", isEmployee[companyId].company_id.id)
+    setCookie('employeeId', isEmployee[companyId].id)
     window.location.reload();
   };
 
@@ -177,7 +176,7 @@ const Navbar: React.FC = () => {
           <>
            
             {isEmployee.length > 1 ? (
-              <CompanySwitcher isEmployee={isEmployee} companyNum={isEmployee[companyNum].company_id.id} />
+              <CompanySwitcher isEmployee={isEmployee} companyNum={companyNum} />
             ) : (
               <span className="ml-auto mr-3">{isEmployee[companyNum].company_id.name ?? ""}</span>
             )}

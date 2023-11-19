@@ -1,19 +1,23 @@
 import { useEffect, useState, useRef } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Form, Input, Button, Upload, Image, message } from "antd";
 import { createCompany } from "../../../api";
 import { useLoading } from "../../../components/LoadingScreen";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../app/store";
+import { setEmployees, setSelectCompany } from "../../../reducers/employeeReducers";
 
 const CreateCompaniesPage: React.FC = () => {
   const history = useNavigate();
   const isUser = useSelector((state: RootState) => state.auth.user);
+  const isEmployee = useSelector((state: RootState) => state.employee.employees);
   const image = "/image/empty.png"
   const { setLoading } = useLoading();
   setLoading(false);
 
   const [logo, setLogo] = useState(image)
+  const dispatch = useDispatch()
 
   const beforeUpload = (file: any) => {
     if (file.type.indexOf('image/') === -1) {
@@ -40,11 +44,16 @@ const CreateCompaniesPage: React.FC = () => {
     values["boss_id"] = isUser?.id;
     values["logo"] = logo
     try {
-      await createCompany(values);
-      history("/"); 
+      const response = await createCompany(values);
+      if(response.status==200){
+        message.success('公司創建成功')
+        dispatch(setEmployees(response.data.employee))
+        history("/");
+      }else{
+        message.success('公司創建失敗')
+      }
     } catch (error) {
       console.log(error);
-      
     }
     setLoading(false);
   };

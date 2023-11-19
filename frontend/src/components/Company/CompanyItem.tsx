@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import 'dayjs/locale/zh-cn';
 import { getCookie, setCookie } from '../../utils';
 import { getUserEmployee } from '../../api';
+import { setSelectCompany } from '../../reducers/employeeReducers';
 
 
 
@@ -27,6 +28,8 @@ interface ButtonRowProps{
 const ButtonRow: React.FC<ButtonRowProps> = ({id}) => {
 
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const isEmployee = useSelector((state: RootState) => state.employee.employees);
 
     const handlerView = async () => {
         const response = await getUserEmployee(Number(getCookie('userId')))
@@ -40,14 +43,17 @@ const ButtonRow: React.FC<ButtonRowProps> = ({id}) => {
     }
 
     const handlerEnter = async () => {
-        const response = await getUserEmployee(Number(getCookie('userId')))
-        response.data.map((cmp: any) => {
-            if(cmp.company_id==id) {
-                setCookie('employeeId', cmp.id)
+        setCookie("companyId", `${id}`)
+        isEmployee.forEach((employee, index) => {
+            if(employee.company_id.id==id) {
+                console.log(employee)
+                dispatch(setSelectCompany(index))
+                // setCompanyName(employee.company_id.name);
+                setCookie('employeeId', employee.id)
+                setCookie("companyId", `${id}`)
+                navigate(`/admin/company/employees`)
             }
         })
-        navigate(`/admin/company/employees`)
-        setCookie("companyId", `${id}`)
     }
 
     return (

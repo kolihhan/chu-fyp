@@ -350,7 +350,10 @@ def createCompany(request):
             )
             # endregion checkInRule
             
-        return Response({'message':'公司創建成功', 'data':serializer.data})
+            companyEmployee = models.CompanyEmployee.objects.filter(user_id__id=companyData['data']['boss_id'])
+            companyEmployeeSerializer = serializers.CompanyEmployeeSerializer(companyEmployee, many=True)
+
+        return Response({'message':'公司創建成功', 'data':serializer.data, 'employee':companyEmployeeSerializer.data})
     except Exception as e:
         transaction.rollback()
         return Response({'message':'公司創建失敗，請稍後再嘗試', 'error':str(e)}, status=status.HTTP_400_BAD_REQUEST)
