@@ -40,7 +40,6 @@ const EmployeeData: React.FC = () => {
   const chartCardStyle: React.CSSProperties = {
     flexBasis: '50%',
     width: '50%',
-    padding: '10px',
   };
 
   return (

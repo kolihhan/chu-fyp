@@ -163,9 +163,9 @@ const CompanyDetailPage: React.FC = () => {
       {/* display flex change to block  */}
       {/* can set the right side panel to bottom */}
 
-      <div style={{ display: "flex", alignItems: "start", justifyContent: "space-between" }}>
+      <div style={{ display: "flex", alignItems: "start", justifyContent: "space-between", marginTop:'8px' }}>
 
-        <div style={{ flex: 7, background:"transparent", padding: "0px", display:'flex', flexDirection:'column', height: 'calc(100vh - 250px)', overflowY:'auto'}}>
+        <div style={{ flex: 7, background:"transparent", padding: "0px", display:'flex', flexDirection:'column', height: 'calc(100vh - 250px)', overflowY:'auto', marginRight:'8px'}}>
           <EmployeeData />
           <DashboardEmployeeScore />
           <Card id="cmpDetails"

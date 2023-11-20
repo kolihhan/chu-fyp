@@ -88,7 +88,7 @@ const EmployeeHomePage: React.FC = () => {
             <CompanyHeader company={company} checkInButton={true} />
 
             <div style={{ display: "flex", alignItems: "start", justifyContent: "space-between", marginTop:'8px' }}>
-                <div style={{ flex: 7, background:"transparent", padding: "0px", display:'flex', flexDirection:'column', height: 'calc(100vh - 250px)' }} >
+                <div style={{ flex: 7, background:"transparent", padding: "0px", display:'flex', flexDirection:'column', height: 'calc(100vh - 250px)', marginRight:'8px' }} >
                     <Card id="cmpAnnouncements" 
                         style={{flex:'auto', overflowY: "auto"}}
                         bodyStyle={{ backgroundColor: "white", paddingTop: "0px", overflowY: "auto" }}
@@ -163,7 +163,7 @@ const EmployeeHomePage: React.FC = () => {
 
                 <div style={{ flex: 3, padding: "0px", display:'flex', flexDirection:'column', height: 'calc(100vh - 250px)' }} >
                     <Card id="cmpDetailEmployees"
-                        style={{flex:'auto'}}
+                        style={{flex:'1', overflowY: "auto"}}
                         bodyStyle={{ backgroundColor: "white", paddingTop: "0px", overflowY: "auto" }}
                         title={<h2 style={{ margin: "0px" }}>員工列表</h2>} >
                         {
