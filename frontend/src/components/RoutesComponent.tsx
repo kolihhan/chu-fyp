@@ -38,6 +38,7 @@ import CompanyCreateTaskPage from "../pages/companies/admin/companyTaskList/comp
 import CompanyTaskDetailPage from "../pages/companies/admin/companyTaskList/companyTask/CompanyTaskDetailPage";
 import EmployeeTaskPage from "../pages/companies/employees/EmployeeTaskPage";
 import EmployeeTaskForcePage from "../pages/companies/employees/EmployeeTaskForcePage";
+import { getCookie } from "../utils";
 
 const Protected: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const user = useSelector((state: RootState) => state.auth.user);
@@ -77,14 +78,15 @@ const Protected: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   
   const ProtectedAdmin: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const employees = useSelector((state: RootState) => state.employee.employees);
+    const companyNum = useSelector((state: RootState) => state.employee.selectCompany);
     const navigate = useNavigate();
     const isMessageDisplayed = useRef(false);
-  
-  
+    const userId = getCookie('userId');
+
     useEffect(() => {
-      if (!employees && !isMessageDisplayed.current) {
+      if (employees[companyNum].company_id.boss_id.id !== Number(userId) && !isMessageDisplayed.current) {
   
-        message.error('请登录后再执行此操作');
+        message.error('你不是這間公司的老闆 BABI');
         isMessageDisplayed.current = true;
         navigate('/login');
       }
@@ -121,11 +123,11 @@ const RoutesComponent: React.FC = () =>{
                 <Route path="/company/employee/profile" element={<ProtectedEmployee><EmployeeProfilePage /></ProtectedEmployee>} />
                 <Route path="/company/applicationleave" element={<ProtectedEmployee><ApplicationLeavePage /></ProtectedEmployee>} />
                 <Route path="/company/tasks" element={<ProtectedEmployee><EmployeeTaskPage /></ProtectedEmployee>} />
-                <Route path="/company/employee/taskforce" element={<ProtectedAdmin><EmployeeTaskForcePage /></ProtectedAdmin>} />
-                <Route path="company/task-list/create" element={<ProtectedAdmin><CompanyCreateTaskForcePage /></ProtectedAdmin>} /> {/* 创建新的 */}
-                <Route path="company/task-list/:id/update" element={<ProtectedAdmin><CompanyCreateTaskForcePage /></ProtectedAdmin>} /> {/* 编辑现有 */}
-                <Route path="company/task-list/:id/details" element={<ProtectedAdmin><CompanyTaskDetailPage /></ProtectedAdmin>} /> {/* 编辑现有 */}
-                <Route path="company/task-list/:id/details/create" element={<ProtectedAdmin><CompanyCreateTaskPage /></ProtectedAdmin>} /> {/* 编辑现有 */}
+                <Route path="/company/employee/taskforce" element={<ProtectedEmployee><EmployeeTaskForcePage /></ProtectedEmployee>} />
+                <Route path="company/task-list/create" element={<ProtectedEmployee><CompanyCreateTaskForcePage /></ProtectedEmployee>} /> {/* 创建新的 */}
+                <Route path="company/task-list/:id/update" element={<ProtectedEmployee><CompanyCreateTaskForcePage /></ProtectedEmployee>} /> {/* 编辑现有 */}
+                <Route path="company/task-list/:id/details" element={<ProtectedEmployee><CompanyTaskDetailPage /></ProtectedEmployee>} /> {/* 编辑现有 */}
+                <Route path="company/task-list/:id/details/create" element={<ProtectedEmployee><CompanyCreateTaskPage /></ProtectedEmployee>} /> {/* 编辑现有 */}
 
 
                 {/* Admin */}
