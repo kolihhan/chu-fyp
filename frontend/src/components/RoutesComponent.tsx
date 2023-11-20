@@ -122,6 +122,7 @@ const RoutesComponent: React.FC = () =>{
                 <Route path="/company/applicationleave" element={<ProtectedEmployee><ApplicationLeavePage /></ProtectedEmployee>} />
                 <Route path="/company/tasks" element={<ProtectedEmployee><EmployeeTaskPage /></ProtectedEmployee>} />
                 <Route path="/company/employee/taskforce" element={<ProtectedAdmin><EmployeeTaskForcePage /></ProtectedAdmin>} />
+                <Route path="company/task-list/create" element={<ProtectedAdmin><CompanyCreateTaskForcePage /></ProtectedAdmin>} /> {/* 创建新的 */}
                 <Route path="company/task-list/:id/update" element={<ProtectedAdmin><CompanyCreateTaskForcePage /></ProtectedAdmin>} /> {/* 编辑现有 */}
                 <Route path="company/task-list/:id/details" element={<ProtectedAdmin><CompanyTaskDetailPage /></ProtectedAdmin>} /> {/* 编辑现有 */}
                 <Route path="company/task-list/:id/details/create" element={<ProtectedAdmin><CompanyCreateTaskPage /></ProtectedAdmin>} /> {/* 编辑现有 */}

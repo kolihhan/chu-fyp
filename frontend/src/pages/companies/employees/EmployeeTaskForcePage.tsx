@@ -106,7 +106,7 @@ const EmployeeTaskForcePage: React.FC = () => {
     return(
         <div>
             <h1>My Task Force</h1>
-            <a href="/admin/company/task-list/create">
+            <a href="/company/task-list/create">
             <Button type="primary">
                 Create Task Force
             </Button>
