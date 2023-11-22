@@ -45,9 +45,9 @@ const ProfilePage: React.FC = () => {
 
   useEffect(() => {
     dispatch(userActions.fetchUserApplicationRecord());
-    if(role=="Boss" || employeeId!=null){
+    if (role == "Boss" || employeeId != null) {
       setShowJobApply(false)
-    }else{
+    } else {
       setShowJobApply(true)
     }
   }, []);
@@ -66,7 +66,7 @@ const ProfilePage: React.FC = () => {
   const cancelApplication = async (applicationId: number) => {
     // dispatch(userActions.cancelApplicationId(applicationId));
     const response = await cancelApplicationIdApi(applicationId);
-    if(response.status == 200){
+    if (response.status == 200) {
       message.success('取消應聘記錄成功');
       dispatch(userActions.fetchUserApplicationRecord());
     }
@@ -87,8 +87,8 @@ const ProfilePage: React.FC = () => {
   const acceptOffer = async (record: any) => {
     // const status = "Accept";
     // dispatch(userActions.updateOfferStatus(record, status));
-    const response = await updateOfferStatusApi(record.id ,{status: 'Accept'});
-    if(response.status == 200){
+    const response = await updateOfferStatusApi(record.id, { status: 'Accept' });
+    if (response.status == 200) {
       message.success('操作成功');
       dispatch(userActions.fetchUserApplicationRecord());
       createEmployee(record)
@@ -98,8 +98,8 @@ const ProfilePage: React.FC = () => {
   const declineOffer = async (record: any) => {
     // const status = "Reject";
     // dispatch(userActions.updateOfferStatus(record, status));
-    const response = await updateOfferStatusApi(record,{status: 'Reject'});
-    if(response.status == 200){
+    const response = await updateOfferStatusApi(record, { status: 'Reject' });
+    if (response.status == 200) {
       dispatch(userActions.fetchUserApplicationRecord());
     }
   };
@@ -111,9 +111,9 @@ const ProfilePage: React.FC = () => {
       companyEmployeePosition_id: record.companyRecruitment_id.companyEmployeePosition.id,
       salary: record.companyRecruitment_id.max_salary,
       skills: record['userResume_id']['skills']
-    } 
+    }
     const response = await createCompanyEmployee(data)
-    if(response.status == 200){
+    if (response.status == 200) {
       dispatch(logout());
       message.success('操作成功，請重新登入');
     }
@@ -124,6 +124,7 @@ const ProfilePage: React.FC = () => {
 
       <Tabs activeKey={activeTab} onChange={toggleTab} >
         <TabPane tab="个人資料" key="profile" >
+        <div className='profileForm'>
           <Form onFinish={handleSubmit} initialValues={userData} layout="vertical">
             <Form.Item label="用戶名" name="username" rules={[{ required: true, message: 'Please enter your username' }]}>
               <Input prefix={<UserOutlined />} />
@@ -156,6 +157,8 @@ const ProfilePage: React.FC = () => {
               </Button>
             </Form.Item>
           </Form>
+          </div>
+
 
         </TabPane>
 
@@ -199,7 +202,7 @@ const ProfilePage: React.FC = () => {
 
         </TabPane>
 
-        {showJobApply?(
+        {showJobApply ? (
           <TabPane tab="應聘進度" key="application">
             {/* {applicationData.map((application) => (
               <Card bodyStyle={{padding:'8px'}} style={{marginBottom:'4px'}}
@@ -251,64 +254,64 @@ const ProfilePage: React.FC = () => {
 
             <Collapse accordion>
               {applicationData.map((application) => (
-                <Panel style={{backgroundColor:'white'}}
+                <Panel style={{ backgroundColor: 'white' }}
                   header={
-                    <div style={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                       <div>
-                          <Row gutter={[4, 0]} style={{display:'flex', alignItems:'center'}}>
-                              <Col><Image src={application.companyRecruitment_id.companyEmployeePosition.company_id.logo} style={{height:'50px', width:'50px'}}/></Col>
-                              <Col>
-                                  <Row><Col>
-                                    {application.companyRecruitment_id.companyEmployeePosition.company_id.name}
-                                    <span> - </span>
-                                    {application.companyRecruitment_id.title}
-                                  </Col></Row>
-                              </Col>
-                          </Row>
+                        <Row gutter={[4, 0]} style={{ display: 'flex', alignItems: 'center' }}>
+                          <Col><Image src={application.companyRecruitment_id.companyEmployeePosition.company_id.logo} style={{ height: '50px', width: '50px' }} /></Col>
+                          <Col>
+                            <Row><Col>
+                              {application.companyRecruitment_id.companyEmployeePosition.company_id.name}
+                              <span> - </span>
+                              {application.companyRecruitment_id.title}
+                            </Col></Row>
+                          </Col>
+                        </Row>
                       </div>
                       <div>
-                        <span style={{marginRight:'16px'}}>{application.status}</span>
+                        <span style={{ marginRight: '16px' }}>{application.status}</span>
                       </div>
                     </div>
-                }
+                  }
                   key={application.id}>
 
-                  <div style={{textAlign:'right'}}>
-                    {employeeId == null?(
+                  <div style={{ textAlign: 'right' }}>
+                    {employeeId == null ? (
                       <>
                         {application.status === 'Offering' && (
-                        <>
-                          <Popconfirm title="確定接受嗎？"okText="确定"cancelText="關閉"
-                            onConfirm={() => acceptOffer(application)} >
-                            <Button type="primary" style={{marginRight:'8px'}}>Accept Offer</Button>
-                          </Popconfirm>
-                          <Popconfirm title="確定拒絕嗎？"okText="确定"cancelText="關閉"
-                            onConfirm={() => declineOffer(application.id)} >
-                            <Button danger style={{marginRight:'8px'}}>Decline Offer</Button>
-                          </Popconfirm>
-                        </>
+                          <>
+                            <Popconfirm title="確定接受嗎？" okText="确定" cancelText="關閉"
+                              onConfirm={() => acceptOffer(application)} >
+                              <Button type="primary" style={{ marginRight: '8px' }}>Accept Offer</Button>
+                            </Popconfirm>
+                            <Popconfirm title="確定拒絕嗎？" okText="确定" cancelText="關閉"
+                              onConfirm={() => declineOffer(application.id)} >
+                              <Button danger style={{ marginRight: '8px' }}>Decline Offer</Button>
+                            </Popconfirm>
+                          </>
                         )}
-                      
+
                         {(application.status !== 'Accept' && application.status !== 'Reject' && application.status !== 'Withdrawn') && (
                           <Popconfirm
                             title="確定取消嗎？"
                             onConfirm={() => cancelApplication(application.id)}
                             okText="确定"
                             cancelText="關閉">
-                            <Button type="default" style={{marginRight:'8px'}}>Cancel Application</Button>
+                            <Button type="default" style={{ marginRight: '8px' }}>Cancel Application</Button>
                           </Popconfirm>
                         )}
                       </>
-                      ):(<></>)
+                    ) : (<></>)
                     }
-                  
-                  <Button type="link" style={{marginRight:'8px'}}>查看</Button>
-                </div>
+
+                    <Button type="link" style={{ marginRight: '8px' }}>查看</Button>
+                  </div>
                 </Panel>
               ))}
             </Collapse>
           </TabPane>
-        ):(<></>)}
+        ) : (<></>)}
       </Tabs>
 
 

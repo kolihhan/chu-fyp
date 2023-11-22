@@ -1,5 +1,7 @@
+from collections import OrderedDict
 import datetime
 from datetime import timedelta, date
+import re
 import string
 
 from django.db import transaction
@@ -842,78 +844,55 @@ def getCompanyEmployeeFeedbackReview(request, pk):
     except Exception as e:
         return Response({'message':'員工反饋獲取失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-nlp = spacy.load('en_core_web_sm')
+# 處理Resumes 
+def preprocess_text(resume):
+    # 提取文本信息
+    text = resume.get('summary', '')  # 取得摘要信息
+    for section in ['experience', 'education']:
+        section_data = resume.get(section, OrderedDict())
+        # 提取每個部分的文本信息
+        section_text = ' '.join([str(value) for value in section_data.values()])
+        text += ' ' + section_text  # 將各部分文本連接到摘要信息後
 
-# 将单个简历字典转换为文本
-def convert_resume_to_text(resume):
-    print(resume)
-    experienceS = serializers.WorkingExperienceSerializer(resume['experience'])
-    
-    educationS = serializers.EducationSerializer(resume['education'])
-    title = resume['title']
-    # summary = ' '.join(resume['summary'])
-    # experience = ' '.join(resume['experience'])
-    # education = ' '.join(resume['education'])
-    skills = ' '.join(resume['skills'])
+    # 加入技能信息
+    skills = resume.get('skills', [])
+    skills_text = ' '.join(skills)
+    text += ' ' + skills_text
 
-    # 分别连接各个字段的文本
-    # {summary}
-    combined_text = f"{title} {experienceS.data} {educationS.data} {skills}"
-    return combined_text
+    # 清理文本
+    text = re.sub(r'[^\w\s]', ' ', text)  # 去除標點符號
+    text = re.sub(r'\d+', ' ', text)  # 去除數字
+    text = text.lower()  # 將文本轉換為小寫
 
-# 将多份简历字典列表转换为文本
-def convert_resumes_to_text(resumes):
-    resume_texts = []
-    for resume in resumes:
-        resume_text = convert_resume_to_text(resume)
-        resume_texts.append(resume_text)
+    # 分詞（以空格分割）
+    words = text.split()
 
-    return resume_texts  # 返回文本字符串的列表
+    # 返回處理後的文本
+    processed_text = ' '.join(words)
+    return processed_text
 
 
-def get_final_recommendations(job_texts, resume_texts, n_neighbors=3):
-    # 使用TF-IDF Vectorizer和Count Vectorizer来处理文本
+def get_final_recommendations(job_requirements, resume_data, top_n=1):
+    # 初始化TF-IDF向量化器
     tfidf_vectorizer = TfidfVectorizer()
-    count_vectorizer = CountVectorizer()
 
-    # 对职位要求和简历进行TF-IDF向量化
-    tfidf_matrix_job = tfidf_vectorizer.fit_transform(job_texts)
-    tfidf_matrix_resume = tfidf_vectorizer.transform(resume_texts)
+    # 转换用户履历文本为TF-IDF特征表示
+    tfidf_features = tfidf_vectorizer.fit_transform(resume_data)
 
-    # 对职位要求和简历进行Count Vectorizer向量化
-    count_matrix_job = count_vectorizer.fit_transform(job_texts)
-    count_matrix_resume = count_vectorizer.transform(resume_texts)
+    # 转换职位描述为TF-IDF特征表示
+    job_description_tfidf = tfidf_vectorizer.transform(job_requirements)
 
-    # 使用TF-IDF计算余弦相似性
-    cosine_similarities_tfidf = cosine_similarity(tfidf_matrix_job, tfidf_matrix_resume)
+    # 计算职位描述与用户履历之间的相似度
+    similarities = cosine_similarity(job_description_tfidf, tfidf_features)
 
-    # 使用Count Vectorizer计算余弦相似性
-    cosine_similarities_count = cosine_similarity(count_matrix_job, count_matrix_resume)
+    # 获取最匹配的候选人
+    top_matched_indices = similarities.argsort()[0][-top_n:]
 
-    # 初始化用于存储推荐的列表
-    final_recommendations = []
+    similar_candidates = []
+    for idx in top_matched_indices:
+        similar_candidates.append(resume_data[idx])
 
-    # 遍历每个职位
-    for i in range(len(job_texts)):
-        # 基于TF-IDF找到最相似简历的索引
-        tfidf_indices = cosine_similarities_tfidf[i].argsort()[::-1][:n_neighbors]
-
-        # 基于Count Vectorizer找到最相似简历的索引
-        count_indices = cosine_similarities_count[i].argsort()[::-1][:n_neighbors]
-
-        # 合并两种方法的索引
-        combined_indices = np.union1d(tfidf_indices, count_indices)
-
-        # 按照余弦相似性之和（值越小越好）对推荐进行排序
-        combined_recommendations = [(idx, cosine_similarities_tfidf[i][idx] + cosine_similarities_count[i][idx]) for idx in combined_indices if idx < len(resume_texts)]
-        combined_recommendations.sort(key=lambda x: x[1])
-
-        # 从合并的推荐中提取简历文本
-        recommended_resumes = [(resume_texts[idx], 100 - i) for i, (idx, _) in enumerate(combined_recommendations)]
-
-        final_recommendations.append(recommended_resumes)
-
-    return final_recommendations
+    return similar_candidates
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -927,25 +906,26 @@ def get_recommendations(request):
         job = CompanyRecruitment.objects.get(pk=job_id)
     except CompanyRecruitment.DoesNotExist:
         return JsonResponse({'error': 'Job not found'}, status=404)
-
+    
     job_requirements = [job.requirement]
+
     applicationRecord = UserApplicationRecord.objects.filter(companyRecruitment_id__id=job_id)
+
+    if not applicationRecord.exists():  # 如果查詢集合為空
+        return JsonResponse({'error': 'UserApplicationRecord not found'}, status=404)
 
     candidates = []
     for record in applicationRecord:
-        user_resume = record.userResume_id  # 假设userResume_id是UserResume对象的引用
-        # 从UserResume对象中提取所需字段并创建一个简历字典
-        resume_dict = {
-            'title': user_resume.title,
-            'experience': user_resume.experience,
-            'education': user_resume.education,
-            'skills': user_resume.skills,
-        }
-        candidates.append(resume_dict)
+        user_resume = record.userResume_id
+        serializer = serializers.UserResumeSerializerTest(user_resume)
+
+        processed_data = preprocess_text(serializer.data)
+
+        candidates.append(processed_data)
 
     similar_candidates = get_final_recommendations(
                          job_requirements,
-                         convert_resumes_to_text(candidates),
+                         candidates,
                          1  
                         )
 
@@ -958,27 +938,26 @@ def get_tfRecommend(request, id, description, title):
 
     applicationRecord = models.CompanyEmployee.objects.filter(company_id=id)
 
+    if not applicationRecord.exists():  # 如果查詢集合為空
+        return JsonResponse({'error': 'UserApplicationRecord not found'}, status=404)
+    
     recommended_resumes = []  # 用于存储推荐候选人的简历
 
     for record in applicationRecord:
         user_employee = record.user_id  # 获取与CompanyEmployee关联的UserAccount对象
         try:
             user_resume = models.UserResume.objects.filter(user=user_employee).first()  # 获取与UserAccount关联的UserResume对象
-            # 获取用户的简历信息
-            resume_dict = {
-                'title': user_resume.title,
-                'experience': user_resume.experience,
-                'education': user_resume.education,
-                'skills': user_resume.skills,
-            }
-            recommended_resumes.append(resume_dict)
+            serializer = serializers.UserResumeSerializerTest(user_resume)
+            processed_data = preprocess_text(serializer.data)
+
+            recommended_resumes.append(processed_data)
         except UserResume.DoesNotExist:
             # 如果没有与用户关联的简历，可以在这里处理
             pass
 
     similar_candidates = get_final_recommendations(
         job_requirements,
-        convert_resumes_to_text(recommended_resumes),
+        recommended_resumes,
         1
     )
 

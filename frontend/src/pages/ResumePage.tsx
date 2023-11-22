@@ -36,29 +36,29 @@ const ResumePage: React.FC = () => {
     // dispatch(fetchResumes());
     // setResumeData(selectedResume);
     form.resetFields(); // 重置表单以填充新的初始值
-    if(id) { getResumeById() }
+    if (id) { getResumeById() }
   }, [resumeData]);
 
-  const getResumeById = async() => {
+  const getResumeById = async () => {
     const response = await getResume(id)
-    if(response.status==200){
+    if (response.status == 200) {
       console.log(response.data)
-      if(stopResume==false){
+      if (stopResume == false) {
         setResumeData(response.data.data)
         setTimeout(() => {
-          if(response.data.data.experience!=null){            
+          if (response.data.data.experience != null) {
             form.setFieldsValue({
-              experience:{
-                start_date:dayjs(response.data.data.experience.start_date).format("YYYY/MM"),
-                end_date:dayjs(response.data.data.experience.end_date).format("YYYY/MM")
+              experience: {
+                start_date: dayjs(response.data.data.experience.start_date).format("YYYY/MM"),
+                end_date: dayjs(response.data.data.experience.end_date).format("YYYY/MM")
               }
             })
           }
-          if(response.data.data.education!=null){
+          if (response.data.data.education != null) {
             form.setFieldsValue({
-              education:{
-                start_date:dayjs(response.data.data.education.start_date).format("YYYY/MM"),
-                end_date:dayjs(response.data.data.education.end_date).format("YYYY/MM")
+              education: {
+                start_date: dayjs(response.data.data.education.start_date).format("YYYY/MM"),
+                end_date: dayjs(response.data.data.education.end_date).format("YYYY/MM")
               }
             })
           }
@@ -70,10 +70,10 @@ const ResumePage: React.FC = () => {
 
   const onFinish = async (values: any) => {
     console.log(values)
-      values.experience.start_date = dayjs(values.experience.start_date)
-      values.experience.end_date = dayjs(values.experience.end_date)
-      values.education.start_date = dayjs(values.education.start_date)
-      values.education.end_date = dayjs(values.education.end_date)
+    values.experience.start_date = dayjs(values.experience.start_date)
+    values.experience.end_date = dayjs(values.experience.end_date)
+    values.education.start_date = dayjs(values.education.start_date)
+    values.education.end_date = dayjs(values.education.end_date)
     console.log(values)
     if (id) {
       console.log("finish: update")
@@ -91,6 +91,7 @@ const ResumePage: React.FC = () => {
   const statusOptions = ['graduated', 'studying', 'drop out of school'];
 
   return (
+    <div className='profileForm'>
     <Form form={form} onFinish={onFinish} initialValues={resumeData} layout="vertical">
       <Form.Item label="履歷名稱" name="title" rules={[{ required: true, message: '此欄為必填' }]}>
         <Input/>
@@ -168,6 +169,8 @@ const ResumePage: React.FC = () => {
         </Button>
       </Form.Item>
     </Form>
+    </div>
+
   );
 };
 

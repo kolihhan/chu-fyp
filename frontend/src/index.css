@@ -87,3 +87,120 @@ code {
 }
 
 
+
+/* styles.css */
+
+/* 全局样式 */
+body {
+  font-family: 'Roboto', sans-serif; /* 使用更现代的字体 */
+  background-color: #f8f8f8; /* 更轻柔的背景色 */
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  margin: 20px auto; /* 居中容器 */
+  padding: 20px; /* 添加内边距 */
+  background-color: #ffffff; /* 白色背景 */
+  border-radius: 8px; /* 圆角边框 */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 微小的阴影 */
+}
+
+/* 调整 Ant Design 组件 */
+.ant-card {
+  margin-bottom: 20px;
+  border-radius: 8px; /* 圆角边框 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 轻微的阴影 */
+}
+
+/* 自定义输入框和选择框 */
+.ant-input,
+.ant-select {
+  border-radius: 4px; /* 圆角边框 */
+  border-color: #d9d9d9; /* 更柔和的边框颜色 */
+}
+
+/* 自定义按钮 */
+.ant-btn-primary {
+  background-color: #1890ff; /* 蓝色背景 */
+  border-color: #1890ff;
+  border-radius: 4px; /* 圆角边框 */
+}
+
+.ant-btn-primary:hover,
+.ant-btn-primary:focus {
+  background-color: #40a9ff; /* 悬停时的颜色变化 */
+  border-color: #40a9ff;
+}
+
+/* 调整表单元素标签样式 */
+.ant-form-item-label {
+  font-weight: bold;
+  color: #333333; /* 更深的文本颜色 */
+}
+
+/* 调整表单元素样式 */
+.ant-form-item {
+  margin-bottom: 20px; /* 调整表单项之间的间距 */
+}
+
+/* 自定义输入框和选择框 */
+.ant-input,
+.ant-select {
+  border-radius: 4px; /* 圆角边框 */
+  border-color: #d9d9d9; /* 更柔和的边框颜色 */
+}
+
+/* 自定义按钮 */
+.ant-btn-primary {
+  background-color: #1890ff; /* 蓝色背景 */
+  border-color: #1890ff;
+  border-radius: 4px; /* 圆角边框 */
+}
+
+.ant-btn-primary:hover,
+.ant-btn-primary:focus {
+  background-color: #40a9ff; /* 悬停时的颜色变化 */
+  border-color: #40a9ff;
+}
+
+/* 调整表单元素标签样式 */
+.ant-form-item-label {
+  font-weight: bold;
+  color: #333333; /* 更深的文本颜色 */
+}
+
+/* 自定义 profileForm 样式 */
+.profileForm {
+  margin: 0 auto; /* 居中表单 */
+  padding: 30px; /* 添加内边距 */
+  background-color: #f9f9f9; /* 淡色背景 */
+  border-radius: 8px; /* 圆角边框 */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* 更明显的阴影 */
+}
+
+/* 自定义输入框和选择框 */
+.profileForm .ant-input,
+.profileForm .ant-select {
+  border-radius: 4px; /* 圆角边框 */
+  border-color: #d9d9d9; /* 更柔和的边框颜色 */
+}
+
+/* 自定义按钮 */
+.profileForm .ant-btn-primary {
+  background-color: #1890ff; /* 蓝色背景 */
+  border-color: #1890ff;
+  border-radius: 4px; /* 圆角边框 */
+}
+
+.profileForm .ant-btn-primary:hover,
+.profileForm .ant-btn-primary:focus {
+  background-color: #40a9ff; /* 悬停时的颜色变化 */
+  border-color: #40a9ff;
+}
+
+/* 调整表单元素标签样式 */
+.profileForm .ant-form-item-label {
+  font-weight: bold;
+  color: #333333; /* 更深的文本颜色 */
+}

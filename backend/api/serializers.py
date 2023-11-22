@@ -153,6 +153,13 @@ class UserResumeSerializer(serializers.ModelSerializer):
         model = models.UserResume
         fields = '__all__'
 
+class UserResumeSerializerTest(serializers.ModelSerializer):
+    experience = WorkingExperienceSerializer(many=False, read_only=True)
+    education = EducationSerializer(many=False, read_only=True)
+    class Meta: 
+        model = models.UserResume
+        fields = ['summary', 'experience', 'education', 'skills']
+        
 class UserOfferRecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.UserOfferRecord
