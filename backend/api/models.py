@@ -435,3 +435,10 @@ class Task(models.Model):
 
     def __str__(self):
         return self.task_name
+
+class CompanyInvitation(models.Model):
+    email = models.EmailField()
+    company_id = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='comapny_invitation')
+    code = models.TextField()
+    status = models.CharField(default='Pending')
+    expire_at = models.DateTimeField(default=timezone.now() + timezone.timedelta(days=7))
