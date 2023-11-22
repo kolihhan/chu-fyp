@@ -83,8 +83,8 @@ const ManageEmployeesPositionPage: React.FC = () => {
   };
 
   const columns = [
-    { title: "职位名称", dataIndex: "position_name", key: "position_name" },
-    { title: "部门", dataIndex: "department_name", key: "department_name" },
+    { title: "職位名稱", dataIndex: "position_name", key: "position_name" },
+    { title: "部門", dataIndex: "department_name", key: "department_name" },
     {
       title: "操作",
       key: "actions",
@@ -112,47 +112,54 @@ const ManageEmployeesPositionPage: React.FC = () => {
 
   return (
     <div>
-      <h1>职位管理</h1>
+      <h1 style={{ textAlign: 'center', marginBottom: '20px' }}>職位管理</h1>
 
-      <Button type="primary" onClick={showModal}>
-        創建職位
-      </Button>
+      <div style={{ marginBottom: '16px', textAlign: 'right' }}>
+        <Button type="primary" onClick={showModal}>
+          創建職位
+        </Button>
+      </div>
 
       <Table dataSource={employeePositions} columns={columns} />
 
       <Modal
-        title={selectedPosition ? "編輯職位" : "創建職位"}
+        title={selectedPosition ? '編輯職位' : '創建職位'}
         visible={isModalVisible}
         onCancel={handleCancel}
         footer={null}
       >
-        <Form form={form} onFinish={selectedPosition ? handleUpdatePosition : handleCreatePosition}>
+        <Form form={form} onFinish={selectedPosition ? handleUpdatePosition : handleCreatePosition} labelCol={{ span: 6 }} wrapperCol={{ span: 16 }}>
           <Form.Item
             name="position_name"
             label="職位名稱"
-            rules={[{ required: true, message: "請輸入職位名稱" }]} >
+            rules={[{ required: true, message: '請輸入職位名稱' }]}
+          >
             <Input />
           </Form.Item>
 
           <Form.Item
             name="companyDepartment_id"
             label="部門"
-            rules={[{ required: true, message: "請輸入部門名稱" }]} >
-            <Select showSearch optionFilterProp="children" 
-                filterOption={(input, option) =>
-                  option?.props?.children?.toString()?.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                }>
-                {availableDepartments?.map((department: any) => (
-                  <Select.Option key={department.id} value={department.id}>
-                    {department.department_name}
-                  </Select.Option>
-                ))}
-              </Select>
+            rules={[{ required: true, message: '請選擇部門' }]}
+          >
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option?.props?.children?.toString()?.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+            >
+              {availableDepartments?.map((department: any) => (
+                <Select.Option key={department.id} value={department.id}>
+                  {department.department_name}
+                </Select.Option>
+              ))}
+            </Select>
           </Form.Item>
 
-          <Form.Item>
+          <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
             <Button type="primary" htmlType="submit">
-              {selectedPosition ? "更新" : "創建"}
+              {selectedPosition ? '更新' : '創建'}
             </Button>
           </Form.Item>
         </Form>
@@ -160,5 +167,6 @@ const ManageEmployeesPositionPage: React.FC = () => {
     </div>
   );
 };
+
 
 export default ManageEmployeesPositionPage;

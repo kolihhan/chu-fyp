@@ -32,22 +32,22 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div style={{ backgroundColor: '#f0f2f5', padding: '20px', borderRadius: '5px' }}>
-      <h1>Login Page</h1>
-      <Form onFinish={handleSubmit}>
-        <Form.Item name="username" label="Username">
+    <div className="login-container">
+      <h1 style={{ textAlign: 'center'}}>登入</h1>
+      <Form onFinish={handleSubmit} style={{ maxWidth: '300px', margin: '0 auto'}}>
+        <Form.Item style={{width: '100%'}} name="username" label="用戶名" labelCol={{span:24}}>
           <Input value={username} onChange={handleUsernameChange} />
         </Form.Item>
-        <Form.Item name="password" label="Password">
+        <Form.Item style={{width: '100%'}} name="password" label="密碼" labelCol={{span:24}}>
           <Input.Password value={password} onChange={handlePasswordChange} />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Log in
+          <Button type="primary" htmlType="submit" style={{ width: '100%', marginTop: '25px' }}>
+            登入
           </Button>
         </Form.Item>
         <Form.Item>
-          <Link to="/register">Register</Link>
+          <Link to="/register">註冊</Link>
         </Form.Item>
       </Form>
     </div>

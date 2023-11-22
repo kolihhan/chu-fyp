@@ -66,15 +66,15 @@ const ManageEmployeeLeavePage: React.FC = () => {
     
     
     const columns = [
-        { title: 'Employee', dataIndex: 'companyEmployee_id', key: 'company_employee_id', render: (companyEmployee:any) => 
+        { title: '員工', dataIndex: 'companyEmployee_id', key: 'company_employee_id', render: (companyEmployee:any) => 
             companyEmployee.user_id.name
         },
-        { title: 'Start Date', dataIndex: 'leave_start', key: 'leave_start', render: (text:any) => dayjs(text).format('YYYY-MM-DD') },
-        { title: 'End Date', dataIndex: 'leave_end', key: 'leave_end', render: (text:any) => dayjs(text).format('YYYY-MM-DD') },
-        { title: 'Reason', dataIndex: 'reason', key: 'reason' },
-        { title: 'Type', dataIndex: 'type', key: 'type' },
-        { title: 'Status', dataIndex: 'status', key: 'status' },
-        { title: 'Comment', dataIndex: 'comment', key: 'comment', render: (text:any) => (text==null?"-":text) },
+        { title: '開始日期', dataIndex: 'leave_start', key: 'leave_start', render: (text:any) => dayjs(text).format('YYYY-MM-DD') },
+        { title: '結束日期', dataIndex: 'leave_end', key: 'leave_end', render: (text:any) => dayjs(text).format('YYYY-MM-DD') },
+        { title: '原因', dataIndex: 'reason', key: 'reason' },
+        { title: '類型', dataIndex: 'type', key: 'type' },
+        { title: '狀態', dataIndex: 'status', key: 'status' },
+        { title: '評論', dataIndex: 'comment', key: 'comment', render: (text:any) => (text==null?"-":text) },
         { title: '', dataIndex:'', key:"action", render: (record: any) => (
             <>
                 {record.status=='Pending' && (

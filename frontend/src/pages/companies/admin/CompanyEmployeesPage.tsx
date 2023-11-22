@@ -86,10 +86,10 @@ const CompanyEmployeePage: React.FC = () => {
   );
 
   const columns = [
-    { title: 'Employee', key: 'employee', render: (_ : any, record: any) =>  <span>{record.user_id.name}</span> },
-    { title: 'Department', dataIndex: 'department', key: 'department', render:(_ : any, record: any) => <span>{record.companyEmployeePosition_id.companyDepartment_id.department_name }</span> },
-    { title: 'Position', dataIndex: 'position', key: 'position', render:(_ : any, record: any) => <span>{record.companyEmployeePosition_id.position_name}</span> },
-    { title: 'Actions', key: 'actions', render: (_ : any, record: any) => (
+    { title: '員工', key: 'employee', render: (_ : any, record: any) =>  <span>{record.user_id.name}</span> },
+    { title: '部門', dataIndex: 'department', key: 'department', render:(_ : any, record: any) => <span>{record.companyEmployeePosition_id.companyDepartment_id.department_name }</span> },
+    { title: '職位', dataIndex: 'position', key: 'position', render:(_ : any, record: any) => <span>{record.companyEmployeePosition_id.position_name}</span> },
+    { title: '操作', key: 'actions', render: (_ : any, record: any) => (
       <>
         <Link to={`/admin/company/manage/${record.id}`}>Manage Permissions</Link>
         <Button type='link' onClick={() => fireEmployee(record.id)}>Fire Employee</Button>
@@ -106,44 +106,53 @@ const CompanyEmployeePage: React.FC = () => {
       showTotal: (total:any, range:any) => `${range[0]}-${range[1]} of ${total} items`,
     };
 
-  return (
+   return (
     <div>
-      <h1>公司職員</h1>
-      <div style={{display:'flex', justifyContent:'space-between'}}>
-        <Input.Search placeholder="Search employee" onSearch={handleSearch} style={{ width: 200, marginBottom: 16 }} />
-        <Button onClick={handleInviteEmployee}>邀請員工</Button>
+      <h1 style={{ textAlign: 'center', marginBottom: '20px' }}>公司職員</h1>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
+        <Input.Search
+          placeholder="搜索員工"
+          onSearch={handleSearch}
+          style={{ width: 200 }}
+        />
+        <Button type="primary" onClick={handleInviteEmployee}>
+          邀請員工
+        </Button>
       </div>
       <Table dataSource={filteredEmployees} columns={columns} />
-      <Modal 
+
+      <Modal
         visible={modalVisible}
         onCancel={handleModalCancel}
         onOk={handleModalSubmit}
-        title="邀請員工">
-          <Form form={form}>
-            <Form.Item name="email" label="員工" rules={[{ required:true }]}>
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name="position"
-              label="職位"
-              rules={[{ required: true, message: "請輸入職位" }]}>
-              <Select placeholder="員工">
-                {availablePosition.map((position) => (
-                  <Option value={position.id}>{position.position_name}</Option>
-                ))}
-              </Select>
+        title="邀請員工"
+      >
+        <Form form={form} labelCol={{ span: 6 }} wrapperCol={{ span: 16 }}>
+          <Form.Item name="email" label="員工" rules={[{ required: true, message: '請輸入員工郵箱' }]}>
+            <Input />
           </Form.Item>
-          <Form.Item label="薪資" name="salary" rules={[{ required: true, message: "請輸入薪資" }]}>
-              <InputNumber style={{width:'100%'}} min={0} type="number"/>
-            </Form.Item>
-          </Form>
-        </Modal>
-
-
-      {/* Button to navigate to permission settings page */}
-      {/* <Button type="primary">
-        <Link to="/permission-settings">Permission Settings</Link>
-      </Button> */}
+          <Form.Item
+            name="position"
+            label="職位"
+            rules={[{ required: true, message: '請輸入職位' }]}
+          >
+            <Select placeholder="選擇職位">
+              {availablePosition.map((position) => (
+                <Option key={position.id} value={position.id}>
+                  {position.position_name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            label="薪資"
+            name="salary"
+            rules={[{ required: true, message: '請輸入薪資' }]}
+          >
+            <InputNumber style={{ width: '100%' }} min={0} type="number" />
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 };

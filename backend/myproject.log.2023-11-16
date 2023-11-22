@@ -1,0 +1,162 @@
+[16/Nov/2023 14:14:35] WARNING [django.request:241] Unauthorized: /api/companyRecruitment/get/company/all
+[16/Nov/2023 14:14:35] WARNING [django.request:241] Unauthorized: /api/companyRecruitment/get/company/all
+[16/Nov/2023 14:14:35] WARNING [django.server:212] "GET /api/companyRecruitment/get/company/all HTTP/1.1" 401 183
+[16/Nov/2023 14:14:35] WARNING [django.server:212] "GET /api/companyRecruitment/get/company/all HTTP/1.1" 401 183
+[16/Nov/2023 14:19:36] WARNING [django.request:241] Unauthorized: /api/verify
+[16/Nov/2023 14:19:36] WARNING [django.request:241] Unauthorized: /api/verify
+[16/Nov/2023 14:19:36] WARNING [django.server:212] "POST /api/verify HTTP/1.1" 401 183
+[16/Nov/2023 14:19:36] WARNING [django.server:212] "POST /api/verify HTTP/1.1" 401 183
+[16/Nov/2023 14:28:41] WARNING [django.request:241] Not Found: /favicon.ico
+[16/Nov/2023 14:28:41] WARNING [django.request:241] Not Found: /favicon.ico
+[16/Nov/2023 14:28:41] WARNING [django.server:212] "GET /favicon.ico HTTP/1.1" 404 2215
+[16/Nov/2023 14:28:41] WARNING [django.server:212] "GET /favicon.ico HTTP/1.1" 404 2215
+[16/Nov/2023 15:02:07] WARNING [django.request:241] Unauthorized: /api/companyRecruitment/get/company/all
+[16/Nov/2023 15:02:07] WARNING [django.request:241] Unauthorized: /api/companyRecruitment/get/company/all
+[16/Nov/2023 15:02:07] WARNING [django.server:212] "GET /api/companyRecruitment/get/company/all HTTP/1.1" 401 183
+[16/Nov/2023 15:02:07] WARNING [django.server:212] "GET /api/companyRecruitment/get/company/all HTTP/1.1" 401 183
+[16/Nov/2023 15:11:13] WARNING [django.request:241] Bad Request: /api/userApplicationRecord/create
+[16/Nov/2023 15:11:13] WARNING [django.request:241] Bad Request: /api/userApplicationRecord/create
+[16/Nov/2023 15:11:13] WARNING [django.server:212] "POST /api/userApplicationRecord/create HTTP/1.1" 400 30
+[16/Nov/2023 15:11:13] WARNING [django.server:212] "POST /api/userApplicationRecord/create HTTP/1.1" 400 30
+[16/Nov/2023 15:13:29] WARNING [django.request:241] Bad Request: /api/login
+[16/Nov/2023 15:13:29] WARNING [django.request:241] Bad Request: /api/login
+[16/Nov/2023 15:13:29] WARNING [django.server:212] "POST /api/login HTTP/1.1" 400 46
+[16/Nov/2023 15:13:29] WARNING [django.server:212] "POST /api/login HTTP/1.1" 400 46
+[16/Nov/2023 15:13:42] WARNING [django.request:241] Not Found: /api/announcement/get/company/all/NaN
+[16/Nov/2023 15:13:42] WARNING [django.request:241] Not Found: /api/announcement/get/company/all/NaN
+[16/Nov/2023 15:13:42] WARNING [django.server:212] "GET /api/announcement/get/company/all/NaN HTTP/1.1" 404 37846
+[16/Nov/2023 15:13:42] WARNING [django.server:212] "GET /api/announcement/get/company/all/NaN HTTP/1.1" 404 37846
+[16/Nov/2023 15:13:43] ERROR [django.request:241] Internal Server Error: /api/company/NaN
+[16/Nov/2023 15:13:43] ERROR [django.request:241] Internal Server Error: /api/company/NaN
+[16/Nov/2023 15:13:43] ERROR [django.server:212] "GET /api/company/NaN HTTP/1.1" 500 26
+[16/Nov/2023 15:13:43] ERROR [django.server:212] "GET /api/company/NaN HTTP/1.1" 500 26
+[16/Nov/2023 15:14:08] WARNING [django.request:241] Not Found: /api/announcement/get/company/all/NaN
+[16/Nov/2023 15:14:08] WARNING [django.request:241] Not Found: /api/announcement/get/company/all/NaN
+[16/Nov/2023 15:14:08] WARNING [django.server:212] "GET /api/announcement/get/company/all/NaN HTTP/1.1" 404 37846
+[16/Nov/2023 15:14:08] WARNING [django.server:212] "GET /api/announcement/get/company/all/NaN HTTP/1.1" 404 37846
+[16/Nov/2023 15:14:08] ERROR [django.request:241] Internal Server Error: /api/company/NaN
+[16/Nov/2023 15:14:08] ERROR [django.request:241] Internal Server Error: /api/company/NaN
+[16/Nov/2023 15:14:08] ERROR [django.server:212] "GET /api/company/NaN HTTP/1.1" 500 26
+[16/Nov/2023 15:14:08] ERROR [django.server:212] "GET /api/company/NaN HTTP/1.1" 500 26
+[16/Nov/2023 15:14:31] ERROR [django.request:241] Internal Server Error: /api/companyEmployee/get/company/all/[object Object]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/fields/__init__.py", line 2055, in get_prep_value
+    return int(value)
+ValueError: invalid literal for int() with base 10: '[object Object]'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+  File "/app/backend/api/views.py", line 692, in getCompanyAllEmployee
+    companyEmployee = models.CompanyEmployee.objects.filter(
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/query.py", line 1436, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/query.py", line 1454, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/query.py", line 1461, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1498, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1529, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1357, in build_filter
+    return self._add_q(
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1529, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1444, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1271, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/lookups.py", line 27, in __init__
+    self.rhs = self.get_prep_lookup()
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/fields/related_lookups.py", line 166, in get_prep_lookup
+    self.rhs = target_field.get_prep_value(self.rhs)
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/fields/__init__.py", line 2057, in get_prep_value
+    raise e.__class__(
+ValueError: Field 'id' expected a number but got '[object Object]'.
+[16/Nov/2023 15:14:31] ERROR [django.request:241] Internal Server Error: /api/companyEmployee/get/company/all/[object Object]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/fields/__init__.py", line 2055, in get_prep_value
+    return int(value)
+ValueError: invalid literal for int() with base 10: '[object Object]'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+  File "/app/backend/api/views.py", line 692, in getCompanyAllEmployee
+    companyEmployee = models.CompanyEmployee.objects.filter(
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/query.py", line 1436, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/query.py", line 1454, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/query.py", line 1461, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1498, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1529, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1357, in build_filter
+    return self._add_q(
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1529, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1444, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1271, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/lookups.py", line 27, in __init__
+    self.rhs = self.get_prep_lookup()
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/fields/related_lookups.py", line 166, in get_prep_lookup
+    self.rhs = target_field.get_prep_value(self.rhs)
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/fields/__init__.py", line 2057, in get_prep_value
+    raise e.__class__(
+ValueError: Field 'id' expected a number but got '[object Object]'.
+[16/Nov/2023 15:14:31] ERROR [django.server:212] "GET /api/companyEmployee/get/company/all/[object%20Object] HTTP/1.1" 500 166986
+[16/Nov/2023 15:14:31] ERROR [django.server:212] "GET /api/companyEmployee/get/company/all/[object%20Object] HTTP/1.1" 500 166986
+[16/Nov/2023 15:14:42] WARNING [django.request:241] Not Found: /api/announcement/get/company/all/NaN
+[16/Nov/2023 15:14:42] WARNING [django.request:241] Not Found: /api/announcement/get/company/all/NaN
+[16/Nov/2023 15:14:42] WARNING [django.server:212] "GET /api/announcement/get/company/all/NaN HTTP/1.1" 404 37846
+[16/Nov/2023 15:14:42] WARNING [django.server:212] "GET /api/announcement/get/company/all/NaN HTTP/1.1" 404 37846
+[16/Nov/2023 15:14:42] ERROR [django.request:241] Internal Server Error: /api/company/NaN
+[16/Nov/2023 15:14:42] ERROR [django.request:241] Internal Server Error: /api/company/NaN
+[16/Nov/2023 15:14:42] ERROR [django.server:212] "GET /api/company/NaN HTTP/1.1" 500 26
+[16/Nov/2023 15:14:42] ERROR [django.server:212] "GET /api/company/NaN HTTP/1.1" 500 26

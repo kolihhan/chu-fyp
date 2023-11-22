@@ -57,16 +57,16 @@ export const DropDownIcon: React.FC<{ isManage: boolean; isEmployee: any[]; }> =
           <Link to={`/company/home`}>首頁</Link>
         </Menu.Item>
         <Menu.Item key="employee-feedback">
-          <Link to={`/company/feedback`}>Feedback</Link>
+          <Link to={`/company/feedback`}>反饋</Link>
         </Menu.Item>
         <Menu.Item key="employee-application">
-          <Link to={`/company/applicationleave`}>ApplicationLeave</Link>
+          <Link to={`/company/applicationleave`}>請假申請</Link>
         </Menu.Item>
         <Menu.Item key="employee-taskforce">
-          <Link to={`/company/employee/taskforce`}>Task Force</Link>
+          <Link to={`/company/employee/taskforce`}>任務組</Link>
         </Menu.Item>
         <Menu.Item key="employee-tasks">
-          <Link to={`/company/tasks`}>Tasks</Link>
+          <Link to={`/company/tasks`}>任務</Link>
         </Menu.Item>
         <Divider />
       </Menu.ItemGroup>
@@ -77,10 +77,10 @@ export const DropDownIcon: React.FC<{ isManage: boolean; isEmployee: any[]; }> =
   menuItems.push(
 
     <Item key="profile-key">
-      <Link to="/profile">Profile</Link>
+      <Link to="/profile">個人簡介</Link>
     </Item>,
     <Item key="logout-key" onClick={handleLogout}>
-      Logout
+      登出
     </Item>
 
   );

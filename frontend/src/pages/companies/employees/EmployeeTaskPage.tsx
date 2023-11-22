@@ -54,17 +54,17 @@ const EmployeeTaskPage: React.FC = () => {
 
   const columns = [
     {
-      title: 'Task Name',
+      title: '任務名稱',
       dataIndex: 'task_name',
       key: 'task_name',
     },
     {
-      title: 'Task Description',
+      title: '任務內容',
       dataIndex: 'task_description',
       key: 'task_description',
     },
     {
-      title: 'Status',
+      title: '狀態',
       dataIndex: 'status',
       key: 'status',
       render: (text: any, record: any) => (
@@ -73,19 +73,19 @@ const EmployeeTaskPage: React.FC = () => {
           style={{ width: 120 }}
           onChange={(value) => handleStatusChange(record, value)}
         >
-          <Option value="Pending">Pending</Option>
-          <Option value="In Progress">In Progress</Option>
-          <Option value="Completed">Completed</Option>
+          <Option value="Pending">代辦中</Option>
+          <Option value="In Progress">進行中</Option>
+          <Option value="Completed">已完成</Option>
         </Select>
       ),
     },
     {
-      title: 'Due Date',
+      title: '截止日期',
       dataIndex: 'due_date',
       key: 'due_date',
     },
     {
-      title: 'Priority',
+      title: '優先度',
       dataIndex: 'task_force',
       key: 'task_force',
       render: (text: any, record: any) => (
@@ -95,10 +95,10 @@ const EmployeeTaskPage: React.FC = () => {
           defaultValue={text.priority}
           style={{ width: 120 }}
         >
-            <Option value="Low">Low</Option>
-            <Option value="Medium">Medium</Option>
-            <Option value="High">High</Option>
-            <Option value="Emergency">Emergency</Option>
+            <Option value="Low">低</Option>
+            <Option value="Medium">中</Option>
+            <Option value="High">高</Option>
+            <Option value="Emergency">緊急</Option>
         </Select>
       ),
     },
@@ -116,7 +116,7 @@ const EmployeeTaskPage: React.FC = () => {
 
     setTasks(updatedTasks);
     updateTasks(record.id,data);
-    message.success('Status updated successfully');
+    message.success('狀態更新成功');
   };
 
   const showDrawer = () => {
@@ -129,7 +129,7 @@ const EmployeeTaskPage: React.FC = () => {
   return (
     <div>
       <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
-        <h1>Your Tasks</h1>
+        <h1>你的任務</h1>
         <Button type='primary' onClick={showDrawer}>時間表</Button>
       </div>
       <Table dataSource={tasks} columns={columns} />

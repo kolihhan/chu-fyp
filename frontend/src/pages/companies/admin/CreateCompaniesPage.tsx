@@ -7,6 +7,7 @@ import { useLoading } from "../../../components/LoadingScreen";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../app/store";
 import { setEmployees, setSelectCompany } from "../../../reducers/employeeReducers";
+import { UserOutlined, MailOutlined, PhoneOutlined, EnvironmentOutlined, CalendarOutlined } from '@ant-design/icons';
 
 const CreateCompaniesPage: React.FC = () => {
   const history = useNavigate();
@@ -63,74 +64,87 @@ const CreateCompaniesPage: React.FC = () => {
   };
 
   return (
-    <div>
-      <h1>創建公司</h1>
+    <div style={{ maxWidth: '600px', margin: 'auto' }}>
+      <h1 style={{ textAlign: 'center', marginBottom: '20px' }}>創建公司</h1>
+
       <Form
-        onFinish={onFinish} onFinishFailed={onFinishFailed}
-        labelCol={{ span: 1 }} wrapperCol={{ span:24 }} labelAlign='left'>
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+        labelCol={{ span: 6 }}
+        wrapperCol={{ span: 18 }}
+      >
+        <Form.Item
+          label="公司 Logo"
+          name="logo2"
+          rules={[{ required: true, message: '請上傳公司 Logo' }]}
+        >
+          <Upload
+            listType="picture-card"
+            showUploadList={false}
+            multiple={false}
+            maxCount={1}
+            beforeUpload={beforeUpload}
+            customRequest={({ file }) => uploadImage(file)}
+          >
+            <Image preview={false} src={logo} style={{ width: '100px', height: '100px' }} />
+          </Upload>
+      </Form.Item>
 
-        <div style={{display:'flex', alignItems:'end'}}>
-          <Form.Item label="" name="logo2" labelCol={{ span: 1 }} wrapperCol={{ span:24 }} style={{height:'100px', width:'100px', marginRight:'16px'}}>
-            <Upload 
-              listType="picture-card" showUploadList={false} multiple={false} maxCount={1} 
-              beforeUpload={beforeUpload} customRequest={({file}) => uploadImage(file)}>
-                <Image preview={false} src={logo} style={{height:'100px', width:'100px'}}></Image>
-            </Upload>
-          </Form.Item>
-          <Form.Item label="公司名称"
-            name="name" labelCol={{span:24}} style={{width:'100%'}}
-            rules={[{ required: true, message: "请输入公司名称" }]} >
-            <Input />
-          </Form.Item>
-        </div>
+      <Form.Item
+        label="公司名稱"
+        name="name"
+        rules={[{ required: true, message: '請輸入公司名稱' }]}
+      >
+        <Input />
+      </Form.Item>
 
-        <Form.Item label="邮箱" name="email"
-          rules={[{ required: true, message: "请输入公司邮箱" }]} >
-          <Input />
-        </Form.Item>
+      <Form.Item label="電子郵件" name="email" rules={[{ required: true, message: '請輸入公司邮箱' }]}>
+        <Input prefix={<MailOutlined />} />
+      </Form.Item>
 
-        <Form.Item label="电话" name="phone"
-          rules={[{ required: true, message: "请输入公司电话" }]} >
-          <Input />
-        </Form.Item>
+      <Form.Item label="電話" name="phone" rules={[{ required: true, message: '請輸入公司电话' }]}>
+        <Input prefix={<PhoneOutlined />} />
+      </Form.Item>
 
-        <Form.Item label="地址" name="address"
-          rules={[{ required: true, message: "请输入公司地址" }]} >
-          <Input />
-        </Form.Item>
+      <Form.Item label="地址" name="address" rules={[{ required: true, message: '請輸入公司地址' }]}>
+        <Input prefix={<EnvironmentOutlined />} />
+      </Form.Item>
 
-        <Form.Item label="公司描述" name="company_desc"
-          rules={[{ required: true, message: "请输入公司描述" }]} >
-          <Input.TextArea onChange={handlerTAChange} />
-        </Form.Item>
+      <Form.Item
+        label="公司描述"
+        name="company_desc"
+        rules={[{ required: true, message: '請輸入公司描述' }]}
+      >
+        <Input.TextArea rows={4} onChange={handlerTAChange} />
+      </Form.Item>
 
-        <Form.Item label="公司福利" name="company_benefits"
-          rules={[{ required: true, message: "请输入公司福利" }]} >
-          <Input.TextArea onChange={handlerTAChange} />
-        </Form.Item>
+      <Form.Item
+        label="公司福利"
+        name="company_benefits"
+        rules={[{ required: true, message: '請輸入公司福利' }]}
+      >
+        <Input.TextArea rows={4} onChange={handlerTAChange} />
+      </Form.Item>
 
-        <Form.Item label="產業類別" name="industry"
-          rules={[{ required: true, message: "请输入公司福利" }]} >
-          <Input />
-        </Form.Item>
+      <Form.Item label="產業類別" name="industry" rules={[{ required: true, message: '請輸入產業類別' }]}>
+        <Input />
+      </Form.Item>
 
-        <Form.Item label="公司網址" name="website"
-          rules={[{ required: true, message: "请输入公司福利" }]} >
-          <Input />
-        </Form.Item>
+      <Form.Item label="公司網址" name="website" rules={[{ required: true, message: '請輸入公司網址' }]}>
+        <Input />
+      </Form.Item>
 
-        <Form.Item label="聯絡人" name="contact"
-          rules={[{ required: true, message: "请输入公司福利" }]} >
-          <Input />
-        </Form.Item>
+      <Form.Item label="聯絡人" name="contact" rules={[{ required: true, message: '請輸入聯絡人' }]}>
+        <Input />
+      </Form.Item>
 
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            创建
-          </Button>
-        </Form.Item>
-      </Form>
-    </div>
+      <Form.Item wrapperCol={{ offset: 6, span: 18 }}>
+        <Button type="primary" htmlType="submit">
+          創建
+        </Button>
+      </Form.Item>
+    </Form>
+  </div>
   );
 };
 

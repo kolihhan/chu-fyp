@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Table, Popconfirm } from 'antd';
+import { Button, Table, Popconfirm} from 'antd';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from 'react-router-dom';
 import { AnyAction } from '@reduxjs/toolkit';
@@ -35,17 +35,17 @@ const EmployeeTaskForcePage: React.FC = () => {
     
     const columns = [
         {
-          title: 'Task Force Name',
+          title: '任務組名稱',
           dataIndex: 'name',
           key: 'name',
         },
         {
-          title: 'Description',
+          title: '內容',
           dataIndex: 'description',
           key: 'description',
         },
         {
-          title: 'Leader',
+          title: '領導',
           dataIndex: 'leader',
           key: 'leader',
           render: (status: any) => {
@@ -53,7 +53,7 @@ const EmployeeTaskForcePage: React.FC = () => {
           },
         },
         {
-          title: 'Status',
+          title: '狀態',
           dataIndex: 'status',
           key: 'status',
           render: (status: string) => {
@@ -70,20 +70,20 @@ const EmployeeTaskForcePage: React.FC = () => {
           },
         },
         {
-          title: 'Actions',
+          title: '操作',
           dataIndex: 'id',
           key: 'actions',
           render: (id: any, record: any) => (
             <div>
              <a className="mr-2" href={`/company/task-list/${id}/details`}>
                <Button type="primary">
-                 View
+                 查看
                </Button>
              </a>
             {record.leader.id == employeeId && 
                 <a className="mr-2" href={`/company/task-list/${id}/update`}>
                 <Button type="primary">
-                    Edit
+                    編輯
                 </Button>
                 </a>
             }
@@ -95,7 +95,7 @@ const EmployeeTaskForcePage: React.FC = () => {
                 okText="Yes"
                 cancelText="No"
                 >
-                <Button danger>Delete</Button>
+                <Button danger>刪除</Button>
                 </Popconfirm>
             }
             </div>
@@ -105,10 +105,10 @@ const EmployeeTaskForcePage: React.FC = () => {
 
     return(
         <div>
-            <h1>My Task Force</h1>
+            <h1>我的任務組</h1>
             <a href="/company/task-list/create">
             <Button type="primary">
-                Create Task Force
+                創建任務組
             </Button>
             </a>
             <Table dataSource={taskForces} columns={columns} />

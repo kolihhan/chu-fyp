@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectUserResume, fetchResumes, editResume, createNewResume } from '../reducers/userReducers';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Form, Input, Button, Select, Collapse, CollapseProps, DatePicker, Radio, Card, Checkbox } from 'antd';
+import { UserOutlined, CalendarOutlined } from '@ant-design/icons';
 
 import { AnyAction } from '@reduxjs/toolkit';
 import { ThunkDispatch } from 'redux-thunk';
@@ -90,15 +91,15 @@ const ResumePage: React.FC = () => {
   const statusOptions = ['graduated', 'studying', 'drop out of school'];
 
   return (
-    <Form form={form} onFinish={onFinish} initialValues={resumeData}>
-      <Form.Item label="Title" name="title" rules={[{ required: true, message: '此欄為必填' }]}>
-        <Input />
+    <Form form={form} onFinish={onFinish} initialValues={resumeData} layout="vertical">
+      <Form.Item label="履歷名稱" name="title" rules={[{ required: true, message: '此欄為必填' }]}>
+        <Input/>
       </Form.Item>
-      <Form.Item label="Summary" name="summary" rules={[{ required: true, message: '此欄為必填' }]}>
+      <Form.Item label="簡介" name="summary" rules={[{ required: true, message: '此欄為必填' }]}>
         <Input.TextArea />
       </Form.Item>
-      <Form.Item label="Experience">
-        <Card title={"Experience"}>
+      <Form.Item label="工作經歷">
+        <Card title={"編輯工作經歷"}>
           <Form.Item label="公司" name={["experience", "we_company_name"]} rules={[{ required:true, message:'此欄為必填'}]}>
             <Input />
           </Form.Item>
@@ -111,37 +112,37 @@ const ResumePage: React.FC = () => {
           <Form.Item label="職務類別" name={["experience", "job_nature"]} rules={[{ required:true, message:'此欄為必填'}]}>
             <Radio.Group options={jobNatureOptions} />
           </Form.Item>
-          <Form.Item label="开始日期" name={["experience", "start_date"]} rules={[{ required:true, message:'此欄為必填'}, 
-          { pattern: /^(19|20)\d{2}\/(0[1-9]|1[0-2])$/,message: '日期格式必须为YYYY/MM'}]}>
+          <Form.Item label="開始日期" name={["experience", "start_date"]} rules={[{ required:true, message:'此欄為必填'}, 
+          { pattern: /^(19|20)\d{2}\/(0[1-9]|1[0-2])$/,message: '日期格式必須為YYYY/MM'}]}>
             <Input />
           </Form.Item>
-          <Form.Item label="结束日期" name={["experience","end_date"]} rules={[{ required:true, message:'此欄為必填'}, 
-          { pattern: /^(19|20)\d{2}\/(0[1-9]|1[0-2])$/,message: '日期格式必须为YYYY/MM'}]}>
+          <Form.Item label="結束日期" name={["experience","end_date"]} rules={[{ required:true, message:'此欄為必填'}, 
+          { pattern: /^(19|20)\d{2}\/(0[1-9]|1[0-2])$/,message: '日期格式必須為YYYY/MM'}]}>
             {/* <DatePicker picker="month" format={'YYYY/MM'} /> */}
             <Input />
           </Form.Item>
-          <Form.Item label="仍在职" name={["experience", "still_employed"]} valuePropName='checked'>
+          <Form.Item label="在職中" name={["experience", "still_employed"]} valuePropName='checked'>
             <Checkbox></Checkbox>
           </Form.Item>
         </Card>
       </Form.Item>
-      <Form.Item label="Education">
-        <Card>
+      <Form.Item label="學歷">
+        <Card title="編輯學歷">
           <Form.Item label="學校" name={["education", "school_name"]} rules={[{ required:true, message:'此欄為必填'}]}>
             <Input />
           </Form.Item>
           <Form.Item label="學歷" name={["education", "educational_qualifications"]} rules={[{ required:true, message:'此欄為必填'}]}>
           <Radio.Group options={qualificationsOptions} />
           </Form.Item>
-          <Form.Item label="科系" name={["education", "department_name"]} rules={[{ required:true, message:'此欄為必填'}]}>
+          <Form.Item label="科系名稱" name={["education", "department_name"]} rules={[{ required:true, message:'此欄為必填'}]}>
             <Input />
           </Form.Item>
-          <Form.Item label="开学日期" name={["education", "start_date"]} rules={[{ required:true, message:'此欄為必填'}, 
-          { pattern: /^(19|20)\d{2}\/(0[1-9]|1[0-2])$/,message: '日期格式必须为YYYY/MM'}]}>
+          <Form.Item label="開學日期" name={["education", "start_date"]} rules={[{ required:true, message:'此欄為必填'}, 
+          { pattern: /^(19|20)\d{2}\/(0[1-9]|1[0-2])$/,message: '日期格式必須為YYYY/MM'}]}>
             <Input />
           </Form.Item>
-          <Form.Item label="毕业日期" name={["education", "end_date"]} rules={[{ required:true, message:'此欄為必填'}, 
-          { pattern: /^(19|20)\d{2}\/(0[1-9]|1[0-2])$/,message: '日期格式必须为YYYY/MM'}]}>
+          <Form.Item label="畢業日期" name={["education", "end_date"]} rules={[{ required:true, message:'此欄為必填'}, 
+          { pattern: /^(19|20)\d{2}\/(0[1-9]|1[0-2])$/,message: '日期格式必須為YYYY/MM'}]}>
             <Input />
           </Form.Item>
           <Form.Item label="就學狀態" name={["education", "school_status"]} rules={[{ required:true, message:'此欄為必填'}]}>
@@ -149,21 +150,21 @@ const ResumePage: React.FC = () => {
           </Form.Item>
         </Card>          
       </Form.Item>
-      <Form.Item label="Skills" name="skills" rules={[{ required: true, message: '此欄為必填' }]}>
+      <Form.Item label="專長" name="skills" rules={[{ required: true, message: '此欄為必填' }]}>
         <Select mode='tags' options={options.filter((option: any) => option.option_name=="skill")} 
           tokenSeparators={[',', '，']} showSearch={false} />
       </Form.Item>
-      <Form.Item label="Preferred Work" name="prefer_work" rules={[{ required: true, message: '此欄為必填' }]}>
+      <Form.Item label="希望職類" name="prefer_work" rules={[{ required: true, message: '此欄為必填' }]}>
       <Select mode='tags' options={options.filter((option: any) => option.option_name=="work")}
           tokenSeparators={[',', '，']} showSearch={false} />
       </Form.Item>
-      <Form.Item label="Language" name="language" rules={[{ required: true, message: '此欄為必填' }]}>
+      <Form.Item label="語文能力" name="language" rules={[{ required: true, message: '此欄為必填' }]}>
       <Select mode='tags' options={options.filter((option: any) => option.option_name=="language")}
           tokenSeparators={[',', '，']} showSearch={false} />
       </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit">
-          Save
+          儲存
         </Button>
       </Form.Item>
     </Form>

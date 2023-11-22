@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Select, Modal, Table, message } from 'antd';
+import { Form, Input, Button, Select, Modal, Table, Spin, message } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../app/store';
 import { createFeedback, selectSelectedCompany, selectSelf } from '../../../reducers/employeeReducers';
@@ -11,6 +11,8 @@ import { createFeedbackApi, getAllEmployees, getAllEmployeesFeedbackFrom, getAll
 import { getCookie } from '../../../utils';
 
 import {Chart} from 'react-google-charts';
+
+import { PieChartOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 
@@ -117,7 +119,7 @@ const FeedBackPage: React.FC = () => {
     {title: '員工', key:'name', dataIndex:'', 
       render:(_:any, record:any) => <span>{record.companyEmployee_id.user_id.name}</span>
     },
-    {title:'remarks', key:'remarks', dataIndex:'',
+    {title:'評價', key:'remarks', dataIndex:'',
       render:(_:any, record:any) => <span style={{ color: record.remarks === textNothing ? 'transparent' : 'inherit' }}>
       {record.remarks}
     </span>
@@ -128,7 +130,7 @@ const FeedBackPage: React.FC = () => {
     {title: '員工', key:'name', dataIndex:'', 
       render:(_:any, record:any) => <span>{record.feedback_to.user_id.name}</span>
     },
-    {title:'remarks', key:'remarks', dataIndex:'',
+    {title:'評價', key:'remarks', dataIndex:'',
       render:(_:any, record:any) => <span style={{ color: record.remarks === textNothing ? 'transparent' : 'inherit' }}>
       {record.remarks}
     </span>
@@ -173,11 +175,13 @@ const FeedBackPage: React.FC = () => {
     setFeedbackScore(response.data.data.toFixed(2))
   }
 
+  const [isLoading, setIsLoading] = useState(false);
+
   return (
     <div style={{marginLeft:'10%', marginRight:'10%'}}>
       <div style={{textAlign:'right'}}>
-        <Button onClick={openFeedbackModal} style={{marginTop:'8px', marginBottom:'8px', marginRight:'8px'}}>Feedback to</Button>
-        <Button type="primary" onClick={openViewFeedbackModal} style={{marginTop:'8px', marginBottom:'8px'}}>View</Button>
+        <Button onClick={openFeedbackModal} style={{marginTop:'8px', marginBottom:'8px', marginRight:'8px'}}>反饋</Button>
+        <Button type="primary" onClick={openViewFeedbackModal} style={{marginTop:'8px', marginBottom:'8px'}}>查看</Button>
       </div>
       <div style={{display:'flex', justifyContent:'space-between'}}>
         <Table dataSource={feedbackTo} columns={columnsTo} title={() => '我評價他人'}
@@ -187,30 +191,44 @@ const FeedBackPage: React.FC = () => {
       </div>
 
       <Modal bodyStyle={{margin:0}}
-        title="My Feedback"
-        open={viewFeedbackModalVisible}
+        title="我的反饋"
+        visible={viewFeedbackModalVisible}
         onCancel={closeViewFeedbackModal}
-        footer={null}>
-          <div>
-            <Chart chartType='PieChart' data={pieChartData} options={pieChartOptions}/>
-            <div
-              style={{ position: 'absolute', top: '55%', left: '30%',
-                transform: 'translate(-50%, -50%)',
-                fontSize: '20px', fontWeight: 'bold' }} >
+        footer={null}
+        width={500}>
+        <div>
+          {isLoading ? (
+            <Spin size="large" />
+          ) : (
+            <>
+              <Chart chartType='PieChart' data={pieChartData} options={pieChartOptions}/>
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '20%',
+                  left: '10%',
+                  transform: 'translate(-50%, -50%)',
+                  fontSize: '20px',
+                  fontWeight: 'bold',
+              }}
+            >
               {feedbackScore}
             </div>
-          </div>
-      </Modal>
+          </>
+        )}
+      </div>
+     </Modal>
 
       <Modal 
-        title="Feedback to"
+        //title="反饋"
         open={modalVisible}
         onCancel={closeFeedbackModal}
         footer={null}>
         <Form form={form} onFinish={onFinish}>
           <Form.Item
             name="feedback_to"
-            label="Feedback To"
+            label="反饋至"
+            labelCol={{span:24}}
             rules={[{ required: true, message: 'Please select an employee to provide feedback to.' }]} >
             <Select>
               {Array.isArray(companyEmployees) &&
@@ -222,7 +240,7 @@ const FeedBackPage: React.FC = () => {
             </Select>
 
           </Form.Item>
-          <Form.Item name="remarks" label="Remarks" rules={[{ required: true, message: 'Please enter remarks.' }]}>
+          <Form.Item name="remarks" label="評價" rules={[{ required: true, message: 'Please enter remarks.' }]} labelCol={{span:24}}>
             {/* <Input.TextArea /> */}
             <Select>
               {feedbackOption.map((fbo) =>(
@@ -232,7 +250,7 @@ const FeedBackPage: React.FC = () => {
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit">
-              Submit
+              提交
             </Button>
           </Form.Item>
         </Form>

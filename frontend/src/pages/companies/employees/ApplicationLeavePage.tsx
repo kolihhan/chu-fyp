@@ -1,4 +1,4 @@
-import { Button, Card, Col, DatePicker, Form, Input, Row, Select, Table } from 'antd';
+import { Button, Card, Col, DatePicker, Form, Input, Row, Select, Table} from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../app/store';
@@ -10,6 +10,7 @@ import { AnyAction } from '@reduxjs/toolkit';
 import { ThunkDispatch } from 'redux-thunk';
 import dayjs from 'dayjs';
 import { getCookie } from '../../../utils';
+
 
 const { RangePicker } = DatePicker;
 
@@ -55,12 +56,12 @@ const ApplicationLeavePage: React.FC = () => {
   };
 
   const columns = [
-    { title: 'Start Date', dataIndex: 'leave_start', key: 'leave_start', render: (text:any) => dayjs(text).format('YYYY-MM-DD') },
-    { title: 'End Date', dataIndex: 'leave_end', key: 'leave_end', render: (text:any) => dayjs(text).format('YYYY-MM-DD') },
-    { title: 'Reason', dataIndex: 'reason', key: 'reason' },
-    { title: 'Type', dataIndex: 'type', key: 'type' },
-    { title: 'Status', dataIndex: 'status', key: 'status' },
-    { title: 'Comment', dataIndex: 'comment', key: 'comment', render: (text:any) => (text==null?"-":text) },
+    { title: '開始日期', dataIndex: 'leave_start', key: 'leave_start', render: (text:any) => dayjs(text).format('YYYY-MM-DD') },
+    { title: '結束日期', dataIndex: 'leave_end', key: 'leave_end', render: (text:any) => dayjs(text).format('YYYY-MM-DD') },
+    { title: '原因', dataIndex: 'reason', key: 'reason' },
+    { title: '類型', dataIndex: 'type', key: 'type' },
+    { title: '狀態', dataIndex: 'status', key: 'status' },
+    { title: '評論', dataIndex: 'comment', key: 'comment', render: (text:any) => (text==null?"-":text) },
   ];
 
   return (
@@ -70,41 +71,41 @@ const ApplicationLeavePage: React.FC = () => {
         <Form form={form} onFinish={onFinish}>
           <Row gutter={[16,0]}>
             <Col>
-              <Form.Item name="leave_start" label="Start Date"
-                rules={[{ required: true, message: 'Please select a start date.' }]} >
-                  <DatePicker showTime />
+              <Form.Item name="leave_start" label="開始日期"
+                rules={[{ required: true, message: '請選擇開始日期.' }]} >
+                  <DatePicker showTime placeholder="選擇日期" />
               </Form.Item>
             </Col>
             <Col>
-              <Form.Item name="leave_end" label="End Date"
-                rules={[{ required: true, message: 'Please select an end date.' }]} >
-                  <DatePicker showTime />
+              <Form.Item name="leave_end" label="結束日期"
+                rules={[{ required: true, message: '請選擇結束日期.' }]} >
+                  <DatePicker showTime placeholder="選擇日期" />
               </Form.Item>
             </Col>
             <Col>
-              <Form.Item name="type" label="Leave Type"
-                rules={[{ required: true, message: 'Please select a leave type.' }]} >
+              <Form.Item name="type" label="請假類型"
+                rules={[{ required: true, message: '請選擇請假類型.' }]} >
                   <Select style={{minWidth:"200px"}}>
-                    <Option value="Annual Leave">Annual Leave</Option>
-                    <Option value="Sick Leave">Sick Leave</Option>
-                    <Option value="Personal Leave">Personal Leave</Option>
-                    <Option value="Maternity Leave">Maternity Leave</Option>
-                    <Option value="Paternity Leave">Paternity Leave</Option>
+                    <Option value="Annual Leave">年假</Option>
+                    <Option value="Sick Leave">病假</Option>
+                    <Option value="Personal Leave">事假</Option>
+                    <Option value="Maternity Leave">產假</Option>
+                    <Option value="Paternity Leave">陪產假</Option>
                   </Select>
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={[16,0]}>
             <Col flex='auto'>
-              <Form.Item name="reason" label="Reason" 
-                rules={[{ required: true, message: 'Please enter a reason.' }]} >
+              <Form.Item name="reason" label="原因" 
+                rules={[{ required: true, message: '請寫原因.' }]} >
                   <Input.TextArea rows={1} autoSize={{ minRows: 1, maxRows: 4 }} />
               </Form.Item>
             </Col>
             <Col flex='none' style={{textAlign:'right'}}>
               <Form.Item>
                 <Button type="primary" htmlType="submit">
-                  Submit
+                  提交
                 </Button>
               </Form.Item>
             </Col>

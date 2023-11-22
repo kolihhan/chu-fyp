@@ -1,0 +1,44 @@
+[15/Nov/2023 04:52:53] WARNING [django.request:241] Bad Request: /api/login
+[15/Nov/2023 04:52:53] WARNING [django.request:241] Bad Request: /api/login
+[15/Nov/2023 04:52:53] WARNING [django.server:212] "POST /api/login HTTP/1.1" 400 46
+[15/Nov/2023 04:52:53] WARNING [django.server:212] "POST /api/login HTTP/1.1" 400 46
+[15/Nov/2023 04:52:58] WARNING [django.request:241] Bad Request: /api/login
+[15/Nov/2023 04:52:58] WARNING [django.request:241] Bad Request: /api/login
+[15/Nov/2023 04:52:58] WARNING [django.server:212] "POST /api/login HTTP/1.1" 400 46
+[15/Nov/2023 04:52:58] WARNING [django.server:212] "POST /api/login HTTP/1.1" 400 46
+[15/Nov/2023 04:53:11] WARNING [django.request:241] Bad Request: /api/login
+[15/Nov/2023 04:53:11] WARNING [django.request:241] Bad Request: /api/login
+[15/Nov/2023 04:53:11] WARNING [django.server:212] "POST /api/login HTTP/1.1" 400 46
+[15/Nov/2023 04:53:11] WARNING [django.server:212] "POST /api/login HTTP/1.1" 400 46
+[15/Nov/2023 04:53:52] WARNING [django.request:241] Bad Request: /api/login
+[15/Nov/2023 04:53:52] WARNING [django.request:241] Bad Request: /api/login
+[15/Nov/2023 04:53:52] WARNING [django.server:212] "POST /api/login HTTP/1.1" 400 46
+[15/Nov/2023 04:53:52] WARNING [django.server:212] "POST /api/login HTTP/1.1" 400 46
+[15/Nov/2023 04:56:23] WARNING [django.request:241] Bad Request: /api/login
+[15/Nov/2023 04:56:23] WARNING [django.request:241] Bad Request: /api/login
+[15/Nov/2023 04:56:23] WARNING [django.server:212] "POST /api/login HTTP/1.1" 400 46
+[15/Nov/2023 04:56:23] WARNING [django.server:212] "POST /api/login HTTP/1.1" 400 46
+[15/Nov/2023 04:56:51] WARNING [django.request:241] Not Found: /favicon.ico
+[15/Nov/2023 04:56:51] WARNING [django.request:241] Not Found: /favicon.ico
+[15/Nov/2023 04:56:51] WARNING [django.server:212] "GET /favicon.ico HTTP/1.1" 404 2215
+[15/Nov/2023 04:56:51] WARNING [django.server:212] "GET /favicon.ico HTTP/1.1" 404 2215
+[15/Nov/2023 07:59:39] WARNING [django.request:241] Unauthorized: /api/companyRecruitment/get/company/all
+[15/Nov/2023 07:59:39] WARNING [django.request:241] Unauthorized: /api/companyRecruitment/get/company/all
+[15/Nov/2023 07:59:39] WARNING [django.server:212] "GET /api/companyRecruitment/get/company/all HTTP/1.1" 401 183
+[15/Nov/2023 07:59:39] WARNING [django.server:212] "GET /api/companyRecruitment/get/company/all HTTP/1.1" 401 183
+[15/Nov/2023 07:59:56] WARNING [django.request:241] Unauthorized: /api/userApplicationRecord/get/user/all/202
+[15/Nov/2023 07:59:56] WARNING [django.request:241] Unauthorized: /api/userApplicationRecord/get/user/all/202
+[15/Nov/2023 07:59:56] WARNING [django.server:212] "GET /api/userApplicationRecord/get/user/all/202 HTTP/1.1" 401 183
+[15/Nov/2023 07:59:56] WARNING [django.server:212] "GET /api/userApplicationRecord/get/user/all/202 HTTP/1.1" 401 183
+[15/Nov/2023 08:00:00] WARNING [django.request:241] Unauthorized: /api/companyRecruitment/get/company/all
+[15/Nov/2023 08:00:00] WARNING [django.request:241] Unauthorized: /api/companyRecruitment/get/company/all
+[15/Nov/2023 08:00:00] WARNING [django.server:212] "GET /api/companyRecruitment/get/company/all HTTP/1.1" 401 183
+[15/Nov/2023 08:00:00] WARNING [django.server:212] "GET /api/companyRecruitment/get/company/all HTTP/1.1" 401 183
+[15/Nov/2023 08:39:55] WARNING [django.request:241] Unauthorized: /api/userApplicationRecord/get/user/all/202
+[15/Nov/2023 08:39:55] WARNING [django.request:241] Unauthorized: /api/userApplicationRecord/get/user/all/202
+[15/Nov/2023 08:39:55] WARNING [django.server:212] "GET /api/userApplicationRecord/get/user/all/202 HTTP/1.1" 401 183
+[15/Nov/2023 08:39:55] WARNING [django.server:212] "GET /api/userApplicationRecord/get/user/all/202 HTTP/1.1" 401 183
+[15/Nov/2023 08:40:09] WARNING [django.request:241] Unauthorized: /api/verify
+[15/Nov/2023 08:40:09] WARNING [django.request:241] Unauthorized: /api/verify
+[15/Nov/2023 08:40:09] WARNING [django.server:212] "POST /api/verify HTTP/1.1" 401 183
+[15/Nov/2023 08:40:09] WARNING [django.server:212] "POST /api/verify HTTP/1.1" 401 183

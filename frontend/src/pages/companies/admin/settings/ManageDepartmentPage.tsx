@@ -71,10 +71,10 @@ const ManageDepartmentPage: React.FC = () => {
       render: (_: any, record: any) => (
         <div style={{textAlign:'right'}}>
           <Button type="primary" onClick={() => handleEditDepartment(record)} style={{marginRight:'8px'}}>
-            Edit
+            編輯
           </Button>
           <Button type="default" onClick={() => handleDeleteDepartment(record.id)}>
-            Delete
+            刪除
           </Button>
         </div>
       ),
@@ -92,30 +92,40 @@ const ManageDepartmentPage: React.FC = () => {
 
   return (
     <div>
-      <h1>部门管理</h1>
+      <h1 style={{ textAlign: 'center', marginBottom: '20px' }}>部門管理</h1>
 
-      <div style={{marginBottom:'8px', textAlign:'right', width:'100%'}}>
+      <div style={{ marginBottom: '16px', textAlign: 'right' }}>
         <Button type="primary" onClick={showModal}>
-          创建部门
+          創建部門
         </Button>
       </div>
 
       <Table dataSource={departments} columns={columns} />
 
       <Modal
-        title={selectedDepartment ? "编辑部门" : "创建部门"}
+        title={selectedDepartment ? '編輯部門' : '創建部門'}
         visible={isModalVisible}
         onCancel={handleCancel}
         footer={null}
       >
-        <Form form={form} initialValues={selectedDepartment} onFinish={selectedDepartment ? handleUpdateDepartment : handleCreateDepartment}>
-          <Form.Item name="department_name" label="部门名称" rules={[{ required: true, message: "请输入部门名称" }]}>
+        <Form
+          form={form}
+          initialValues={selectedDepartment}
+          onFinish={selectedDepartment ? handleUpdateDepartment : handleCreateDepartment}
+          labelCol={{ span: 6 }}
+          wrapperCol={{ span: 16 }}
+        >
+          <Form.Item
+            name="department_name"
+            label="部門名稱"
+            rules={[{ required: true, message: '請輸入部門名稱' }]}
+          >
             <Input />
           </Form.Item>
 
-          <Form.Item>
+          <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
             <Button type="primary" htmlType="submit">
-              {selectedDepartment ? "更新" : "创建"}
+              {selectedDepartment ? '更新' : '創建'}
             </Button>
           </Form.Item>
         </Form>

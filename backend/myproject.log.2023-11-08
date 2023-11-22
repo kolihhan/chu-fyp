@@ -1,0 +1,504 @@
+[08/Nov/2023 06:00:19] WARNING [django.request:241] Not Found: /
+[08/Nov/2023 06:00:19] WARNING [django.request:241] Not Found: /
+[08/Nov/2023 06:00:19] WARNING [django.server:212] "GET / HTTP/1.1" 404 2164
+[08/Nov/2023 06:00:19] WARNING [django.server:212] "GET / HTTP/1.1" 404 2164
+[08/Nov/2023 06:00:20] WARNING [django.request:241] Not Found: /favicon.ico
+[08/Nov/2023 06:00:20] WARNING [django.request:241] Not Found: /favicon.ico
+[08/Nov/2023 06:00:20] WARNING [django.server:212] "GET /favicon.ico HTTP/1.1" 404 2215
+[08/Nov/2023 06:00:20] WARNING [django.server:212] "GET /favicon.ico HTTP/1.1" 404 2215
+[08/Nov/2023 06:02:35] ERROR [django.request:241] Internal Server Error: /api/companyRecruitment/get/company/all
+[08/Nov/2023 06:02:35] ERROR [django.request:241] Internal Server Error: /api/companyRecruitment/get/company/all
+[08/Nov/2023 06:02:35] ERROR [django.server:212] "GET /api/companyRecruitment/get/company/all HTTP/1.1" 500 241
+[08/Nov/2023 06:02:35] ERROR [django.server:212] "GET /api/companyRecruitment/get/company/all HTTP/1.1" 500 241
+[08/Nov/2023 06:12:15] WARNING [django.request:241] Bad Request: /api/login
+[08/Nov/2023 06:12:15] WARNING [django.request:241] Bad Request: /api/login
+[08/Nov/2023 06:12:15] WARNING [django.server:212] "POST /api/login HTTP/1.1" 400 46
+[08/Nov/2023 06:12:15] WARNING [django.server:212] "POST /api/login HTTP/1.1" 400 46
+[08/Nov/2023 06:12:15] WARNING [django.request:241] Unauthorized: /api/createCompany
+[08/Nov/2023 06:12:15] WARNING [django.request:241] Unauthorized: /api/createCompany
+[08/Nov/2023 06:12:15] WARNING [django.server:212] "POST /api/createCompany HTTP/1.1" 401 183
+[08/Nov/2023 06:12:15] WARNING [django.server:212] "POST /api/createCompany HTTP/1.1" 401 183
+[08/Nov/2023 06:12:15] WARNING [django.request:241] Unauthorized: /api/company/47
+[08/Nov/2023 06:12:15] WARNING [django.request:241] Unauthorized: /api/company/47
+[08/Nov/2023 06:12:15] WARNING [django.server:212] "GET /api/company/47 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:15] WARNING [django.server:212] "GET /api/company/47 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:16] WARNING [django.request:241] Unauthorized: /api/updateCompany/1
+[08/Nov/2023 06:12:16] WARNING [django.request:241] Unauthorized: /api/updateCompany/1
+[08/Nov/2023 06:12:16] WARNING [django.server:212] "PUT /api/updateCompany/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:16] WARNING [django.server:212] "PUT /api/updateCompany/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:16] WARNING [django.request:241] Unauthorized: /api/deleteCompany/21
+[08/Nov/2023 06:12:16] WARNING [django.request:241] Unauthorized: /api/deleteCompany/21
+[08/Nov/2023 06:12:16] WARNING [django.server:212] "DELETE /api/deleteCompany/21 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:16] WARNING [django.server:212] "DELETE /api/deleteCompany/21 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:16] WARNING [django.request:241] Unauthorized: /api/companyImages/create
+[08/Nov/2023 06:12:16] WARNING [django.request:241] Unauthorized: /api/companyImages/create
+[08/Nov/2023 06:12:16] WARNING [django.server:212] "POST /api/companyImages/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:16] WARNING [django.server:212] "POST /api/companyImages/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:16] WARNING [django.request:241] Unauthorized: /api/companyImages/get/1
+[08/Nov/2023 06:12:16] WARNING [django.request:241] Unauthorized: /api/companyImages/get/1
+[08/Nov/2023 06:12:16] WARNING [django.server:212] "GET /api/companyImages/get/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:16] WARNING [django.server:212] "GET /api/companyImages/get/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:16] WARNING [django.request:241] Unauthorized: /api/companyImages/get/company/1
+[08/Nov/2023 06:12:16] WARNING [django.request:241] Unauthorized: /api/companyImages/get/company/1
+[08/Nov/2023 06:12:16] WARNING [django.server:212] "GET /api/companyImages/get/company/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:16] WARNING [django.server:212] "GET /api/companyImages/get/company/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:16] WARNING [django.request:241] Unauthorized: /api/companyImages/update/1
+[08/Nov/2023 06:12:16] WARNING [django.request:241] Unauthorized: /api/companyImages/update/1
+[08/Nov/2023 06:12:16] WARNING [django.server:212] "PUT /api/companyImages/update/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:16] WARNING [django.server:212] "PUT /api/companyImages/update/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:16] WARNING [django.request:241] Unauthorized: /api/companyImages/update/1
+[08/Nov/2023 06:12:16] WARNING [django.request:241] Unauthorized: /api/companyImages/update/1
+[08/Nov/2023 06:12:16] WARNING [django.server:212] "DELETE /api/companyImages/update/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:16] WARNING [django.server:212] "DELETE /api/companyImages/update/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:16] WARNING [django.request:241] Unauthorized: /api/companyEmployee/create
+[08/Nov/2023 06:12:16] WARNING [django.request:241] Unauthorized: /api/companyEmployee/create
+[08/Nov/2023 06:12:16] WARNING [django.server:212] "POST /api/companyEmployee/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:16] WARNING [django.server:212] "POST /api/companyEmployee/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:16] WARNING [django.request:241] Unauthorized: /api/companyEmployee/create/multiple
+[08/Nov/2023 06:12:16] WARNING [django.request:241] Unauthorized: /api/companyEmployee/create/multiple
+[08/Nov/2023 06:12:16] WARNING [django.server:212] "POST /api/companyEmployee/create/multiple HTTP/1.1" 401 183
+[08/Nov/2023 06:12:16] WARNING [django.server:212] "POST /api/companyEmployee/create/multiple HTTP/1.1" 401 183
+[08/Nov/2023 06:12:16] WARNING [django.request:241] Unauthorized: /api/companyEmployee/get/5
+[08/Nov/2023 06:12:16] WARNING [django.request:241] Unauthorized: /api/companyEmployee/get/5
+[08/Nov/2023 06:12:16] WARNING [django.server:212] "GET /api/companyEmployee/get/5 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:16] WARNING [django.server:212] "GET /api/companyEmployee/get/5 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:16] WARNING [django.request:241] Unauthorized: /api/companyEmployee/get/company/all/2
+[08/Nov/2023 06:12:16] WARNING [django.request:241] Unauthorized: /api/companyEmployee/get/company/all/2
+[08/Nov/2023 06:12:16] WARNING [django.server:212] "GET /api/companyEmployee/get/company/all/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:16] WARNING [django.server:212] "GET /api/companyEmployee/get/company/all/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:16] WARNING [django.request:241] Unauthorized: /api/companyEmployee/update/5
+[08/Nov/2023 06:12:16] WARNING [django.request:241] Unauthorized: /api/companyEmployee/update/5
+[08/Nov/2023 06:12:16] WARNING [django.server:212] "PUT /api/companyEmployee/update/5 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:16] WARNING [django.server:212] "PUT /api/companyEmployee/update/5 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:16] WARNING [django.request:241] Unauthorized: /api/companyEmployee/delete/101
+[08/Nov/2023 06:12:16] WARNING [django.request:241] Unauthorized: /api/companyEmployee/delete/101
+[08/Nov/2023 06:12:16] WARNING [django.server:212] "DELETE /api/companyEmployee/delete/101 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:16] WARNING [django.server:212] "DELETE /api/companyEmployee/delete/101 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:16] WARNING [django.request:241] Unauthorized: /api/companyEmployee/fire/18
+[08/Nov/2023 06:12:16] WARNING [django.request:241] Unauthorized: /api/companyEmployee/fire/18
+[08/Nov/2023 06:12:16] WARNING [django.server:212] "PUT /api/companyEmployee/fire/18 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:16] WARNING [django.server:212] "PUT /api/companyEmployee/fire/18 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:17] WARNING [django.request:241] Unauthorized: /api/companyPermission/create
+[08/Nov/2023 06:12:17] WARNING [django.request:241] Unauthorized: /api/companyPermission/create
+[08/Nov/2023 06:12:17] WARNING [django.server:212] "POST /api/companyPermission/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:17] WARNING [django.server:212] "POST /api/companyPermission/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:17] WARNING [django.request:241] Unauthorized: /api/companyPermission/get/18
+[08/Nov/2023 06:12:17] WARNING [django.request:241] Unauthorized: /api/companyPermission/get/18
+[08/Nov/2023 06:12:17] WARNING [django.server:212] "GET /api/companyPermission/get/18 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:17] WARNING [django.server:212] "GET /api/companyPermission/get/18 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:17] WARNING [django.request:241] Unauthorized: /api/companyPermission/update/18
+[08/Nov/2023 06:12:17] WARNING [django.request:241] Unauthorized: /api/companyPermission/update/18
+[08/Nov/2023 06:12:17] WARNING [django.server:212] "PUT /api/companyPermission/update/18 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:17] WARNING [django.server:212] "PUT /api/companyPermission/update/18 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:17] WARNING [django.request:241] Unauthorized: /api/companyPermission/delete/18
+[08/Nov/2023 06:12:17] WARNING [django.request:241] Unauthorized: /api/companyPermission/delete/18
+[08/Nov/2023 06:12:17] WARNING [django.server:212] "DELETE /api/companyPermission/delete/18 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:17] WARNING [django.server:212] "DELETE /api/companyPermission/delete/18 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:17] WARNING [django.request:241] Unauthorized: /api/companyPermission/get/company/all/2
+[08/Nov/2023 06:12:17] WARNING [django.request:241] Unauthorized: /api/companyPermission/get/company/all/2
+[08/Nov/2023 06:12:17] WARNING [django.server:212] "GET /api/companyPermission/get/company/all/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:17] WARNING [django.server:212] "GET /api/companyPermission/get/company/all/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:17] WARNING [django.request:241] Unauthorized: /api/announcement/create
+[08/Nov/2023 06:12:17] WARNING [django.request:241] Unauthorized: /api/announcement/create
+[08/Nov/2023 06:12:17] WARNING [django.server:212] "POST /api/announcement/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:17] WARNING [django.server:212] "POST /api/announcement/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:17] WARNING [django.request:241] Unauthorized: /api/announcement/get/5
+[08/Nov/2023 06:12:17] WARNING [django.request:241] Unauthorized: /api/announcement/get/5
+[08/Nov/2023 06:12:17] WARNING [django.server:212] "GET /api/announcement/get/5 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:17] WARNING [django.server:212] "GET /api/announcement/get/5 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:17] WARNING [django.request:241] Unauthorized: /api/announcement/get/user/all/8/1
+[08/Nov/2023 06:12:17] WARNING [django.request:241] Unauthorized: /api/announcement/get/user/all/8/1
+[08/Nov/2023 06:12:17] WARNING [django.server:212] "GET /api/announcement/get/user/all/8/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:17] WARNING [django.server:212] "GET /api/announcement/get/user/all/8/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:17] WARNING [django.request:241] Unauthorized: /api/announcement/get/company/all/8
+[08/Nov/2023 06:12:17] WARNING [django.request:241] Unauthorized: /api/announcement/get/company/all/8
+[08/Nov/2023 06:12:17] WARNING [django.server:212] "GET /api/announcement/get/company/all/8 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:17] WARNING [django.server:212] "GET /api/announcement/get/company/all/8 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:17] WARNING [django.request:241] Unauthorized: /api/announcement/update/5
+[08/Nov/2023 06:12:17] WARNING [django.request:241] Unauthorized: /api/announcement/update/5
+[08/Nov/2023 06:12:17] WARNING [django.server:212] "PUT /api/announcement/update/5 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:17] WARNING [django.server:212] "PUT /api/announcement/update/5 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:17] WARNING [django.request:241] Unauthorized: /api/announcement/delete/6
+[08/Nov/2023 06:12:17] WARNING [django.request:241] Unauthorized: /api/announcement/delete/6
+[08/Nov/2023 06:12:17] WARNING [django.server:212] "DELETE /api/announcement/delete/6 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:17] WARNING [django.server:212] "DELETE /api/announcement/delete/6 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:17] WARNING [django.request:241] Unauthorized: /api/resume/create
+[08/Nov/2023 06:12:17] WARNING [django.request:241] Unauthorized: /api/resume/create
+[08/Nov/2023 06:12:17] WARNING [django.server:212] "POST /api/resume/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:17] WARNING [django.server:212] "POST /api/resume/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:17] WARNING [django.request:241] Unauthorized: /api/resume/get/2
+[08/Nov/2023 06:12:17] WARNING [django.request:241] Unauthorized: /api/resume/get/2
+[08/Nov/2023 06:12:17] WARNING [django.server:212] "GET /api/resume/get/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:17] WARNING [django.server:212] "GET /api/resume/get/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:18] WARNING [django.request:241] Unauthorized: /api/resume/get/user/2
+[08/Nov/2023 06:12:18] WARNING [django.request:241] Unauthorized: /api/resume/get/user/2
+[08/Nov/2023 06:12:18] WARNING [django.server:212] "GET /api/resume/get/user/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:18] WARNING [django.server:212] "GET /api/resume/get/user/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:18] WARNING [django.request:241] Unauthorized: /api/resume/update/5
+[08/Nov/2023 06:12:18] WARNING [django.request:241] Unauthorized: /api/resume/update/5
+[08/Nov/2023 06:12:18] WARNING [django.server:212] "PUT /api/resume/update/5 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:18] WARNING [django.server:212] "PUT /api/resume/update/5 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:18] WARNING [django.request:241] Unauthorized: /api/resume/delete/5
+[08/Nov/2023 06:12:18] WARNING [django.request:241] Unauthorized: /api/resume/delete/5
+[08/Nov/2023 06:12:18] WARNING [django.server:212] "DELETE /api/resume/delete/5 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:18] WARNING [django.server:212] "DELETE /api/resume/delete/5 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:18] WARNING [django.request:241] Unauthorized: /api/user/get/multiple/email/66
+[08/Nov/2023 06:12:18] WARNING [django.request:241] Unauthorized: /api/user/get/multiple/email/66
+[08/Nov/2023 06:12:18] WARNING [django.server:212] "GET /api/user/get/multiple/email/66 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:18] WARNING [django.server:212] "GET /api/user/get/multiple/email/66 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:18] WARNING [django.request:241] Unauthorized: /api/companyDepartment/create
+[08/Nov/2023 06:12:18] WARNING [django.request:241] Unauthorized: /api/companyDepartment/create
+[08/Nov/2023 06:12:18] WARNING [django.server:212] "POST /api/companyDepartment/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:18] WARNING [django.server:212] "POST /api/companyDepartment/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:18] WARNING [django.request:241] Unauthorized: /api/companyDepartment/get/18
+[08/Nov/2023 06:12:18] WARNING [django.request:241] Unauthorized: /api/companyDepartment/get/18
+[08/Nov/2023 06:12:18] WARNING [django.server:212] "GET /api/companyDepartment/get/18 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:18] WARNING [django.server:212] "GET /api/companyDepartment/get/18 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:18] WARNING [django.request:241] Unauthorized: /api/companyDepartment/update/17
+[08/Nov/2023 06:12:18] WARNING [django.request:241] Unauthorized: /api/companyDepartment/update/17
+[08/Nov/2023 06:12:18] WARNING [django.server:212] "PUT /api/companyDepartment/update/17 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:18] WARNING [django.server:212] "PUT /api/companyDepartment/update/17 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:18] WARNING [django.request:241] Unauthorized: /api/companyDepartment/delete/16
+[08/Nov/2023 06:12:18] WARNING [django.request:241] Unauthorized: /api/companyDepartment/delete/16
+[08/Nov/2023 06:12:18] WARNING [django.server:212] "DELETE /api/companyDepartment/delete/16 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:18] WARNING [django.server:212] "DELETE /api/companyDepartment/delete/16 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:18] WARNING [django.request:241] Unauthorized: /api/companyDepartment/get/company/all/38
+[08/Nov/2023 06:12:18] WARNING [django.request:241] Unauthorized: /api/companyDepartment/get/company/all/38
+[08/Nov/2023 06:12:18] WARNING [django.server:212] "GET /api/companyDepartment/get/company/all/38 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:18] WARNING [django.server:212] "GET /api/companyDepartment/get/company/all/38 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:18] WARNING [django.request:241] Unauthorized: /api/companyBenefit/create
+[08/Nov/2023 06:12:18] WARNING [django.request:241] Unauthorized: /api/companyBenefit/create
+[08/Nov/2023 06:12:18] WARNING [django.server:212] "POST /api/companyBenefit/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:18] WARNING [django.server:212] "POST /api/companyBenefit/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:18] WARNING [django.request:241] Unauthorized: /api/companyBenefit/get/14
+[08/Nov/2023 06:12:18] WARNING [django.request:241] Unauthorized: /api/companyBenefit/get/14
+[08/Nov/2023 06:12:18] WARNING [django.server:212] "GET /api/companyBenefit/get/14 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:18] WARNING [django.server:212] "GET /api/companyBenefit/get/14 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:18] WARNING [django.request:241] Unauthorized: /api/companyBenefit/get/company/all/25
+[08/Nov/2023 06:12:18] WARNING [django.request:241] Unauthorized: /api/companyBenefit/get/company/all/25
+[08/Nov/2023 06:12:18] WARNING [django.server:212] "GET /api/companyBenefit/get/company/all/25 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:18] WARNING [django.server:212] "GET /api/companyBenefit/get/company/all/25 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:18] WARNING [django.request:241] Unauthorized: /api/companyBenefit/update/15
+[08/Nov/2023 06:12:18] WARNING [django.request:241] Unauthorized: /api/companyBenefit/update/15
+[08/Nov/2023 06:12:18] WARNING [django.server:212] "PUT /api/companyBenefit/update/15 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:18] WARNING [django.server:212] "PUT /api/companyBenefit/update/15 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:18] WARNING [django.request:241] Unauthorized: /api/companyBenefit/delete/14
+[08/Nov/2023 06:12:18] WARNING [django.request:241] Unauthorized: /api/companyBenefit/delete/14
+[08/Nov/2023 06:12:18] WARNING [django.server:212] "DELETE /api/companyBenefit/delete/14 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:18] WARNING [django.server:212] "DELETE /api/companyBenefit/delete/14 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:18] WARNING [django.request:241] Unauthorized: /api/companyPosition/create
+[08/Nov/2023 06:12:18] WARNING [django.request:241] Unauthorized: /api/companyPosition/create
+[08/Nov/2023 06:12:18] WARNING [django.server:212] "POST /api/companyPosition/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:18] WARNING [django.server:212] "POST /api/companyPosition/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:19] WARNING [django.request:241] Unauthorized: /api/companyPosition/get/14
+[08/Nov/2023 06:12:19] WARNING [django.request:241] Unauthorized: /api/companyPosition/get/14
+[08/Nov/2023 06:12:19] WARNING [django.server:212] "GET /api/companyPosition/get/14 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:19] WARNING [django.server:212] "GET /api/companyPosition/get/14 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:19] WARNING [django.request:241] Unauthorized: /api/companyPosition/get/employee/222
+[08/Nov/2023 06:12:19] WARNING [django.request:241] Unauthorized: /api/companyPosition/get/employee/222
+[08/Nov/2023 06:12:19] WARNING [django.server:212] "GET /api/companyPosition/get/employee/222 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:19] WARNING [django.server:212] "GET /api/companyPosition/get/employee/222 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:19] WARNING [django.request:241] Unauthorized: /api/companyPosition/get/company/all/38
+[08/Nov/2023 06:12:19] WARNING [django.request:241] Unauthorized: /api/companyPosition/get/company/all/38
+[08/Nov/2023 06:12:19] WARNING [django.server:212] "GET /api/companyPosition/get/company/all/38 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:19] WARNING [django.server:212] "GET /api/companyPosition/get/company/all/38 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:19] WARNING [django.request:241] Unauthorized: /api/companyPosition/update/14
+[08/Nov/2023 06:12:19] WARNING [django.request:241] Unauthorized: /api/companyPosition/update/14
+[08/Nov/2023 06:12:19] WARNING [django.server:212] "PUT /api/companyPosition/update/14 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:19] WARNING [django.server:212] "PUT /api/companyPosition/update/14 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:19] WARNING [django.request:241] Unauthorized: /api/companyPosition/delete/14
+[08/Nov/2023 06:12:19] WARNING [django.request:241] Unauthorized: /api/companyPosition/delete/14
+[08/Nov/2023 06:12:19] WARNING [django.server:212] "DELETE /api/companyPosition/delete/14 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:19] WARNING [django.server:212] "DELETE /api/companyPosition/delete/14 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:19] WARNING [django.request:241] Unauthorized: /api/announcementGroup/create
+[08/Nov/2023 06:12:19] WARNING [django.request:241] Unauthorized: /api/announcementGroup/create
+[08/Nov/2023 06:12:19] WARNING [django.server:212] "POST /api/announcementGroup/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:19] WARNING [django.server:212] "POST /api/announcementGroup/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:19] WARNING [django.request:241] Unauthorized: /api/announcementGroup/get/2
+[08/Nov/2023 06:12:19] WARNING [django.request:241] Unauthorized: /api/announcementGroup/get/2
+[08/Nov/2023 06:12:19] WARNING [django.server:212] "GET /api/announcementGroup/get/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:19] WARNING [django.server:212] "GET /api/announcementGroup/get/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:19] WARNING [django.request:241] Unauthorized: /api/announcementGroup/get/company/all/8
+[08/Nov/2023 06:12:19] WARNING [django.request:241] Unauthorized: /api/announcementGroup/get/company/all/8
+[08/Nov/2023 06:12:19] WARNING [django.server:212] "GET /api/announcementGroup/get/company/all/8 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:19] WARNING [django.server:212] "GET /api/announcementGroup/get/company/all/8 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:19] WARNING [django.request:241] Unauthorized: /api/announcementGroup/update/2
+[08/Nov/2023 06:12:19] WARNING [django.request:241] Unauthorized: /api/announcementGroup/update/2
+[08/Nov/2023 06:12:19] WARNING [django.server:212] "PUT /api/announcementGroup/update/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:19] WARNING [django.server:212] "PUT /api/announcementGroup/update/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:19] WARNING [django.request:241] Unauthorized: /api/announcementGroup/delete/1
+[08/Nov/2023 06:12:19] WARNING [django.request:241] Unauthorized: /api/announcementGroup/delete/1
+[08/Nov/2023 06:12:19] WARNING [django.server:212] "DELETE /api/announcementGroup/delete/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:19] WARNING [django.server:212] "DELETE /api/announcementGroup/delete/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:19] WARNING [django.request:241] Unauthorized: /api/companyTraining/create
+[08/Nov/2023 06:12:19] WARNING [django.request:241] Unauthorized: /api/companyTraining/create
+[08/Nov/2023 06:12:19] WARNING [django.server:212] "POST /api/companyTraining/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:19] WARNING [django.server:212] "POST /api/companyTraining/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:19] WARNING [django.request:241] Unauthorized: /api/companyTraining/get/2
+[08/Nov/2023 06:12:19] WARNING [django.request:241] Unauthorized: /api/companyTraining/get/2
+[08/Nov/2023 06:12:19] WARNING [django.server:212] "GET /api/companyTraining/get/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:19] WARNING [django.server:212] "GET /api/companyTraining/get/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:19] WARNING [django.request:241] Unauthorized: /api/companyTraining/get/company/all/8
+[08/Nov/2023 06:12:19] WARNING [django.request:241] Unauthorized: /api/companyTraining/get/company/all/8
+[08/Nov/2023 06:12:19] WARNING [django.server:212] "GET /api/companyTraining/get/company/all/8 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:19] WARNING [django.server:212] "GET /api/companyTraining/get/company/all/8 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:19] WARNING [django.request:241] Unauthorized: /api/companyTraining/update/2
+[08/Nov/2023 06:12:19] WARNING [django.request:241] Unauthorized: /api/companyTraining/update/2
+[08/Nov/2023 06:12:19] WARNING [django.server:212] "PUT /api/companyTraining/update/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:19] WARNING [django.server:212] "PUT /api/companyTraining/update/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:20] WARNING [django.request:241] Unauthorized: /api/companyTraining/delete/2
+[08/Nov/2023 06:12:20] WARNING [django.request:241] Unauthorized: /api/companyTraining/delete/2
+[08/Nov/2023 06:12:20] WARNING [django.server:212] "DELETE /api/companyTraining/delete/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:20] WARNING [django.server:212] "DELETE /api/companyTraining/delete/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:20] WARNING [django.request:241] Unauthorized: /api/companyEmployeeTraining/create
+[08/Nov/2023 06:12:20] WARNING [django.request:241] Unauthorized: /api/companyEmployeeTraining/create
+[08/Nov/2023 06:12:20] WARNING [django.server:212] "POST /api/companyEmployeeTraining/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:20] WARNING [django.server:212] "POST /api/companyEmployeeTraining/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:20] WARNING [django.request:241] Unauthorized: /api/companyEmployeeTraining/get/1
+[08/Nov/2023 06:12:20] WARNING [django.request:241] Unauthorized: /api/companyEmployeeTraining/get/1
+[08/Nov/2023 06:12:20] WARNING [django.server:212] "GET /api/companyEmployeeTraining/get/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:20] WARNING [django.server:212] "GET /api/companyEmployeeTraining/get/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:20] WARNING [django.request:241] Unauthorized: /api/companyEmployeeTraining/get/company/all/8
+[08/Nov/2023 06:12:20] WARNING [django.request:241] Unauthorized: /api/companyEmployeeTraining/get/company/all/8
+[08/Nov/2023 06:12:20] WARNING [django.server:212] "GET /api/companyEmployeeTraining/get/company/all/8 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:20] WARNING [django.server:212] "GET /api/companyEmployeeTraining/get/company/all/8 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:20] WARNING [django.request:241] Unauthorized: /api/companyEmployeeTraining/get/employee/all/1
+[08/Nov/2023 06:12:20] WARNING [django.request:241] Unauthorized: /api/companyEmployeeTraining/get/employee/all/1
+[08/Nov/2023 06:12:20] WARNING [django.server:212] "GET /api/companyEmployeeTraining/get/employee/all/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:20] WARNING [django.server:212] "GET /api/companyEmployeeTraining/get/employee/all/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:20] WARNING [django.request:241] Unauthorized: /api/companyEmployeeTraining/update/1
+[08/Nov/2023 06:12:20] WARNING [django.request:241] Unauthorized: /api/companyEmployeeTraining/update/1
+[08/Nov/2023 06:12:20] WARNING [django.server:212] "PUT /api/companyEmployeeTraining/update/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:20] WARNING [django.server:212] "PUT /api/companyEmployeeTraining/update/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:20] WARNING [django.request:241] Unauthorized: /api/companyEmployeeTraining/delete/1
+[08/Nov/2023 06:12:20] WARNING [django.request:241] Unauthorized: /api/companyEmployeeTraining/delete/1
+[08/Nov/2023 06:12:20] WARNING [django.server:212] "DELETE /api/companyEmployeeTraining/delete/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:20] WARNING [django.server:212] "DELETE /api/companyEmployeeTraining/delete/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:20] WARNING [django.request:241] Unauthorized: /api/companyEmployeePerformance/create
+[08/Nov/2023 06:12:20] WARNING [django.request:241] Unauthorized: /api/companyEmployeePerformance/create
+[08/Nov/2023 06:12:20] WARNING [django.server:212] "POST /api/companyEmployeePerformance/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:20] WARNING [django.server:212] "POST /api/companyEmployeePerformance/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:20] WARNING [django.request:241] Unauthorized: /api/companyEmployeePerformance/get/2
+[08/Nov/2023 06:12:20] WARNING [django.request:241] Unauthorized: /api/companyEmployeePerformance/get/2
+[08/Nov/2023 06:12:20] WARNING [django.server:212] "GET /api/companyEmployeePerformance/get/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:20] WARNING [django.server:212] "GET /api/companyEmployeePerformance/get/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:20] WARNING [django.request:241] Unauthorized: /api/companyEmployeePerformance/get/company/all/8
+[08/Nov/2023 06:12:20] WARNING [django.request:241] Unauthorized: /api/companyEmployeePerformance/get/company/all/8
+[08/Nov/2023 06:12:20] WARNING [django.server:212] "GET /api/companyEmployeePerformance/get/company/all/8 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:20] WARNING [django.server:212] "GET /api/companyEmployeePerformance/get/company/all/8 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:20] WARNING [django.request:241] Unauthorized: /api/companyEmployeePerformance/get/employee/all/1
+[08/Nov/2023 06:12:20] WARNING [django.request:241] Unauthorized: /api/companyEmployeePerformance/get/employee/all/1
+[08/Nov/2023 06:12:20] WARNING [django.server:212] "GET /api/companyEmployeePerformance/get/employee/all/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:20] WARNING [django.server:212] "GET /api/companyEmployeePerformance/get/employee/all/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:20] WARNING [django.request:241] Unauthorized: /api/companyEmployeePerformance/update/1
+[08/Nov/2023 06:12:20] WARNING [django.request:241] Unauthorized: /api/companyEmployeePerformance/update/1
+[08/Nov/2023 06:12:20] WARNING [django.server:212] "PUT /api/companyEmployeePerformance/update/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:20] WARNING [django.server:212] "PUT /api/companyEmployeePerformance/update/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:20] WARNING [django.request:241] Unauthorized: /api/companyEmployeePerformance/delete/2
+[08/Nov/2023 06:12:20] WARNING [django.request:241] Unauthorized: /api/companyEmployeePerformance/delete/2
+[08/Nov/2023 06:12:20] WARNING [django.server:212] "DELETE /api/companyEmployeePerformance/delete/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:20] WARNING [django.server:212] "DELETE /api/companyEmployeePerformance/delete/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:20] WARNING [django.request:241] Unauthorized: /api/companyEmployeeFeedBackReview/create
+[08/Nov/2023 06:12:20] WARNING [django.request:241] Unauthorized: /api/companyEmployeeFeedBackReview/create
+[08/Nov/2023 06:12:20] WARNING [django.server:212] "POST /api/companyEmployeeFeedBackReview/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:20] WARNING [django.server:212] "POST /api/companyEmployeeFeedBackReview/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:20] WARNING [django.request:241] Unauthorized: /api/companyEmployeeFeedBackReview/get/3
+[08/Nov/2023 06:12:20] WARNING [django.request:241] Unauthorized: /api/companyEmployeeFeedBackReview/get/3
+[08/Nov/2023 06:12:20] WARNING [django.server:212] "GET /api/companyEmployeeFeedBackReview/get/3 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:20] WARNING [django.server:212] "GET /api/companyEmployeeFeedBackReview/get/3 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:21] WARNING [django.request:241] Unauthorized: /api/companyEmployeeFeedBackReview/get/company/all/8
+[08/Nov/2023 06:12:21] WARNING [django.request:241] Unauthorized: /api/companyEmployeeFeedBackReview/get/company/all/8
+[08/Nov/2023 06:12:21] WARNING [django.server:212] "GET /api/companyEmployeeFeedBackReview/get/company/all/8 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:21] WARNING [django.server:212] "GET /api/companyEmployeeFeedBackReview/get/company/all/8 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:21] WARNING [django.request:241] Unauthorized: /api/companyEmployeeFeedBackReview/get/employee/by/all/19
+[08/Nov/2023 06:12:21] WARNING [django.request:241] Unauthorized: /api/companyEmployeeFeedBackReview/get/employee/by/all/19
+[08/Nov/2023 06:12:21] WARNING [django.server:212] "GET /api/companyEmployeeFeedBackReview/get/employee/by/all/19 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:21] WARNING [django.server:212] "GET /api/companyEmployeeFeedBackReview/get/employee/by/all/19 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:21] WARNING [django.request:241] Unauthorized: /api/companyEmployeeFeedBackReview/get/employee/to/all/1
+[08/Nov/2023 06:12:21] WARNING [django.request:241] Unauthorized: /api/companyEmployeeFeedBackReview/get/employee/to/all/1
+[08/Nov/2023 06:12:21] WARNING [django.server:212] "GET /api/companyEmployeeFeedBackReview/get/employee/to/all/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:21] WARNING [django.server:212] "GET /api/companyEmployeeFeedBackReview/get/employee/to/all/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:21] WARNING [django.request:241] Unauthorized: /api/companyEmployeeFeedBackReview/update/1
+[08/Nov/2023 06:12:21] WARNING [django.request:241] Unauthorized: /api/companyEmployeeFeedBackReview/update/1
+[08/Nov/2023 06:12:21] WARNING [django.server:212] "PUT /api/companyEmployeeFeedBackReview/update/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:21] WARNING [django.server:212] "PUT /api/companyEmployeeFeedBackReview/update/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:21] WARNING [django.request:241] Unauthorized: /api/companyEmployeeFeedBackReview/delete/1
+[08/Nov/2023 06:12:21] WARNING [django.request:241] Unauthorized: /api/companyEmployeeFeedBackReview/delete/1
+[08/Nov/2023 06:12:21] WARNING [django.server:212] "DELETE /api/companyEmployeeFeedBackReview/delete/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:21] WARNING [django.server:212] "DELETE /api/companyEmployeeFeedBackReview/delete/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:21] WARNING [django.request:241] Unauthorized: /api/user/application
+[08/Nov/2023 06:12:21] WARNING [django.request:241] Unauthorized: /api/user/application
+[08/Nov/2023 06:12:21] WARNING [django.server:212] "POST /api/user/application HTTP/1.1" 401 183
+[08/Nov/2023 06:12:21] WARNING [django.server:212] "POST /api/user/application HTTP/1.1" 401 183
+[08/Nov/2023 06:12:21] WARNING [django.request:241] Unauthorized: /api/companyRecruitment/create
+[08/Nov/2023 06:12:21] WARNING [django.request:241] Unauthorized: /api/companyRecruitment/create
+[08/Nov/2023 06:12:21] WARNING [django.server:212] "POST /api/companyRecruitment/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:21] WARNING [django.server:212] "POST /api/companyRecruitment/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:21] WARNING [django.request:241] Unauthorized: /api/companyRecruitment/get/2
+[08/Nov/2023 06:12:21] WARNING [django.request:241] Unauthorized: /api/companyRecruitment/get/2
+[08/Nov/2023 06:12:21] WARNING [django.server:212] "GET /api/companyRecruitment/get/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:21] WARNING [django.server:212] "GET /api/companyRecruitment/get/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:21] WARNING [django.request:241] Unauthorized: /api/companyRecruitment/get/company/all/3
+[08/Nov/2023 06:12:21] WARNING [django.request:241] Unauthorized: /api/companyRecruitment/get/company/all/3
+[08/Nov/2023 06:12:21] WARNING [django.server:212] "GET /api/companyRecruitment/get/company/all/3 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:21] WARNING [django.server:212] "GET /api/companyRecruitment/get/company/all/3 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:21] WARNING [django.request:241] Unauthorized: /api/companyRecruitment/get/applied/all/1
+[08/Nov/2023 06:12:21] WARNING [django.request:241] Unauthorized: /api/companyRecruitment/get/applied/all/1
+[08/Nov/2023 06:12:21] WARNING [django.server:212] "GET /api/companyRecruitment/get/applied/all/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:21] WARNING [django.server:212] "GET /api/companyRecruitment/get/applied/all/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:21] WARNING [django.request:241] Unauthorized: /api/companyRecruitment/update/1
+[08/Nov/2023 06:12:21] WARNING [django.request:241] Unauthorized: /api/companyRecruitment/update/1
+[08/Nov/2023 06:12:21] WARNING [django.server:212] "PUT /api/companyRecruitment/update/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:21] WARNING [django.server:212] "PUT /api/companyRecruitment/update/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:21] WARNING [django.request:241] Unauthorized: /api/companyRecruitment/close/1
+[08/Nov/2023 06:12:21] WARNING [django.request:241] Unauthorized: /api/companyRecruitment/close/1
+[08/Nov/2023 06:12:21] WARNING [django.server:212] "PUT /api/companyRecruitment/close/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:21] WARNING [django.server:212] "PUT /api/companyRecruitment/close/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:21] WARNING [django.request:241] Unauthorized: /api/companyCheckInRule/create
+[08/Nov/2023 06:12:21] WARNING [django.request:241] Unauthorized: /api/companyCheckInRule/create
+[08/Nov/2023 06:12:21] WARNING [django.server:212] "POST /api/companyCheckInRule/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:21] WARNING [django.server:212] "POST /api/companyCheckInRule/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:21] WARNING [django.request:241] Unauthorized: /api/companyCheckInRule/get/2
+[08/Nov/2023 06:12:21] WARNING [django.request:241] Unauthorized: /api/companyCheckInRule/get/2
+[08/Nov/2023 06:12:21] WARNING [django.server:212] "GET /api/companyCheckInRule/get/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:21] WARNING [django.server:212] "GET /api/companyCheckInRule/get/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:22] WARNING [django.request:241] Unauthorized: /api/companyCheckInRule/update/2
+[08/Nov/2023 06:12:22] WARNING [django.request:241] Unauthorized: /api/companyCheckInRule/update/2
+[08/Nov/2023 06:12:22] WARNING [django.server:212] "PUT /api/companyCheckInRule/update/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:22] WARNING [django.server:212] "PUT /api/companyCheckInRule/update/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:22] WARNING [django.request:241] Unauthorized: /api/companyCheckInRule/delete/2
+[08/Nov/2023 06:12:22] WARNING [django.request:241] Unauthorized: /api/companyCheckInRule/delete/2
+[08/Nov/2023 06:12:22] WARNING [django.server:212] "DELETE /api/companyCheckInRule/delete/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:22] WARNING [django.server:212] "DELETE /api/companyCheckInRule/delete/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:22] WARNING [django.request:241] Unauthorized: /api/userResume/create
+[08/Nov/2023 06:12:22] WARNING [django.request:241] Unauthorized: /api/userResume/create
+[08/Nov/2023 06:12:22] WARNING [django.server:212] "POST /api/userResume/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:22] WARNING [django.server:212] "POST /api/userResume/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:22] WARNING [django.request:241] Unauthorized: /api/userResume/get/6
+[08/Nov/2023 06:12:22] WARNING [django.request:241] Unauthorized: /api/userResume/get/6
+[08/Nov/2023 06:12:22] WARNING [django.server:212] "GET /api/userResume/get/6 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:22] WARNING [django.server:212] "GET /api/userResume/get/6 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:22] WARNING [django.request:241] Unauthorized: /api/userResume/get/user/all/2
+[08/Nov/2023 06:12:22] WARNING [django.request:241] Unauthorized: /api/userResume/get/user/all/2
+[08/Nov/2023 06:12:22] WARNING [django.server:212] "GET /api/userResume/get/user/all/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:22] WARNING [django.server:212] "GET /api/userResume/get/user/all/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:22] WARNING [django.request:241] Unauthorized: /api/userResume/update/6
+[08/Nov/2023 06:12:22] WARNING [django.request:241] Unauthorized: /api/userResume/update/6
+[08/Nov/2023 06:12:22] WARNING [django.server:212] "PUT /api/userResume/update/6 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:22] WARNING [django.server:212] "PUT /api/userResume/update/6 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:22] WARNING [django.request:241] Unauthorized: /api/userResume/delete/6
+[08/Nov/2023 06:12:22] WARNING [django.request:241] Unauthorized: /api/userResume/delete/6
+[08/Nov/2023 06:12:22] WARNING [django.server:212] "DELETE /api/userResume/delete/6 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:22] WARNING [django.server:212] "DELETE /api/userResume/delete/6 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:22] WARNING [django.request:241] Unauthorized: /api/userApplicationRecord/create
+[08/Nov/2023 06:12:22] WARNING [django.request:241] Unauthorized: /api/userApplicationRecord/create
+[08/Nov/2023 06:12:22] WARNING [django.server:212] "POST /api/userApplicationRecord/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:22] WARNING [django.server:212] "POST /api/userApplicationRecord/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:22] WARNING [django.request:241] Unauthorized: /api/userApplicationRecord/get/8
+[08/Nov/2023 06:12:22] WARNING [django.request:241] Unauthorized: /api/userApplicationRecord/get/8
+[08/Nov/2023 06:12:22] WARNING [django.server:212] "GET /api/userApplicationRecord/get/8 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:22] WARNING [django.server:212] "GET /api/userApplicationRecord/get/8 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:22] WARNING [django.request:241] Unauthorized: /api/userApplicationRecord/get/user/all/2
+[08/Nov/2023 06:12:22] WARNING [django.request:241] Unauthorized: /api/userApplicationRecord/get/user/all/2
+[08/Nov/2023 06:12:22] WARNING [django.server:212] "GET /api/userApplicationRecord/get/user/all/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:22] WARNING [django.server:212] "GET /api/userApplicationRecord/get/user/all/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:22] WARNING [django.request:241] Unauthorized: /api/userApplicationRecord/get/company/all/2
+[08/Nov/2023 06:12:22] WARNING [django.request:241] Unauthorized: /api/userApplicationRecord/get/company/all/2
+[08/Nov/2023 06:12:22] WARNING [django.server:212] "GET /api/userApplicationRecord/get/company/all/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:22] WARNING [django.server:212] "GET /api/userApplicationRecord/get/company/all/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:22] WARNING [django.request:241] Unauthorized: /api/userApplicationRecord/update/8
+[08/Nov/2023 06:12:22] WARNING [django.request:241] Unauthorized: /api/userApplicationRecord/update/8
+[08/Nov/2023 06:12:22] WARNING [django.server:212] "PUT /api/userApplicationRecord/update/8 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:22] WARNING [django.server:212] "PUT /api/userApplicationRecord/update/8 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:22] WARNING [django.request:241] Unauthorized: /api/userApplicationRecord/delete/9
+[08/Nov/2023 06:12:22] WARNING [django.request:241] Unauthorized: /api/userApplicationRecord/delete/9
+[08/Nov/2023 06:12:22] WARNING [django.server:212] "DELETE /api/userApplicationRecord/delete/9 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:22] WARNING [django.server:212] "DELETE /api/userApplicationRecord/delete/9 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:22] WARNING [django.request:241] Unauthorized: /api/company/check-in/2
+[08/Nov/2023 06:12:22] WARNING [django.request:241] Unauthorized: /api/company/check-in/2
+[08/Nov/2023 06:12:22] WARNING [django.server:212] "POST /api/company/check-in/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:22] WARNING [django.server:212] "POST /api/company/check-in/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:22] WARNING [django.request:241] Unauthorized: /api/companyEmployeeLeave/create
+[08/Nov/2023 06:12:22] WARNING [django.request:241] Unauthorized: /api/companyEmployeeLeave/create
+[08/Nov/2023 06:12:22] WARNING [django.server:212] "POST /api/companyEmployeeLeave/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:22] WARNING [django.server:212] "POST /api/companyEmployeeLeave/create HTTP/1.1" 401 183
+[08/Nov/2023 06:12:23] WARNING [django.request:241] Unauthorized: /api/companyEmployeeLeave/get/3
+[08/Nov/2023 06:12:23] WARNING [django.request:241] Unauthorized: /api/companyEmployeeLeave/get/3
+[08/Nov/2023 06:12:23] WARNING [django.server:212] "GET /api/companyEmployeeLeave/get/3 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:23] WARNING [django.server:212] "GET /api/companyEmployeeLeave/get/3 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:23] WARNING [django.request:241] Unauthorized: /api/companyEmployeeLeave/get/employee/all/1
+[08/Nov/2023 06:12:23] WARNING [django.request:241] Unauthorized: /api/companyEmployeeLeave/get/employee/all/1
+[08/Nov/2023 06:12:23] WARNING [django.server:212] "GET /api/companyEmployeeLeave/get/employee/all/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:23] WARNING [django.server:212] "GET /api/companyEmployeeLeave/get/employee/all/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:23] WARNING [django.request:241] Unauthorized: /api/companyEmployeeLeave/get/company/all/1
+[08/Nov/2023 06:12:23] WARNING [django.request:241] Unauthorized: /api/companyEmployeeLeave/get/company/all/1
+[08/Nov/2023 06:12:23] WARNING [django.server:212] "GET /api/companyEmployeeLeave/get/company/all/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:23] WARNING [django.server:212] "GET /api/companyEmployeeLeave/get/company/all/1 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:23] WARNING [django.request:241] Unauthorized: /api/companyEmployeeLeave/update/2
+[08/Nov/2023 06:12:23] WARNING [django.request:241] Unauthorized: /api/companyEmployeeLeave/update/2
+[08/Nov/2023 06:12:23] WARNING [django.server:212] "PUT /api/companyEmployeeLeave/update/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:23] WARNING [django.server:212] "PUT /api/companyEmployeeLeave/update/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:23] WARNING [django.request:241] Unauthorized: /api/companyEmployeeLeave/delete/2
+[08/Nov/2023 06:12:23] WARNING [django.request:241] Unauthorized: /api/companyEmployeeLeave/delete/2
+[08/Nov/2023 06:12:23] WARNING [django.server:212] "DELETE /api/companyEmployeeLeave/delete/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:12:23] WARNING [django.server:212] "DELETE /api/companyEmployeeLeave/delete/2 HTTP/1.1" 401 183
+[08/Nov/2023 06:17:55] ERROR [django.request:241] Internal Server Error: /api/calCompanyEmployeeScore
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 511, in dispatch
+    self.response = self.finalize_response(request, response, *args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 423, in finalize_response
+    assert isinstance(response, HttpResponseBase), (
+AssertionError: Expected a `Response`, `HttpResponse` or `HttpStreamingResponse` to be returned from the view, but received a `<class 'NoneType'>`
+[08/Nov/2023 06:17:55] ERROR [django.request:241] Internal Server Error: /api/calCompanyEmployeeScore
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 511, in dispatch
+    self.response = self.finalize_response(request, response, *args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 423, in finalize_response
+    assert isinstance(response, HttpResponseBase), (
+AssertionError: Expected a `Response`, `HttpResponse` or `HttpStreamingResponse` to be returned from the view, but received a `<class 'NoneType'>`
+[08/Nov/2023 06:17:55] ERROR [django.server:212] "POST /api/calCompanyEmployeeScore HTTP/1.1" 500 73700
+[08/Nov/2023 06:17:55] ERROR [django.server:212] "POST /api/calCompanyEmployeeScore HTTP/1.1" 500 73700
+[08/Nov/2023 06:23:56] WARNING [django.request:241] Not Found: /api/announcement/get/company/all/NaN
+[08/Nov/2023 06:23:56] WARNING [django.request:241] Not Found: /api/announcement/get/company/all/NaN
+[08/Nov/2023 06:23:56] WARNING [django.server:212] "GET /api/announcement/get/company/all/NaN HTTP/1.1" 404 37846
+[08/Nov/2023 06:23:56] WARNING [django.server:212] "GET /api/announcement/get/company/all/NaN HTTP/1.1" 404 37846
+[08/Nov/2023 06:23:56] ERROR [django.request:241] Internal Server Error: /api/company/NaN
+[08/Nov/2023 06:23:56] ERROR [django.request:241] Internal Server Error: /api/company/NaN
+[08/Nov/2023 06:23:56] ERROR [django.server:212] "GET /api/company/NaN HTTP/1.1" 500 26
+[08/Nov/2023 06:23:56] ERROR [django.server:212] "GET /api/company/NaN HTTP/1.1" 500 26
+[08/Nov/2023 06:24:14] WARNING [django.request:241] Not Found: /api/announcement/get/company/all/NaN
+[08/Nov/2023 06:24:14] WARNING [django.request:241] Not Found: /api/announcement/get/company/all/NaN
+[08/Nov/2023 06:24:14] WARNING [django.server:212] "GET /api/announcement/get/company/all/NaN HTTP/1.1" 404 37846
+[08/Nov/2023 06:24:14] WARNING [django.server:212] "GET /api/announcement/get/company/all/NaN HTTP/1.1" 404 37846
+[08/Nov/2023 06:24:14] ERROR [django.request:241] Internal Server Error: /api/company/NaN
+[08/Nov/2023 06:24:14] ERROR [django.request:241] Internal Server Error: /api/company/NaN
+[08/Nov/2023 06:24:14] ERROR [django.server:212] "GET /api/company/NaN HTTP/1.1" 500 26
+[08/Nov/2023 06:24:14] ERROR [django.server:212] "GET /api/company/NaN HTTP/1.1" 500 26
+[08/Nov/2023 06:24:18] WARNING [django.request:241] Unauthorized: /api/company/check-in/0
+[08/Nov/2023 06:24:18] WARNING [django.request:241] Unauthorized: /api/company/check-in/0
+[08/Nov/2023 06:24:18] WARNING [django.server:212] "GET /api/company/check-in/0 HTTP/1.1" 401 58
+[08/Nov/2023 06:24:18] WARNING [django.server:212] "GET /api/company/check-in/0 HTTP/1.1" 401 58
+[08/Nov/2023 06:24:31] WARNING [django.request:241] Not Found: /api/announcement/get/company/all/NaN
+[08/Nov/2023 06:24:31] WARNING [django.request:241] Not Found: /api/announcement/get/company/all/NaN
+[08/Nov/2023 06:24:31] WARNING [django.server:212] "GET /api/announcement/get/company/all/NaN HTTP/1.1" 404 37846
+[08/Nov/2023 06:24:31] WARNING [django.server:212] "GET /api/announcement/get/company/all/NaN HTTP/1.1" 404 37846
+[08/Nov/2023 06:24:31] ERROR [django.request:241] Internal Server Error: /api/company/NaN
+[08/Nov/2023 06:24:31] ERROR [django.request:241] Internal Server Error: /api/company/NaN
+[08/Nov/2023 06:24:31] ERROR [django.server:212] "GET /api/company/NaN HTTP/1.1" 500 26
+[08/Nov/2023 06:24:31] ERROR [django.server:212] "GET /api/company/NaN HTTP/1.1" 500 26
