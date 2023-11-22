@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Input, InputNumber, Modal, Pagination, Select, Table, message } from 'antd';
 import { Link, useParams } from 'react-router-dom';
-import { createCompanyEmployee, fireCompanyEmployee, getAllEmployees, getEmployeePositions, getUserByEmail } from '../../../api';
+import { createCompanyEmployee, fireCompanyEmployee, getAllEmployees, getEmployeePositions, getUserByEmail, sendInvitation } from '../../../api';
 import { getCookie } from '../../../utils';
 
 const CompanyEmployeePage: React.FC = () => {
@@ -40,22 +40,31 @@ const CompanyEmployeePage: React.FC = () => {
   };
 
   const inviteEmployee = async () => {
-    const userResposne = await getUserByEmail(form.getFieldValue('email'))
-    if(userResposne.status==200){
-      const data = {
-        company_id: companyId,
-        user_id: userResposne.data.id,
-        companyEmployeePosition_id: form.getFieldValue("position"),
-        salary: form.getFieldValue("salary")
-      } 
-      const response = await createCompanyEmployee(data)
-      if(response.status==200){
+    const data = {
+      'email':form.getFieldValue('email'),
+      'companyId':companyId
+    }
+    const response = await sendInvitation(data)
+    if(response.status==200){
         message.success('邀請成功')
         fetchCompanyEmployees();
       }
-    }else{
-      // user not found, send invitation to the email
-    }
+    // const userResposne = await getUserByEmail(form.getFieldValue('email'))
+    // if(userResposne.status==200){
+    //   const data = {
+    //     company_id: companyId,
+    //     user_id: userResposne.data.id,
+    //     companyEmployeePosition_id: form.getFieldValue("position"),
+    //     salary: form.getFieldValue("salary")
+    //   }
+    //   const response = await createCompanyEmployee(data)
+    //   if(response.status==200){
+    //     message.success('邀請成功')
+    //     fetchCompanyEmployees();
+    //   }
+    // }else{
+    //   // user not found, send invitation to the email
+    // }
   }
 
   const fireEmployee = async (id:number) => {

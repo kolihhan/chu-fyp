@@ -39,6 +39,7 @@ import CompanyTaskDetailPage from "../pages/companies/admin/companyTaskList/comp
 import EmployeeTaskPage from "../pages/companies/employees/EmployeeTaskPage";
 import EmployeeTaskForcePage from "../pages/companies/employees/EmployeeTaskForcePage";
 import { getCookie } from "../utils";
+import AcceptInvitePage from "../pages/AcceptInvitePage";
 
 const Protected: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const user = useSelector((state: RootState) => state.auth.user);
@@ -128,6 +129,7 @@ const RoutesComponent: React.FC = () =>{
                 <Route path="company/task-list/:id/update" element={<ProtectedEmployee><CompanyCreateTaskForcePage /></ProtectedEmployee>} /> {/* 编辑现有 */}
                 <Route path="company/task-list/:id/details" element={<ProtectedEmployee><CompanyTaskDetailPage /></ProtectedEmployee>} /> {/* 编辑现有 */}
                 <Route path="company/task-list/:id/details/create" element={<ProtectedEmployee><CompanyCreateTaskPage /></ProtectedEmployee>} /> {/* 编辑现有 */}
+                <Route path="invitation/accept/:code" element={<AcceptInvitePage />} />
 
 
                 {/* Admin */}

@@ -1,4 +1,5 @@
 import random
+import string
 from django.http import Http404
 from django.shortcuts import render,get_object_or_404
 from faker import Faker
@@ -25,6 +26,9 @@ from django.utils import timezone
 import logging
 import datetime
 from django.db.models import Count
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+
 
 # from django.db.models import QuerySet
 # from django.http import JsonResponse
@@ -2867,3 +2871,65 @@ def createRandomJob(request):
 
     except Exception as e:
         return Response({'message': 'Failed to create random job listings.', 'error': str(e)}, status=500)
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def sendInvitationEmail(request):
+    try:
+        email = request.data.get('email')
+        companyId = request.data.get('companyId')
+        company = models.Company.objects.get(id=companyId)
+
+        today_date = datetime.datetime.now().strftime("%Y%m%d")
+        random_string = ''.join(random.choices(string.ascii_letters + string.digits, k=16))
+        code = f"{today_date}_{random_string}"
+
+        invitation = models.CompanyInvitation.objects.create(
+            email = email,
+            company_id = company,
+            code = code
+        )
+
+        subject = f'Invitation from {company.name}'
+        link = f'http://localhost:3000/invitation/accept/{code}'
+        message = f"您好！您已经被公司10邀请加入。点击链接接受邀请：[{link}]。"
+        from_email = 'chiajy04@gmail.com'
+
+        send_mail(subject, message, from_email, [email], fail_silently=False)
+
+        return Response({'status': message})
+    except Exception as e:
+        return Response({'status': 'error', 'message': str(e)})
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def registerAndJoinCompany(request):
+    try:
+        code = request.data.get('code')
+        invitation = models.CompanyInvitation.objects.get(code=code)
+        try:
+            user = models.UserAccount.objects.get(email=invitation.email)
+        except UserAccount.DoesNotExist as e:
+            user = models.UserAccount.objects.create(
+                email = invitation.email,
+                password ="chiachia",
+                name = "chia",
+                gender = "Male",
+                birthday = "2000-4-18",
+                address = "-",
+                phone = "-",
+                avatar_url = "",
+                type = "Employee"
+            )
+        finally:
+            position = models.CompanyEmployeePosition.objects.get(company_id=invitation.company_id, position_name='Employee')
+            companyEmployee = models.CompanyEmployee.objects.create(
+                company_id = invitation.company_id,
+                user_id = user,
+                companyEmployeePosition_id = position,
+                salary = 0
+            )
+            return Response({'message':f"已加入{invitation.company_id.name}"}, status=status.HTTP_200_OK)
+    except Exception as e: 
+        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)

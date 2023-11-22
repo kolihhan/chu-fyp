@@ -238,6 +238,10 @@ urlpatterns = [
     # 其他URL路由
     path('hr-data/<int:pk>', get_HRChartData, name='get_hr_data'),
     path('createRandomJob/get/', createRandomJob, name='createRandomJob'),
+
+    # email
+    path('sendInvitationEmail', sendInvitationEmail, name='sendInvitationEmail'),
+    path('registerAndJoinCompany', registerAndJoinCompany, name='registerAndJoinCompany'),
 ]
 
 # create company

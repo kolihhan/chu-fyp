@@ -520,3 +520,15 @@ export const getChartData = async(id:number) => {
     headers: authHeaders(),
   })
 }
+
+export const sendInvitation = async (data : any) => {
+  return axios.post(`${API_URL}/sendInvitationEmail`, 
+  data,
+  { headers: authHeaders() });
+};
+
+export const acceptInvitation = async(data: any) => {
+  return axios.post(`${API_URL}/registerAndJoinCompany`, 
+  data,
+  { headers: authHeaders() })
+}
