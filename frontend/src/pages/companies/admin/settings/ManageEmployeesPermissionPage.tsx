@@ -97,12 +97,12 @@ const ManageEmployeesSettingPage: React.FC = () => {
   const handleUpdateSettings = async (values: any) => {
     try {
       const updateData = {
-        "companyEmployeePosition_id":values[0]
+        "companyEmployeePosition_id":values
       }
       const response = await updateEmployeeSettings(employeeId, updateData);
       if(response.status===200){
         message.success("員工職位更新成功")
-        navigate(`/admin/company/${companyId}/employees`)
+        navigate(`/admin/company/employees`)
       }else{
         message.error("員工職位更新失敗，請重新嘗試")
       }
