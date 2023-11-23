@@ -64,7 +64,7 @@ const CreateCompaniesPage: React.FC = () => {
   };
 
   return (
-    <div style={{ maxWidth: '600px', margin: 'auto' }}>
+    <div className="container">
       <h1 style={{ textAlign: 'center', marginBottom: '20px' }}>創建公司</h1>
 
       <Form

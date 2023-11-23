@@ -92,7 +92,7 @@ const ManageDepartmentPage: React.FC = () => {
 
   return (
     <div>
-      <h1 style={{ textAlign: 'center', marginBottom: '20px' }}>部門管理</h1>
+      <h1>部門管理</h1>
 
       <div style={{ marginBottom: '16px', textAlign: 'right' }}>
         <Button type="primary" onClick={showModal}>

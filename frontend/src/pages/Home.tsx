@@ -10,6 +10,7 @@ import { AnyAction } from '@reduxjs/toolkit';
 import { useLoading } from '../components/LoadingScreen';
 import ApplyJobModal from '../components/ApplyJobModal';
 import { getCookie } from '../utils';
+import ChatComponent from '../components/ChatModal';
 
 const Home: React.FC = () => {
   type AppDispatch = ThunkDispatch<RootState, unknown, AnyAction>;
@@ -66,14 +67,13 @@ const Home: React.FC = () => {
   );
 
   return (
-    <div className="container">
+    <><ChatComponent /><div className="container">
       <h1 className="mt-4 mb-4">欢迎来到招聘信息页面</h1>
       <Input.Search
         placeholder="输入关键词进行搜索"
         value={searchTerm}
         onChange={handleSearch}
-        style={{ marginBottom: '16px' }}
-      />
+        style={{ marginBottom: '16px' }} />
       <Row gutter={[16, 16]}>
         {currentJobs.length === 0 ? (
           noJobsMessage
@@ -97,8 +97,7 @@ const Home: React.FC = () => {
                   isEmployee={isEmployee}
                   loggedIn={user != null}
                   jobId={job.id}
-                  jobTitle={job.title}
-                />
+                  jobTitle={job.title} />
                 <Button
                   className="mt-2"
                   onClick={() => handleViewPage(job.id)}
@@ -125,7 +124,7 @@ const Home: React.FC = () => {
           下一页
         </Button>
       </div>
-    </div>
+    </div></>
   );
 };
 

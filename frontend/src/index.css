@@ -104,6 +104,7 @@ body {
   background-color: #ffffff; /* 白色背景 */
   border-radius: 8px; /* 圆角边框 */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 微小的阴影 */
+  border: 10px solid #ffffff; /* 3像素寬的灰色實線邊框 */
 }
 
 /* 调整 Ant Design 组件 */

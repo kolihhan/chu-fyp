@@ -16,6 +16,10 @@ const ChatWindow = () => {
         scrollToBottom();
     }, [chatMessages]);
 
+    useEffect(() => {
+        toggleChat();
+    },[]);
+
     const scrollToBottom = () => {
         if (chatContentRef.current) {
             chatContentRef.current.scrollTop = chatContentRef.current.scrollHeight;

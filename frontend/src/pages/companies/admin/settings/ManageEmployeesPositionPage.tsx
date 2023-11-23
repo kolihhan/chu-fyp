@@ -112,7 +112,7 @@ const ManageEmployeesPositionPage: React.FC = () => {
 
   return (
     <div>
-      <h1 style={{ textAlign: 'center', marginBottom: '20px' }}>職位管理</h1>
+      <h1>職位管理</h1>
 
       <div style={{ marginBottom: '16px', textAlign: 'right' }}>
         <Button type="primary" onClick={showModal}>

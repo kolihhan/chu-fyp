@@ -32,7 +32,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="login-container">
+    <div className="container">
       <h1 style={{ textAlign: 'center'}}>登入</h1>
       <Form onFinish={handleSubmit} style={{ maxWidth: '300px', margin: '0 auto'}}>
         <Form.Item style={{width: '100%'}} name="username" label="用戶名" labelCol={{span:24}}>

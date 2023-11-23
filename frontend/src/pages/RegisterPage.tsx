@@ -4,7 +4,7 @@ import { register } from '../reducers/authReducers';
 import { AnyAction } from '@reduxjs/toolkit';
 import { ThunkDispatch } from 'redux-thunk';
 import { RootState } from '../app/store';
-import { Form, Input, Button, DatePicker, Select, Upload, message , Image} from 'antd';
+import { Form, Input, Button, DatePicker, Select, Upload, message, Image } from 'antd';
 import dayjs from 'dayjs';  // 引入 dayjs 库
 import axios from 'axios';
 import { UserOutlined, MailOutlined, PhoneOutlined, EnvironmentOutlined, CalendarOutlined } from '@ant-design/icons';
@@ -73,9 +73,9 @@ const Register: React.FC = () => {
     dispatch(register(username, email, password, checkPassword, gender, birthday, address, phone, avatarUrl, type));
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     document.title = "用戶注冊"
-    if (avatarUrl=='') setAvatarUrl(image)
+    if (avatarUrl == '') setAvatarUrl(image)
   })
 
   const beforeUpload = (file: any) => {
@@ -87,7 +87,7 @@ const Register: React.FC = () => {
     return true;
   };
 
-  const uploadImage = async (file:any) => {
+  const uploadImage = async (file: any) => {
     console.log(file)
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -97,34 +97,35 @@ const Register: React.FC = () => {
   }
 
   return (
-    <div style={{ backgroundColor: '#f0f2f5', padding: '20px', borderRadius: '5px' }}>
-      <h1 style={{ textAlign: 'center' }}>註冊界面</h1>
-      
-      <Form onFinish={handleSubmit} labelAlign='left' labelCol={{ span: 1 }} wrapperCol={{ span:24 }}>
-        <div style={{ marginBottom: '16px' }}>
-          <Form.Item label="" name="avatarUrl" style={{height:'100px', width:'100px', marginRight:'16px'}}>
-            <Upload 
-              listType="picture-card" showUploadList={false} multiple={false} maxCount={1} 
-              beforeUpload={beforeUpload}
-              customRequest={({file}) => uploadImage(file)}>
-                <Image preview={false} src={avatarUrl} style={{height:'100px', width:'100px', borderRadius: '50%'}}></Image>
-            </Upload>
-          </Form.Item>
-          <Form.Item style={{width: '20%'}} label="用戶名" name="username" labelCol={{span:24}} rules={[{ required: true, message: 'Please enter your username' }]}>
+    <div className="container" style={{ backgroundColor: '#f0f2f5', padding: '20px', borderRadius: '5px' }}>
+      <h1 style={{ textAlign: 'center' }} className='mb-2'>註冊界面</h1>
+      <Form onFinish={handleSubmit} labelAlign="left" labelCol={{ span: 1 }} wrapperCol={{ span: 24 }}>
+        <div className='mt-2' style={{ marginBottom: '16px'}}>
+          <center>
+            <Form.Item label="" name="avatarUrl" style={{ height: '100px', width: '100px', marginRight: '16px' }}>
+              <Upload
+                listType="picture-card" showUploadList={false} multiple={false} maxCount={1}
+                beforeUpload={beforeUpload}
+                customRequest={({ file }) => uploadImage(file)}>
+                <Image preview={false} src={avatarUrl} style={{ height: '100px', width: '100px', borderRadius: '50%' }}></Image>
+              </Upload>
+            </Form.Item>
+          </center>
+          <Form.Item style={{ width: '20%' }} label="用戶名" name="username" labelCol={{ span: 24 }} rules={[{ required: true, message: 'Please enter your username' }]}>
             <Input value={username} onChange={handleUsernameChange} prefix={<UserOutlined />} />
           </Form.Item>
         </div>
         <div>
-          <Form.Item style={{width: '20%'}} label="電郵"
-            name="email" labelCol={{span:24}} rules={[{ required: true, message: 'Please enter your email' }]}>
+          <Form.Item style={{ width: '20%' }} label="電郵"
+            name="email" labelCol={{ span: 24 }} rules={[{ required: true, message: 'Please enter your email' }]}>
             <Input value={email} onChange={handleEmailChange} prefix={<MailOutlined />} />
           </Form.Item>
-          <Form.Item style={{width: '20%'}} label="密碼"
-            name="password" labelCol={{span:24}} rules={[{ required: true, message: 'Please enter your password' }]}>
+          <Form.Item style={{ width: '20%' }} label="密碼"
+            name="password" labelCol={{ span: 24 }} rules={[{ required: true, message: 'Please enter your password' }]}>
             <Input.Password value={password} onChange={handlePasswordChange} />
           </Form.Item>
-          <Form.Item style={{width: '20%'}} label="確認密碼"
-            name="check-password" labelCol={{span:24}} 
+          <Form.Item style={{ width: '20%' }} label="確認密碼"
+            name="check-password" labelCol={{ span: 24 }}
             rules={[
               { required: true, message: 'Please enter your password' },
               ({ getFieldValue }) => ({
@@ -139,30 +140,30 @@ const Register: React.FC = () => {
           >
             <Input.Password value={checkPassword} onChange={handleCheckPasswordChange} />
           </Form.Item>
-          <Form.Item style={{width: '20%'}} label="類別" name="type" labelCol={{span:24}}>
-            <Select value={type} onChange={(value) => {setType(value)}}>
+          <Form.Item style={{ width: '20%' }} label="類別" name="type" labelCol={{ span: 24 }}>
+            <Select value={type} onChange={(value) => { setType(value) }}>
               <Option value="Boss">Boss</Option>
               <Option value="Employee">Employee</Option>
             </Select>
           </Form.Item>
-          <Form.Item style={{width: '20%'}} label="性別" name="gender" labelCol={{span:24}}>
+          <Form.Item style={{ width: '20%' }} label="性別" name="gender" labelCol={{ span: 24 }}>
             <Select value={gender} onChange={handleGenderChange} placeholder="選擇性別">
               <Option value="male">Male</Option>
               <Option value="female">Female</Option>
               <Option value="other">Other</Option>
             </Select>
           </Form.Item>
-          <Form.Item style={{width: '20%'}} label="生日" name="birthday" labelCol={{span:24}}>
-            <DatePicker value={birthday} style={{width:'100%'}} onChange={handleBirthdayChange} placeholder="選擇生日"/>
+          <Form.Item style={{ width: '20%' }} label="生日" name="birthday" labelCol={{ span: 24 }}>
+            <DatePicker value={birthday} style={{ width: '100%' }} onChange={handleBirthdayChange} placeholder="選擇生日" />
           </Form.Item>
-          <Form.Item style={{width: '20%'}} label="地址" name="address" labelCol={{span:24}}>
+          <Form.Item style={{ width: '20%' }} label="地址" name="address" labelCol={{ span: 24 }}>
             <Input value={address} onChange={handleAddressChange} prefix={<EnvironmentOutlined />} />
           </Form.Item>
-          <Form.Item style={{width: '20%'}} label="手機" name="phone" labelCol={{span:24}}>
+          <Form.Item style={{ width: '20%' }} label="手機" name="phone" labelCol={{ span: 24 }}>
             <Input value={phone} onChange={handlePhoneChange} prefix={<PhoneOutlined />} />
           </Form.Item>
         </div>
-        <div style={{width:'100%', textAlign:'left'}}>
+        <div style={{ width: '100%', textAlign: 'left' }}>
           <Form.Item >
             <Button type="primary" htmlType="submit" disabled={!username || !email || !password || !checkPassword || !type}>
               註冊

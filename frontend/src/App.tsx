@@ -124,7 +124,6 @@ const App: React.FC = () => {
         <Navbar />
         <AdminNavBar />
         <RoutesComponent/>
-        <ChatComponent />
       </LoadingScreen>
     </Router>
     </Layout>

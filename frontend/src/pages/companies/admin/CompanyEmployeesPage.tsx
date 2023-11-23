@@ -117,7 +117,7 @@ const CompanyEmployeePage: React.FC = () => {
 
    return (
     <div>
-      <h1 style={{ textAlign: 'center', marginBottom: '20px' }}>公司職員</h1>
+      <h1>公司職員</h1>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
         <Input.Search
           placeholder="搜索員工"
