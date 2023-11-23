@@ -42,6 +42,7 @@ const ManageEmployeesPositionPage: React.FC = () => {
       fetchEmployeePositions();
       setIsModalVisible(false);
       form.resetFields();
+      setSelectedPosition(null)
     } catch (error) {
       console.log(error);
     }
@@ -68,6 +69,7 @@ const ManageEmployeesPositionPage: React.FC = () => {
       fetchEmployeePositions();
       setIsModalVisible(false);
       form.resetFields();
+      setSelectedPosition(null)
     } catch (error) {
       console.log(error);
     }
