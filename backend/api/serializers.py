@@ -327,3 +327,10 @@ class TaskSerializer(serializers.ModelSerializer):
     class Meta: 
         model = models.Task
         fields = '__all__'
+
+class CompanyInvitationSerializer(serializers.ModelSerializer):
+    company_id = CompanySerializer(many=False, read_only=True)
+    position = CompanyEmployeePositionSerializer(many=False, read_only=True)
+    class Meta: 
+        model = models.CompanyInvitation
+        fields = '__all__'

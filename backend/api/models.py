@@ -439,6 +439,8 @@ class Task(models.Model):
 class CompanyInvitation(models.Model):
     email = models.EmailField()
     company_id = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='comapny_invitation')
+    position = models.ForeignKey(CompanyEmployeePosition, on_delete=models.CASCADE, related_name='invitation_position', null=True, blank=True)
+    salary = models.DecimalField(max_digits=10, decimal_places=2, default=30000)
     code = models.TextField()
     status = models.CharField(default='Pending')
     expire_at = models.DateTimeField(default=timezone.now() + timezone.timedelta(days=7))

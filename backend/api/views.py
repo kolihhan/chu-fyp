@@ -2878,8 +2878,9 @@ def createRandomJob(request):
 def sendInvitationEmail(request):
     try:
         email = request.data.get('email')
-        companyId = request.data.get('companyId')
-        company = models.Company.objects.get(id=companyId)
+        salary = request.data.get('salary')
+        company = models.Company.objects.get(id=request.data.get('companyId'))
+        position = models.CompanyEmployeePosition.objects.get(id=request.data.get('position'))
 
         today_date = datetime.datetime.now().strftime("%Y%m%d")
         random_string = ''.join(random.choices(string.ascii_letters + string.digits, k=16))
@@ -2888,6 +2889,8 @@ def sendInvitationEmail(request):
         invitation = models.CompanyInvitation.objects.create(
             email = email,
             company_id = company,
+            position = position,
+            salary = salary,
             code = code
         )
 
@@ -2908,28 +2911,84 @@ def registerAndJoinCompany(request):
     try:
         code = request.data.get('code')
         invitation = models.CompanyInvitation.objects.get(code=code)
+        invitationSerializer = serializers.CompanyInvitationSerializer(invitation, many=False)
+
+        if(request.data.get('accept')==False):
+            invitation.status = 'Reject'
+            invitation.save()
+            invitationSerializer = serializers.CompanyInvitationSerializer(invitation, many=False)
+            return Response({'message':f'已拒絕${invitation.company_id.name}', 'invitation': invitationSerializer.data}, status=status.HTTP_200_OK)
+
+        if invitation.expire_at < timezone.now():
+            invitation.status = "Expire"
+            invitation.save()
+            return Response({'message': '邀請已過期', 'invitation': invitationSerializer.data}, status=status.HTTP_200_OK)
+        elif invitation.status=='Accept':
+            return Response({'message':'已經接受過了', 'invitation': invitationSerializer.data}, status=status.HTTP_200_OK)
+        elif invitation.status=='Reject':
+            return Response({'message':'已經拒絕過了', 'invitation': invitationSerializer.data}, status=status.HTTP_200_OK)
+        
+        isNewUser = False
         try:
+            isNewUser = False
+            password = ''
+            userData = {}
             user = models.UserAccount.objects.get(email=invitation.email)
-        except UserAccount.DoesNotExist as e:
-            user = models.UserAccount.objects.create(
-                email = invitation.email,
-                password ="chiachia",
-                name = "chia",
-                gender = "Male",
-                birthday = "2000-4-18",
-                address = "-",
-                phone = "-",
-                avatar_url = "",
-                type = "Employee"
-            )
-        finally:
-            position = models.CompanyEmployeePosition.objects.get(company_id=invitation.company_id, position_name='Employee')
-            companyEmployee = models.CompanyEmployee.objects.create(
-                company_id = invitation.company_id,
-                user_id = user,
-                companyEmployeePosition_id = position,
-                salary = 0
-            )
-            return Response({'message':f"已加入{invitation.company_id.name}"}, status=status.HTTP_200_OK)
+        except models.UserAccount.DoesNotExist as e:
+            isNewUser = True
+            password = ''.join(random.choices(string.ascii_letters + string.digits, k=16))
+            userData = {
+                'email': invitation.email, 'password':password, 'name': invitation.email,
+                'gender': "Male", 'birthday': "2000-1-1", 
+                'address': "-", 'phone': "-", 'avatar_url': "", 'type': "Employee"
+            }
+            createUser =serializers.UserSerializer(data=userData)
+            if createUser.is_valid():
+                createUser.save()
+            user = models.UserAccount.objects.get(email=invitation.email)
+
+        companyEmployee = models.CompanyEmployee.objects.create(
+            company_id = invitation.company_id,
+            user_id = user,
+            companyEmployeePosition_id = invitation.position,
+            salary = invitation.salary
+        )
+        invitation.status = 'Accept'
+        invitation.save()
+
+        invitationSerializer = serializers.CompanyInvitationSerializer(invitation, many=False)
+        returnData = {
+            'message':f"已加入{invitation.company_id.name}", 
+            'isNewUser':isNewUser, 
+            'password': password,
+            'invitation': invitationSerializer.data
+        }
+        return Response(returnData, status=status.HTTP_201_CREATED)
+    except models.CompanyInvitation.DoesNotExist as e:
+        return Response({'error': '邀請不存在'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e: 
-        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def getInvitation(request, code):
+    try:
+        invitation = models.CompanyInvitation.objects.get(code=code)
+        if invitation.expire_at < timezone.now():
+            invitation.status = "Expire"
+            invitation.save()
+            serializer = serializers.CompanyInvitationSerializer(invitation, many=False)
+            return Response({'message': '邀請已過期', 'invitation': serializer.data}, status=status.HTTP_200_OK)
+        elif invitation.status=='Accept':
+            serializer = serializers.CompanyInvitationSerializer(invitation, many=False)
+            return Response({'message':'已經接受過了', 'invitation': serializer.data}, status=status.HTTP_200_OK)
+        elif invitation.status=='Reject':
+            serializer = serializers.CompanyInvitationSerializer(invitation, many=False)
+            return Response({'message':'已經拒絕過了', 'invitation': serializer.data}, status=status.HTTP_200_OK)
+        
+        serializer = serializers.CompanyInvitationSerializer(invitation, many=False)
+        return Response({'message': '等待中', 'invitation':serializer.data}, status=status.HTTP_200_OK)
+    except models.CompanyInvitation.DoesNotExist as e:
+        return Response({'error': '邀請不存在'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e: 
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

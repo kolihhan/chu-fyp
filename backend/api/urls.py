@@ -239,8 +239,9 @@ urlpatterns = [
     path('hr-data/<int:pk>', get_HRChartData, name='get_hr_data'),
     path('createRandomJob/get/', createRandomJob, name='createRandomJob'),
 
-    # email
+    # email invitation
     path('sendInvitationEmail', sendInvitationEmail, name='sendInvitationEmail'),
+    path('getInvitation/<str:code>', getInvitation, name='getInvitation'),
     path('registerAndJoinCompany', registerAndJoinCompany, name='registerAndJoinCompany'),
 ]
 

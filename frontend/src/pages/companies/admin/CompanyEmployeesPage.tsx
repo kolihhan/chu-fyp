@@ -42,7 +42,9 @@ const CompanyEmployeePage: React.FC = () => {
   const inviteEmployee = async () => {
     const data = {
       'email':form.getFieldValue('email'),
-      'companyId':companyId
+      'companyId':companyId,
+      'position':form.getFieldValue('position'),
+      'salary':form.getFieldValue('salary'),
     }
     const response = await sendInvitation(data)
     if(response.status==200){

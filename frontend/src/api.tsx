@@ -532,3 +532,8 @@ export const acceptInvitation = async(data: any) => {
   data,
   { headers: authHeaders() })
 }
+
+export const getInvitation = async(code: string) => {
+  return axios.get(`${API_URL}/getInvitation/${code}`, 
+  { headers: authHeaders() })
+}
