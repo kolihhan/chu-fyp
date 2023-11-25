@@ -40,7 +40,7 @@ export const getUserFromToken = (payload: any) => {
       birthday: payload.birthday ? dayjs(payload.birthday).format("YYYY-MM-DD") : null,
       address: payload.address,
       phone: payload.phone,
-      avatarUrl: payload.avatarUrl
+      avatarUrl: payload.avatar_url
     };
 
 

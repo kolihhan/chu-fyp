@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Button, DatePicker, Select, Timeline, Table, Tabs, Popconfirm, Collapse, message, Card, Row, Col, Image } from 'antd';
+import { Form, Input, Button, DatePicker, Select, Timeline, Table, Tabs, Popconfirm, Collapse, message, Card, Row, Col, Image, Upload } from 'antd';
 import { UserOutlined, MailOutlined, PhoneOutlined, EnvironmentOutlined, CalendarOutlined } from '@ant-design/icons';
 
 import * as userActions from '../reducers/userReducers';
@@ -41,6 +41,7 @@ const ProfilePage: React.FC = () => {
   const employeeId = getCookie('employeeId')
   const role = getCookie("role")
   const [showJobApply, setShowJobApply] = useState(false)
+  const [avatarUrl, setAvatarUrl] = useState('');
 
 
   useEffect(() => {
@@ -50,6 +51,7 @@ const ProfilePage: React.FC = () => {
     } else {
       setShowJobApply(true)
     }
+    setAvatarUrl(userData.avatarUrl!!)
   }, []);
 
   const toggleTab = (tab: string) => {
@@ -59,7 +61,7 @@ const ProfilePage: React.FC = () => {
   };
 
   const handleSubmit = (values: any) => {
-    const { username, email, gender, birthday, address, phone, avatarUrl } = values;
+    const { username, email, gender, birthday, address, phone } = values;
     dispatch(userActions.updateUserInfo(username, email, gender, birthday, address, phone, avatarUrl));
   };
 
@@ -119,13 +121,37 @@ const ProfilePage: React.FC = () => {
     }
   }
 
+  const beforeUpload = (file: any) => {
+    if (file.type.indexOf('image/') === -1) {
+      message.error('You can only upload image files!');
+      return false;
+    }
+    return true;
+  };
+
+  const uploadImage = async (file: any) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      setAvatarUrl(reader?.result!.toString())
+    };
+  }
+
   return (
     <div>
 
       <Tabs activeKey={activeTab} onChange={toggleTab} >
-        <TabPane tab="个人資料" key="profile" >
+        <TabPane tab="個人資料" key="profile" >
         <div className='profileForm'>
           <Form onFinish={handleSubmit} initialValues={userData} layout="vertical">
+            <Form.Item label="Avatar URL" name="avatarUrl">
+              <Upload
+                listType="picture-card" showUploadList={false} multiple={false} maxCount={1}
+                beforeUpload={beforeUpload}
+                customRequest={({ file }) => uploadImage(file)}>
+                <Image preview={false} src={avatarUrl} style={{ height: '100px', width: '100px', borderRadius: '50%' }}></Image>
+              </Upload>
+            </Form.Item>
             <Form.Item label="用戶名" name="username" rules={[{ required: true, message: 'Please enter your username' }]}>
               <Input prefix={<UserOutlined />} />
             </Form.Item>
@@ -147,9 +173,6 @@ const ProfilePage: React.FC = () => {
             </Form.Item>
             <Form.Item label="電話" name="phone">
               <Input prefix={<PhoneOutlined />} />
-            </Form.Item>
-            <Form.Item label="Avatar URL" name="avatarUrl">
-              <Input />
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">
