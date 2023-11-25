@@ -121,7 +121,7 @@ const RoutesComponent: React.FC = () =>{
                 <Route path="/company/home" element={<ProtectedEmployee><EmployeeHomePage /></ProtectedEmployee>} />
                 {/* <Route path="/company/checkIn" element={<ProtectedEmployee><CheckInPage /></ProtectedEmployee>} />  */}
                 <Route path="/company/feedback" element={<ProtectedEmployee><FeedBackPage /></ProtectedEmployee>} />
-                {/* <Route path="/company/employee/profile" element={<ProtectedEmployee><EmployeeProfilePage /></ProtectedEmployee>} /> */}
+                <Route path="/company/employee/profile" element={<ProtectedEmployee><EmployeeProfilePage /></ProtectedEmployee>} />
                 <Route path="/company/applicationleave" element={<ProtectedEmployee><ApplicationLeavePage /></ProtectedEmployee>} />
                 <Route path="/company/tasks" element={<ProtectedEmployee><EmployeeTaskPage /></ProtectedEmployee>} />
                 <Route path="/company/employee/taskforce" element={<ProtectedEmployee><EmployeeTaskForcePage /></ProtectedEmployee>} />

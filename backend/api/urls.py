@@ -80,6 +80,7 @@ urlpatterns = [
     path('companyEmployee/delete/<str:pk>', deleteCompanyEmployee, name='deleteCompanyEmployee'),
     path('companyEmployee/create/multiple', createMultipleCompanyEmployee, name='createMultipleCompanyEmployee'),
     path('companyEmployee/fire/<int:pk>', fireEmployee, name='fireEmployee'),
+    path('companyEmployee/resign/<int:pk>', resignEmployee, name='resignEmployee'),
 
     # announcementGroup
     path('announcementGroup/create', createAnnouncementGroup, name='createAnnouncementGroup'),

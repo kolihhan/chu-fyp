@@ -714,6 +714,8 @@ def updateCompanyEmployee(request, pk):
             originalCompanyEmployee.companyEmployeePosition_id = models.CompanyEmployeePosition.objects.get(id=updatedCompanyEmployee['companyEmployeePosition_id'])
         if updatedCompanyEmployee.get('salary', None)!=None:
             originalCompanyEmployee.salary = updatedCompanyEmployee['salary']
+        if updatedCompanyEmployee.get('skills', None)!=None:
+            originalCompanyEmployee.skills = updatedCompanyEmployee['skills']
         originalCompanyEmployee.save()
         serializer = serializers.CompanyEmployeeSerializer(originalCompanyEmployee, many=False)
         return Response({"message":"員工資料更新成功", 'data':serializer.data},status=status.HTTP_200_OK)
@@ -724,17 +726,37 @@ def updateCompanyEmployee(request, pk):
 
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
-def fireEmployee(request, pk):
+def resignEmployee(request, pk):
     try:
         originalCompanyEmployee = models.CompanyEmployee.objects.get(id=pk)
-        originalCompanyEmployee.end_date = timezone.now()
-        originalCompanyEmployee.save()
-        serializer = serializers.CompanyEmployeeSerializer(originalCompanyEmployee, many=False)
-        return Response({"message":"員工資料更新成功", 'data':serializer.data},status=status.HTTP_200_OK)
+        if originalCompanyEmployee.companyEmployeePosition_id.position_name=='Boss':
+            return Response({"message":"離職失敗，老闆無法離職", 'status':'fail'},status=status.HTTP_200_OK)
+        else: 
+            originalCompanyEmployee.end_date = timezone.now()
+            originalCompanyEmployee.save()
+            serializer = serializers.CompanyEmployeeSerializer(originalCompanyEmployee, many=False)
+            return Response({"message":"離職成功", 'status':'success', 'data':serializer.data},status=status.HTTP_200_OK)
     except models.CompanyEmployee.DoesNotExist:
         return Response({'message':'員工不存在'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
-        return Response({"message":"員工資料更新失敗，請稍後再嘗試"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response({"message":"離職失敗，請稍後再嘗試", 'status':'fail', 'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def fireEmployee(request, pk):
+    try:
+        originalCompanyEmployee = models.CompanyEmployee.objects.get(id=pk)
+        if originalCompanyEmployee.companyEmployeePosition_id.position_name=='Boss':
+            return Response({"message":"解雇失敗，無法解雇老闆", 'data':serializer.data},status=status.HTTP_400_BAD_REQUEST)
+        else: 
+            originalCompanyEmployee.end_date = timezone.now()
+            originalCompanyEmployee.save()
+            serializer = serializers.CompanyEmployeeSerializer(originalCompanyEmployee, many=False)
+            return Response({"message":"解雇成功", 'data':serializer.data},status=status.HTTP_200_OK)
+    except models.CompanyEmployee.DoesNotExist:
+        return Response({'message':'員工不存在'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({"message":"員工解雇失敗，請稍後再嘗試"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])

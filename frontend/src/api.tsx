@@ -407,6 +407,12 @@ export const fireCompanyEmployee = async (id: number) => {
   { headers: authHeaders() });
 };
 
+export const resignCompanyEmployee = async (id: number) => {
+  return axios.put(`${API_URL}/companyEmployee/resign/${id}`, 
+  { id },
+  { headers: authHeaders() });
+};
+
 export const getIDRecommendations = async(id: number) => {
   return axios.get(`${API_URL}/get_recommendations`, { 
     headers: authHeaders(),

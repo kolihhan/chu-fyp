@@ -59,14 +59,17 @@ export const DropDownIcon: React.FC<{ isManage: boolean; isEmployee: any[]; }> =
         <Menu.Item key="employee-feedback">
           <Link to={`/company/feedback`}>反饋</Link>
         </Menu.Item>
-        <Menu.Item key="employee-application">
-          <Link to={`/company/applicationleave`}>請假申請</Link>
+        <Menu.Item key="employee-tasks">
+          <Link to={`/company/tasks`}>任務</Link>
         </Menu.Item>
         <Menu.Item key="employee-taskforce">
           <Link to={`/company/employee/taskforce`}>任務組</Link>
         </Menu.Item>
-        <Menu.Item key="employee-tasks">
-          <Link to={`/company/tasks`}>任務</Link>
+        <Menu.Item key="employee-profile">
+          <Link to={`/company/employee/profile`}>員工資料</Link>
+        </Menu.Item>
+        <Menu.Item key="employee-application">
+          <Link to={`/company/applicationleave`}>請假申請</Link>
         </Menu.Item>
         <Divider />
       </Menu.ItemGroup>
