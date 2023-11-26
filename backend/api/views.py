@@ -28,6 +28,8 @@ import datetime
 from django.db.models import Count
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
+from django.contrib.auth.hashers import check_password
+
 
 
 # from django.db.models import QuerySet
@@ -116,6 +118,31 @@ def updateUserInfo(request, pk):
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def changeUserPassword(request, pk):
+    try:
+        passwordData = request.data
+        oldPassword = passwordData.get('oldPassword', None)
+        newPassword = passwordData.get('newPassword', None)
+        user = models.UserAccount.objects.get(id=pk)
+        
+        if not check_password(oldPassword, user.password):
+            return Response({'message': '舊密碼不對'}, status=status.HTTP_400_BAD_REQUEST)
+       
+        if check_password(newPassword, user.password):
+            return Response({'message': '新密碼不可與舊密碼一樣'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        serializer = serializers.UserUpdatePasswordSerializer(user, data={'password':newPassword})
+        if serializer.is_valid():
+            serializer.save()
+        return Response({'message':'密碼變更成功'}, status=status.HTTP_200_OK)
+    
+    except models.UserAccount.DoesNotExist as e:
+        return Response({'error': str(e), 'message':'用戶不存在'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'error': str(e), 'message':'密碼變更失敗'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view(['GET'])

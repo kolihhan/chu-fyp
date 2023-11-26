@@ -18,6 +18,7 @@ urlpatterns = [
     path('user/get/email/<str:pk>', getUserByEmail, name='getUserByEmail'),
     path('user/get/multiple/email/<str:pk>', getMultipleUserByEmail, name='getMultipleUserByEmail'),
     path('user/update/<int:pk>', updateUserInfo, name='updateUserInfo'),
+    path('user/changeUserPassword/<int:pk>', changeUserPassword, name='changeUserPassword'),
 
 
     # company

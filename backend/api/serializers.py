@@ -62,7 +62,8 @@ class UserSerializer(serializers.ModelSerializer):
         user = UserAccount(**validated_data)
         user.set_password(password)
         user.save()
-        return user  
+        return user
+
 class UserUpdateSerializer(serializers.ModelSerializer):
 
     password = serializers.CharField(write_only=True, required=False)
@@ -75,6 +76,16 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             'address': {'required': False},
             'avatar_url': {'required': False}
         }
+
+class UserUpdatePasswordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserAccount
+        fields = ['password']
+        
+    def update(self, instance, validated_data):
+        instance.set_password(validated_data['password'])
+        instance.save()
+        return instance
     
 # class BossSerializer(ModelSerializer):
 #     class Meta:
