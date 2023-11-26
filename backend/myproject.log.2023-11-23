@@ -1,0 +1,20 @@
+[23/Nov/2023 15:18:57] WARNING [django.request:241] Bad Request: /api/get_recommendations
+[23/Nov/2023 15:18:57] WARNING [django.request:241] Bad Request: /api/get_recommendations
+[23/Nov/2023 15:18:57] WARNING [django.server:212] "GET /api/get_recommendations HTTP/1.1" 400 37
+[23/Nov/2023 15:18:57] WARNING [django.server:212] "GET /api/get_recommendations HTTP/1.1" 400 37
+[23/Nov/2023 15:18:57] WARNING [django.request:241] Bad Request: /api/get_recommendations
+[23/Nov/2023 15:18:57] WARNING [django.request:241] Bad Request: /api/get_recommendations
+[23/Nov/2023 15:18:57] WARNING [django.server:212] "GET /api/get_recommendations HTTP/1.1" 400 37
+[23/Nov/2023 15:18:57] WARNING [django.server:212] "GET /api/get_recommendations HTTP/1.1" 400 37
+[23/Nov/2023 15:30:57] WARNING [django.request:241] Bad Request: /api/get_recommendations
+[23/Nov/2023 15:30:57] WARNING [django.request:241] Bad Request: /api/get_recommendations
+[23/Nov/2023 15:30:57] WARNING [django.server:212] "GET /api/get_recommendations HTTP/1.1" 400 37
+[23/Nov/2023 15:30:57] WARNING [django.server:212] "GET /api/get_recommendations HTTP/1.1" 400 37
+[23/Nov/2023 16:12:43] WARNING [django.request:241] Unauthorized: /api/company/check-in/0
+[23/Nov/2023 16:12:43] WARNING [django.request:241] Unauthorized: /api/company/check-in/0
+[23/Nov/2023 16:12:43] WARNING [django.server:212] "GET /api/company/check-in/0 HTTP/1.1" 401 58
+[23/Nov/2023 16:12:43] WARNING [django.server:212] "GET /api/company/check-in/0 HTTP/1.1" 401 58
+[23/Nov/2023 16:26:19] WARNING [django.request:241] Bad Request: /api/login
+[23/Nov/2023 16:26:19] WARNING [django.request:241] Bad Request: /api/login
+[23/Nov/2023 16:26:19] WARNING [django.server:212] "POST /api/login HTTP/1.1" 400 46
+[23/Nov/2023 16:26:19] WARNING [django.server:212] "POST /api/login HTTP/1.1" 400 46

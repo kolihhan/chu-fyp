@@ -6,6 +6,7 @@ import { AnyAction} from '@reduxjs/toolkit';
 import { ThunkDispatch } from 'redux-thunk';
 import { RootState } from '../app/store';
 import { Form, Input, Button } from 'antd';
+import { UserOutlined } from '@ant-design/icons';
 
 
 const Login: React.FC = () => {
@@ -36,7 +37,7 @@ const Login: React.FC = () => {
       <h1 style={{ textAlign: 'center'}}>登入</h1>
       <Form onFinish={handleSubmit} style={{ maxWidth: '300px', margin: '0 auto'}}>
         <Form.Item style={{width: '100%'}} name="username" label="用戶名" labelCol={{span:24}}>
-          <Input value={username} onChange={handleUsernameChange} />
+          <Input value={username} onChange={handleUsernameChange} prefix={<UserOutlined />} />
         </Form.Item>
         <Form.Item style={{width: '100%'}} name="password" label="密碼" labelCol={{span:24}}>
           <Input.Password value={password} onChange={handlePasswordChange} />

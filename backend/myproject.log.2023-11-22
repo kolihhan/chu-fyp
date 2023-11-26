@@ -1,0 +1,124 @@
+[21/Nov/2023 08:30:56] WARNING [django.request:241] Not Found: /favicon.ico
+[21/Nov/2023 08:30:56] WARNING [django.request:241] Not Found: /favicon.ico
+[21/Nov/2023 08:30:56] WARNING [django.server:212] "GET /favicon.ico HTTP/1.1" 404 2215
+[21/Nov/2023 08:30:56] WARNING [django.server:212] "GET /favicon.ico HTTP/1.1" 404 2215
+[21/Nov/2023 08:31:06] WARNING [django.request:241] Unauthorized: /api/company/check-in/0
+[21/Nov/2023 08:31:06] WARNING [django.request:241] Unauthorized: /api/company/check-in/0
+[21/Nov/2023 08:31:06] WARNING [django.server:212] "GET /api/company/check-in/0 HTTP/1.1" 401 58
+[21/Nov/2023 08:31:06] WARNING [django.server:212] "GET /api/company/check-in/0 HTTP/1.1" 401 58
+[21/Nov/2023 19:23:59] WARNING [django.request:241] Not Found: /api/companyPosition/get/department/all/undefined
+[21/Nov/2023 19:23:59] WARNING [django.request:241] Not Found: /api/companyPosition/get/department/all/undefined
+[21/Nov/2023 19:23:59] WARNING [django.server:212] "GET /api/companyPosition/get/department/all/undefined HTTP/1.1" 404 38758
+[21/Nov/2023 19:23:59] WARNING [django.server:212] "GET /api/companyPosition/get/department/all/undefined HTTP/1.1" 404 38758
+[21/Nov/2023 19:31:30] ERROR [django.request:241] Internal Server Error: /api/user/get/email/undefined
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+  File "/app/backend/api/views.py", line 127, in getUserByEmail
+    user = models.UserAccount.objects.get(email=pk)
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/query.py", line 637, in get
+    raise self.model.DoesNotExist(
+api.models.UserAccount.DoesNotExist: UserAccount matching query does not exist.
+[21/Nov/2023 19:31:30] ERROR [django.request:241] Internal Server Error: /api/user/get/email/undefined
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+  File "/app/backend/api/views.py", line 127, in getUserByEmail
+    user = models.UserAccount.objects.get(email=pk)
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/query.py", line 637, in get
+    raise self.model.DoesNotExist(
+api.models.UserAccount.DoesNotExist: UserAccount matching query does not exist.
+[21/Nov/2023 19:31:30] ERROR [django.server:212] "GET /api/user/get/email/undefined HTTP/1.1" 500 101415
+[21/Nov/2023 19:31:30] ERROR [django.server:212] "GET /api/user/get/email/undefined HTTP/1.1" 500 101415
+[21/Nov/2023 19:33:13] ERROR [django.request:241] Internal Server Error: /api/user/get/email/undefined
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+  File "/app/backend/api/views.py", line 127, in getUserByEmail
+    user = models.UserAccount.objects.get(email=pk)
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/query.py", line 637, in get
+    raise self.model.DoesNotExist(
+api.models.UserAccount.DoesNotExist: UserAccount matching query does not exist.
+[21/Nov/2023 19:33:13] ERROR [django.request:241] Internal Server Error: /api/user/get/email/undefined
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/rest_framework/decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+  File "/app/backend/api/views.py", line 127, in getUserByEmail
+    user = models.UserAccount.objects.get(email=pk)
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/django/db/models/query.py", line 637, in get
+    raise self.model.DoesNotExist(
+api.models.UserAccount.DoesNotExist: UserAccount matching query does not exist.
+[21/Nov/2023 19:33:13] ERROR [django.server:212] "GET /api/user/get/email/undefined HTTP/1.1" 500 101415
+[21/Nov/2023 19:33:13] ERROR [django.server:212] "GET /api/user/get/email/undefined HTTP/1.1" 500 101415

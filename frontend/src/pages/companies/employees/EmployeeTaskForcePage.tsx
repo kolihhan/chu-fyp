@@ -105,12 +105,14 @@ const EmployeeTaskForcePage: React.FC = () => {
 
     return(
         <div>
+          <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
             <h1>我的任務組</h1>
             <a href="/company/task-list/create">
             <Button type="primary">
                 創建任務組
             </Button>
             </a>
+          </div>
             <Table dataSource={taskForces} columns={columns} />
         </div>
     )

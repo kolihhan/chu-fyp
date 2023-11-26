@@ -155,23 +155,23 @@ const ProfilePage: React.FC = () => {
             <Form.Item label="用戶名" name="username" rules={[{ required: true, message: 'Please enter your username' }]}>
               <Input prefix={<UserOutlined />} />
             </Form.Item>
-            <Form.Item label="電子郵件" name="email" rules={[{ required: true, message: 'Please enter your email' }]}>
+            <Form.Item style={{width: '100%'}} label="電子郵件" name="email" rules={[{ required: true, message: 'Please enter your email' }]}>
               <Input prefix={<MailOutlined />} />
             </Form.Item>
-            <Form.Item label="性別" name="gender">
+            <Form.Item style={{width: '100%'}} label="性別" name="gender">
               <Select placeholder="選擇性別">
                 <Option value="male">男</Option>
                 <Option value="female">女</Option>
                 <Option value="other">其他</Option>
               </Select>
             </Form.Item>
-            <Form.Item label="生日" name="birthday">
+            <Form.Item style={{width: '100%'}} label="生日" name="birthday">
               <DatePicker style={{ width: '100%' }} placeholder="選擇生日" />
             </Form.Item>
-            <Form.Item label="地址" name="address">
+            <Form.Item style={{width: '100%'}} label="地址" name="address">
               <Input prefix={<EnvironmentOutlined />} />
             </Form.Item>
-            <Form.Item label="電話" name="phone">
+            <Form.Item style={{width: '100%'}} label="電話" name="phone">
               <Input prefix={<PhoneOutlined />} />
             </Form.Item>
             <Form.Item>
@@ -182,13 +182,12 @@ const ProfilePage: React.FC = () => {
           </Form>
           </div>
 
-
         </TabPane>
 
         <TabPane tab="簡歷管理" key="resume">
-          <div style={{ marginBottom: '16px' }}>
+          <div style={{ marginBottom: '16px', textAlign: 'right'  }}>
             <Button type="primary" onClick={handleCreate}>
-              新建
+              新建履歷
             </Button>
           </div>
           <Table dataSource={resumes}>

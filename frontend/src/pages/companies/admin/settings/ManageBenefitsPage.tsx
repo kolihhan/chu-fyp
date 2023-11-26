@@ -59,15 +59,15 @@ const ManageBenefitsPage: React.FC = () => {
   };
 
   const columns = [
-    { title: "Name", dataIndex: "benefit_name", key: "benefit_name" },
-    { title: "Description", dataIndex: "benefit_desc", key: "benefit_desc" },
+    { title: "名稱", dataIndex: "benefit_name", key: "benefit_name" },
+    { title: "描述", dataIndex: "benefit_desc", key: "benefit_desc" },
     {
-      title: "Actions",
+      title: "操作",
       key: "actions",
       render: (_: any, record: any) => (
         <>
-          <Button onClick={() => handleEdit(record)}>Edit</Button>
-          <Button onClick={() => deleteSelectedBenefit(record.id)}>Delete</Button>
+          <Button onClick={() => handleEdit(record)}>編輯</Button>
+          <Button onClick={() => deleteSelectedBenefit(record.id)}>刪除</Button>
         </>
       ),
     },
@@ -99,28 +99,42 @@ const ManageBenefitsPage: React.FC = () => {
   };
 
   return (
-    <div>
-      <h1>Manage Benefits</h1>
-      <Button onClick={handleAdd}>Add Benefit</Button>
-      <Table dataSource={benefits} columns={columns} />
-
-      <Modal
-        visible={modalVisible}
-        onCancel={handleModalCancel}
-        onOk={handleModalSubmit}
-        destroyOnClose
-      >
-        <Form form={form} initialValues={selectedBenefit}>
-          <Form.Item name="benefit_name" label="Name" rules={[{ required: true }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item name="benefit_desc" label="Description" rules={[{ required: true }]}>
-            <Input.TextArea rows={4} />
-          </Form.Item>
-        </Form>
-      </Modal>
+  <div style={{ padding: '20px', margin: '20px', border: '1px solid #ddd', borderRadius: '5px' }}>
+    <div style={{ background: '#f0f0f0', padding: '10px', borderBottom: '1px solid #ccc' }}>
+      <h1>福利管理</h1>
     </div>
-  );
+    
+    <div style={{ textAlign: 'right' }}>
+      <Button onClick={handleAdd} type="primary" style={{ marginBottom: '16px' }}>
+        新增福利
+      </Button>
+    </div>
+    
+    <Table
+      dataSource={benefits}
+      columns={columns}
+      style={{ background: '#fff', border: '1px solid #ddd', borderRadius: '5px', overflow: 'hidden' }}
+    />
+
+    <Modal
+      visible={modalVisible}
+      onCancel={handleModalCancel}
+      onOk={handleModalSubmit}
+      destroyOnClose
+      title="編輯福利"
+    >
+      <Form form={form} initialValues={selectedBenefit} labelCol={{ span: 6 }} wrapperCol={{ span: 18 }}>
+        <Form.Item name="benefit_name" label="名稱" rules={[{ required: true }]}>
+          <Input />
+        </Form.Item>
+        <Form.Item name="benefit_desc" label="描述" rules={[{ required: true }]}>
+          <Input.TextArea rows={4} />
+        </Form.Item>
+      </Form>
+    </Modal>
+  </div>
+);
 };
+
 
 export default ManageBenefitsPage;

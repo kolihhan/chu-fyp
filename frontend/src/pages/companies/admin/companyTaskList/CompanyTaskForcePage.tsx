@@ -41,17 +41,17 @@ const CompanyTaskForcePage: React.FC = () => {
 
   const columns = [
     {
-      title: 'Task Force Name',
+      title: '任務組名稱',
       dataIndex: 'name',
       key: 'name',
     },
     {
-      title: 'Description',
+      title: '描述',
       dataIndex: 'description',
       key: 'description',
     },
     {
-      title: 'Leader',
+      title: '領導',
       dataIndex: 'leader',
       key: 'leader',
       render: (status: any) => {
@@ -59,7 +59,7 @@ const CompanyTaskForcePage: React.FC = () => {
       },
     },
     {
-      title: 'Status',
+      title: '狀態',
       dataIndex: 'status',
       key: 'status',
       render: (status: string) => {
@@ -76,30 +76,30 @@ const CompanyTaskForcePage: React.FC = () => {
       },
     },
     {
-      title: 'Actions',
+      title: '操作',
       dataIndex: 'id',
       key: 'actions',
       render: (id: any) => (
         <div>
          <a className="mr-2" href={`/admin/company/task-list/${id}/details`}>
            <Button type="primary">
-             View
+             查看
            </Button>
          </a>
          
          <a className="mr-2" href={`/admin/company/task-list/${id}/update`}>
            <Button type="primary">
-             Edit
+             編輯
            </Button>
          </a>
 
           <Popconfirm
-            title="Are you sure you want to delete this task force?"
+            title="你確定要刪除此任務組嗎？"
             onConfirm={() => handleDelete(id)}
-            okText="Yes"
-            cancelText="No"
+            okText="是"
+            cancelText="否"
           >
-            <Button danger>Delete</Button>
+            <Button danger>刪除</Button>
           </Popconfirm>
         </div>
       ),
@@ -108,11 +108,13 @@ const CompanyTaskForcePage: React.FC = () => {
 
   return (
     <div>
-      <h1>Company Task Force List</h1>
+      <h1>公司任務組名單</h1>
       <a href="/admin/company/task-list/create">
-      <Button type="primary">
-        Create Task Force
-      </Button>
+      <div style={{ textAlign: 'right' }}>
+        <Button type="primary">
+          創建任務組
+        </Button>
+      </div>
       </a>
       <Table dataSource={taskForces} columns={columns} />
     </div>

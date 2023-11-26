@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Select, message } from 'antd';
+import { Form, Input, Button, Select, message, DatePicker } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
 import { createTaskForces, findSuitableAssignee, fetchTaskForcesById, getAllEmployees, updateTaskForces } from '../../../../api';
 import { getCookie } from '../../../../utils';
@@ -123,79 +123,79 @@ const CompanyCreateTaskForcePage: React.FC = () => {
   
 
   return (
-    <div>
-      <h1>{newId ? 'Update' : 'Create'} Task Force</h1>
-      <Form form={form} onFinish={onFinish}>
-      <Form.Item
-          label="Task Force Title"
+    <div style={{ marginBottom: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+      <h1>{newId ? '更新' : '創建'}任務組</h1>
+      <Form form={form} onFinish={onFinish} labelAlign="left">
+        <Form.Item
+          label="任務組標題"
           name="name"
+          labelCol={{ span: 24 }}
         >
           <Input />
         </Form.Item>
         <Form.Item
-          label="Task Force Description"
+          label="任務組描述"
           name="description"
+          labelCol={{ span: 24 }}
         >
           <Input.TextArea />
         </Form.Item>
-          
 
-        <Input.Group compact>
-  <Form.Item label="Leader Name" name="leader">
-    <Select
-      showSearch
-      placeholder="Select an leader"
-      optionFilterProp="children"
-      filterOption={(input, option) =>
-        String(option?.children)?.toLowerCase().indexOf(input.toLowerCase()) >= 0
-      }
-      value={selectedAssignee}
-    >
+        <Form.Item label="領導名字" name="leader" labelCol={{ span: 24 }}>
+          <Input.Group compact>
+            <Select
+              showSearch
+              placeholder="選擇領導"
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                String(option?.children)?.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              value={selectedAssignee}
+            >
+              {assignees.map((assignee: any, index) => (
+                <Select.Option key={index} value={assignee.id}>
+                  {assignee.user_id.name}
+                </Select.Option>
+              ))}
+            </Select>
+            <Button type="primary" onClick={recommendLeader}>
+              推薦
+            </Button>
+          </Input.Group>
+        </Form.Item>
 
-      {assignees.map((assignee: any, index) => (
-        <Select.Option key={index} value={assignee.id}>
-          {assignee.user_id.name}
-        </Select.Option>
-      ))}
-    </Select>
-</Form.Item>
-<Button type="primary" onClick={recommendLeader}>
-      Recommend
-    </Button>
-  </Input.Group>
         <Form.Item
-          label="Goals"
+          label="目標"
           name="goals"
+          labelCol={{ span: 24 }}
         >
           <Input.TextArea />
         </Form.Item>
-          
-        <Form.Item
-          label="Deadline"
-          name="deadline"
-        >
-          <Input type="date" />
+
+        <Form.Item label="期限" name="deadline" labelCol={{ span: 24 }} >
+          <DatePicker style={{ width: '100%' }} placeholder="選擇日期" />
         </Form.Item>
-          
-        <Form.Item label="Priority" name="priority">
+
+        <Form.Item label="優先度" name="priority" labelCol={{ span: 24 }}>
           <Select value={priority} onChange={handlePriorityChange}>
-            <Option value="Low">Low</Option>
-            <Option value="Medium">Medium</Option>
-            <Option value="High">High</Option>
-            <Option value="Emergency">Emergency</Option>
+            <Select.Option value="Low">低</Select.Option>
+            <Select.Option value="Medium">中</Select.Option>
+            <Select.Option value="High">高</Select.Option>
+            <Select.Option value="Emergency">緊急</Select.Option>
           </Select>
         </Form.Item>
-          
-        <Form.Item label="Status" name="status">
+
+        <Form.Item label="狀態" name="status" labelCol={{ span: 24 }}>
           <Select value={status} onChange={handleStatusChange}>
-            <Option value="Planning">Planning</Option>
-            <Option value="In Progress">In Progress</Option>
-            <Option value="Completed">Completed</Option>
+            <Select.Option value="Planning">計劃中</Select.Option>
+            <Select.Option value="In Progress">進行中</Select.Option>
+            <Select.Option value="Completed">已完成</Select.Option>
           </Select>
         </Form.Item>
+
         <Form.Item>
           <Button type="primary" htmlType="submit">
-            {newId ? 'Update' : 'Create'}
+            {newId ? '更新' : '創建'}
           </Button>
         </Form.Item>
       </Form>

@@ -198,7 +198,7 @@ const ManageRecruitmentPage: React.FC = () => {
   };
 
   const columns = [
-    { title: "标题", dataIndex: "title", key: "title" },
+    { title: "標题", dataIndex: "title", key: "title" },
     { title: "職位", dataIndex: "companyEmployeePosition", key: "companyEmployeePosition",
       render:(_:any, rec:any) => (
         <span>{rec.companyEmployeePosition.position_name}</span>
@@ -213,12 +213,12 @@ const ManageRecruitmentPage: React.FC = () => {
         </span>
       )
     },
-    { title: "入职日期", dataIndex: "start_at", key: "start_at",
+    { title: "入職日期", dataIndex: "start_at", key: "start_at",
       render:(_:any, rec:any) => (
         <span>{dayjs(rec.start_at).format("YYYY-MM-DD")}</span>
       )
     },
-    { title: "人数", dataIndex: "employee_need", key: "employee_need" },
+    { title: "人數", dataIndex: "employee_need", key: "employee_need" },
     {
       title: "操作",
       key: "actions",
@@ -231,7 +231,7 @@ const ManageRecruitmentPage: React.FC = () => {
             關閉
           </Button>
           <Button type="link" onClick={() => handleDeleteRecruitment(record.id)}>
-            删除
+            刪除
           </Button>
           <Button type="link" onClick={() => handleManageApplicants(record.id)}>
             應聘人員
@@ -281,11 +281,15 @@ const ManageRecruitmentPage: React.FC = () => {
   ];
 
   return (
-    <div>
-      <h1>招聘管理</h1>
-      <Button type="primary" onClick={handleCreateRecruitment}>
-        创建招聘职位
-      </Button>
+  <div style={{ padding: '20px', margin: '20px', border: '1px solid #ddd', borderRadius: '5px' }}>
+    <div style={{ background: '#f0f0f0', padding: '10px', borderBottom: '1px solid #ccc' }}>
+      <h1>招聘職位</h1>
+    </div>
+      <div style={{ textAlign: 'right' }}>
+        <Button type="primary" onClick={handleCreateRecruitment}>
+          創建招聘職位
+        </Button>
+      </div>
       <Table dataSource={recruitments} columns={columns} />
 
       <Modal width='80%' bodyStyle={{maxHeight:'70vh', overflowY: 'auto'}}
@@ -306,13 +310,13 @@ const ManageRecruitmentPage: React.FC = () => {
             name="description"
             label="描述"
             rules={[{ required: true, message: "請輸入招聘描述" }]}>
-            <Input.TextArea autoSize={{minRows:1, maxRows:6}} placeholder="描述工作内容" />
+            <Input.TextArea autoSize={{minRows:1, maxRows:6}} placeholder="描述工作內容" />
           </Form.Item>
           
           <Form.Item
             name="companyEmployeePosition"
             label="職位"
-            rules={[{ required: true, message: "请輸入招聘職位" }]}>
+            rules={[{ required: true, message: "請輸入招聘職位" }]}>
             <Select placeholder="全職">
               {availablePosition.map((position) => (
                 <Option value={position.id}>{position.position_name}</Option>
@@ -323,7 +327,7 @@ const ManageRecruitmentPage: React.FC = () => {
           <Form.Item
             name="requirement"
             label="要求"
-            rules={[{ required: true, message: "请輸入能力要求" }]}>
+            rules={[{ required: true, message: "請輸入能力要求" }]}>
             <Input.TextArea autoSize={{minRows:1, maxRows:6}} placeholder="完成工作需要的基本能力" />
           </Form.Item>
           
@@ -354,7 +358,7 @@ const ManageRecruitmentPage: React.FC = () => {
           <Form.Item
             name="offered_at"
             label="入職日期"
-            rules={[{ required: true, message: "请选择入職日期" }]}>
+            rules={[{ required: true, message: "請選擇入職日期" }]}>
             <DatePicker style={{width:'100%'}}/>
           </Form.Item>
 
@@ -377,7 +381,7 @@ const ManageRecruitmentPage: React.FC = () => {
           <Form.Item
             name="employee_need"
             label="招聘人數"
-            rules={[{ required: true, message: "请輸入需要的员工人数" }]}
+            rules={[{ required: true, message: "請輸入需要的員工人數" }]}
           >
             <InputNumber min={1} placeholder="1" />
           </Form.Item>
@@ -391,9 +395,9 @@ const ManageRecruitmentPage: React.FC = () => {
           <Form.Item
             name="job_nature"
             label="工作性質">
-            <Select value={jobNature} placeholder="全职">
-              <Option value="全职">全职</Option>
-              <Option value="兼职">兼职</Option>
+            <Select value={jobNature} placeholder="全職">
+              <Option value="全职">全職</Option>
+              <Option value="兼职">兼職</Option>
             </Select>
           </Form.Item>
           
@@ -406,7 +410,7 @@ const ManageRecruitmentPage: React.FC = () => {
 
           <Form.Item>
             <Button type="primary" htmlType="submit">
-              {selectedRecruitment ? "更新" : "创建"}
+              {selectedRecruitment ? "更新" : "創建"}
             </Button>
           </Form.Item>
         </Form>

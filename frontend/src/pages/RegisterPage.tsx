@@ -148,9 +148,9 @@ const Register: React.FC = () => {
           </Form.Item>
           <Form.Item style={{ width: '20%' }} label="性別" name="gender" labelCol={{ span: 24 }}>
             <Select value={gender} onChange={handleGenderChange} placeholder="選擇性別">
-              <Option value="male">Male</Option>
-              <Option value="female">Female</Option>
-              <Option value="other">Other</Option>
+              <Option value="male">男性</Option>
+              <Option value="female">女性</Option>
+              <Option value="other">其他</Option>
             </Select>
           </Form.Item>
           <Form.Item style={{ width: '20%' }} label="生日" name="birthday" labelCol={{ span: 24 }}>

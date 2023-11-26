@@ -86,9 +86,9 @@ const ResumePage: React.FC = () => {
     // navigate(`/profile`);
   };
 
-  const jobNatureOptions = ['全职', '兼职']
-  const qualificationsOptions = ['PhD', 'Master', 'Degree', 'Diploma', 'High School', 'Higher vocational education', 'Junior high school (inclusive) and below']
-  const statusOptions = ['graduated', 'studying', 'drop out of school'];
+  const jobNatureOptions = ['全職', '兼職']
+  const qualificationsOptions = ['博士', '碩士', '學位', '大學', '高中', '高職', '國中(含)以下']
+  const statusOptions = ['畢業', '就學中', '肄業'];
 
   return (
     <div className='profileForm'>

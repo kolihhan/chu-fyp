@@ -122,32 +122,44 @@ const ManageAnnouncementPage: React.FC = () => {
   };
 
   return (
-    <div>
+  <div style={{ padding: '20px', margin: '20px', border: '1px solid #ddd', borderRadius: '5px' }}>
+    <div style={{ background: '#f0f0f0', padding: '10px', borderBottom: '1px solid #ccc' }}>
       <h1>管理公告</h1>
-      <Button onClick={handleAdd}>新增公告</Button>
-      <Table dataSource={announcements} columns={columns} />
-
-      <Modal
-        visible={modalVisible}
-        onCancel={handleModalCancel}
-        onOk={handleModalSubmit}
-        destroyOnClose
-        title="發佈公告"
-      >
-        <Form form={form} initialValues={selectedAnnouncement}>
-          <Form.Item name="title" label="標題" rules={[{ required: true }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item name="content" label="內容" rules={[{ required: true }]}>
-            <Input.TextArea rows={4} />
-          </Form.Item>
-          <Form.Item name="expire_at" label="過期時間">
-            <DatePicker />
-          </Form.Item>
-        </Form>
-      </Modal>
     </div>
-  );
+    
+    <div style={{ textAlign: 'right' }}>
+      <Button onClick={handleAdd} type="primary" style={{ marginBottom: '16px' }}>
+        新增公告
+      </Button>
+    </div>
+    
+    <Table
+      dataSource={announcements}
+      columns={columns}
+      style={{ background: '#fff', border: '1px solid #ddd', borderRadius: '5px', overflow: 'hidden' }}
+    />
+
+    <Modal
+      visible={modalVisible}
+      onCancel={handleModalCancel}
+      onOk={handleModalSubmit}
+      destroyOnClose
+      title="發佈公告"
+    >
+      <Form form={form} initialValues={selectedAnnouncement} labelCol={{ span: 6 }} wrapperCol={{ span: 18 }}>
+        <Form.Item name="title" label="標題" rules={[{ required: true }]}>
+          <Input />
+        </Form.Item>
+        <Form.Item name="content" label="內容" rules={[{ required: true }]}>
+          <Input.TextArea rows={4} />
+        </Form.Item>
+        <Form.Item name="expire_at" label="過期時間" style={{ marginBottom: 0 }}>
+          <DatePicker style={{ width: '100%' }} placeholder="選擇時間" />
+        </Form.Item>
+      </Form>
+    </Modal>
+  </div>
+);
 };
 
 export default ManageAnnouncementPage;
