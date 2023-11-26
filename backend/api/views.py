@@ -700,7 +700,7 @@ def getCompanyAllEmployee(request, pk):
     today = timezone.now()
     companyEmployee = models.CompanyEmployee.objects.filter(
         Q(company_id=pk) & (Q(end_date__isnull=True) | Q(end_date__gte=today))
-    )
+    ).order_by('id')
     serializer = serializers.CompanyEmployeeSerializer(companyEmployee, many=True)
     return Response(serializer.data)
 
@@ -980,7 +980,7 @@ def getPosition(request, pk):
 @permission_classes([IsAuthenticated])
 def getCompanyAllPosition(request, pk):
     try:
-        position = models.CompanyEmployeePosition.objects.filter(company_id__id=pk)
+        position = models.CompanyEmployeePosition.objects.filter(company_id__id=pk).order_by('id')
         serializer = serializers.CompanyEmployeePositionSerializer(position, many=True)
         return Response({'message:': '', 'data':serializer.data})
     except models.CompanyEmployeePosition.DoesNotExist:
