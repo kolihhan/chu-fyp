@@ -144,7 +144,7 @@ const ProfilePage: React.FC = () => {
         <TabPane tab="個人資料" key="profile" >
         <div className='profileForm'>
           <Form onFinish={handleSubmit} initialValues={userData} layout="vertical">
-            <Form.Item label="Avatar URL" name="avatarUrl">
+            <Form.Item name="avatarUrl">
               <Upload
                 listType="picture-card" showUploadList={false} multiple={false} maxCount={1}
                 beforeUpload={beforeUpload}

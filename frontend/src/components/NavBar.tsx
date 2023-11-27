@@ -82,6 +82,9 @@ export const DropDownIcon: React.FC<{ isManage: boolean; isEmployee: any[]; }> =
     <Item key="profile-key">
       <Link to="/profile">個人簡介</Link>
     </Item>,
+    <Item key="change-password">
+      <Link to="/changePassword">變更密碼</Link>
+    </Item>,
     <Item key="logout-key" onClick={handleLogout}>
       登出
     </Item>

@@ -22,6 +22,20 @@ export const registerApi = (username: string,email: string,password: string,chec
     { headers: authHeaders() }
   );
 
+export const changeUserPassword = (id:number,data:any) =>
+axios.put(
+  `${API_URL}/user/changeUserPassword/${id}`,
+  data,
+  { headers: authHeaders() }
+);
+
+export const resetUserPassword = (data:any) =>
+axios.put(
+  `${API_URL}/user/resetUserPassword`,
+  data,
+  { headers: authHeaders() }
+);
+
   export const getUserByEmail = (email: String) =>
   axios.get(
     `${API_URL}/user/get/email/${email}`,

@@ -129,11 +129,36 @@ def changeUserPassword(request, pk):
         user = models.UserAccount.objects.get(id=pk)
         
         if not check_password(oldPassword, user.password):
-            return Response({'message': '舊密碼不對'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': '舊密碼不對'}, status=status.HTTP_208_ALREADY_REPORTED)
        
         if check_password(newPassword, user.password):
-            return Response({'message': '新密碼不可與舊密碼一樣'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': '新密碼不可與舊密碼一樣'}, status=status.HTTP_208_ALREADY_REPORTED)
         
+        serializer = serializers.UserUpdatePasswordSerializer(user, data={'password':newPassword})
+        if serializer.is_valid():
+            serializer.save()
+        return Response({'message':'密碼變更成功'}, status=status.HTTP_200_OK)
+    
+    except models.UserAccount.DoesNotExist as e:
+        return Response({'error': str(e), 'message':'用戶不存在'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'error': str(e), 'message':'密碼變更失敗'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['PUT'])
+@permission_classes([AllowAny])
+def resetUserPassword(request):
+    try:
+        passwordData = request.data
+        email = passwordData.get('email', None)
+        user = models.UserAccount.objects.get(email=email)
+        newPassword = ''.join(random.choices(string.ascii_letters + string.digits, k=16))
+
+        subject = '重設密碼'
+        message = f'您的密碼已重設為 {newPassword}，請儘快登入並更換密碼'
+        from_email = 'chiajy04@gmail.com'
+        send_mail(subject, message, from_email, [email], fail_silently=False)
+
         serializer = serializers.UserUpdatePasswordSerializer(user, data={'password':newPassword})
         if serializer.is_valid():
             serializer.save()

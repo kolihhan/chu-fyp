@@ -50,6 +50,9 @@ const Login: React.FC = () => {
         <Form.Item>
           <Link to="/register">註冊</Link>
         </Form.Item>
+        <Form.Item>
+          <Link to="/resetPassword">忘記密碼</Link>
+        </Form.Item>
       </Form>
     </div>
   );

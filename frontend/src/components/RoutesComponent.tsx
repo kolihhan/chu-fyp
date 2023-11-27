@@ -40,6 +40,8 @@ import EmployeeTaskPage from "../pages/companies/employees/EmployeeTaskPage";
 import EmployeeTaskForcePage from "../pages/companies/employees/EmployeeTaskForcePage";
 import { getCookie } from "../utils";
 import AcceptInvitePage from "../pages/AcceptInvitePage";
+import ResetPassword from "../pages/ResetPassword";
+import ChangePassword from "../pages/ChangePassword";
 
 const Protected: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const user = useSelector((state: RootState) => state.auth.user);
@@ -110,6 +112,8 @@ const RoutesComponent: React.FC = () =>{
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/resetPassword" element={<ResetPassword />} />
+                <Route path="/changePassword" element={<ChangePassword />} />
                 <Route path="/detailsPage/:id" element={<ApplicationDetailsPage />} />
 
                 {/* Users */}
