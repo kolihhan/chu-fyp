@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { SendOutlined, CloseOutlined } from '@ant-design/icons';
+import { SendOutlined, CloseOutlined, MailOutlined } from '@ant-design/icons';
 import { Button, Input } from 'antd';
 
 
@@ -11,6 +11,17 @@ const ChatWindow = () => {
     const botReply = "I'm a bot. This is a bot reply.";
 
     const chatContentRef = useRef(null) as any;
+
+    const questions = 
+    "你有什麼興趣或愛好？\n 你喜歡獨自工作還是團隊合作？ 你完成了哪個教育程度？ 你對進入特定行業或職業有任何疑慮嗎？"
+
+    const getInfo = () => {
+        if (userInput.trim() !== '') {
+            const newMessage = { message: userInput, type: 'user' };
+            setChatMessages((prevMessages: any) => [...prevMessages, newMessage]);
+            setUserInput('');
+        }
+    };
 
     useEffect(() => {
         scrollToBottom();
@@ -46,12 +57,13 @@ const ChatWindow = () => {
     const toggleChat = () => {
         setIsOpen(!isOpen);
         if (!isFirst) {
-            setIsFirst(!isFirst);
             setTimeout(() => {
-                const botMessage = { message: "你好！ 需要什麽幫助嗎？", type: 'bot' };
+                const botMessage = { message: questions, type: 'bot' };
                 setChatMessages((prevMessages: any) => [...prevMessages, botMessage]);
             }, 500)
+            setIsFirst(!isFirst);
         }
+
     };
 
     return (
@@ -62,7 +74,7 @@ const ChatWindow = () => {
                 type="primary"
                 shape="circle"
                 size="large"
-                icon={<SendOutlined />}
+                icon={<MailOutlined />}
                 title='推薦工作'
                 onClick={toggleChat}
             />
