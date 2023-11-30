@@ -97,7 +97,8 @@ const Register: React.FC = () => {
   }
 
   return (
-    <div className="container" style={{ backgroundColor: '#f0f2f5', padding: '20px', borderRadius: '5px' }}>
+    <center>
+    <div className="container" style={{ padding: '20px', borderRadius: '5px' }}>
       <h1 style={{ textAlign: 'center' }} className='mb-2'>註冊界面</h1>
       <Form onFinish={handleSubmit} labelAlign="left" labelCol={{ span: 1 }} wrapperCol={{ span: 24 }}>
         <div className='mt-2' style={{ marginBottom: '16px'}}>
@@ -111,20 +112,20 @@ const Register: React.FC = () => {
               </Upload>
             </Form.Item>
           </center>
-          <Form.Item style={{ width: '20%' }} label="用戶名" name="username" labelCol={{ span: 24 }} rules={[{ required: true, message: 'Please enter your username' }]}>
+          <Form.Item style={{ width: '80%', textAlign: 'left' }} label="用戶名" name="username" labelCol={{ span: 24 }} rules={[{ required: true, message: 'Please enter your username' }]}>
             <Input value={username} onChange={handleUsernameChange} prefix={<UserOutlined />} />
           </Form.Item>
         </div>
         <div>
-          <Form.Item style={{ width: '20%' }} label="電郵"
+          <Form.Item style={{ width: '80%', textAlign: 'left' }} label="電郵"
             name="email" labelCol={{ span: 24 }} rules={[{ required: true, message: 'Please enter your email' }]}>
             <Input value={email} onChange={handleEmailChange} prefix={<MailOutlined />} />
           </Form.Item>
-          <Form.Item style={{ width: '20%' }} label="密碼"
+          <Form.Item style={{ width: '80%', textAlign: 'left' }} label="密碼"
             name="password" labelCol={{ span: 24 }} rules={[{ required: true, message: 'Please enter your password' }]}>
             <Input.Password value={password} onChange={handlePasswordChange} />
           </Form.Item>
-          <Form.Item style={{ width: '20%' }} label="確認密碼"
+          <Form.Item style={{ width: '80%', textAlign: 'left' }} label="確認密碼"
             name="check-password" labelCol={{ span: 24 }}
             rules={[
               { required: true, message: 'Please enter your password' },
@@ -140,30 +141,30 @@ const Register: React.FC = () => {
           >
             <Input.Password value={checkPassword} onChange={handleCheckPasswordChange} />
           </Form.Item>
-          <Form.Item style={{ width: '20%' }} label="類別" name="type" labelCol={{ span: 24 }}>
+          <Form.Item style={{ width: '80%', textAlign: 'left' }} label="類別" name="type" labelCol={{ span: 24 }}>
             <Select value={type} onChange={(value) => { setType(value) }}>
               <Option value="Boss">Boss</Option>
               <Option value="Employee">Employee</Option>
             </Select>
           </Form.Item>
-          <Form.Item style={{ width: '20%' }} label="性別" name="gender" labelCol={{ span: 24 }}>
+          <Form.Item style={{ width: '80%', textAlign: 'left' }} label="性別" name="gender" labelCol={{ span: 24 }}>
             <Select value={gender} onChange={handleGenderChange} placeholder="選擇性別">
               <Option value="male">男性</Option>
               <Option value="female">女性</Option>
               <Option value="other">其他</Option>
             </Select>
           </Form.Item>
-          <Form.Item style={{ width: '20%' }} label="生日" name="birthday" labelCol={{ span: 24 }}>
+          <Form.Item style={{ width: '80%', textAlign: 'left' }} label="生日" name="birthday" labelCol={{ span: 24 }}>
             <DatePicker value={birthday} style={{ width: '100%' }} onChange={handleBirthdayChange} placeholder="選擇生日" />
           </Form.Item>
-          <Form.Item style={{ width: '20%' }} label="地址" name="address" labelCol={{ span: 24 }}>
+          <Form.Item style={{ width: '80%', textAlign: 'left' }} label="地址" name="address" labelCol={{ span: 24 }}>
             <Input value={address} onChange={handleAddressChange} prefix={<EnvironmentOutlined />} />
           </Form.Item>
-          <Form.Item style={{ width: '20%' }} label="手機" name="phone" labelCol={{ span: 24 }}>
+          <Form.Item style={{ width: '80%', textAlign: 'left' }} label="手機" name="phone" labelCol={{ span: 24 }}>
             <Input value={phone} onChange={handlePhoneChange} prefix={<PhoneOutlined />} />
           </Form.Item>
         </div>
-        <div style={{ width: '100%', textAlign: 'left' }}>
+        <div style={{ width: '100%', textAlign: 'center' }}>
           <Form.Item >
             <Button type="primary" htmlType="submit" disabled={!username || !email || !password || !checkPassword || !type}>
               註冊
@@ -172,6 +173,7 @@ const Register: React.FC = () => {
         </div>
       </Form>
     </div>
+    </center>
   );
 };
 
