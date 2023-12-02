@@ -28,11 +28,19 @@ const CompanyCreateTaskPage: React.FC = () => {
     }
   };
 
-  const onFinish = (values: any) => {
+  const onFinish = async (values: any) => {
 
     values['task_force'] = Number(id);
-    createTasks(values);
-
+    try{
+      const response = await createTasks(values);
+      if(response.status==201){
+        message.success('任務建立成功')
+      }else{
+        message.success('任務建立失敗')
+      }
+    }catch (error){
+      message.error('任務建立失敗')
+    }
     //navigate(`/admin/company/task-list/${id}/details`);
   };
 
@@ -45,7 +53,6 @@ const CompanyCreateTaskPage: React.FC = () => {
     }
 
     const selectAssignee = await findSuitableAssignee(companyId, task_description, task_name);
-
     if (selectAssignee.data) {
       const selectedId = selectAssignee.data.candidates[0].resume.user.id;
       // 获取选中的assignee对象
@@ -53,6 +60,7 @@ const CompanyCreateTaskPage: React.FC = () => {
 
       if (selectedAssigneeObject) {
         form.setFieldsValue({ assignee: selectedAssigneeObject.id });
+        setSelectedAssignee(selectedAssigneeObject.id)
       } else {
         message.error('没有找到适合给定任务描述和标题的领导。');
       }
@@ -62,31 +70,37 @@ const CompanyCreateTaskPage: React.FC = () => {
 
   };
 
+  const setAssignee = (value:any) => {
+    setSelectedAssignee(value)
+    form.setFieldsValue({ assignee: value });
+  }
+
 
   return (
-    <div className='container'>
-      <h1>Create or Update Task</h1>
-      <Form onFinish={onFinish} form={form}>
+    <div>
+      <h1>建立任務</h1>
+      <Form onFinish={onFinish} form={form} layout='vertical'>
         <Form.Item
-          label="Task Name"
+          label="任務名稱"
           name="task_name"
           rules={[{ required: true, message: 'Please enter the task name!' }]}
         >
           <Input />
         </Form.Item>
         <Form.Item
-          label="Task Description"
+          label="描述"
           name="task_description"
         >
           <Input.TextArea />
         </Form.Item>
 
-        <Input.Group compact>
-          <Form.Item label="Assignee" name="assignee">
+        <Form.Item label="人選" name="assignee">
+          <Input.Group compact>
             <Select
               showSearch
               placeholder="Select an assignee"
               optionFilterProp="children"
+              onChange={setAssignee}
               filterOption={(input, option) =>
                 String(option?.children)?.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
@@ -99,12 +113,12 @@ const CompanyCreateTaskPage: React.FC = () => {
                 </Select.Option>
               ))}
             </Select>
-          </Form.Item>
-          <Button type="primary" onClick={recommendAssignee}>
-            Recommend
-          </Button>
-        </Input.Group>
-        <Form.Item label="Status" name="status">
+            <Button type="primary" onClick={recommendAssignee}>
+              Recommend
+            </Button>
+          </Input.Group>
+        </Form.Item>
+        <Form.Item label="狀態" name="status">
           <Select>
             <Option value="Pending">待處理</Option>
             <Option value="In Progress">進行中</Option>
@@ -112,7 +126,7 @@ const CompanyCreateTaskPage: React.FC = () => {
           </Select>
         </Form.Item>
         <Form.Item
-          label="Due Date"
+          label="完成日期"
           name="due_date"
         >
           <Input type="date" />

@@ -2831,12 +2831,17 @@ def fetchTasksByEmployeeId(request, pk):
 @permission_classes([IsAuthenticated])
 def createTasks(request):
     try:
-        data = request.data.get('data', {})  # 获取"data"字段内的数据
-        serializer = serializers.TaskSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        data = request.data.get('data', {})
+        createdTask = models.Task.objects.create(
+            task_force = models.TaskForce.objects.get(id=data['task_force']),
+            task_name = data['task_name'],
+            task_description = data['task_description'],
+            assignee = models.CompanyEmployee.objects.get(id=data['assignee']),
+            status = data['status'],
+            due_date = data['due_date']
+        )
+        serializer = serializers.TaskSerializer(createdTask, many=False)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 

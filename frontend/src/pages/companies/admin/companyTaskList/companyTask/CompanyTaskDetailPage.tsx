@@ -24,6 +24,7 @@ const CompanyTaskDetailPage: React.FC = () => {
   const [milestoneCurrent, setMileStoneCurrent] = useState(0);
   const [taskForce, setTaskForce] = useState<any>({});
   const { Step } = Steps
+  const [selectedAssignee, setSelectedAssignee] = useState<number | null>(null);
 
   const uniqueAssigneeIds = Array.from(new Set(memberTasks.map(task => task.assignee)));
   // Filter assigneesData based on uniqueAssigneeIds
@@ -86,6 +87,7 @@ const CompanyTaskDetailPage: React.FC = () => {
     // Set the selected task for editing
     setSelectedTask(newEditMode[taskId] ? taskToEdit : null);
     form.setFieldsValue(taskToEdit); // Set form initial values here
+    setAssignee(taskToEdit.assignee)
   };
 
   const clearTask = () => {
@@ -101,6 +103,11 @@ const CompanyTaskDetailPage: React.FC = () => {
     setSelectedTask(null);
     form.resetFields(); // Reset form fields to their initial values
   };
+
+  const setAssignee = (value:any) => {
+    setSelectedAssignee(value)
+    form.setFieldsValue({ assignee: value });
+  }
 
   const recommendAssignee = async () => {
     const { task_description, task_name } = form.getFieldsValue();
@@ -119,6 +126,7 @@ const CompanyTaskDetailPage: React.FC = () => {
 
       if (selectedAssigneeObject) {
         form.setFieldsValue({ assignee: selectedAssigneeObject.id });
+        setSelectedAssignee(selectedAssigneeObject.id)
       } else {
         message.error('没有找到适合给定任务描述和标题的领导。');
       }
@@ -283,32 +291,34 @@ const CompanyTaskDetailPage: React.FC = () => {
           </Collapse>
 
           <Modal
-            title={'Edit Task'}
+            title={'更新任務'}
             visible={!!selectedTask}
             onCancel={() => clearTask()}
             footer={null}
           >
             {selectedTask && (
-              <Form form={form} onFinish={() => handleSave(selectedTask.id)} initialValues={selectedTask}>
+              <Form form={form} onFinish={() => handleSave(selectedTask.id)} initialValues={selectedTask} layout='vertical'>
                 <Form.Item
-                  label="Task Name"
+                  label="任務名稱"
                   name="task_name"
                   rules={[{ required: true, message: 'Please enter the task name!' }]}
                 >
                   <Input />
                 </Form.Item>
-                <Form.Item label="Task Description" name="task_description">
+                <Form.Item label="描述" name="task_description">
                   <Input.TextArea />
                 </Form.Item>
-                <Input.Group compact>
-                  <Form.Item label="Assignee" name="assignee">
+                  <Form.Item label="人選" name="assignee">
+                  <Input.Group compact>
                     <Select
                       showSearch
                       placeholder="Select an assignee"
                       optionFilterProp="children"
+                      onChange={setAssignee}
                       filterOption={(input, option) =>
                         String(option?.children)?.toLowerCase().indexOf(input.toLowerCase()) >= 0
                       }
+                      value={selectedAssignee}
                     >
                       {assignees.map((assignee, index) => (
                         <Select.Option key={index} value={assignee.id}>
@@ -316,19 +326,19 @@ const CompanyTaskDetailPage: React.FC = () => {
                         </Select.Option>
                       ))}
                     </Select>
+                    <Button type="primary" onClick={recommendAssignee}>
+                      Recommend
+                    </Button>
+                  </Input.Group>
                   </Form.Item>
-                  <Button type="primary" onClick={recommendAssignee}>
-                    Recommend
-                  </Button>
-                </Input.Group>
-                <Form.Item label="Status" name="status">
+                <Form.Item label="狀態" name="status">
                   <Select>
                     <Option value="Pending">待處理</Option>
                     <Option value="In Progress">進行中</Option>
                     <Option value="Completed">已完成</Option>
                   </Select>
                 </Form.Item>
-                <Form.Item label="Due Date" name="due_date">
+                <Form.Item label="完成日期" name="due_date">
                   <Input type="date" />
                 </Form.Item>
                 <Form.Item>
