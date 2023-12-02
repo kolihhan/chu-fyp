@@ -15,11 +15,11 @@ const CompanyCreateTaskPage: React.FC = () => {
   const [assignees, setAssignees] = useState<any[]>([]);
 
 
-useEffect(() => {
-  fetchAssignees();
+  useEffect(() => {
+    fetchAssignees();
   }, []);
 
-const fetchAssignees = async () => {
+  const fetchAssignees = async () => {
     try {
       const response2 = await getAllEmployees(companyId);
       setAssignees(response2.data);
@@ -28,8 +28,8 @@ const fetchAssignees = async () => {
     }
   };
 
-const onFinish = (values: any) => {
-    
+  const onFinish = (values: any) => {
+
     values['task_force'] = Number(id);
     createTasks(values);
 
@@ -38,47 +38,33 @@ const onFinish = (values: any) => {
 
   const recommendAssignee = async () => {
     const { task_description, task_name } = form.getFieldsValue();
-  
+
     if (!task_description || !task_name) {
       message.error('任务描述和标题是必填项。');
       return;
     }
-  
+
     const selectAssignee = await findSuitableAssignee(companyId, task_description, task_name);
-  
+
     if (selectAssignee.data) {
-      const firstIndex = selectAssignee.data.candidates[0];
-      const firstArray = firstIndex[0];
-      const defaultId = firstArray[0];
-  
-      if (typeof defaultId === 'string') {
-        const getId = defaultId.match(/'id': (\d+)/g);
-        if (getId) {
-          const ids = getId.map(match => (match.match(/\d+/)?.[0] ?? ''));
-          const selectedId = Number(ids[0]);
-  
-          // 获取选中的assignee对象
-          const selectedAssigneeObject : any = assignees.find(assignee => assignee.user_id.id === selectedId);
-    
-          if (selectedAssigneeObject) {
-            form.setFieldsValue({ assignee: selectedAssigneeObject.id });
-          } else {
-            message.error('没有找到适合给定任务描述和标题的领导。');
-          }
-        } else {
-          message.error('没有找到适合给定任务描述和标题的领导。');
-        }
+      const selectedId = selectAssignee.data.candidates[0].resume.user.id;
+      // 获取选中的assignee对象
+      const selectedAssigneeObject: any = assignees.find(assignee => assignee.user_id.id === selectedId);
+
+      if (selectedAssigneeObject) {
+        form.setFieldsValue({ assignee: selectedAssigneeObject.id });
       } else {
         message.error('没有找到适合给定任务描述和标题的领导。');
       }
     } else {
       message.error('没有找到适合给定任务描述和标题的领导。');
     }
+
   };
 
 
   return (
-    <div>
+    <div className='container'>
       <h1>Create or Update Task</h1>
       <Form onFinish={onFinish} form={form}>
         <Form.Item
@@ -95,29 +81,29 @@ const onFinish = (values: any) => {
           <Input.TextArea />
         </Form.Item>
 
-  <Input.Group compact>
-  <Form.Item label="Assignee" name="assignee">
-    <Select
-      showSearch
-      placeholder="Select an assignee"
-      optionFilterProp="children"
-      filterOption={(input, option) =>
-        String(option?.children)?.toLowerCase().indexOf(input.toLowerCase()) >= 0
-      }
-      value={selectedAssignee}
-    >
+        <Input.Group compact>
+          <Form.Item label="Assignee" name="assignee">
+            <Select
+              showSearch
+              placeholder="Select an assignee"
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                String(option?.children)?.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              value={selectedAssignee}
+            >
 
-      {assignees.map((assignee: any, index) => (
-        <Select.Option key={index} value={assignee.id}>
-          {assignee.user_id.name}
-        </Select.Option>
-      ))}
-    </Select>
-</Form.Item>
-<Button type="primary" onClick={recommendAssignee}>
-      Recommend
-    </Button>
-  </Input.Group>
+              {assignees.map((assignee: any, index) => (
+                <Select.Option key={index} value={assignee.id}>
+                  {assignee.user_id.name}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Button type="primary" onClick={recommendAssignee}>
+            Recommend
+          </Button>
+        </Input.Group>
         <Form.Item label="Status" name="status">
           <Select>
             <Option value="Pending">待處理</Option>

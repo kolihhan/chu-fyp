@@ -104,14 +104,14 @@ const EmployeesRecruitmentRecommendation: React.FC = () => {
                   </div>
                 )}
                 <div style={{ fontSize: '1.2em', marginBottom: '10px' }}>
-                  <strong>推薦人選：</strong> {candidate ? candidate.resume_id : 'Unknown'}
+                  <strong>推薦人選：</strong> {candidate ? candidate.resume.user.name : 'Unknown'}
                 </div>
 
               </div>
 
               <div style={{ padding: '16px', flex: 2 }}>
                 <div style={{ borderBottom: '1px solid #f0f0f0', marginBottom: '10px' }}>
-                  <h4 style={{ fontSize: '1.5em', fontWeight: 'bold', margin: 0 }}>{candidate.resume_id}</h4>
+                  <h4 style={{ fontSize: '1.5em', fontWeight: 'bold', margin: 0 }}> 推薦分數：{ candidate.similarity_score.toFixed(2) }</h4>
                 </div>
               </div>
             </div>

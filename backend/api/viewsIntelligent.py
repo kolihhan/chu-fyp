@@ -845,52 +845,157 @@ def getCompanyEmployeeFeedbackReview(request, pk):
         return Response({'message':'員工反饋獲取失敗', 'error':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 # 處理Resumes 
+from spacy.tokens import Doc
+import spacy.cli
+
+# Download the medium-sized English model if not available
+try:
+    nlp = spacy.load("zh_core_web_md")
+except OSError:
+    print("Downloading 'en_core_web_md' model...")
+    spacy.cli.download("zh_core_web_md")
+    nlp = spacy.load("zh_core_web_md")
+
+# 停用詞列表
+stop_words = nlp.Defaults.stop_words
+
+# 函數來進行文字預處理
 def preprocess_text(resume):
-    # 提取文本信息
-    text = resume.get('summary', '')  # 取得摘要信息
+    text = resume.get('summary', '')
     for section in ['experience', 'education']:
-        section_data = resume.get(section, OrderedDict())
-        # 提取每個部分的文本信息
+        section_data = resume.get(section, {})
         section_text = ' '.join([str(value) for value in section_data.values()])
-        text += ' ' + section_text  # 將各部分文本連接到摘要信息後
+        text += ' ' + section_text
 
-    # 加入技能信息
     skills = resume.get('skills', [])
-    skills_text = ' '.join(skills)
-    text += ' ' + skills_text
+    if isinstance(skills, (list, tuple)):
+        # Join the skills using a space as a separator
+        skills_text = ' '.join(skills)
+        text += ' ' + skills_text
 
-    # 清理文本
-    text = re.sub(r'[^\w\s]', ' ', text)  # 去除標點符號
-    text = re.sub(r'\d+', ' ', text)  # 去除數字
-    text = text.lower()  # 將文本轉換為小寫
+    # 使用 Spacy 進行詞形還原和停用詞移除
+    doc = nlp(text)
+    words = [token.lemma_.lower() for token in doc if token.text.lower() not in stop_words]
 
-    # 分詞（以空格分割）
-    words = text.split()
-
-    # 返回處理後的文本
     processed_text = ' '.join(words)
     return processed_text
 
+def calculate_text_similarity(text1, text2):
+    if not text1 or not text2:
+        return 0  # 如果文本为空，返回 0
+
+    doc1 = nlp(text1)
+    doc2 = nlp(text2)
+
+    # 检查向量是否为空
+    if not doc1.vector.any() or not doc2.vector.any():
+        return 0  # 如果文本向量为空，返回 0
+
+    return doc1.similarity(doc2)
+
+
+# 更新相似度計算方法
+def calculate_skill_similarity(candidate_skills, job_skills):
+    candidate_doc = Doc(nlp.vocab, words=candidate_skills)
+    job_doc = Doc(nlp.vocab, words=job_skills)
+
+    candidate_vector = candidate_doc.vector
+    job_vector = job_doc.vector
+
+    # Calculate norms for vectors using NumPy
+    candidate_vector_norm = np.linalg.norm(candidate_vector)
+    job_vector_norm = np.linalg.norm(job_vector)
+
+    # Check for zero division
+    if candidate_vector_norm == 0 or job_vector_norm == 0:
+        return 0
+
+    similarity = candidate_vector.dot(job_vector) / (candidate_vector_norm * job_vector_norm)
+    return similarity
+
+def calculate_experience_score(candidate_resume, job_requirements):
+    experience_score = 0
+    if 'experience' in candidate_resume:
+        exp_text_similarity = []
+        for exp_text in candidate_resume['experience'].values():
+            max_similarity = 0
+            for keyword in job_requirements:
+                # Check and convert if the input is not a string
+                if not isinstance(exp_text, (str, bytes)):
+                    exp_text = str(exp_text)  # Convert to string (or bytes) if necessary
+                similarity_score = calculate_text_similarity(exp_text, keyword)
+                max_similarity = max(max_similarity, similarity_score)
+        exp_text_similarity.append(max_similarity)
+    return experience_score
+
+def calculate_education_score(candidate_resume, job_requirements):
+    education_score = 0
+    if 'education' in candidate_resume:
+        edu_text_similarity = []
+        for edu_text in candidate_resume['education'].values():
+            max_similarity = 0
+            for keyword in job_requirements:
+                # Check and convert if the input is not a string
+                if not isinstance(edu_text, (str, bytes)):
+                    edu_text = str(edu_text)  # Convert to string (or bytes) if necessary
+                similarity_score = calculate_text_similarity(edu_text, keyword)
+                max_similarity = max(max_similarity, similarity_score)
+            edu_text_similarity.append(max_similarity)
+        education_score = sum(edu_text_similarity) / len(edu_text_similarity) if edu_text_similarity else 0
+    return education_score
+
+
+# 在計算相似度得分的函數中加入技能匹配程度
+def calculate_similarity(candidate_text, job_description_tfidf, candidate_skills, job_skills):
+    similarities = cosine_similarity(candidate_text, job_description_tfidf)
+    skill_similarity = calculate_skill_similarity(candidate_skills, job_skills)
+    return similarities[0][0], skill_similarity
+
 
 def get_final_recommendations(job_requirements, resume_data, top_n=1):
-    # 初始化TF-IDF向量化器
-    tfidf_vectorizer = TfidfVectorizer()
+    tfidf_vectorizer = TfidfVectorizer(max_features=1500, ngram_range=(1, 2))
+    job_description = ' '.join(job_requirements)
+    job_description_tfidf = tfidf_vectorizer.fit_transform([job_description])
 
-    # 转换用户履历文本为TF-IDF特征表示
-    tfidf_features = tfidf_vectorizer.fit_transform(resume_data)
+    scores = []
+    # 設置技能權重
+    experience_weight = 0.8
+    education_weight = 0.6
+    skill_weight = 0.3  # 新增技能權重
 
-    # 转换职位描述为TF-IDF特征表示
-    job_description_tfidf = tfidf_vectorizer.transform(job_requirements)
+    for candidate_resume in resume_data:
+        candidate_text = preprocess_text(candidate_resume)
+        candidate_skills = candidate_resume.get('skills', [])
 
-    # 计算职位描述与用户履历之间的相似度
-    similarities = cosine_similarity(job_description_tfidf, tfidf_features)
+        # 计算技能相似度
+        skill_similarity = calculate_skill_similarity(candidate_skills, job_requirements)
 
-    # 获取最匹配的候选人
-    top_matched_indices = similarities.argsort()[0][-top_n:]
+        # 计算工作经验相关度得分
+        experience_score = calculate_experience_score(candidate_resume, job_requirements)
 
-    similar_candidates = []
-    for idx in top_matched_indices:
-        similar_candidates.append(resume_data[idx])
+        # 计算学历相关度得分
+        education_score = calculate_education_score(candidate_resume, job_requirements)
+
+        # 计算综合得分
+        total_score = calculate_similarity(
+            tfidf_vectorizer.transform([candidate_text]),
+            job_description_tfidf,
+            candidate_skills,
+            job_requirements
+        )[0] + (experience_score * experience_weight) + (education_score * education_weight) + (skill_similarity * skill_weight)
+
+        scores.append(total_score)
+
+    # 获取前 N 个最高得分的候选人
+    top_matched_indices = sorted(range(len(scores)), key=lambda i: scores[i], reverse=True)[:top_n]
+    similar_candidates = [
+        {
+            'resume': resume_data[idx],
+            'similarity_score': scores[idx],
+            'reason': f"工作經驗加分: {calculate_experience_score(resume_data[idx], job_requirements)}, 學歷加分: {calculate_education_score(resume_data[idx], job_requirements)}"  # 推薦原因
+        }
+        for idx in top_matched_indices
+    ]
 
     return similar_candidates
 
@@ -919,14 +1024,12 @@ def get_recommendations(request):
         user_resume = record.userResume_id
         serializer = serializers.UserResumeSerializerTest(user_resume)
 
-        processed_data = preprocess_text(serializer.data)
-
-        candidates.append(processed_data)
+        candidates.append(serializer.data)
 
     similar_candidates = get_final_recommendations(
                          job_requirements,
                          candidates,
-                         1  
+                         3  
                         )
 
     return JsonResponse({'job_requirements': job_requirements, 'candidates': similar_candidates})
@@ -948,9 +1051,8 @@ def get_tfRecommend(request, id, description, title):
         try:
             user_resume = models.UserResume.objects.filter(user=user_employee).first()  # 获取与UserAccount关联的UserResume对象
             serializer = serializers.UserResumeSerializerTest(user_resume)
-            processed_data = preprocess_text(serializer.data)
 
-            recommended_resumes.append(processed_data)
+            recommended_resumes.append(serializer.data)
         except UserResume.DoesNotExist:
             # 如果没有与用户关联的简历，可以在这里处理
             pass

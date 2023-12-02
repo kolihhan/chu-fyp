@@ -2,6 +2,7 @@ from django.urls import path
 from rest_framework_simplejwt.views import (TokenObtainPairView,
                                             TokenRefreshView, TokenVerifyView)
 
+from .viewsFakeData import *
 from .views import *
 from .viewsIntelligent import *
 from . import views
@@ -246,6 +247,9 @@ urlpatterns = [
     path('sendInvitationEmail', sendInvitationEmail, name='sendInvitationEmail'),
     path('getInvitation/<str:code>', getInvitation, name='getInvitation'),
     path('registerAndJoinCompany', registerAndJoinCompany, name='registerAndJoinCompany'),
+
+    #Fake Data
+    path('createUserAndRecruitement', createUserAndRecruitement, name='createUserAndRecruitement'),
 ]
 
 # create company

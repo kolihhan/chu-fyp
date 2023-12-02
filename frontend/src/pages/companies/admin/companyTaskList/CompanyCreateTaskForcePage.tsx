@@ -88,41 +88,33 @@ const CompanyCreateTaskForcePage: React.FC = () => {
       message.error('任务描述和标题是必填项。');
       return;
     }
-  
+    
     const selectAssignee = await findSuitableAssignee(companyId, description, name);
   
     if (selectAssignee.data) {
-      const firstIndex = selectAssignee.data.candidates[0];
-      const firstArray = firstIndex[0];
-      const defaultId = firstArray[0];
-  
-      if (typeof defaultId === 'string') {
-        const getId = defaultId.match(/'id': (\d+)/g);
-        if (getId) {
-          const ids = getId.map(match => (match.match(/\d+/)?.[0] ?? ''));
-          const selectedId = Number(ids[0]);
-  
-          // 获取选中的assignee对象
-          const selectedAssigneeObject : any = assignees.find(assignee => assignee.user_id.id === selectedId);
-    
-          if (selectedAssigneeObject) {
-            form.setFieldsValue({ leader: selectedAssigneeObject.id });
-          } else {
-            message.error('没有找到适合给定任务描述和标题的领导。');
-          }
-        } else {
-          message.error('没有找到适合给定任务描述和标题的领导。');
-        }
+      const selectedId = selectAssignee.data.candidates[0].resume.user.id;
+      
+      // 获取选中的assignee对象
+      const selectedAssigneeObject: any = assignees.find(assignee => assignee.user_id.id === selectedId);
+
+      if (selectedAssigneeObject) {
+        form.setFieldsValue({ leader: selectedAssigneeObject.id });
+
+        // Update the selectedAssignee state
+        setSelectedAssignee(selectedAssigneeObject.id);
+        
       } else {
         message.error('没有找到适合给定任务描述和标题的领导。');
       }
     } else {
       message.error('没有找到适合给定任务描述和标题的领导。');
     }
+
   };
   
 
   return (
+    <div className='container'>
     <div style={{ marginBottom: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
       <h1>{newId ? '更新' : '創建'}任務組</h1>
       <Form form={form} onFinish={onFinish} labelAlign="left">
@@ -199,6 +191,7 @@ const CompanyCreateTaskForcePage: React.FC = () => {
           </Button>
         </Form.Item>
       </Form>
+    </div>
     </div>
   );
 };

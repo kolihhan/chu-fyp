@@ -85,10 +85,11 @@ const CompanyTaskDetailPage: React.FC = () => {
 
     // Set the selected task for editing
     setSelectedTask(newEditMode[taskId] ? taskToEdit : null);
+    form.setFieldsValue(taskToEdit); // Set form initial values here
   };
 
   const clearTask = () => {
-
+    form.resetFields(); // Reset form fields to their initial values
     setSelectedTask(null);
   }
 
@@ -98,6 +99,7 @@ const CompanyTaskDetailPage: React.FC = () => {
     updateTasks(taskId, data);
     setEditMode({ ...editMode, [taskId]: false });
     setSelectedTask(null);
+    form.resetFields(); // Reset form fields to their initial values
   };
 
   const recommendAssignee = async () => {
@@ -111,33 +113,19 @@ const CompanyTaskDetailPage: React.FC = () => {
     const selectAssignee = await findSuitableAssignee(companyId, task_description, task_name);
 
     if (selectAssignee.data) {
-      const firstIndex = selectAssignee.data.candidates[0];
-      const firstArray = firstIndex[0];
-      const defaultId = firstArray[0];
+      const selectedId = selectAssignee.data.candidates[0].resume.user.id;
+      // 获取选中的assignee对象
+      const selectedAssigneeObject: any = assignees.find(assignee => assignee.user_id.id === selectedId);
 
-      if (typeof defaultId === 'string') {
-        const getId = defaultId.match(/'id': (\d+)/g);
-        if (getId) {
-          const ids = getId.map(match => (match.match(/\d+/)?.[0] ?? ''));
-          const selectedId = Number(ids[0]);
-
-          // 获取选中的assignee对象
-          const selectedAssigneeObject: any = assignees.find(assignee => assignee.user_id.id === selectedId);
-
-          if (selectedAssigneeObject) {
-            form.setFieldsValue({ assignee: selectedAssigneeObject.id });
-          } else {
-            message.error('没有找到适合给定任务描述和标题的领导。');
-          }
-        } else {
-          message.error('没有找到适合给定任务描述和标题的领导。');
-        }
+      if (selectedAssigneeObject) {
+        form.setFieldsValue({ assignee: selectedAssigneeObject.id });
       } else {
         message.error('没有找到适合给定任务描述和标题的领导。');
       }
     } else {
       message.error('没有找到适合给定任务描述和标题的领导。');
     }
+
   };
 
   return (
