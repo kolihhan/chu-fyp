@@ -25,6 +25,7 @@ const CompanyTaskDetailPage: React.FC = () => {
   const [taskForce, setTaskForce] = useState<any>({});
   const { Step } = Steps
   const [selectedAssignee, setSelectedAssignee] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(false)
 
   const uniqueAssigneeIds = Array.from(new Set(memberTasks.map(task => task.assignee)));
   // Filter assigneesData based on uniqueAssigneeIds
@@ -116,7 +117,7 @@ const CompanyTaskDetailPage: React.FC = () => {
       message.error('任务描述和标题是必填项。');
       return;
     }
-
+    setIsLoading(true)
     const selectAssignee = await findSuitableAssignee(companyId, task_description, task_name);
 
     if (selectAssignee.data) {
@@ -133,6 +134,7 @@ const CompanyTaskDetailPage: React.FC = () => {
     } else {
       message.error('没有找到适合给定任务描述和标题的领导。');
     }
+    setIsLoading(false)
 
   };
 
@@ -326,8 +328,8 @@ const CompanyTaskDetailPage: React.FC = () => {
                         </Select.Option>
                       ))}
                     </Select>
-                    <Button type="primary" onClick={recommendAssignee}>
-                      Recommend
+                    <Button type="primary" onClick={recommendAssignee} loading={isLoading}>
+                      獲取推薦
                     </Button>
                   </Input.Group>
                   </Form.Item>

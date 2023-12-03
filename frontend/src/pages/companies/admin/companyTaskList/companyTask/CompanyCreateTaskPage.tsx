@@ -13,6 +13,7 @@ const CompanyCreateTaskPage: React.FC = () => {
   const companyId = Number(getCookie('companyId'));
   const [selectedAssignee, setSelectedAssignee] = useState<number | null>(null);
   const [assignees, setAssignees] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(false)
 
 
   useEffect(() => {
@@ -52,6 +53,7 @@ const CompanyCreateTaskPage: React.FC = () => {
       return;
     }
 
+    setIsLoading(true)
     const selectAssignee = await findSuitableAssignee(companyId, task_description, task_name);
     if (selectAssignee.data) {
       const selectedId = selectAssignee.data.candidates[0].resume.user.id;
@@ -67,6 +69,7 @@ const CompanyCreateTaskPage: React.FC = () => {
     } else {
       message.error('没有找到适合给定任务描述和标题的领导。');
     }
+    setIsLoading(false)
 
   };
 
@@ -113,8 +116,8 @@ const CompanyCreateTaskPage: React.FC = () => {
                 </Select.Option>
               ))}
             </Select>
-            <Button type="primary" onClick={recommendAssignee}>
-              Recommend
+            <Button type="primary" onClick={recommendAssignee} loading={isLoading}>
+              獲取推薦
             </Button>
           </Input.Group>
         </Form.Item>

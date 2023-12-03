@@ -19,6 +19,7 @@ const EmployeesRecruitmentRecommendation: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1); // 假設初始頁碼為1
   const pageSize = 2; // 每頁顯示的候選人數量
   const [hasSelectedOption, setHasSelectedOption] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
   
   const handleSelectChange = (value: any) => {
     setJobId(value);
@@ -33,11 +34,8 @@ const EmployeesRecruitmentRecommendation: React.FC = () => {
   const fetchAllApplicaiton = async () => {
     try {
       const response = await getRecruitments(companyId);
-
-
       setJobList(response.data.data);
       setJobId(jobList[0].id);
-
     } catch (error) {
       console.error('Error fetching recommendations:', error);
     }
@@ -47,18 +45,20 @@ const EmployeesRecruitmentRecommendation: React.FC = () => {
   // 获取推荐结果
   const getRecommendations = async () => {
     try {
-
       if (!hasSelectedOption) {
         message.error("請選擇一個招聘信息");
         return;
       }
+      setIsLoading(true)
       const response = await getIDRecommendations(jobId);
 
       console.log(response.data.candidates)
 
       setJobRequirements(response.data.job_requirements);
       setCandidates(response.data.candidates);
+      setIsLoading(false)
     } catch (error) {
+      setIsLoading(false)
 
       setJobRequirements('');
       setCandidates([]);
@@ -153,8 +153,8 @@ const EmployeesRecruitmentRecommendation: React.FC = () => {
             </Select>
           </div>
           <div className="col-md-6">
-            <Button className="btn btn-primary" onClick={getRecommendations}>
-              获取推薦
+            <Button className="btn btn-primary" onClick={getRecommendations} loading={isLoading}>
+              獲取推薦
             </Button>
           </div>
         </div>
