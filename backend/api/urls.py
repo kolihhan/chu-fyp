@@ -4,6 +4,7 @@ from rest_framework_simplejwt.views import (TokenObtainPairView,
 
 from .viewsFakeData import *
 from .views import *
+from .chatbot.replyBot import *
 from .viewsIntelligent import *
 from . import views
 
@@ -242,6 +243,7 @@ urlpatterns = [
     # 其他URL路由
     path('hr-data/<int:pk>', get_HRChartData, name='get_hr_data'),
     path('createRandomJob/get/', createRandomJob, name='createRandomJob'),
+    path('chatRecommendation/get/', predict_job_title, name='chatRecommendation'),
 
     # email invitation
     path('sendInvitationEmail', sendInvitationEmail, name='sendInvitationEmail'),

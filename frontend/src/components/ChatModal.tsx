@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { SendOutlined, CloseOutlined, MailOutlined, ReloadOutlined } from '@ant-design/icons';
 import { Button, Input } from 'antd';
+import { chatRecommendation } from '../api';
 
 
 const ChatWindow = () => {
@@ -14,26 +15,15 @@ const ChatWindow = () => {
             type: 'bot',
             message:
                 "您好！歡迎使用聊天窗口。請回答以下問題以繼續:\n\n" +
-                "你有什麼興趣或愛好？",
+                "你有什麼興趣？(多個選項請用括號分開）",
         },
     ]);
 
     const botQuestions = [
-        "你有什麼興趣或愛好？",
-        "你喜歡獨自工作還是團隊合作？",
-        "你完成了哪個教育程度？",
-        "你對進入特定行業或職業有任何疑慮嗎？"
+        "你有什麼愛好？(多個選項請用括號分開）",
     ];
 
     const chatContentRef = useRef(null) as any;
-
-    const getInfo = () => {
-        if (userInput.trim() !== '') {
-            const newMessage = { message: userInput, type: 'user' };
-            setChatMessages((prevMessages: any) => [...prevMessages, newMessage]);
-            setUserInput('');
-        }
-    };
 
     useEffect(() => {
         scrollToBottom();
@@ -51,10 +41,9 @@ const ChatWindow = () => {
 
     const handleUserInput = (e: any) => {
         setUserInput(e.target.value);
-        console.log(userReply);
     };
 
-    const handleSend = () => {
+    const handleSend = async () => {
         if (userInput.trim() !== '') {
             const newMessage = { message: userInput, type: 'user' };
             setChatMessages((prevMessages: any) => [...prevMessages, newMessage]);
@@ -64,25 +53,30 @@ const ChatWindow = () => {
 
             const botReply = "點擊重置按鈕，重新開始測試";
 
-            if (currentQuestion < 3) {
+            if (currentQuestion < 1) {
                 setTimeout(() => {
                     const botMessage = { message: botQuestions[currentQuestion], type: 'bot' };
                     setChatMessages((prevMessages: any) => [...prevMessages, botMessage]);
                 }, 500);
             } else {
-                //怎麽找
-                setTimeout(() => {
-                    const botMessage = { message: "Hi", type: 'bot' };
-                    setChatMessages((prevMessages: any) => [...prevMessages, botMessage]);
-                }, 500);
+                try {
+                    const response = await chatRecommendation([...userReply, userInput]);
 
+                    setTimeout(() => {
+                        const botMessage = { message: response.data.predicted_job_title , type: 'bot' };
+                        setChatMessages((prevMessages: any) => [...prevMessages, botMessage]);
+                    }, 500);
+    
+    
+                    setTimeout(() => {
+                        const botMessage = { message: botReply, type: 'bot' };
+                        setChatMessages((prevMessages: any) => [...prevMessages, botMessage]);
+                    }, 1500);
 
-                setTimeout(() => {
-                    const botMessage = { message: botReply, type: 'bot' };
-                    setChatMessages((prevMessages: any) => [...prevMessages, botMessage]);
-                }, 1500);
+                  } catch (error) {
+                    console.log(error);
+                  }
             }
-
             setCurrentQuestion(currentQuestion + 1);
         }
     };
@@ -102,7 +96,7 @@ const ChatWindow = () => {
                 type: 'bot',
                 message:
                     "您好！歡迎使用聊天窗口。請回答以下問題以繼續:\n\n" +
-                    "你有什麼興趣或愛好？",
+                    "你有什麼興趣？(多個選項請用括號分開）",
             },
         ]);
         setUserReply([]);
@@ -149,9 +143,9 @@ const ChatWindow = () => {
                                 value={userInput}
                                 onChange={handleUserInput}
                                 onPressEnter={handleSend}
-                                disabled={currentQuestion == 4}
+                                disabled={currentQuestion == 2}
                             />
-                            <Button className={`chat-icon ${isOpen ? '' : 'hide'}`} type="primary" onClick={currentQuestion == 4 ? handleRefresh : handleSend} icon={currentQuestion == 4 ? <ReloadOutlined /> : <SendOutlined />} />
+                            <Button className={`chat-icon ${isOpen ? '' : 'hide'}`} type="primary" onClick={currentQuestion == 2 ? handleRefresh : handleSend} icon={currentQuestion == 2 ? <ReloadOutlined /> : <SendOutlined />} />
 
                         </div>
                     </div>

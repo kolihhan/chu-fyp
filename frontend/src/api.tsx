@@ -557,3 +557,9 @@ export const getInvitation = async(code: string) => {
   return axios.get(`${API_URL}/getInvitation/${code}`, 
   { headers: authHeaders() })
 }
+
+export const chatRecommendation = async (data : any) => {
+  return axios.post(`${API_URL}/chatRecommendation/get/`, 
+  data,
+  { headers: authHeaders() });
+};
