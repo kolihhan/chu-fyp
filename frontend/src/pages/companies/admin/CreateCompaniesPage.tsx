@@ -49,7 +49,7 @@ const CreateCompaniesPage: React.FC = () => {
       if(response.status==200){
         message.success('公司創建成功')
         dispatch(setEmployees(response.data.employee))
-        history("/");
+        history("/company/list");
       }else{
         message.success('公司創建失敗')
       }

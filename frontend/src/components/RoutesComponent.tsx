@@ -87,7 +87,7 @@ const Protected: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const userId = getCookie('userId');
 
     useEffect(() => {
-      if (employees[companyNum].company_id.boss_id.id !== Number(userId) && !isMessageDisplayed.current) {
+      if (employees.length>0 && employees[companyNum].company_id.boss_id.id !== Number(userId) && !isMessageDisplayed.current) {
   
         message.error('你不是這間公司的老闆 BABI');
         isMessageDisplayed.current = true;

@@ -84,6 +84,7 @@ export const register = (
 
     if (response.status === 201) {
       message.success('注冊成功');
+      window.location.href='/login'
     }
 
   } catch (error) {
