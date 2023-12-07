@@ -425,35 +425,25 @@ def createCompanyRecruitmentMulti(request):
 @permission_classes([IsAuthenticated])
 def createCompanyEmployeeFeedbackReviewMulti(request):
     try:
-        for i in range(1,201):
-            if random.randint(1,10)%2==0:
-                rmk = random.choice(feedback_remark_list_g)
-            else: 
-                rmk = random.choice(feedback_remark_list_b)
+        companyList = models.Company.objects.all()
+        for cmp in companyList:
+            employeeList = models.CompanyEmployee.objects.filter(company_id=cmp)
+            for emp in employeeList:
+                feedbackToList = employeeList.exclude(id=emp.id)
+                if(feedbackToList.exists):
+                    feedbackCount = random.randint(1,11)
+                    for i in range(0, feedbackCount):
+                        if random.randint(1,10)%2==0:
+                            rmk = random.choice(feedback_remark_list_g)
+                        else: 
+                            rmk = random.choice(feedback_remark_list_b)
 
-            emp = models.CompanyEmployee.objects.get(id=i)
-            cmp = models.Company.objects.get(id=emp.company_id.id)
-            createdCEFR = models.CompanyEmployeeFeedBackReview.objects.create(
-                company_id = cmp,
-                companyEmployee_id = emp,
-                feedback_to = emp,
-                remarks = rmk
-            )
-            for j in range(4):
-                if random.randint(1,10)%2==0:
-                    rmk = random.choice(feedback_remark_list_g)
-                else: 
-                    rmk = random.choice(feedback_remark_list_b)
-
-                if (random.randint(0,10))%2==0:
-                    emp = models.CompanyEmployee.objects.get(id=i)
-                    cmp = models.Company.objects.get(id=emp.company_id.id)
-                    createdCEFR = models.CompanyEmployeeFeedBackReview.objects.create(
-                        company_id = cmp,
-                        companyEmployee_id = emp,
-                        feedback_to = emp,
-                        remarks = rmk
-                    )
+                        createdCEFR = models.CompanyEmployeeFeedBackReview.objects.create(
+                            company_id = cmp,
+                            companyEmployee_id = emp,
+                            feedback_to = random.choice(feedbackToList),
+                            remarks = rmk
+                        )
         serializer = serializers.CompanyEmployeeFeedBackReviewSerializer(createdCEFR, many=False)
         return Response({'message':'員工反饋成功', 'data':serializer.data}, status=status.HTTP_200_OK)
     except (models.CompanyEmployee.DoesNotExist, models.Company.DoesNotExist) as e:
@@ -1078,11 +1068,15 @@ def compute_gradient(x, y, w, b):
     w_gradient[i] = (x[:, i] * (y_pred-y)).mean()
   return w_gradient, b_gradient
 
-def gradient_descent(x, y, w_init, b_init, learning_rate, cost_function, gradient_function, run_iter, p_iter=1000):
+def gradient_descent(
+    x, y, w_init, b_init, learning_rate, 
+    cost_function, gradient_function, 
+    run_iter, p_iter=1000
+):
 
-  c_hist = []
-  w_hist = []
-  b_hist = []
+#   c_hist = []
+#   w_hist = []
+#   b_hist = []
 
   w = w_init
   b = b_init
@@ -1093,15 +1087,16 @@ def gradient_descent(x, y, w_init, b_init, learning_rate, cost_function, gradien
     b = b - b_gradient * learning_rate
     cost = cost_function(x, y, w, b)
 
-    w_hist.append(w)
-    b_hist.append(b)
-    c_hist.append(cost)
+    # w_hist.append(w)
+    # b_hist.append(b)
+    # c_hist.append(cost)
 
     if i%p_iter == 0:
       # print(f"{i:4}")
       # print(f"{i:4}: Cost : {cost: .2f}, w: {w}, b: {b:.2f}, w_gradient: {w_gradient}, b_gradient: {b_gradient: 2.3f}")
       print(f"{i:4}: Cost : {cost: .2f}, b: {b:.2f}, b_gradient: {b_gradient: 2.3f}")
-  return w, b, w_hist, b_hist, c_hist
+#   return w, b, w_hist, b_hist, c_hist
+  return w, b
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
@@ -1115,8 +1110,8 @@ def calGradients(request):
             item['feedback_to'] = item['feedback_to']['id']
 
         data = pd.DataFrame(data_ori)
-        pd.set_option('display.max_columns', None)
-        pd.set_option('display.expand_frame_repr', False)
+        # pd.set_option('display.max_columns', None)
+        # pd.set_option('display.expand_frame_repr', False)
 
         oneHotEncoder = OneHotEncoder()
         oneHotEncoder.fit(data[['remarks']])
@@ -1184,7 +1179,8 @@ def calGradients(request):
         b_init=0
         learning_rate = 0.01
         run_iter = 10000
-        w_final, b_final, w_hist, b_hist, c_hist = gradient_descent(x_train, y_train, w_init, b_init, learning_rate, compute_cost, compute_gradient, run_iter, p_iter=1000)
+        # w_final, b_final, w_hist, b_hist, c_hist = gradient_descent(x_train, y_train, w_init, b_init, learning_rate, compute_cost, compute_gradient, run_iter, p_iter=1000)
+        w_final, b_final = gradient_descent(x_train, y_train, w_init, b_init, learning_rate, compute_cost, compute_gradient, run_iter, p_iter=1000)
 
         # y_pred = (w_final * x_test).sum(axis=1) + b_final
         # pred = pd.DataFrame({
