@@ -15,12 +15,12 @@ const ChatWindow = () => {
             type: 'bot',
             message:
                 "您好！歡迎使用聊天窗口。請回答以下問題以繼續:\n\n" +
-                "你有什麼興趣？(多個選項請用括號分開）",
+                "你有什麼興趣？(多個選項請用分號分開）",
         },
     ]);
 
     const botQuestions = [
-        "你有什麼愛好？(多個選項請用括號分開）",
+        "你有什麼技能？(多個選項請用括號分開）",
     ];
 
     const chatContentRef = useRef(null) as any;
