@@ -6,8 +6,7 @@ from django.http import JsonResponse
 
 
 # Load the trained model
-model = joblib.load(f'/app/backend/api/chatbot/random_forest_grid21.sav')
-model2 = joblib.load(f'/app/backend/api/chatbot/test.sav')
+model = joblib.load(f'/app/backend/api/chatbot/random_forest_grid2.sav')
 
 # Load the necessary encoders
 mlb_interest = joblib.load(f'/app/backend/api/chatbot/mlb_interest.pkl')
@@ -36,19 +35,16 @@ def predict_job_title(request):
     encoded_skills = mlb_skills.transform(user_data['skills'])
 
     user_data.drop(['interest', 'skills'], axis=1, inplace=True)
-    user_data = pd.concat([pd.DataFrame(encoded_interest, columns=mlb_interest.classes_), pd.DataFrame(encoded_skills, columns=mlb_skills.classes_)], axis=1)
+    user_data = pd.concat([user_data, pd.DataFrame(encoded_interest, columns=mlb_interest.classes_), pd.DataFrame(encoded_skills, columns=mlb_skills.classes_)], axis=1)
     user_data_std = scaler.transform(user_data)
-    
+
     # Predict the job title
     predicted_job_code = model.predict(user_data_std)
-    predicted_job_code2 = model2.predict(user_data_std)
-
     predicted_job_code_rounded = int(predicted_job_code)
-    predicted_job_code_rounded2 = int(predicted_job_code2)
 
-    predicted_job_title = le.inverse_transform([predicted_job_code_rounded,predicted_job_code_rounded2])
+    predicted_job_title = le.inverse_transform([predicted_job_code_rounded])
 
-    answer = '推薦職位：' + predicted_job_title
+    answer = '推薦職位：' + predicted_job_title[0]
     return JsonResponse({'predicted_job_title': answer})
 
 
