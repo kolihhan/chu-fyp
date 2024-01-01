@@ -6,8 +6,9 @@ from django.http import JsonResponse
 
 
 # Load the trained model
-model = joblib.load(f'/app/backend/api/chatbot/random_forest_grid21.sav')
-model2 = joblib.load(f'/app/backend/api/chatbot/test.sav')
+model = joblib.load(f'/app/backend/api/chatbot/random_forest_grid2.sav')
+model2 = joblib.load(f'/app/backend/api/chatbot/rf.sav')
+model3 = joblib.load(f'/app/backend/api/chatbot/test.sav')
 
 # Load the necessary encoders
 mlb_interest = joblib.load(f'/app/backend/api/chatbot/mlb_interest.pkl')
@@ -42,22 +43,15 @@ def predict_job_title(request):
     # Predict the job title
     predicted_job_code = model.predict(user_data_std)
     predicted_job_code2 = model2.predict(user_data_std)
+    predicted_job_code3 = model3.predict(user_data_std)
 
     predicted_job_code_rounded = int(predicted_job_code)
     predicted_job_code_rounded2 = int(predicted_job_code2)
+    predicted_job_code_rounded3 = int(predicted_job_code3)
 
-    predicted_job_title = le.inverse_transform([predicted_job_code_rounded,predicted_job_code_rounded2])
 
-    answer = '推薦職位：' + predicted_job_title
+    predicted_job_title = le.inverse_transform([predicted_job_code_rounded,predicted_job_code_rounded2,predicted_job_code_rounded3])
+
+    answer = '推薦職位: ' + predicted_job_title[0] + '\n' + predicted_job_title[1] + '\n' + predicted_job_title[2]
+
     return JsonResponse({'predicted_job_title': answer})
-
-
-# interests_input = "entrepreneurship, Interest2, Interest3"  # Replace with user input
-# skills_input = "Python, C++, good communication skill"  # Replace with user input
-# interests_input2 = "HAPPY;HAPPY,LHAPPY!"
-# predicted_job = predict_job_title( interests_input, skills_input)
-# print(f"The predicted job title based on your inputs is: {predicted_job}")
-
-# predicted_job = predict_job_title(interests_input2, skills_input)
-# print(f"The predicted job title based on your inputs is: {predicted_job}")
-
