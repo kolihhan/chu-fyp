@@ -26,7 +26,8 @@ const CompaniesPage: React.FC = () => {
     setLoading(false);
     console.log(companies);
     if(getCookie('companyId')==null) {
-      setCookie("companyId", companies[0].id)
+      if(companies&&companies.length>0)
+        setCookie("companyId", companies[0].id)
     }
   }, []);
 
