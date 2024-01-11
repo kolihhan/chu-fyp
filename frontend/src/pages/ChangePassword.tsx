@@ -30,13 +30,13 @@ return (
         <h1>變更密碼</h1>
         <Form form={form} onFinish={resetPassword} layout='vertical'>
             <Form.Item name="oldPassword" label="舊密碼">
-                <Input></Input>
+                <Input.Password></Input.Password>
             </Form.Item>
             <Form.Item name="newPassword" label="新密碼">
-                <Input></Input>
+                <Input.Password></Input.Password>
             </Form.Item>
             <Form.Item name="confirmPassword" label="確認密碼">
-                <Input></Input>
+                <Input.Password></Input.Password>
             </Form.Item>
             <Button type="primary" htmlType="submit" loading={isLoading}>變更</Button>
         </Form>
