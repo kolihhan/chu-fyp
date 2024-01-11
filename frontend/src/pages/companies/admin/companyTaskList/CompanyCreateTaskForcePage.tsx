@@ -3,6 +3,7 @@ import { Form, Input, Button, Select, message, DatePicker } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
 import { createTaskForces, findSuitableAssignee, fetchTaskForcesById, getAllEmployees, updateTaskForces } from '../../../../api';
 import { getCookie } from '../../../../utils';
+import dayjs from 'dayjs';  // 引入 dayjs 库
 
 const { Option } = Select;
 
@@ -49,6 +50,7 @@ const CompanyCreateTaskForcePage: React.FC = () => {
   const fetchTaskForceById = async () => {
     try {
       const response = await fetchTaskForcesById(Number(newId)); 
+      response.data.data.deadline = dayjs(response.data.data.deadline);
       form.setFieldsValue(response.data.data); // Set form initial values here
       form.setFieldsValue({ leader:response.data.data.leader.id })
     } catch (error) {
@@ -57,8 +59,10 @@ const CompanyCreateTaskForcePage: React.FC = () => {
   };
 
   const onFinish = async (values: any) => {
+    values['deadline'] = dayjs().format('YYYY-MM-DD');
     if (newId) {
       values['company_id'] = Number(getCookie('companyId'));
+
       const response = await updateTaskForces(Number(newId), values);
       if(response.status!=200){
         message.error('Task Force 修改失敗')
