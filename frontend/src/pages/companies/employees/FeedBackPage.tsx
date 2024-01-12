@@ -192,7 +192,7 @@ const FeedBackPage: React.FC = () => {
       </div>
 
       <Modal bodyStyle={{margin:0}}
-        title="我的反饋"
+        title="他人評價我"
         visible={viewFeedbackModalVisible}
         onCancel={closeViewFeedbackModal}
         footer={null}
